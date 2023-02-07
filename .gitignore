@@ -1,3 +1,5 @@
+# ignore default text notes from flixel
+assets/**/*-here.txt
 export/*
 .vscode/*
 *.code-workspace
