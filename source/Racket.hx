@@ -13,6 +13,7 @@ class Racket extends FlxSprite {
 
 		this.direction = direction;
 		makeGraphic(width, height, FlxColor.WHITE);
+
 		switch (direction) {
 			case UP:
 				angle = 0;
@@ -22,6 +23,18 @@ class Racket extends FlxSprite {
 				angle = 180;
 			case LEFT:
 				angle = 270;
+		}
+
+		updateHitboxRotation();
+	}
+
+	function updateHitboxRotation() {
+		switch (direction) {
+			case LEFT, RIGHT:
+				setSize(height, width);
+				centerOffsets(false);
+			case UP, DOWN:
+				0;
 		}
 	}
 }
