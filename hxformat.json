@@ -1,0 +1,31 @@
+{
+	"lineEnds": {
+		"leftCurly": "after",
+		"rightCurly": "both",
+		"emptyCurly": "noBreak",
+		"objectLiteralCurly": {
+			"leftCurly": "after"
+		}
+	},
+	"sameLine": {
+		"ifBody": "next",
+		"ifElse": "next",
+		"doWhile": "next",
+		"tryBody": "next",
+		"tryCatch": "next"
+	},
+	"emptyLines": {
+		"classEmptyLines": {
+			"beginType": 1,
+			"endType": 1
+		},
+		"afterLeftCurly": "keep",
+		"maxAnywhereInFile": 1
+	},
+	"indentation": {
+		"character": "tab",
+		"tabWidth": 2
+	},
+	"whitespace": {
+	}
+}
