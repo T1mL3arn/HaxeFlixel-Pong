@@ -15,14 +15,10 @@ class Racket extends FlxSprite {
 		makeGraphic(width, height, FlxColor.WHITE);
 
 		switch (direction) {
-			case UP:
+			case UP, DOWN:
 				angle = 0;
-			case RIGHT:
+			case RIGHT, LEFT:
 				angle = 90;
-			case DOWN:
-				angle = 180;
-			case LEFT:
-				angle = 270;
 		}
 
 		updateHitboxRotation();

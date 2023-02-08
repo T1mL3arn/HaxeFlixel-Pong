@@ -21,13 +21,12 @@ class PlayState extends FlxState {
 
 		walls = new FlxGroup();
 
-		player = new Racket(100, 15, FlxDirection.RIGHT);
+		player = cast walls.add(new Racket(100, 15, FlxDirection.RIGHT));
 		player.centerOrigin();
 		player.screenCenter();
 		player.x = player.width * 2;
 		player.immovable = true;
 		player.elasticity = 1;
-		walls.add(player);
 		add(player);
 
 		ball = new FlxSprite();
@@ -45,7 +44,6 @@ class PlayState extends FlxState {
 		/*
 			Lets do some pong:
 
-			- top and bottom walls to collide the ball
 			- movement boundaries for racket
 		 */
 	}
@@ -84,11 +82,11 @@ class PlayState extends FlxState {
 		return wall;
 	}
 
-	function setSpritePosition(obj:FlxSprite, ?x:Float, ?y:Float) {
+	function setSpritePosition(sprite:FlxSprite, ?x:Float, ?y:Float) {
 		if (x != null)
-			obj.x = x - obj.origin.x;
+			sprite.x = x - sprite.origin.x;
 		if (y != null)
-			obj.y = y - obj.origin.y;
+			sprite.y = y - sprite.origin.y;
 	}
 
 	override public function update(elapsed:Float) {
@@ -100,7 +98,7 @@ class PlayState extends FlxState {
 			}
 
 		moveRacketByKeyboard(player);
-		Flixel.collide(walls, ball, racketBallCollisionon);
+		Flixel.collide(walls, ball, ballCollision);
 
 		// ball resets its position when its is outside world's boundaries
 		var rect = FlxRect.get();
@@ -123,7 +121,7 @@ class PlayState extends FlxState {
 		}
 	}
 
-	function racketBallCollisionon(racket:Racket, ball:FlxSprite) {
+	function ballCollision(racket:Racket, ball:FlxSprite) {
 		// TODO some sound
 	}
 }
