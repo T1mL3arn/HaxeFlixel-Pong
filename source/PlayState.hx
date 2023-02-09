@@ -2,6 +2,7 @@ package;
 
 import Main.Pong;
 import RacketController.KeyboardMovementController;
+import SpriteUtils.setSpritePosition;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.FlxState;
@@ -100,13 +101,6 @@ class PlayState extends FlxState {
 		add(wall);
 
 		return wall;
-	}
-
-	function setSpritePosition(sprite:FlxSprite, ?x:Float, ?y:Float) {
-		if (x != null)
-			sprite.x = x - sprite.origin.x;
-		if (y != null)
-			sprite.y = y - sprite.origin.y;
 	}
 
 	override public function update(elapsed:Float) {
