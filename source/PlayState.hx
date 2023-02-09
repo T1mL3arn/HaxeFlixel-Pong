@@ -1,25 +1,27 @@
 package;
 
+import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.group.FlxGroup;
 import flixel.math.FlxRect;
 import flixel.util.FlxColor;
 import flixel.util.FlxDirection;
+import flixel.util.FlxSpriteUtil;
 
 class PlayState extends FlxState {
 
 	var player:Racket;
 	var ball:FlxSprite;
 
-	var walls:FlxGroup;
+	var walls:FlxTypedGroup<FlxObject>;
 
 	override public function create() {
 		super.create();
 
 		bgColor = FlxColor.GRAY;
 
-		walls = new FlxGroup();
+		walls = new FlxTypedGroup();
 
 		player = cast walls.add(new Racket(100, 15, FlxDirection.RIGHT));
 		player.screenCenter();
@@ -43,7 +45,6 @@ class PlayState extends FlxState {
 		/*
 			Lets do some pong:
 
-			- movement boundaries for racket
 		 */
 	}
 
@@ -97,6 +98,7 @@ class PlayState extends FlxState {
 			}
 
 		moveRacketByKeyboard(player);
+		FlxSpriteUtil.bound(player, player.x, 0, 40, Flixel.height - 40);
 		Flixel.collide(walls, ball, ballCollision);
 
 		// ball resets its position when its is outside world's boundaries
