@@ -13,6 +13,13 @@ import flixel.util.FlxDirection;
 
 class PlayState extends FlxState {
 
+	final racketBounds = {
+		x: 0.0,
+		right: 0.0,
+		y: 40.0,
+		bottom: Flixel.height - 40.0
+	};
+
 	var player:Racket;
 	var ball:FlxSprite;
 
@@ -25,32 +32,7 @@ class PlayState extends FlxState {
 
 		walls = new FlxTypedGroup();
 
-		player = cast walls.add(new Racket(Pong.defaults.racketLength, Pong.defaults.racketThickness, FlxDirection.RIGHT));
-		player.screenCenter();
-		player.x = 50;
-		player.movementBounds = {
-			x: player.x,
-			right: 0.0,
-			y: 40.0,
-			bottom: Flixel.height - 40
-		};
-		add(player);
-
-		var kbd = new KeyboardMovementController(player);
-		kbd.speed = Pong.defaults.racketSpeed;
-		add(kbd);
-
-		ball = new FlxSprite();
-		ball.makeGraphic(Pong.defaults.ballSize, Pong.defaults.ballSize, FlxColor.WHITE);
-		ball.centerOrigin();
-		ball.screenCenter();
-		ball.velocity.set(0, 0);
-		ball.elasticity = 1;
-		add(ball);
-
-		addWall(UP);
-		addWall(DOWN);
-		addWall(RIGHT);
+		buildTrainingRoom();
 
 		/*
 			TODO:
@@ -58,8 +40,6 @@ class PlayState extends FlxState {
 			- extract constants
 				- wall size
 			- add different levels:
-				- training room
-					- 1 rocket on the left, three walls, 1 ball
 				- same player:
 					- 2 rackets are controleld byt the same player
 					- 2 walls: top and bottom 
@@ -101,6 +81,35 @@ class PlayState extends FlxState {
 		add(wall);
 
 		return wall;
+	}
+
+	function getRacket(dir = FlxDirection.LEFT)
+		return new Racket(Pong.defaults.racketLength, Pong.defaults.racketThickness, dir);
+
+	function buildTrainingRoom() {
+		var racket = getRacket();
+		racket.screenCenter();
+		racket.x = Pong.defaults.racketPadding;
+		racket.movementBounds = racketBounds;
+
+		walls.add(racket);
+		add(racket);
+
+		var kbd = new KeyboardMovementController(racket);
+		kbd.speed = Pong.defaults.racketSpeed;
+		add(kbd);
+
+		ball = new FlxSprite();
+		ball.makeGraphic(Pong.defaults.ballSize, Pong.defaults.ballSize, FlxColor.WHITE);
+		ball.centerOrigin();
+		ball.screenCenter();
+		ball.velocity.set(0, 0);
+		ball.elasticity = 1;
+		add(ball);
+
+		addWall(UP);
+		addWall(DOWN);
+		addWall(RIGHT);
 	}
 
 	override public function update(elapsed:Float) {

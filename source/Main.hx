@@ -17,6 +17,7 @@ class Pong {
 		ballSize: 16,
 		racketLength: 100,
 		racketThickness: 16,
-		racketSpeed: 200.0
+		racketSpeed: 200.0,
+		racketPadding: 30.0,
 	}
 }

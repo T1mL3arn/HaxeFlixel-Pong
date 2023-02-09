@@ -19,7 +19,7 @@ class Racket extends FlxSprite {
 	public var movementBounds:MovementsBounds = null;
 	public var movementController:Racket->Void = null;
 
-	public function new(width:Int, height:Int, direction:FlxDirection = FlxDirection.UP) {
+	public function new(width:Int, height:Int, direction:FlxDirection = FlxDirection.LEFT) {
 		super();
 
 		this.direction = direction;
