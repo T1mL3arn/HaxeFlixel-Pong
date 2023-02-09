@@ -3,10 +3,21 @@ package;
 import flixel.FlxSprite;
 import flixel.util.FlxColor;
 import flixel.util.FlxDirection;
+import flixel.util.FlxSpriteUtil;
+
+typedef MovementsBounds = {
+	x:Float,
+	y:Float,
+	right:Float,
+	bottom:Float,
+}
 
 class Racket extends FlxSprite {
 
 	public var direction:FlxDirection;
+
+	public var movementBounds:MovementsBounds = null;
+	public var movementController:Racket->Void = null;
 
 	public function new(width:Int, height:Int, direction:FlxDirection = FlxDirection.UP) {
 		super();
@@ -34,6 +45,22 @@ class Racket extends FlxSprite {
 				centerOffsets(false);
 			case UP, DOWN:
 				0;
+		}
+	}
+
+	override function update(time:Float) {
+
+		// isTouching() and justTouched() must be called BEFORE
+		// calling `super.update()`
+
+		super.update(time);
+
+		// if (movementController != null)
+		// 	movementController(this);
+
+		if (movementBounds != null) {
+			var b = movementBounds;
+			FlxSpriteUtil.bound(this, b.x, b.right, b.y, b.bottom);
 		}
 	}
 }

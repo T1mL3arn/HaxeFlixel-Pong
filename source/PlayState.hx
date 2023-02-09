@@ -1,13 +1,13 @@
 package;
 
+import RacketController.KeyboardMovementController;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.FlxState;
-import flixel.group.FlxGroup;
+import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxRect;
 import flixel.util.FlxColor;
 import flixel.util.FlxDirection;
-import flixel.util.FlxSpriteUtil;
 
 class PlayState extends FlxState {
 
@@ -28,7 +28,15 @@ class PlayState extends FlxState {
 		player.x = 50;
 		player.immovable = true;
 		player.elasticity = 1;
+		player.movementBounds = {
+			x: player.x,
+			right: 0.0,
+			y: 40.0,
+			bottom: Flixel.height - 40
+		};
 		add(player);
+
+		add(new KeyboardMovementController(player));
 
 		ball = new FlxSprite();
 		ball.makeGraphic(15, 15, FlxColor.WHITE);
@@ -43,8 +51,11 @@ class PlayState extends FlxState {
 		addWall(RIGHT);
 
 		/*
-			Lets do some pong:
+			TODO:
 
+			- allow a racket to be controlled in dfferent ways:
+				- user keyboard control
+				- ai control
 		 */
 	}
 
@@ -92,13 +103,10 @@ class PlayState extends FlxState {
 	override public function update(elapsed:Float) {
 		super.update(elapsed);
 
-		if (ball.velocity.lengthSquared == 0)
-			if (Flixel.keys.justPressed.ANY) {
-				ball.velocity.setPolarDegrees(300, 135 + Flixel.random.int(0, 105));
-			}
+		if (ball.velocity.lengthSquared == 0 && Flixel.keys.justPressed.ANY) {
+			ball.velocity.setPolarDegrees(300, 135 + Flixel.random.int(0, 105));
+		}
 
-		moveRacketByKeyboard(player);
-		FlxSpriteUtil.bound(player, player.x, 0, 40, Flixel.height - 40);
 		Flixel.collide(walls, ball, ballCollision);
 
 		// ball resets its position when its is outside world's boundaries
@@ -108,18 +116,6 @@ class PlayState extends FlxState {
 			ball.screenCenter();
 		}
 		rect.put();
-	}
-
-	function moveRacketByKeyboard(racket:Racket) {
-		racket.velocity.set(0, 0);
-
-		var pressed = Flixel.keys.pressed;
-		if (pressed.UP) {
-			racket.velocity.setPolarDegrees(200, -90);
-		}
-		else if (pressed.DOWN) {
-			racket.velocity.setPolarDegrees(200, 90);
-		}
 	}
 
 	function ballCollision(racket:Racket, ball:FlxSprite) {
