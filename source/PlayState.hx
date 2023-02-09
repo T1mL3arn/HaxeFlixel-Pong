@@ -1,5 +1,6 @@
 package;
 
+import Main.Pong;
 import RacketController.KeyboardMovementController;
 import flixel.FlxObject;
 import flixel.FlxSprite;
@@ -23,11 +24,9 @@ class PlayState extends FlxState {
 
 		walls = new FlxTypedGroup();
 
-		player = cast walls.add(new Racket(100, 15, FlxDirection.RIGHT));
+		player = cast walls.add(new Racket(Pong.defaults.racketLength, Pong.defaults.racketThickness, FlxDirection.RIGHT));
 		player.screenCenter();
 		player.x = 50;
-		player.immovable = true;
-		player.elasticity = 1;
 		player.movementBounds = {
 			x: player.x,
 			right: 0.0,
@@ -36,10 +35,12 @@ class PlayState extends FlxState {
 		};
 		add(player);
 
-		add(new KeyboardMovementController(player));
+		var kbd = new KeyboardMovementController(player);
+		kbd.speed = Pong.defaults.racketSpeed;
+		add(kbd);
 
 		ball = new FlxSprite();
-		ball.makeGraphic(15, 15, FlxColor.WHITE);
+		ball.makeGraphic(Pong.defaults.ballSize, Pong.defaults.ballSize, FlxColor.WHITE);
 		ball.centerOrigin();
 		ball.screenCenter();
 		ball.velocity.set(0, 0);
@@ -53,6 +54,14 @@ class PlayState extends FlxState {
 		/*
 			TODO:
 
+			- extract constants
+				- wall size
+			- add different levels:
+				- training room
+					- 1 rocket on the left, three walls, 1 ball
+				- same player:
+					- 2 rackets are controleld byt the same player
+					- 2 walls: top and bottom 
 			- allow a racket to be controlled in dfferent ways:
 				- user keyboard control
 				- ai control

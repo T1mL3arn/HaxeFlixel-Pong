@@ -24,6 +24,9 @@ class Racket extends FlxSprite {
 
 		this.direction = direction;
 
+		immovable = true;
+		elasticity = 1;
+
 		switch (direction) {
 			case UP, DOWN:
 				makeGraphic(width, height, FlxColor.WHITE);
@@ -54,9 +57,6 @@ class Racket extends FlxSprite {
 		// calling `super.update()`
 
 		super.update(time);
-
-		// if (movementController != null)
-		// 	movementController(this);
 
 		if (movementBounds != null) {
 			var b = movementBounds;

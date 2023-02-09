@@ -24,7 +24,7 @@ class KeyboardMovementController extends RacketController {
 	public var keyUp:FlxKey;
 	public var keyDown:FlxKey;
 
-	public var speed = 200.0;
+	public var speed:Float;
 
 	public function new(racket, ?up:FlxKey = FlxKey.UP, ?down:FlxKey = FlxKey.DOWN, ?speed = 200.0) {
 		super(racket);
@@ -41,8 +41,8 @@ class KeyboardMovementController extends RacketController {
 		racket.velocity.set(0, 0);
 
 		if (Flixel.keys.checkStatus(keyUp, FlxInputState.PRESSED))
-			this.racket.velocity.setPolarDegrees(200, -90);
+			this.racket.velocity.setPolarDegrees(this.speed, -90);
 		else if (Flixel.keys.checkStatus(keyDown, FlxInputState.PRESSED))
-			this.racket.velocity.setPolarDegrees(200, 90);
+			this.racket.velocity.setPolarDegrees(this.speed, 90);
 	}
 }
