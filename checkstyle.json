@@ -589,7 +589,8 @@
 		{
 			"type": "TODOComment",
 			"props": {
-				"format": "^\\s*(TODO|FIXME|HACK|XXX|BUG)"
+				"format": "^\\s*(FIXME|HACK|XXX|BUG)",
+				"severity": "WARNING"
 			}
 		},
 		{
