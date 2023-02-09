@@ -22,9 +22,8 @@ class PlayState extends FlxState {
 		walls = new FlxGroup();
 
 		player = cast walls.add(new Racket(100, 15, FlxDirection.RIGHT));
-		player.centerOrigin();
 		player.screenCenter();
-		player.x = player.width * 2;
+		player.x = 50;
 		player.immovable = true;
 		player.elasticity = 1;
 		add(player);

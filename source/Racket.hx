@@ -12,19 +12,22 @@ class Racket extends FlxSprite {
 		super();
 
 		this.direction = direction;
-		makeGraphic(width, height, FlxColor.WHITE);
 
 		switch (direction) {
 			case UP, DOWN:
-				angle = 0;
+				makeGraphic(width, height, FlxColor.WHITE);
 			case RIGHT, LEFT:
-				angle = 90;
+				makeGraphic(height, width, FlxColor.WHITE);
 		}
 
-		updateHitboxRotation();
+		centerOrigin();
+		centerOffsets(true);
 	}
 
+	@:deprecated
 	function updateHitboxRotation() {
+		// NOTE updates hitbox to match ortogonal rotation.
+		// At this moment is not needed.
 		switch (direction) {
 			case LEFT, RIGHT:
 				setSize(height, width);
