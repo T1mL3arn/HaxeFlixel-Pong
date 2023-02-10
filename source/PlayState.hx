@@ -20,7 +20,6 @@ class PlayState extends FlxState {
 		bottom: Flixel.height - 40.0
 	};
 
-	var player:Racket;
 	var ball:FlxSprite;
 
 	var walls:FlxTypedGroup<FlxObject>;
@@ -32,7 +31,8 @@ class PlayState extends FlxState {
 
 		walls = new FlxTypedGroup();
 
-		buildTrainingRoom();
+		// buildTrainingRoom();
+		buildShadowFightRoom();
 
 		/*
 			TODO:
@@ -110,6 +110,43 @@ class PlayState extends FlxState {
 		addWall(UP);
 		addWall(DOWN);
 		addWall(RIGHT);
+	}
+
+	function buildShadowFightRoom() {
+		// LEFT racket
+		var racket = getRacket(FlxDirection.LEFT);
+		racket.screenCenter();
+		racket.x = Pong.defaults.racketPadding;
+		racket.movementBounds = racketBounds;
+		walls.add(racket);
+		add(racket);
+
+		var kbd = new KeyboardMovementController(racket);
+		kbd.speed = Pong.defaults.racketSpeed;
+		add(kbd);
+
+		// RIGHT racket
+		var racket = getRacket(FlxDirection.RIGHT);
+		racket.screenCenter();
+		setSpritePosition(racket, Flixel.width - Pong.defaults.racketPadding);
+		racket.movementBounds = racketBounds;
+		walls.add(racket);
+		add(racket);
+
+		var kbd = new KeyboardMovementController(racket);
+		kbd.speed = Pong.defaults.racketSpeed;
+		add(kbd);
+
+		ball = new FlxSprite();
+		ball.makeGraphic(Pong.defaults.ballSize, Pong.defaults.ballSize, FlxColor.WHITE);
+		ball.centerOrigin();
+		ball.screenCenter();
+		ball.velocity.set(0, 0);
+		ball.elasticity = 1;
+		add(ball);
+
+		addWall(UP);
+		addWall(DOWN);
 	}
 
 	override public function update(elapsed:Float) {
