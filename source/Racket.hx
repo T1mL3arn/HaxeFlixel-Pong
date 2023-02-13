@@ -37,8 +37,10 @@ class Racket extends FlxSprite {
 		switch (direction) {
 			case UP, DOWN:
 				makeGraphic(options.size, options.thickness, options.color);
+				allowCollisions = UP | DOWN;
 			case RIGHT, LEFT:
 				makeGraphic(options.thickness, options.size, options.color);
+				allowCollisions = LEFT | RIGHT;
 		}
 
 		centerOrigin();
@@ -69,5 +71,9 @@ class Racket extends FlxSprite {
 			var b = movementBounds;
 			FlxSpriteUtil.bound(this, b.left, b.right, b.top, b.bottom);
 		}
+	}
+
+	public function ballCollision(ball:FlxSprite) {
+		// TODO
 	}
 }
