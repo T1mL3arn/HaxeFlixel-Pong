@@ -34,13 +34,16 @@ class PlayState extends FlxState {
 	};
 
 	var ball:FlxSprite;
-
-	var walls:FlxTypedGroup<FlxObject>;
+	var walls:FlxTypedGroup<FlxObject> = new FlxTypedGroup();
 
 	override public function create() {
 		super.create();
 
-		bgColor = FlxColor.GRAY;
+		bgColor = 0xFF111111;
+
+		buildTrainingRoom();
+		// buildShadowFightRoom();
+		// comment to fuck with git diff
 
 		walls = new FlxTypedGroup();
 
@@ -122,8 +125,19 @@ class PlayState extends FlxState {
 		ball.elasticity = 1;
 		add(ball);
 
-		add(walls.add(getWall({pos: UP, padding: 5, size: 0.95})));
-		add(walls.add(getWall({pos: DOWN, padding: 5, size: 0.95})));
+		var upWall = getWall({pos: UP, padding: 5, size: 0.95});
+		var downWall = getWall({pos: DOWN, padding: 5, size: 0.95});
+		var batHole = Math.ceil(Pong.defaults.ballSize * 1.5);
+
+		racket.movementBounds = {
+			left: 0.0,
+			right: 0.0,
+			top: upWall.y + upWall.height + batHole,
+			bottom: downWall.y - batHole
+		};
+
+		add(walls.add(upWall));
+		add(walls.add(downWall));
 		add(walls.add(getWall({pos: RIGHT, padding: 5, size: 0.95})));
 	}
 
