@@ -25,7 +25,7 @@
 			"props": {
 				"allowReturn": false,
 				"allowFunction": false,
-				"allowCurlyBody": false,
+				"allowCurlyBody": true,
 				"allowSingleArgParens": false
 			}
 		},
