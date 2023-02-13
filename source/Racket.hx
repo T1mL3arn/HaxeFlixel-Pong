@@ -5,33 +5,40 @@ import flixel.util.FlxColor;
 import flixel.util.FlxDirection;
 import flixel.util.FlxSpriteUtil;
 
-typedef MovementsBounds = {
-	x:Float,
-	y:Float,
+typedef MovementBounds = {
+	left:Float,
+	top:Float,
 	right:Float,
 	bottom:Float,
+}
+
+typedef RacketOptions = {
+	direction:FlxDirection,
+	size:Int,
+	thickness:Int,
+	color:FlxColor,
 }
 
 class Racket extends FlxSprite {
 
 	public var direction:FlxDirection;
 
-	public var movementBounds:MovementsBounds = null;
+	public var movementBounds:MovementBounds = null;
 	public var movementController:Racket->Void = null;
 
-	public function new(width:Int, height:Int, direction:FlxDirection = FlxDirection.LEFT) {
+	public function new(options:RacketOptions) {
 		super();
 
-		this.direction = direction;
+		this.direction = options.direction;
 
 		immovable = true;
 		elasticity = 1;
 
 		switch (direction) {
 			case UP, DOWN:
-				makeGraphic(width, height, FlxColor.WHITE);
+				makeGraphic(options.size, options.thickness, options.color);
 			case RIGHT, LEFT:
-				makeGraphic(height, width, FlxColor.WHITE);
+				makeGraphic(options.thickness, options.size, options.color);
 		}
 
 		centerOrigin();
@@ -60,7 +67,7 @@ class Racket extends FlxSprite {
 
 		if (movementBounds != null) {
 			var b = movementBounds;
-			FlxSpriteUtil.bound(this, b.x, b.right, b.y, b.bottom);
+			FlxSpriteUtil.bound(this, b.left, b.right, b.top, b.bottom);
 		}
 	}
 }

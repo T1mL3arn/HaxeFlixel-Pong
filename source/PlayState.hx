@@ -27,9 +27,9 @@ final defaultWallParams:WallParams = {
 class PlayState extends FlxState {
 
 	final racketBounds = {
-		x: 0.0,
+		left: 0.0,
 		right: 0.0,
-		y: 40.0,
+		top: 40.0,
 		bottom: Flixel.height - 40.0
 	};
 
@@ -92,8 +92,13 @@ class PlayState extends FlxState {
 		return wall;
 	}
 
-	function getRacket(dir = FlxDirection.LEFT) {
-		return new Racket(Pong.defaults.racketLength, Pong.defaults.racketThickness, dir);
+	function getRacket(dir = FlxDirection.LEFT):Racket {
+		return new Racket({
+			direction: dir,
+			thickness: Pong.defaults.racketThickness,
+			size: Pong.defaults.racketLength,
+			color: FlxColor.WHITE
+		});
 	}
 
 	function buildTrainingRoom() {
