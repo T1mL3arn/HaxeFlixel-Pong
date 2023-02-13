@@ -81,16 +81,12 @@ class PlayState extends FlxState {
 		switch (pos) {
 			case UP:
 				wall.y = padding;
-			// wall.setPosition(padding, 0);
 			case DOWN:
 				wall.y = Flixel.height - thickness - padding;
-			// wall.setPosition(0, Flixel.height - thickness - padding);
 			case LEFT:
 				wall.x = padding;
-			// wall.setPosition(0, 0);
 			case RIGHT:
 				wall.x = Flixel.width - thickness - padding;
-				// wall.setPosition(Flixel.width - thickness, 0);
 		}
 
 		return wall;
