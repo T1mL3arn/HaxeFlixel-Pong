@@ -8,13 +8,15 @@ using Lambda;
 
 class TrainingRoom extends FlxState {
 
-	public var walls:FlxTypedGroup<FlxObject> = new FlxTypedGroup();
+	public var walls:FlxTypedGroup<FlxObject>;
 	public var ball:Ball;
 	public var player:Player;
 
 	var onGoal:Dynamic->Dynamic->Void;
 
 	override function create() {
+
+		walls = new FlxTypedGroup();
 
 		var room = LevelBuilder.inst.buildTraningRoom();
 
@@ -32,6 +34,14 @@ class TrainingRoom extends FlxState {
 			resetBall();
 			player.score += 1;
 		}
+	}
+
+	override function destroy() {
+		super.destroy();
+
+		walls.destroy();
+		ball.destroy();
+		player.destroy();
 	}
 
 	override function update(dt:Float) {
