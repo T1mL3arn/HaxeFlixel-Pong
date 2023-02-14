@@ -32,7 +32,6 @@ class TrainingRoom extends FlxState {
 	var onGoal:Dynamic->Dynamic->Void;
 
 	override function create() {
-		super.create();
 
 		add(ball = new Ball());
 
