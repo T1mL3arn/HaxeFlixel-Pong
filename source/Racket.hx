@@ -26,6 +26,8 @@ class Racket extends FlxSprite {
 	public var movementBounds:MovementBounds = null;
 	public var movementController:Racket->Void = null;
 
+	var updatesCounter:Int;
+
 	public function new(options:RacketOptions) {
 		super();
 
@@ -45,6 +47,17 @@ class Racket extends FlxSprite {
 
 		centerOrigin();
 		centerOffsets(true);
+
+		Flixel.signals.postUpdate.add(onPostUpdate);
+	}
+
+	function onPostUpdate() {
+		updatesCounter = 0;
+	}
+
+	override function destroy() {
+		Flixel.signals.postUpdate.remove(onPostUpdate);
+		super.destroy();
 	}
 
 	@:deprecated
@@ -61,6 +74,19 @@ class Racket extends FlxSprite {
 	}
 
 	override function update(time:Float) {
+
+		// NOTE a crunch to disable double updating.
+		// Double-updating happens when the same object
+		// appears twice in update cycles. Like the object
+		// was added to the state itself and also
+		// the object is added to some group which in turn
+		// is also added to state.
+		if (updatesCounter > 0) {
+			trace('double update of Racket!');
+			return;
+		}
+
+		updatesCounter += 1;
 
 		// isTouching() and justTouched() must be called BEFORE
 		// calling `super.update()`
