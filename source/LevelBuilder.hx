@@ -21,6 +21,24 @@ final defaultWallParams:WallParams = {
 	padding: 0,
 }
 
+typedef PlayerOptions = {
+	?name:String,
+	position:FlxDirection,
+	?color:FlxColor,
+	getController:Racket->RacketController
+}
+
+final playerOptionsDefault:PlayerOptions = {
+	name: 'player',
+	position: LEFT,
+	color: FlxColor.WHITE,
+	getController: racket -> {
+		var c = new KeyboardMovementController(racket);
+		c.speed = Pong.defaults.racketSpeed;
+		return c;
+	},
+}
+
 class LevelBuilder {
 
 	static public final inst = new LevelBuilder();
@@ -119,15 +137,15 @@ class LevelBuilder {
 		};
 	}
 
-	function getPlayer(dir:FlxDirection, ?controller):Player {
+	function getPlayer(options:PlayerOptions, ?controller):Player {
 		var racket = new Racket({
-			direction: dir,
+			direction: options.position,
 			thickness: Pong.defaults.racketThickness,
 			size: Pong.defaults.racketLength,
-			color: FlxColor.WHITE
+			color: options.color
 		});
 		racket.screenCenter();
-		racket.x = switch (dir) {
+		racket.x = switch (options.position) {
 			case LEFT:
 				Pong.defaults.racketPadding;
 			case RIGHT:
@@ -139,26 +157,30 @@ class LevelBuilder {
 		var player = new Player(racket);
 		player.scoreLabelText = '';
 		player.score = 0;
-		player.add({
-			var kbd = new KeyboardMovementController(racket);
-			kbd.speed = Pong.defaults.racketSpeed;
-			kbd;
-		});
+		player.add(options.getController(racket));
 
 		return player;
 	}
 
-	public function buildTwoPlayersRoom():{
+	public function buildTwoPlayersRoom(?left:PlayerOptions, ?right:PlayerOptions):{
 		ball:Ball,
 		walls:Array<FlxSprite>,
 		players:Array<Player>,
 	} {
+		if (left == null)
+			left = Reflect.copy(playerOptionsDefault);
+
+		if (right == null) {
+			right = Reflect.copy(playerOptionsDefault);
+			right.position = RIGHT;
+		}
+
 		var walls = [getWall({pos: UP, padding: 0}), getWall({pos: DOWN, padding: 0})];
 
 		var batHole = Math.ceil(Pong.defaults.ballSize * 1.5);
 		var movementBounds = getMovementBounds(walls[0], walls[1], batHole);
 
-		var players = [getPlayer(LEFT), getPlayer(RIGHT)];
+		var players = [getPlayer(left), getPlayer(right)];
 		players[0].racket.movementBounds = players[1].racket.movementBounds = movementBounds;
 
 		players[0].scoreLabel.width = 50;
