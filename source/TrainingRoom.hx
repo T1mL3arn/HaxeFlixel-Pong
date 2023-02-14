@@ -16,6 +16,8 @@ class TrainingRoom extends FlxState {
 
 	override function create() {
 
+		bgColor = 0xFF111111;
+
 		walls = new FlxTypedGroup();
 
 		var room = LevelBuilder.inst.buildTraningRoom();

@@ -17,6 +17,8 @@ class TwoPlayersRoom extends FlxState {
 	override function create() {
 		super.create();
 
+		bgColor = 0xFF111111;
+
 		var room = LevelBuilder.inst.buildTwoPlayersRoom();
 
 		ball = room.ball;
