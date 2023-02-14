@@ -67,6 +67,7 @@ class TwoPlayersRoom extends FlxState {
 	function ballCollision(wall:FlxObject, ball:Ball) {
 		if (wall is Racket) {
 			ball.hitBy = wall;
+			(cast wall : Racket).ballCollision(ball);
 		}
 	}
 
