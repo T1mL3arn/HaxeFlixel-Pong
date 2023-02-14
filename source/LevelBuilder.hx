@@ -91,13 +91,15 @@ class LevelBuilder {
 		racket.screenCenter();
 		racket.x = Pong.defaults.racketPadding;
 
-		var upWall = getWall({pos: UP, padding: 5, size: 0.95});
-		var downWall = getWall({pos: DOWN, padding: 5, size: 0.95});
+		var walls = [
+			getWall({pos: UP, padding: 5, size: 0.95}),
+			getWall({pos: DOWN, padding: 5, size: 0.95}),
+			getWall({pos: RIGHT, padding: 5, size: 0.95})
+		];
+
 		var batHole = Math.ceil(Pong.defaults.ballSize * 1.5);
 
-		racket.movementBounds = getMovementBounds(upWall, downWall, batHole);
-
-		var walls = [upWall, downWall, getWall({pos: RIGHT, padding: 5, size: 0.95})];
+		racket.movementBounds = getMovementBounds(walls[0], walls[1], batHole);
 
 		var player;
 		player = new Player(racket);
@@ -114,6 +116,69 @@ class LevelBuilder {
 			ball: ball,
 			walls: walls,
 			player: player,
+		};
+	}
+
+	function getPlayer(dir:FlxDirection, ?controller):Player {
+		var racket = new Racket({
+			direction: dir,
+			thickness: Pong.defaults.racketThickness,
+			size: Pong.defaults.racketLength,
+			color: FlxColor.WHITE
+		});
+		racket.screenCenter();
+		racket.x = switch (dir) {
+			case LEFT:
+				Pong.defaults.racketPadding;
+			case RIGHT:
+				Flixel.width - racket.width - Pong.defaults.racketPadding;
+			default:
+				racket.x;
+		}
+
+		var player = new Player(racket);
+		player.scoreLabelText = '';
+		player.score = 0;
+		player.add({
+			var kbd = new KeyboardMovementController(racket);
+			kbd.speed = Pong.defaults.racketSpeed;
+			kbd;
+		});
+
+		return player;
+	}
+
+	public function buildTwoPlayersRoom():{
+		ball:Ball,
+		walls:Array<FlxSprite>,
+		players:Array<Player>,
+	} {
+		var walls = [getWall({pos: UP, padding: 0}), getWall({pos: DOWN, padding: 0})];
+
+		var batHole = Math.ceil(Pong.defaults.ballSize * 1.5);
+		var movementBounds = getMovementBounds(walls[0], walls[1], batHole);
+
+		var players = [getPlayer(LEFT), getPlayer(RIGHT)];
+		players[0].racket.movementBounds = players[1].racket.movementBounds = movementBounds;
+
+		players[0].scoreLabel.width = 50;
+		players[0].scoreLabel.textField.width = 50;
+		players[0].scoreLabel.alignment = RIGHT;
+		players[0].scoreLabel.screenCenter(X);
+		players[0].scoreLabel.y = Flixel.height * 0.07;
+		players[0].scoreLabel.x -= 50;
+
+		players[1].scoreLabel.width = 50;
+		players[1].scoreLabel.textField.width = 50;
+		players[1].scoreLabel.alignment = LEFT;
+		players[1].scoreLabel.screenCenter(X);
+		players[1].scoreLabel.y = Flixel.height * 0.07;
+		players[1].scoreLabel.x += 50;
+
+		return {
+			ball: new Ball(),
+			walls: walls,
+			players: players,
 		};
 	}
 }
