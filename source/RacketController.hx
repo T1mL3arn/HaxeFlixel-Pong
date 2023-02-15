@@ -1,20 +1,17 @@
 package;
 
 import flixel.FlxBasic;
-import flixel.FlxObject;
 import flixel.input.FlxInput.FlxInputState;
 import flixel.input.keyboard.FlxKey;
 
 class RacketController extends FlxBasic {
 
-	public var racket:FlxObject;
+	public var racket:Racket;
 
-	public function new(racket:FlxObject) {
+	public function new(racket:Racket) {
 		super();
 		this.racket = racket;
 	}
-
-	// public function update(?racket:FlxObject) {}
 }
 
 class KeyboardMovementController extends RacketController {
