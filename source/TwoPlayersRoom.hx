@@ -49,7 +49,10 @@ class TwoPlayersRoom extends FlxState {
 	override function destroy() {
 		super.destroy();
 
-		// TODO
+		walls.destroy();
+		players.iter(p -> p.destroy());
+		playerGoals.destroy();
+		ball.destroy();
 	}
 
 	override function update(dt:Float) {
