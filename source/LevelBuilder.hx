@@ -2,6 +2,7 @@ package;
 
 import Main.Pong;
 import RacketController.KeyboardMovementController;
+import Utils.merge;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.util.FlxColor;
@@ -169,11 +170,15 @@ class LevelBuilder {
 	} {
 		if (left == null)
 			left = Reflect.copy(playerOptionsDefault);
+		else
+			left = merge(Reflect.copy(playerOptionsDefault), left);
 
 		if (right == null) {
 			right = Reflect.copy(playerOptionsDefault);
 			right.position = RIGHT;
 		}
+		else
+			right = merge(Reflect.copy(playerOptionsDefault), right);
 
 		var walls = [getWall({pos: UP, padding: 0}), getWall({pos: DOWN, padding: 0})];
 

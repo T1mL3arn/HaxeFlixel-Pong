@@ -1,5 +1,6 @@
 package;
 
+import LevelBuilder.PlayerOptions;
 import flixel.FlxBasic;
 import flixel.FlxObject;
 import flixel.FlxState;
@@ -14,12 +15,21 @@ class TwoPlayersRoom extends FlxState {
 	var playerGoals:FlxTypedGroup<FlxObject>;
 	var ball:Ball;
 
+	var leftOptions:PlayerOptions;
+	var rightOptions:PlayerOptions;
+
+	public function new(?left:PlayerOptions, ?right:PlayerOptions) {
+		super();
+		leftOptions = left;
+		rightOptions = right;
+	}
+
 	override function create() {
 		super.create();
 
 		bgColor = 0xFF111111;
 
-		var room = LevelBuilder.inst.buildTwoPlayersRoom();
+		var room = LevelBuilder.inst.buildTwoPlayersRoom(leftOptions, rightOptions);
 
 		ball = room.ball;
 		add(ball);
