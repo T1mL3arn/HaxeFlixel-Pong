@@ -62,6 +62,12 @@ class SimpleAI extends RacketController {
 					if (tween != null)
 						tween.cancel();
 
+					// 15% chance AI calculates position with small error
+					final chance = 0.15;
+					final error = Math.random() < chance ? 0.1 : 0.33;
+					final variance = racket.height * 0.5 * error;
+					targetRacketY = Flixel.random.float(targetRacketY - variance, targetRacketY + variance);
+
 					var path = Math.abs(targetRacketY - racketBounds.y);
 					var duration = path / Pong.defaults.racketSpeed;
 					tween = FlxTween.tween(racket, {y: targetRacketY}, duration, {ease: FlxEase.linear});
