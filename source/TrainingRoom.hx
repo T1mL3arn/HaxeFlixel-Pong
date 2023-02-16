@@ -1,5 +1,6 @@
 package;
 
+import Main.Pong;
 import flixel.FlxObject;
 import flixel.FlxState;
 import flixel.group.FlxGroup.FlxTypedGroup;
@@ -50,7 +51,7 @@ class TrainingRoom extends FlxState {
 		super.update(dt);
 
 		if (ball.velocity.lengthSquared == 0 && Flixel.keys.justPressed.ANY) {
-			ball.velocity.setPolarDegrees(300, 135 + Flixel.random.int(0, 105));
+			ball.velocity.setPolarDegrees(Pong.defaults.ballSpeed, Flixel.random.int(135, 225));
 		}
 
 		Flixel.collide(walls, ball, ballCollision);

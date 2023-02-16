@@ -31,6 +31,7 @@ class Pong {
 
 	public static final defaults = {
 		ballSize: 16,
+		ballSpeed: 300,
 		racketLength: 100,
 		racketThickness: 16,
 		racketSpeed: 200.0,
