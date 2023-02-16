@@ -19,9 +19,13 @@ class Main extends Sprite {
 
 		Flixel.switchState(new TwoPlayersRoom({
 			position: FlxDirection.LEFT,
-			getController: racket -> new SimpleAI(racket)
+			name: 'simple-ai',
+			color: 0xFF0075EB,
+			getController: racket -> new SimpleAI(racket),
 		}, {
 			position: FlxDirection.RIGHT,
+			name: 'simple-ai',
+			color: 0xFFF1003C,
 			getController: racket -> new SimpleAI(racket)
 		}));
 	}
