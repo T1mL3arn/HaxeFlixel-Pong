@@ -138,7 +138,7 @@ class LevelBuilder {
 		};
 	}
 
-	function getPlayer(options:PlayerOptions, ?controller):Player {
+	function getPlayer(options:PlayerOptions):Player {
 		var racket = new Racket({
 			direction: options.position,
 			thickness: Pong.defaults.racketThickness,
@@ -156,6 +156,7 @@ class LevelBuilder {
 		}
 
 		var player = new Player(racket);
+		player.name = options.name;
 		player.scoreLabelText = '';
 		player.score = 0;
 		player.add(options.getController(racket));
