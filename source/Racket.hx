@@ -21,8 +21,13 @@ typedef RacketOptions = {
 
 class Racket extends FlxSprite {
 
-	public var direction:FlxDirection;
+	@:deprecated("use `position` instead")
+	public var direction(get, never):FlxDirection;
 
+	inline function get_direction():FlxDirection
+		return this.position;
+
+	public var position:FlxDirection;
 	public var movementBounds:MovementBounds = null;
 	public var movementController:Racket->Void = null;
 
@@ -31,12 +36,12 @@ class Racket extends FlxSprite {
 	public function new(options:RacketOptions) {
 		super();
 
-		this.direction = options.direction;
+		position = options.direction;
 
 		immovable = true;
 		elasticity = 1;
 
-		switch (direction) {
+		switch (position) {
 			case UP, DOWN:
 				makeGraphic(options.size, options.thickness, options.color);
 				allowCollisions = UP | DOWN;
