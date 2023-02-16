@@ -47,7 +47,7 @@ class SimpleAI extends RacketController {
 
 		// there is 10% percent change AI get distracted...
 		if (Math.random() < 0.1)
-			timeToRethink = 0.15 + Math.random() * 0.2;
+			timeToRethink = 0.2 + Math.random() * 0.2;
 
 		// check if it is time to rethink racket position
 		if (currentTimer >= timeToRethink) {
@@ -73,7 +73,7 @@ class SimpleAI extends RacketController {
 
 					// 15% chance AI calculates position with small error
 					final chance = 0.15;
-					final error = Math.random() < chance ? 0.1 : 0.33;
+					final error = Math.random() < chance ? 0.125 : 0.33;
 					final variance = racket.height * 0.5 * error;
 					targetRacketY = Flixel.random.float(targetRacketY - variance, targetRacketY + variance);
 
