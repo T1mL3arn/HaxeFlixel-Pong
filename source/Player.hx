@@ -24,14 +24,14 @@ class Player extends FlxGroup {
 		add(scoreLabel);
 
 		// ball collision area
-		hitArea = switch (racket.direction) {
+		hitArea = switch (racket.position) {
 			case LEFT, RIGHT:
 				new FlxObject(0, 0, 40, Flixel.height);
 			case UP, DOWN:
 				new FlxObject(0, 0, Flixel.width, 40);
 		}
 
-		switch (racket.direction) {
+		switch (racket.position) {
 			case LEFT:
 				hitArea.x = -hitArea.width * 1.2;
 			case RIGHT:

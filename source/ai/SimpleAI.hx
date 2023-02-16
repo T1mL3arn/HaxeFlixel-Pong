@@ -54,7 +54,7 @@ class SimpleAI extends RacketController {
 			var ballBounds = ball.getHitbox(tmprect1);
 			var racketBounds = racket.getHitbox(tmprect2);
 
-			switch (racket.direction) {
+			switch (racket.position) {
 				case LEFT, RIGHT:
 					var targetCenterY = (ballBounds.y + ballBounds.bottom) / 2;
 					var targetRacketY = targetCenterY - racketBounds.height / 2;

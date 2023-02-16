@@ -69,7 +69,7 @@ class Racket extends FlxSprite {
 	function updateHitboxRotation() {
 		// NOTE updates hitbox to match ortogonal rotation.
 		// At this moment is not needed.
-		switch (direction) {
+		switch (position) {
 			case LEFT, RIGHT:
 				setSize(height, width);
 				centerOffsets(false);
