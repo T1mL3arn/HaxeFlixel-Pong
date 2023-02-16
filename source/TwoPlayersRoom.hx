@@ -1,12 +1,14 @@
 package;
 
 import LevelBuilder.PlayerOptions;
+import Main.Pong;
 import flixel.FlxBasic;
 import flixel.FlxObject;
 import flixel.FlxState;
 import flixel.group.FlxGroup.FlxTypedGroup;
 
 using Lambda;
+using StringTools;
 
 class TwoPlayersRoom extends FlxState {
 
@@ -58,9 +60,10 @@ class TwoPlayersRoom extends FlxState {
 	override function update(dt:Float) {
 		super.update(dt);
 
-		if (ball.velocity.lengthSquared == 0 && Flixel.keys.justPressed.ANY && !Flixel.keys.pressed.F2) {
-			ball.velocity.setPolarDegrees(300, 135 + Flixel.random.int(0, 105));
-			ball.velocity.x *= Math.random() < 0.5 ? -1 : 1;
+		if (ball.velocity.lengthSquared == 0 && (Flixel.keys.justPressed.ANY && !Flixel.keys.pressed.F2)) {
+			var sign = Math.random() < 0.5 ? -1 : 1;
+			ball.velocity.setPolarDegrees(Pong.defaults.ballSpeed, Flixel.random.int(60, -60));
+			ball.velocity.x *= sign;
 		}
 
 		Flixel.collide(walls, ball, ballCollision);
@@ -76,6 +79,8 @@ class TwoPlayersRoom extends FlxState {
 		ball.screenCenter();
 		ball.hitBy = null;
 	}
+
+	function throwBall(from, degrees:Float) {}
 
 	function ballCollision(wall:FlxObject, ball:Ball) {
 		if (wall is Racket) {
