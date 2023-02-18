@@ -1,6 +1,5 @@
 package;
 
-import Main.Pong;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.util.FlxColor;

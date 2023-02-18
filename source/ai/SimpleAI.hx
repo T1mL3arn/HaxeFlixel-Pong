@@ -1,6 +1,5 @@
 package ai;
 
-import Main.Pong;
 import flixel.math.FlxRect;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;

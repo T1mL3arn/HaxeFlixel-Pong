@@ -1,6 +1,5 @@
 package;
 
-import Main.Pong;
 import RacketController.KeyboardMovementController;
 import Utils.merge;
 import flixel.FlxObject;

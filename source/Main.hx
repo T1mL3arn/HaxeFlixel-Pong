@@ -1,7 +1,6 @@
 package;
 
 import ai.SimpleAI;
-import flixel.FlxGame;
 import flixel.util.FlxDirection;
 import openfl.display.Sprite;
 
@@ -10,7 +9,7 @@ class Main extends Sprite {
 	public function new() {
 		super();
 
-		addChild(new FlxGame(0, 0));
+		addChild(new Pong(0, 0));
 
 		// Flixel.switchState(new TwoPlayersRoom(null, {
 		// 	position: FlxDirection.RIGHT,
@@ -28,17 +27,5 @@ class Main extends Sprite {
 			color: 0xFFF1003C,
 			getController: racket -> new SimpleAI(racket)
 		}));
-	}
-}
-
-class Pong {
-
-	public static final defaults = {
-		ballSize: 16,
-		ballSpeed: 300,
-		racketLength: 100,
-		racketThickness: 16,
-		racketSpeed: 200.0,
-		racketPadding: 16.0,
 	}
 }
