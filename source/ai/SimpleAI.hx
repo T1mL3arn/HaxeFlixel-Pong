@@ -72,7 +72,7 @@ class SimpleAI extends RacketController {
 
 					// 15% chance AI calculates position with small error
 					final chance = 0.15;
-					final error = Math.random() < chance ? 0.125 : 0.33;
+					final error = Math.random() > chance ? 0.125 : 0.33;
 					final variance = racket.height * 0.5 * error;
 					targetRacketY = Flixel.random.float(targetRacketY - variance, targetRacketY + variance);
 
