@@ -9,7 +9,7 @@ class Main extends Sprite {
 	public function new() {
 		super();
 
-		addChild(new Pong(0, 0));
+		addChild(new Pong());
 
 		// Flixel.switchState(new TwoPlayersRoom(null, {
 		// 	position: FlxDirection.RIGHT,

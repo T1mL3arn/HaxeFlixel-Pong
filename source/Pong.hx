@@ -17,4 +17,8 @@ class Pong extends FlxGame {
 		racketSpeed: 225.0,
 		racketPadding: 12.0,
 	}
+
+	public function new() {
+		super(0, 0);
+	}
 }
