@@ -25,7 +25,7 @@ typedef PlayerOptions = {
 	?name:String,
 	position:FlxDirection,
 	?color:FlxColor,
-	getController:Racket->RacketController
+	?getController:Racket->RacketController
 }
 
 final playerOptionsDefault:PlayerOptions = {

@@ -38,8 +38,8 @@ class KeyboardMovementController extends RacketController {
 		racket.velocity.set(0, 0);
 
 		if (Flixel.keys.checkStatus(keyUp, FlxInputState.PRESSED))
-			this.racket.velocity.setPolarDegrees(this.speed, -90);
+			racket.velocity.set(0, -speed);
 		else if (Flixel.keys.checkStatus(keyDown, FlxInputState.PRESSED))
-			this.racket.velocity.setPolarDegrees(this.speed, 90);
+			racket.velocity.set(0, speed);
 	}
 }
