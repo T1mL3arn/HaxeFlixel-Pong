@@ -1,6 +1,9 @@
 package;
 
+import Utils.invLerp;
 import flixel.FlxSprite;
+import flixel.math.FlxMath;
+import flixel.math.FlxRect;
 import flixel.util.FlxColor;
 import flixel.util.FlxDirection;
 import flixel.util.FlxSpriteUtil;
@@ -104,7 +107,38 @@ class Racket extends FlxSprite {
 		}
 	}
 
+	var r1 = FlxRect.get();
+
 	public function ballCollision(ball:FlxSprite) {
-		// TODO
+		bouncingClassic(ball);
+	}
+
+	function bouncingClassic(ball:FlxSprite) {
+		// the classic pong ball bouncing
+		var paddleBounds = this.getHitbox(r1);
+
+		switch (position) {
+			case LEFT, RIGHT:
+				// 1. what part of a racket the ball hit (normalized value)
+				var hitFactor = invLerp(paddleBounds.y - ball.height, paddleBounds.bottom, ball.y);
+				hitFactor = FlxMath.bound(hitFactor, 0.1, 1.0);
+				// 2. use this factor to get speed scale:
+				// lerp gives value in range [-4, 3]
+				// Factor will never be 0,
+				// thus ceiling gives step value in range [-3, 3],
+				// in total 7 integers are available.
+				var speedScale = Math.ceil(FlxMath.lerp(-4, 3, hitFactor));
+
+				// [-3,3] range gives 7 values in total,
+				// so to limit bounce angle in 120 degrees
+				// I calc it like 120/7 ~ 17.
+				var angleStep = 17;
+				ball.velocity.setPolarDegrees(Pong.defaults.ballSpeed + Math.abs(speedScale * 40), angleStep * speedScale);
+				if (position == RIGHT)
+					ball.velocity.x *= -1;
+			case UP, DOWN:
+				// TODO
+				0;
+		}
 	}
 }
