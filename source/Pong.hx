@@ -1,6 +1,8 @@
 package;
 
 import flixel.FlxGame;
+import flixel.FlxObject;
+import flixel.util.FlxSignal;
 
 class Pong extends FlxGame {
 
@@ -17,6 +19,8 @@ class Pong extends FlxGame {
 		racketSpeed: 225.0,
 		racketPadding: 12.0,
 	}
+
+	public var ballCollision:FlxTypedSignal<(FlxObject, Ball) -> Void> = new FlxTypedSignal();
 
 	public function new() {
 		super(0, 0);

@@ -86,6 +86,7 @@ class TwoPlayersRoom extends FlxState {
 			ball.hitBy = wall;
 			(cast wall : Racket).ballCollision(ball);
 		}
+		Pong.inst.ballCollision.dispatch(wall, ball);
 	}
 
 	function goal(hitArea:FlxBasic, ball:Ball) {

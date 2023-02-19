@@ -1,19 +1,34 @@
 package ai;
 
+import flixel.FlxObject;
+import flixel.math.FlxMath;
 import flixel.math.FlxRect;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 
+/**
+	Get ball center Y.
+	Try to match racket center Y with it
+**/
 class SimpleAI extends RacketController {
 
-	var tmprect1 = new FlxRect();
-	var tmprect2 = new FlxRect();
+	static final SETTINGS = {
+		timeToThink: 0.08,
+		timeToThinkMax: 0.18,
+		distractedChance: 0.1,
+		misscalcChance: 0.15,
+		calcError: 0.15,
+		calcErrorBig: 0.3,
+	};
+
+	var tmprect1 = FlxRect.get();
+	var tmprect2 = FlxRect.get();
 
 	var targetX:Float;
 	var targetY:Float;
 
 	/** This gets randomized! */
-	var timeToRethink:Float = 0.1;
+	var timeToThink:Float = 0.1;
 
 	var currentTimer:Float = 0;
 	var tween:FlxTween;
@@ -23,6 +38,20 @@ class SimpleAI extends RacketController {
 
 		targetX = Flixel.width * 0.5;
 		targetY = Flixel.height * 0.5;
+
+		Pong.inst.ballCollision.add(ballCollision);
+	}
+
+	function ballCollision(obj:FlxObject, ball:Ball) {
+		timeToThink = SETTINGS.timeToThink;
+		currentTimer = 0;
+	}
+
+	override function destroy() {
+		super.destroy();
+		tmprect1.put();
+		tmprect2.put();
+		Pong.inst.ballCollision.remove(ballCollision);
 	}
 
 	function getBall():Ball {
@@ -31,6 +60,8 @@ class SimpleAI extends RacketController {
 
 	override function update(dt) {
 
+		// NOTE in its current form this AI is bad
+		// at reflecting ball on sharp angles!
 		var ball = getBall();
 		if (ball == null)
 			return;
@@ -44,19 +75,17 @@ class SimpleAI extends RacketController {
 				ball.velocity.x *= -1;
 		}
 
-		// there is 10% percent change AI get distracted...
-		if (Math.random() < 0.1)
-			timeToRethink = 0.2 + Math.random() * 0.2;
-
 		// check if it is time to rethink racket position
-		if (currentTimer >= timeToRethink) {
+		if (currentTimer >= timeToThink) {
 			currentTimer = 0;
-			// restore initial time in case AI was distracted
-			timeToRethink = 0.1;
+			// there is a chance AI got distracted
+			timeToThink = if (Math.random() < SETTINGS.distractedChance) {
+				SETTINGS.timeToThink * 1.5 + Math.random() * SETTINGS.timeToThinkMax;
+			}
+			else {
+				SETTINGS.timeToThink;
+			}
 		}
-
-		// get ball center Y
-		// try to match racket center Y with it
 
 		if (currentTimer == 0) {
 			var ballBounds = ball.getHitbox(tmprect1);
@@ -70,9 +99,18 @@ class SimpleAI extends RacketController {
 					if (tween != null)
 						tween.cancel();
 
-					// 15% chance AI calculates position with small error
-					final chance = 0.15;
-					final error = Math.random() > chance ? 0.125 : 0.33;
+					final error = if (FlxMath.equal(ball.velocity.y, 0, 0.1)) {
+						// if the ball moves horizontaly
+						// 1. there is much time to think
+						currentTimer = 0;
+						timeToThink = Math.abs(Flixel.width * 0.8 / ball.velocity.x);
+						trace('tninking calmly $timeToThink ...');
+						// 2. AI has a lot of freedom in placing the racket
+						Flixel.random.float(0.2, 0.99);
+					}
+					else {
+						Math.random() < SETTINGS.misscalcChance ? SETTINGS.calcErrorBig : SETTINGS.calcError;
+					}
 					final variance = racket.height * 0.5 * error;
 					targetRacketY = Flixel.random.float(targetRacketY - variance, targetRacketY + variance);
 
