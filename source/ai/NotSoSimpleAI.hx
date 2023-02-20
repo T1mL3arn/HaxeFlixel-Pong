@@ -7,13 +7,14 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 
 /**
-	Get ball center Y.
-	Try to match racket center Y with it
+	This AI pretends to be not so smart:
+		- its think timer is randomized sometiems (like it is distracted)
+		- its racket positioning is randomized
 **/
 class NotSoSimpleAI extends RacketController {
 
 	static final SETTINGS = {
-		timeToThink: 0.08,
+		timeToThink: 0.09,
 		timeToThinkMax: 0.18,
 		distractedChance: 0.1,
 		misscalcChance: 0.15,
@@ -108,7 +109,6 @@ class NotSoSimpleAI extends RacketController {
 						// 1. there is much time to think
 						currentTimer = 0;
 						timeToThink = Math.abs(Flixel.width * 0.8 / ball.velocity.x);
-						trace('tninking calmly $timeToThink ...');
 						// 2. AI has a lot of freedom in placing the racket
 						Flixel.random.float(0.2, 0.99);
 					}

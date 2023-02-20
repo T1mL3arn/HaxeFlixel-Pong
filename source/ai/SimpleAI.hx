@@ -6,10 +6,10 @@ import flixel.tweens.FlxTween;
 
 /**
 	Simple AI does not mean dumb AI. 
-	This AI is not good when ball comes at sharp adges.
 	Simple means:
 		- Get ball center Y.
 		- Try to match racket center Y with it.
+	NOTE: This AI is not good when a ball comes at sharp adges.
 **/
 class SimpleAI extends RacketController {
 
