@@ -51,6 +51,10 @@ class NotSoSimpleAI extends RacketController {
 		super.destroy();
 		tmprect1.put();
 		tmprect2.put();
+		if (tween != null) {
+			tween.cancel();
+			tween.destroy();
+		}
 		Pong.inst.ballCollision.remove(ballCollision);
 	}
 
