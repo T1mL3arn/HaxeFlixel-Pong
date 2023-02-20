@@ -16,8 +16,8 @@ class SimpleAI extends RacketController {
 	var timeToThink:Float = 0.1;
 	var timer:Float;
 
-	var tmprect1 = FlxRect.get();
-	var tmprect2 = FlxRect.get();
+	var tmprect1:FlxRect = FlxRect.get();
+	var tmprect2:FlxRect = FlxRect.get();
 	var tween:FlxTween;
 
 	public function new(racket:Racket) {
@@ -27,7 +27,10 @@ class SimpleAI extends RacketController {
 	override function destroy() {
 		super.destroy();
 
-		tween.destroy();
+		if (tween != null) {
+			tween.cancel();
+			tween.destroy();
+		}
 		tmprect1.put();
 		tmprect2.put();
 	}
