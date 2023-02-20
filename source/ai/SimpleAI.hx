@@ -1,68 +1,40 @@
 package ai;
 
-import flixel.FlxObject;
-import flixel.math.FlxMath;
 import flixel.math.FlxRect;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 
 /**
-	Get ball center Y.
-	Try to match racket center Y with it
+	Simple AI does not mean dumb AI. 
+	This AI is not good when ball comes at sharp adges.
+	Simple means:
+		- Get ball center Y.
+		- Try to match racket center Y with it.
 **/
 class SimpleAI extends RacketController {
 
-	static final SETTINGS = {
-		timeToThink: 0.08,
-		timeToThinkMax: 0.18,
-		distractedChance: 0.1,
-		misscalcChance: 0.15,
-		calcError: 0.15,
-		calcErrorBig: 0.3,
-	};
+	var timeToThink:Float = 0.1;
+	var timer:Float;
 
 	var tmprect1 = FlxRect.get();
 	var tmprect2 = FlxRect.get();
-
-	var targetX:Float;
-	var targetY:Float;
-
-	/** This gets randomized! */
-	var timeToThink:Float = 0.1;
-
-	var currentTimer:Float = 0;
 	var tween:FlxTween;
 
 	public function new(racket:Racket) {
 		super(racket);
-
-		targetX = Flixel.width * 0.5;
-		targetY = Flixel.height * 0.5;
-
-		Pong.inst.ballCollision.add(ballCollision);
-	}
-
-	function ballCollision(obj:FlxObject, ball:Ball) {
-		timeToThink = SETTINGS.timeToThink;
-		currentTimer = 0;
 	}
 
 	override function destroy() {
 		super.destroy();
+
+		tween.destroy();
 		tmprect1.put();
 		tmprect2.put();
-		Pong.inst.ballCollision.remove(ballCollision);
 	}
 
-	function getBall():Ball {
-		return Reflect.getProperty(Flixel.state, 'ball');
-	}
+	override function update(dt:Float) {
 
-	override function update(dt) {
-
-		// NOTE in its current form this AI is bad
-		// at reflecting ball on sharp angles!
-		var ball = getBall();
+		var ball = Pong.inst.state.ball;
 		if (ball == null)
 			return;
 
@@ -76,18 +48,11 @@ class SimpleAI extends RacketController {
 		}
 
 		// check if it is time to rethink racket position
-		if (currentTimer >= timeToThink) {
-			currentTimer = 0;
-			// there is a chance AI got distracted
-			timeToThink = if (Math.random() < SETTINGS.distractedChance) {
-				SETTINGS.timeToThink * 1.5 + Math.random() * SETTINGS.timeToThinkMax;
-			}
-			else {
-				SETTINGS.timeToThink;
-			}
+		if (timer >= timeToThink) {
+			timer = 0;
 		}
 
-		if (currentTimer == 0) {
+		if (timer == 0) {
 			var ballBounds = ball.getHitbox(tmprect1);
 			var racketBounds = racket.getHitbox(tmprect2);
 
@@ -96,23 +61,10 @@ class SimpleAI extends RacketController {
 					var targetCenterY = (ballBounds.y + ballBounds.bottom) / 2;
 					var targetRacketY = targetCenterY - racketBounds.height / 2;
 
-					if (tween != null)
+					if (tween != null) {
 						tween.cancel();
-
-					final error = if (FlxMath.equal(ball.velocity.y, 0, 0.1)) {
-						// if the ball moves horizontaly
-						// 1. there is much time to think
-						currentTimer = 0;
-						timeToThink = Math.abs(Flixel.width * 0.8 / ball.velocity.x);
-						trace('tninking calmly $timeToThink ...');
-						// 2. AI has a lot of freedom in placing the racket
-						Flixel.random.float(0.2, 0.99);
+						tween.destroy();
 					}
-					else {
-						Math.random() < SETTINGS.misscalcChance ? SETTINGS.calcErrorBig : SETTINGS.calcError;
-					}
-					final variance = racket.height * 0.5 * error;
-					targetRacketY = Flixel.random.float(targetRacketY - variance, targetRacketY + variance);
 
 					var path = Math.abs(targetRacketY - racketBounds.y);
 					var duration = path / Pong.defaults.racketSpeed;
@@ -123,6 +75,6 @@ class SimpleAI extends RacketController {
 			}
 		}
 
-		currentTimer += dt;
+		timer += dt;
 	}
 }
