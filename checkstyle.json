@@ -231,7 +231,7 @@
 		{
 			"type": "InnerAssignment",
 			"props": {
-				"ignoreReturnAssignments": false
+				"ignoreReturnAssignments": true
 			}
 		},
 		{
