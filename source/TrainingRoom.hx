@@ -68,10 +68,10 @@ class TrainingRoom extends FlxState {
 	}
 
 	function ballCollision(wall:FlxObject, ball:Ball) {
-		ball.collision(wall);
 		if (wall is Racket)
 			(cast wall : Racket).ballCollision(ball);
 
+		ball.collision(wall);
 		Pong.inst.ballCollision.dispatch(wall, ball);
 	}
 }

@@ -20,7 +20,6 @@ class TwoPlayersRoom extends FlxState {
 
 	var leftOptions:PlayerOptions;
 	var rightOptions:PlayerOptions;
-	var sounds:Array<FlxSound>;
 
 	public function new(?left:PlayerOptions, ?right:PlayerOptions) {
 		super();
@@ -48,16 +47,6 @@ class TwoPlayersRoom extends FlxState {
 			walls.add(player.racket);
 			playerGoals.add(player.hitArea);
 		});
-
-		// TODO transfer sounds to Ball
-		// TODO the faster ball moves, the higher the pitch should be
-		sounds = [
-			new FlxSound().loadEmbedded(AssetPaths.sfx_4360_4948_lq__freesound__ogg),
-			new FlxSound().loadEmbedded(AssetPaths.sfx_4370_4948_lq__freesound__ogg),
-			new FlxSound().loadEmbedded(AssetPaths.sfx_4382_4948_lq__freesound__ogg),
-			new FlxSound().loadEmbedded(AssetPaths.sfx_4391_4948_lq__freesound__ogg),
-		];
-		sounds.iter(s -> s.volume = 0.75);
 	}
 
 	override function destroy() {
@@ -67,7 +56,6 @@ class TwoPlayersRoom extends FlxState {
 		players.iter(p -> p.destroy());
 		playerGoals.destroy();
 		ball.destroy();
-		sounds.iter(s -> s.destroy());
 	}
 
 	override function update(dt:Float) {
@@ -96,17 +84,11 @@ class TwoPlayersRoom extends FlxState {
 	function throwBall(from, degrees:Float) {}
 
 	function ballCollision(wall:FlxObject, ball:Ball) {
-		ball.collision(wall);
 		if (wall is Racket) {
 			(cast wall : Racket).ballCollision(ball);
 		}
+		ball.collision(wall);
 		Pong.inst.ballCollision.dispatch(wall, ball);
-
-		// play random sound
-		var ind = Flixel.random.int(1, sounds.length - 1) - 1;
-		var sound = sounds[ind];
-		sound.play();
-		sounds.swap(ind, sounds.length - 1);
 	}
 
 	function goal(hitArea:FlxBasic, ball:Ball) {
