@@ -16,4 +16,8 @@ class Ball extends FlxSprite {
 		screenCenter();
 		elasticity = 1;
 	}
+
+	public function collision(target:FlxObject) {
+		hitBy = target;
+	}
 }
