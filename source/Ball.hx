@@ -17,6 +17,8 @@ class Ball extends FlxSprite {
 		super();
 
 		makeGraphic(Pong.defaults.ballSize, Pong.defaults.ballSize, FlxColor.WHITE);
+		color = FlxColor.RED;
+		color = FlxColor.WHITE;
 		centerOrigin();
 		screenCenter();
 		elasticity = 1;

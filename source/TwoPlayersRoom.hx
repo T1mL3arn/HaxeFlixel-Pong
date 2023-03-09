@@ -6,6 +6,7 @@ import flixel.FlxObject;
 import flixel.FlxState;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.system.FlxSound;
+import flixel.util.FlxColor;
 
 using Lambda;
 using StringTools;
@@ -79,13 +80,21 @@ class TwoPlayersRoom extends FlxState {
 		ball.velocity.set(0, 0);
 		ball.screenCenter();
 		ball.hitBy = null;
+		ball.color = FlxColor.WHITE;
 	}
 
-	function throwBall(from, degrees:Float) {}
+	function colorizeBall(racket:Racket, ball:Ball) {
+		var player = players.find(p -> p.racket == racket);
+		var color = player.options.color;
+		color.saturation -= 0.1;
+		color.lightness += 0.2;
+		ball.color = color;
+	}
 
 	function ballCollision(wall:FlxObject, ball:Ball) {
 		if (wall is Racket) {
 			(cast wall : Racket).ballCollision(ball);
+			colorizeBall(cast wall, ball);
 		}
 		ball.collision(wall);
 		Pong.inst.ballCollision.dispatch(wall, ball);
@@ -95,7 +104,6 @@ class TwoPlayersRoom extends FlxState {
 		var looser = players.find(p -> p.hitArea == hitArea);
 		var winner = players.find(p -> p.racket == ball.hitBy);
 		if (looser != null && winner != null) {
-			trace('goal');
 			winner.score += 1;
 			resetBall();
 		}
