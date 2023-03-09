@@ -1,16 +1,38 @@
 package;
 
+import RacketController.KeyboardMovementController;
 import flixel.FlxObject;
 import flixel.group.FlxGroup;
 import flixel.text.FlxText;
+import flixel.util.FlxColor;
+import flixel.util.FlxDirection;
+
+typedef PlayerOptions = {
+	?name:String,
+	position:FlxDirection,
+	?color:FlxColor,
+	?getController:Racket->RacketController
+}
 
 class Player extends FlxGroup {
+
+	public static final defaultOptions:PlayerOptions = {
+		name: 'player',
+		position: LEFT,
+		color: FlxColor.WHITE,
+		getController: racket -> {
+			var c = new KeyboardMovementController(racket);
+			c.speed = Pong.defaults.racketSpeed;
+			return c;
+		},
+	};
 
 	public var name:String;
 	public var racket:Racket;
 	public var score(default, set):Int = 0;
 	public var scoreLabel:FlxText;
 	public var scoreLabelText:String = '';
+	public var options:PlayerOptions;
 
 	public var hitArea:FlxObject;
 

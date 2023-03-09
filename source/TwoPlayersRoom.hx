@@ -1,6 +1,6 @@
 package;
 
-import LevelBuilder.PlayerOptions;
+import Player.PlayerOptions;
 import flixel.FlxBasic;
 import flixel.FlxObject;
 import flixel.FlxState;

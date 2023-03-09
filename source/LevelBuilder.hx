@@ -1,5 +1,6 @@
 package;
 
+import Player.PlayerOptions;
 import RacketController.KeyboardMovementController;
 import Utils.merge;
 import flixel.FlxObject;
@@ -19,24 +20,6 @@ final defaultWallParams:WallParams = {
 	thickness: 5,
 	size: 1.0,
 	padding: 0,
-}
-
-typedef PlayerOptions = {
-	?name:String,
-	position:FlxDirection,
-	?color:FlxColor,
-	?getController:Racket->RacketController
-}
-
-final playerOptionsDefault:PlayerOptions = {
-	name: 'player',
-	position: LEFT,
-	color: FlxColor.WHITE,
-	getController: racket -> {
-		var c = new KeyboardMovementController(racket);
-		c.speed = Pong.defaults.racketSpeed;
-		return c;
-	},
 }
 
 class LevelBuilder {
@@ -155,6 +138,7 @@ class LevelBuilder {
 		}
 
 		var player = new Player(racket);
+		player.options = options;
 		player.name = options.name;
 		player.scoreLabelText = '';
 		player.score = 0;
@@ -169,16 +153,16 @@ class LevelBuilder {
 		players:Array<Player>,
 	} {
 		if (left == null)
-			left = Reflect.copy(playerOptionsDefault);
+			left = Reflect.copy(Player.defaultOptions);
 		else
-			left = merge(Reflect.copy(playerOptionsDefault), left);
+			left = merge(Reflect.copy(Player.defaultOptions), left);
 
 		if (right == null) {
-			right = Reflect.copy(playerOptionsDefault);
+			right = Reflect.copy(Player.defaultOptions);
 			right.position = RIGHT;
 		}
 		else
-			right = merge(Reflect.copy(playerOptionsDefault), right);
+			right = merge(Reflect.copy(Player.defaultOptions), right);
 
 		var walls = [getWall({pos: UP, padding: 0}), getWall({pos: DOWN, padding: 0})];
 
