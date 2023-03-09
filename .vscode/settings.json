@@ -9,5 +9,11 @@
 			"source.sortImports": true
 		}
 	},
-	"haxe.enableExtendedIndentation": true
+	"haxe.enableExtendedIndentation": true,
+	"codedox": {
+		"commentend": "**/",
+		"commentprefix": "\t",
+		// "commentprefix": " * ",
+		"commentdescription": "",
+	}
 }
