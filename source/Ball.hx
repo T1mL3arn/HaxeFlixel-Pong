@@ -40,7 +40,8 @@ class Ball extends FlxSprite {
 	}
 
 	public function collision(target:FlxObject) {
-		hitBy = target;
+		if (target is Racket)
+			hitBy = target;
 
 		playRandomCollisionSound();
 	}
