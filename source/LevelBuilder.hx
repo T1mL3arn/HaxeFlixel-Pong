@@ -80,17 +80,10 @@ class LevelBuilder {
 		ball:Ball,
 	} {
 
+		var player = getPlayer(Reflect.copy(Player.defaultOptions));
+
 		var ball = new Ball();
 		ball.x += Flixel.width * 0.25;
-
-		var racket = new Racket({
-			direction: FlxDirection.LEFT,
-			thickness: Pong.defaults.racketThickness,
-			size: Pong.defaults.racketLength,
-			color: FlxColor.WHITE
-		});
-		racket.screenCenter();
-		racket.x = Pong.defaults.racketPadding;
 
 		var walls = [
 			getWall({pos: UP, padding: 5, size: 0.95}),
@@ -100,18 +93,10 @@ class LevelBuilder {
 
 		var batHole = Math.ceil(Pong.defaults.ballSize * 1.5);
 
-		racket.movementBounds = getMovementBounds(walls[0], walls[1], batHole);
-
-		var player;
-		player = new Player(racket);
+		player.racket.movementBounds = getMovementBounds(walls[0], walls[1], batHole);
 		player.scoreLabel.setPosition(Flixel.width * 0.75, Flixel.height * 0.15);
 		player.scoreLabelText = 'balls: ';
 		player.score = 0;
-		player.add({
-			var kbd = new KeyboardMovementController(racket);
-			kbd.speed = Pong.defaults.racketSpeed;
-			kbd;
-		});
 
 		return {
 			ball: ball,

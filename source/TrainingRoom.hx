@@ -1,6 +1,5 @@
 package;
 
-import Main.Pong;
 import flixel.FlxObject;
 import flixel.FlxState;
 import flixel.group.FlxGroup.FlxTypedGroup;
