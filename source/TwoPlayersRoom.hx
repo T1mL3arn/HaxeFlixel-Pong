@@ -5,8 +5,8 @@ import flixel.FlxBasic;
 import flixel.FlxObject;
 import flixel.FlxState;
 import flixel.group.FlxGroup.FlxTypedGroup;
-import flixel.system.FlxSound;
 import flixel.util.FlxColor;
+import haxe.Timer;
 
 using Lambda;
 using StringTools;
@@ -21,6 +21,8 @@ class TwoPlayersRoom extends FlxState {
 
 	var leftOptions:PlayerOptions;
 	var rightOptions:PlayerOptions;
+
+	var firstBallServe:Bool = true;
 
 	public function new(?left:PlayerOptions, ?right:PlayerOptions) {
 		super();
@@ -62,10 +64,10 @@ class TwoPlayersRoom extends FlxState {
 	override function update(dt:Float) {
 		super.update(dt);
 
-		if (ball.velocity.lengthSquared == 0 && (Flixel.keys.justPressed.ANY && !Flixel.keys.pressed.F2)) {
-			var sign = Math.random() < 0.5 ? -1 : 1;
-			ball.velocity.setPolarDegrees(Pong.defaults.ballSpeed, Flixel.random.int(60, -60));
-			ball.velocity.x *= sign;
+		if (ball.velocity.lengthSquared == 0 && firstBallServe) {
+			var player = Flixel.random.getObject(players);
+			serveBall(player, ball);
+			firstBallServe = false;
 		}
 
 		Flixel.collide(walls, ball, ballCollision);
@@ -103,9 +105,30 @@ class TwoPlayersRoom extends FlxState {
 	function goal(hitArea:FlxBasic, ball:Ball) {
 		var looser = players.find(p -> p.hitArea == hitArea);
 		var winner = players.find(p -> p.racket == ball.hitBy);
+
 		if (looser != null && winner != null) {
 			winner.score += 1;
 			resetBall();
+
+			// winner serves the ball
+			serveBall(winner, ball);
 		}
+	}
+
+	function serveBall(byPlayer:Player, ball:Ball) {
+
+		var p = byPlayer;
+		ball.y = p.racket.y + p.racket.height * 0.5 - ball.height * 0.5;
+
+		var velX = switch byPlayer.options.position {
+			case LEFT:
+				-Pong.defaults.ballSpeed;
+			case RIGHT:
+				Pong.defaults.ballSpeed;
+			default:
+				0;
+		}
+
+		Timer.delay(() -> ball.velocity.set(velX, 0), 1000);
 	}
 }

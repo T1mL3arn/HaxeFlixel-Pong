@@ -41,15 +41,6 @@ class SimpleAI extends RacketController {
 		if (ball == null)
 			return;
 
-		// throw the ball
-		if (ball.velocity.lengthSquared == 0) {
-			var angle = 60;
-
-			ball.velocity.setPolarDegrees(Pong.defaults.ballSpeed, Flixel.random.float(-angle, angle));
-			if (racket.position == RIGHT)
-				ball.velocity.x *= -1;
-		}
-
 		// check if it is time to rethink racket position
 		if (timer >= timeToThink) {
 			timer = 0;
