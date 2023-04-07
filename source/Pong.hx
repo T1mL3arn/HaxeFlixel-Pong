@@ -13,7 +13,7 @@ class Pong extends FlxGame {
 
 	public static final defaults = {
 		ballSize: 12,
-		ballSpeed: 300,
+		ballSpeed: 280,
 		racketLength: 80,
 		racketThickness: 12,
 		racketSpeed: 225.0,

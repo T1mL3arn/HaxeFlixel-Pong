@@ -9,7 +9,7 @@ import flixel.util.FlxDirection;
 
 typedef PlayerOptions = {
 	?name:String,
-	position:FlxDirection,
+	?position:FlxDirection,
 	?color:FlxColor,
 	?getController:Racket->RacketController
 }
