@@ -3,7 +3,6 @@ package;
 import Player.PlayerOptions;
 import flixel.FlxBasic;
 import flixel.FlxObject;
-import flixel.FlxState;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.util.FlxColor;
 import haxe.Timer;
@@ -12,7 +11,7 @@ using Lambda;
 using StringTools;
 using Utils;
 
-class TwoPlayersRoom extends FlxState {
+class TwoPlayersRoom extends BaseState {
 
 	var walls:FlxTypedGroup<FlxObject>;
 	var players:Array<Player>;
@@ -31,7 +30,6 @@ class TwoPlayersRoom extends FlxState {
 	}
 
 	override function create() {
-		super.create();
 
 		bgColor = 0xFF111111;
 

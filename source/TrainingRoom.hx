@@ -1,13 +1,11 @@
 package;
 
 import flixel.FlxObject;
-import flixel.FlxState;
 import flixel.group.FlxGroup.FlxTypedGroup;
-import menu.PauseMenu;
 
 using Lambda;
 
-class TrainingRoom extends FlxState {
+class TrainingRoom extends BaseState {
 
 	public var walls:FlxTypedGroup<FlxObject>;
 	public var ball:Ball;
@@ -59,10 +57,6 @@ class TrainingRoom extends FlxState {
 
 		if (!ball.inWorldBounds()) {
 			resetBall();
-		}
-
-		if (Flixel.keys.anyJustPressed([ESCAPE, P])) {
-			openSubState(new PauseMenu());
 		}
 	}
 
