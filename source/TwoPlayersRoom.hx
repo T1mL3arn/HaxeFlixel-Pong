@@ -21,7 +21,7 @@ class TwoPlayersRoom extends BaseState {
 	var leftOptions:PlayerOptions;
 	var rightOptions:PlayerOptions;
 
-	var firstBallServe:Bool = true;
+	var firstServe:Bool = true;
 
 	public function new(?left:PlayerOptions, ?right:PlayerOptions) {
 		super();
@@ -62,10 +62,11 @@ class TwoPlayersRoom extends BaseState {
 	override function update(dt:Float) {
 		super.update(dt);
 
-		if (ball.velocity.lengthSquared == 0 && firstBallServe) {
+		// NOTE vscode cannot find "firstServe" id to do rename-rafactoring
+		if (ball.velocity.lengthSquared == 0 && firstServe) {
 			var player = Flixel.random.getObject(players);
 			serveBall(player, ball);
-			firstBallServe = false;
+			firstServe = false;
 		}
 
 		Flixel.collide(walls, ball, ballCollision);
@@ -73,6 +74,7 @@ class TwoPlayersRoom extends BaseState {
 
 		if (!ball.inWorldBounds()) {
 			resetBall();
+			serveBall(Flixel.random.getObject(players), ball);
 		}
 	}
 
@@ -104,12 +106,19 @@ class TwoPlayersRoom extends BaseState {
 		var looser = players.find(p -> p.hitArea == hitArea);
 		var winner = players.find(p -> p.racket == ball.hitBy);
 
-		if (looser != null && winner != null) {
+		if (winner != null) {
 			winner.score += 1;
 			resetBall();
 
 			// winner serves the ball
 			serveBall(winner, ball);
+		}
+		else if (looser != null) {
+			// having a looser without a winner means
+			// it was a ball serve, in this case goal doesnt count
+			// and ball re-served the same way
+			resetBall();
+			serveBall(looser, ball);
 		}
 	}
 
