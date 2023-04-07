@@ -5,6 +5,7 @@ import djFlixel.ui.FlxMenu;
 import flixel.FlxState;
 import flixel.util.FlxColor;
 import flixel.util.FlxDirection;
+import lime.app.Application;
 
 class MainMenu extends FlxState {
 
@@ -23,8 +24,8 @@ class MainMenu extends FlxState {
 
 		menu.createPage('main').add('
 		-| 1 player | link | @1_player
-		-| multiplayer	| link | opts
-		-| exit			| link | exit
+		-| multiplayer | link | opts
+		-| exit game | link | exit_game
 		');
 
 		menu.createPage('1_player')
@@ -40,10 +41,10 @@ class MainMenu extends FlxState {
 		menu.goto('main');
 		menu.onMenuEvent = (e, id) -> {
 			switch ([e, id]) {
-				case [MenuEvent.it_fire, TRAINING_ROOM_MENU_ID]:
+				case [it_fire, TRAINING_ROOM_MENU_ID]:
 					Flixel.switchState(new TrainingRoom());
 
-				case [MenuEvent.it_fire, SELF_ROOM_MENU_ID]:
+				case [it_fire, SELF_ROOM_MENU_ID]:
 					Flixel.switchState(new TwoPlayersRoom({
 						position: FlxDirection.LEFT,
 						name: 'you',
@@ -55,6 +56,9 @@ class MainMenu extends FlxState {
 						color: FlxColor.WHITE,
 						getController: racket -> new KeyboardMovementController(racket),
 					}));
+
+				case [it_fire, 'exit_game']:
+					Application.current.window.close();
 
 				default:
 					0;
