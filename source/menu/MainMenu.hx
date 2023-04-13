@@ -27,7 +27,7 @@ class MainMenu extends FlxState {
 
 	override function create() {
 
-		var menu = new FlxMenu(0, Flixel.game.height / 2 - 100, -1);
+		var menu = new FlxMenu(0, Flixel.game.height / 2 - 100, -1, 10);
 
 		menu.PAR.start_button_fire = true;
 
@@ -39,9 +39,12 @@ class MainMenu extends FlxState {
 
 		menu.createPage('1_player')
 			.add('
+		-| Single Player | label | 1 | U
+		-| ---------- | label | 2 | U
 		-| training room | link | ${TRAINING_ROOM_MENU_ID}
 		-| vs self | link | ${SELF_ROOM_MENU_ID}
 		-| vs AI | link | @ai_settings
+		-| ---------- | label | 3 | U
 		-| go back | link | @back
 		');
 
@@ -51,8 +54,9 @@ class MainMenu extends FlxState {
 		-| ---------- | label | 2 | U
 		-| your position | list | player_pos | left,right
 		-| AI difficulty | list | ai_smarteness | easy,medium,hard
+		-| * START * | link | ai_room
 		-| ---------- | label | 3 | U
-		-| START | link | ai_room
+		-| go back | link | @back
 		');
 
 		MenuStyle.setDefaultStyle(menu);

@@ -10,6 +10,7 @@ class Main extends Sprite {
 		super();
 
 		D.init();
+		D.ui.initIcons([8]);
 
 		addChild(new Pong());
 
