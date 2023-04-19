@@ -27,15 +27,21 @@ class MainMenu extends FlxState {
 
 	override function create() {
 
-		var menu = new FlxMenu(0, Flixel.game.height / 2 - 100, -1, 10);
+		var menu = new FlxMenu(0, 0, -1, 10);
 
 		menu.PAR.start_button_fire = true;
 
-		menu.createPage('main').add('
+		menu.createPage('main')
+			.add('
+		-| PONG | label | 1 | U
+		-| ---------- | label | 2 | U
 		-| 1 player | link | @1_player
 		-| multiplayer | link | opts
 		-| exit game | link | exit_game
-		');
+		')
+			.par({
+				pos: 'screen,l,c'
+			});
 
 		menu.createPage('1_player')
 			.add('
@@ -46,7 +52,10 @@ class MainMenu extends FlxState {
 		-| vs AI | link | @ai_settings
 		-| ---------- | label | 3 | U
 		-| go back | link | @back
-		');
+		')
+			.par({
+				pos: 'screen,l,c'
+			});
 
 		menu.createPage('ai_settings')
 			.add('
@@ -57,7 +66,10 @@ class MainMenu extends FlxState {
 		-| * START * | link | ai_room
 		-| ---------- | label | 3 | U
 		-| go back | link | @back
-		');
+		')
+			.par({
+				pos: 'screen,l,c'
+			});
 
 		MenuStyle.setDefaultStyle(menu);
 
