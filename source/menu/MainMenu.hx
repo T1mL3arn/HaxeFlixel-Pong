@@ -11,8 +11,8 @@ import lime.app.Application;
 
 class MainMenu extends FlxState {
 
-	static final TRAINING_ROOM_MENU_ID = 'training_room';
-	static final SELF_ROOM_MENU_ID = 'self';
+	static final TRAINING_ROOM_MENU_ID = 'load_training_room';
+	static final SELF_ROOM_MENU_ID = 'load_self_room';
 
 	var players:Array<PlayerOptions>;
 
@@ -63,7 +63,7 @@ class MainMenu extends FlxState {
 		-| ---------- | label | 2 | U
 		-| your position | list | player_pos | left,right
 		-| AI difficulty | list | ai_smarteness | easy,medium,hard
-		-| * START * | link | ai_room
+		-| * START * | link | load_ai_room
 		-| ---------- | label | 3 | U
 		-| go back | link | @back
 		')
@@ -91,7 +91,7 @@ class MainMenu extends FlxState {
 				case [it_fire, 'exit_game']:
 					Application.current.window.close();
 
-				case [it_fire, 'ai_room']:
+				case [it_fire, 'load_ai_room']:
 					if (players[0].position == RIGHT)
 						swap(players, 0, 1);
 					Flixel.switchState(new TwoPlayersRoom(players[0], players[1]));
