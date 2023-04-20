@@ -49,10 +49,10 @@ class Lobby1v1 extends FlxState {
 		menu.goto('main');
 		add(menu);
 
-		var iceCompleteTimeout = 60 * 2 * 1000;
+		var iceCompleteTimeout = 2 * 60 * 1000;
 
 		var peerOptions = {
-			initiator: true,
+			initiator: false,
 			trickle: false,
 			stream: false,
 			iceCompleteTimeout: iceCompleteTimeout,
@@ -74,7 +74,7 @@ class Lobby1v1 extends FlxState {
 			switch ([e, id]) {
 				case [it_fire, 'create_lobby']:
 					if (localPeer == null) {
-						localPeer = connect(cast merge(peerOptions, {initiator: true}));
+						localPeer = connect(untyped merge(peerOptions, {initiator: true}));
 					}
 
 					menu.close(true);
@@ -105,7 +105,7 @@ class Lobby1v1 extends FlxState {
 
 				case [it_fire, 'connect_to_lobby']:
 					if (localPeer == null) {
-						localPeer = connect(cast merge(peerOptions, {initiator: false}));
+						localPeer = connect(untyped merge(peerOptions, {initiator: false}));
 					}
 
 					var pastedData = Browser.window.prompt('Paste room id');
