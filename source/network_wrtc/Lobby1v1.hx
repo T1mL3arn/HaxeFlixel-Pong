@@ -198,39 +198,9 @@ class Lobby1v1 extends BaseState {
 
 		return peer;
 	}
-	#else
-	override function create() {
-		super.create();
-
-		var input = new FlxInputText(0, 0, 150, 'hello', 12, FlxColor.WHITE, FlxColor.BLACK);
-		input.screenCenter();
-		add(input);
-
-		trace('--------------');
-		trace(Clipboard.generalClipboard.formats);
-		trace(Clipboard.generalClipboard.hasFormat(TEXT_FORMAT));
-		trace(LimeClipboard.text);
-		trace(Clipboard.generalClipboard.getData(TEXT_FORMAT));
-	}
 	#end
 
 	override function update(elapsed:Float) {
 		super.update(elapsed);
-
-		if (Flixel.keys.pressed.CONTROL && Flixel.keys.pressed.V) {
-			trace('ctrl + v is pressed');
-			trace(Clipboard.generalClipboard.getData(TEXT_FORMAT));
-			trace(LimeClipboard.text);
-
-			var text:String = Clipboard.generalClipboard.getData(TEXT_FORMAT);
-
-			if (text != null && text != '' && text != signalData) {
-				#if html5
-				localPeer.signal(Json.parse(text));
-				#end
-			}
-			else if (text == null || text == '')
-				trace('clipboard data is empty: "$text"');
-		}
 	}
 }
