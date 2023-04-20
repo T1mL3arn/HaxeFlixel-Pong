@@ -1,5 +1,6 @@
 package network_wrtc;
 
+import Utils.merge;
 import djFlixel.ui.FlxMenu;
 import flixel.FlxState;
 import haxe.Json;
@@ -50,28 +51,30 @@ class Lobby1v1 extends FlxState {
 
 		var iceCompleteTimeout = 60 * 2 * 1000;
 
+		var peerOptions = {
+			initiator: true,
+			trickle: false,
+			stream: false,
+			iceCompleteTimeout: iceCompleteTimeout,
+			// config: {
+			// 	// NOTE: iceServers from PeerJS library
+			// 	// https://github.com/peers/peerjs/blob/f52cb0c661d1cbaac78a64a5253b3eef03d4dd81/lib/util.ts#L36
+			// 	iceServers: untyped [
+			// 		{urls: "stun:stun.l.google.com:19302"},
+			// 		{
+			// 			urls: ["turn:eu-0.turn.peerjs.com:3478", "turn:us-0.turn.peerjs.com:3478"],
+			// 			username: "peerjs",
+			// 			credential: "peerjsp",
+			// 		},
+			// 	],
+			// },
+		};
+
 		menu.onMenuEvent = (e, id) -> {
 			switch ([e, id]) {
 				case [it_fire, 'create_lobby']:
 					if (localPeer == null) {
-						localPeer = connect(untyped {
-							initiator: true,
-							trickle: false,
-							stream: false,
-							iceCompleteTimeout: iceCompleteTimeout,
-							// config: {
-							// 	// NOTE: iceServers from PeerJS library
-							// 	// https://github.com/peers/peerjs/blob/f52cb0c661d1cbaac78a64a5253b3eef03d4dd81/lib/util.ts#L36
-							// 	iceServers: untyped [
-							// 		{urls: "stun:stun.l.google.com:19302"},
-							// 		{
-							// 			urls: ["turn:eu-0.turn.peerjs.com:3478", "turn:us-0.turn.peerjs.com:3478"],
-							// 			username: "peerjs",
-							// 			credential: "peerjsp",
-							// 		},
-							// 	],
-							// },
-						});
+						localPeer = connect(cast merge(peerOptions, {initiator: true}));
 					}
 
 					menu.close(true);
@@ -102,12 +105,7 @@ class Lobby1v1 extends FlxState {
 
 				case [it_fire, 'connect_to_lobby']:
 					if (localPeer == null) {
-						localPeer = connect(untyped {
-							initiator: false,
-							trickle: false,
-							stream: false,
-							iceCompleteTimeout: iceCompleteTimeout,
-						});
+						localPeer = connect(cast merge(peerOptions, {initiator: false}));
 					}
 
 					var pastedData = Browser.window.prompt('Paste room id');
