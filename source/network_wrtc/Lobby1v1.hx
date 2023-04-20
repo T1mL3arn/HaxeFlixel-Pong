@@ -195,6 +195,8 @@ class Lobby1v1 extends FlxState {
 			trace('Recieved data: ${data}');
 		});
 
+		peer.on('close', () -> trace('connection is CLOSED'));
+
 		return peer;
 	}
 	#end
