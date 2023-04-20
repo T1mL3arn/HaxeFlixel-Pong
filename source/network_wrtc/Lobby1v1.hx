@@ -159,6 +159,11 @@ class Lobby1v1 extends BaseState {
 						}
 					}
 
+				case [it_fire, 'open_main_menu']:
+					if (localPeer != null)
+						localPeer.destroy();
+					Flixel.switchState(new MainMenu());
+
 				default:
 					0;
 			}
