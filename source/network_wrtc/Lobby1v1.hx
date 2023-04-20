@@ -1,6 +1,7 @@
 package network_wrtc;
 
 import djFlixel.ui.FlxMenu;
+import flixel.FlxState;
 import haxe.Json;
 import lime.system.Clipboard as LimeClipboard;
 import menu.MainMenu;
@@ -13,7 +14,7 @@ import js.html.Console;
 import peer.Peer;
 #end
 
-class Lobby1v1 extends BaseState {
+class Lobby1v1 extends FlxState {
 
 	var signalData:String;
 
