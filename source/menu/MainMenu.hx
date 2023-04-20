@@ -8,6 +8,7 @@ import djFlixel.ui.FlxMenu;
 import flixel.FlxState;
 import flixel.util.FlxColor;
 import lime.app.Application;
+import network_wrtc.Lobby1v1;
 
 class MainMenu extends FlxState {
 
@@ -95,6 +96,9 @@ class MainMenu extends FlxState {
 					if (players[0].position == RIGHT)
 						swap(players, 0, 1);
 					Flixel.switchState(new TwoPlayersRoom(players[0], players[1]));
+
+				case [it_fire, 'create_multiplayer_lobby']:
+					Flixel.switchState(new Lobby1v1());
 
 				default:
 					0;
