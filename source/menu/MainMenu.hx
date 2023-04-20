@@ -34,9 +34,9 @@ class MainMenu extends FlxState {
 		menu.createPage('main')
 			.add('
 		-| PONG | label | 1 | U
-		-| ---------- | label | 2 | U
+		-| __________ | label | 2 | U
 		-| 1 player | link | @1_player
-		-| multiplayer | link | opts
+		-| multiplayer | link | create_multiplayer_lobby
 		-| exit game | link | exit_game
 		')
 			.par({
@@ -46,11 +46,11 @@ class MainMenu extends FlxState {
 		menu.createPage('1_player')
 			.add('
 		-| Single Player | label | 1 | U
-		-| ---------- | label | 2 | U
+		-| __________ | label | 2 | U
 		-| training room | link | ${TRAINING_ROOM_MENU_ID}
 		-| vs self | link | ${SELF_ROOM_MENU_ID}
 		-| vs AI | link | @ai_settings
-		-| ---------- | label | 3 | U
+		-| __________ | label | 3 | U
 		-| go back | link | @back
 		')
 			.par({
@@ -60,11 +60,11 @@ class MainMenu extends FlxState {
 		menu.createPage('ai_settings')
 			.add('
 		-| Settings | label | 1 | U
-		-| ---------- | label | 2 | U
+		-| __________ | label | 2 | U
 		-| your position | list | player_pos | left,right
 		-| AI difficulty | list | ai_smarteness | easy,medium,hard
 		-| * START * | link | load_ai_room
-		-| ---------- | label | 3 | U
+		-| __________ | label | 3 | U
 		-| go back | link | @back
 		')
 			.par({
