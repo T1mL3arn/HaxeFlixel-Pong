@@ -39,8 +39,7 @@
 	<haxelib name="djFlixel" />
 	<haxelib name="simple-peer" />
 
-	<!-- <dependency name="https://unpkg.com/simple-peer@5.9.0/simplepeer.min.js"/> -->
-	<dependency name="https://unpkg.com/simple-peer@5.9.0/simplepeer.min.js" path="https://unpkg.com/simple-peer@5.9.0/simplepeer.min.js"/>
+	<dependency name="https://unpkg.com/simple-peer@9.11.1/simplepeer.min.js" path="https://unpkg.com/simple-peer@9.11.1/simplepeer.min.js"/>
 	<!-- in the case if want to distribute the game altogether with simple-peer library -->
 	<!-- <dependency path="./lib/simplepeer.min.js"/> -->
 
