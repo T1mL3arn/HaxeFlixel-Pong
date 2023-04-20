@@ -60,7 +60,7 @@ class Lobby1v1 extends FlxState {
 			// 	// NOTE: iceServers from PeerJS library
 			// 	// https://github.com/peers/peerjs/blob/f52cb0c661d1cbaac78a64a5253b3eef03d4dd81/lib/util.ts#L36
 			// 	iceServers: untyped [
-			// 		{urls: "stun:stun.l.google.com:19302"},
+			// 		{urls: ["stun:stun.l.google.com:19302", "stun:global.stun.twilio.com:3478"]},
 			// 		{
 			// 			urls: ["turn:eu-0.turn.peerjs.com:3478", "turn:us-0.turn.peerjs.com:3478"],
 			// 			username: "peerjs",
