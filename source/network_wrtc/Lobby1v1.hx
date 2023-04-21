@@ -18,6 +18,7 @@ import peer.Peer;
 class Lobby1v1 extends FlxState {
 
 	var signalData:String;
+	var menu:FlxMenu;
 
 	#if html5
 	var localPeer:Peer;
@@ -33,19 +34,43 @@ class Lobby1v1 extends FlxState {
 			Flixel.switchState(new MainMenu());
 			return;
 		}
-		var menu = new FlxMenu(0, 0, 300, 5);
+
+		menu = new FlxMenu(0, 0, 300, 5);
 		menu.createPage('main')
 			.add('
-		-| create lobby | link | create_lobby
-		-| connect | link | connect_to_lobby
-		-| __________ | label | 3 | U
-		-| main menu | link | open_main_menu
-		')
+				-| create  | link | create_lobby
+				-| connect | link | connect_to_lobby
+				-| __________ | label | 3 | U
+				-| main menu | link | open_main_menu
+				')
 			.par({
 				pos: 'screen,c,c'
 			});
 
 		MenuStyle.setDefaultStyle(menu);
+
+		menu.createPage('accept connection')
+			.add('
+				-| create lobby | link | create_lobby | D | U |
+				-| accept connection | link | accept_connection
+				-| __________ | label | 3 | U
+				-| main menu | link | open_main_menu
+				')
+			.par({
+				pos: 'screen,c,c'
+			});
+
+		menu.createPage('connecting')
+			.add('
+				-| create lobby | link | create_lobby | D | U |
+				-| connecting | link | wait_connection | D | U |
+				-| __________ | label | 3 | U
+				-| main menu | link | open_main_menu
+				')
+			.par({
+				pos: 'screen,c,c'
+			});
+
 		menu.goto('main');
 		add(menu);
 
@@ -77,31 +102,7 @@ class Lobby1v1 extends FlxState {
 						localPeer = connect(untyped merge(peerOptions, {initiator: true}));
 					}
 
-					menu.close(true);
-					menu.pages.remove('main');
-					menu.createPage('main')
-						.add('
-							-| create lobby | link | create_lobby | D | U |
-							-| accept connection | link | accept_connection
-							-| __________ | label | 3 | U
-							-| main menu | link | open_main_menu
-							')
-						.par({
-							pos: 'screen,c,c'
-						});
-					menu.goto('main');
-
-				// menu.item_update('main', 'connect_to_lobby', item -> {
-				// 	item.ID = 'accept_connection';
-				// 	item.label = 'accept connection';
-				// 	item.disabled = false;
-				// 	item.selectable = true;
-				// });
-
-				// menu.item_update('main', 'create_loby', item -> {
-				// 	item.selectable = false;
-				// 	item.disabled = true;
-				// });
+					menu.goto('accept connection');
 
 				case [it_fire, 'connect_to_lobby']:
 					if (localPeer == null) {
@@ -120,28 +121,9 @@ class Lobby1v1 extends FlxState {
 						catch (err) {
 							Console.error(err);
 						}
-
-						menu.close(true);
-						menu.pages.remove('main');
-						menu.createPage('main')
-							.add('
-							-| create lobby | link | create_lobby | D | U |
-							-| connecting | link | wait_connection | D | U |
-							-| __________ | label | 3 | U
-							-| main menu | link | open_main_menu
-							')
-							.par({
-								pos: 'screen,c,c'
-							});
-						menu.goto('main');
-
-						// menu.item_update('main', 'connect_to_lobby', item -> {
-						// 	item.ID = 'wait_connection';
-						// 	item.label = 'connecting';
-						// 	item.disabled = true;
-						// 	item.selectable = false;
-						// });
 					}
+
+					menu.goto('connecting');
 
 				case [it_fire, 'accept_connection']:
 					var pastedData = Browser.window.prompt('Paste room id');
