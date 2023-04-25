@@ -11,6 +11,8 @@ import lime.app.Application;
 import menu.MenuUtils.setDefaultMenuStyle;
 import menu.MenuUtils.wrapMenuPage;
 import network_wrtc.Lobby1v1;
+import room.TrainingRoom;
+import room.TwoPlayersRoom;
 
 class MainMenu extends FlxState {
 

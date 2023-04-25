@@ -1,4 +1,4 @@
-package;
+package room;
 
 import flixel.FlxObject;
 import flixel.group.FlxGroup.FlxTypedGroup;

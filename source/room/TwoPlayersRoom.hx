@@ -1,4 +1,4 @@
-package;
+package room;
 
 import Player.PlayerOptions;
 import flixel.FlxBasic;
