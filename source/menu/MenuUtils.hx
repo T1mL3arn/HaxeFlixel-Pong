@@ -14,3 +14,18 @@ function setDefaultMenuStyle(menu:FlxMenu) {
 		a: 'center'
 	};
 }
+
+/**
+	Wraps menu page with header label and 'go back' action.
+	@param headerLabel header label
+	@param pageData string page data
+**/
+function wrapMenuPage(headerLabel:String, pageData:String) {
+	return '
+		-| $headerLabel | label | 1 | U
+		-| __________ | label | 2 | U
+		$pageData
+		-| __________ | label | 3 | U
+		-| go back | link | @back
+		';
+}
