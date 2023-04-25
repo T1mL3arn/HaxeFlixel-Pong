@@ -14,5 +14,3 @@ function setDefaultMenuStyle(menu:FlxMenu) {
 		a: 'center'
 	};
 }
-
-}

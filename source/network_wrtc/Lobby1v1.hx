@@ -6,7 +6,7 @@ import flixel.FlxState;
 import haxe.Json;
 import lime.system.Clipboard as LimeClipboard;
 import menu.MainMenu;
-import menu.MenuStyle.setDefaultMenuStyle;
+import menu.MenuUtils.setDefaultMenuStyle;
 import openfl.desktop.Clipboard;
 import peer.PeerOptions;
 #if html5

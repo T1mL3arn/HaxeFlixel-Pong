@@ -3,6 +3,7 @@ package menu;
 import djFlixel.ui.FlxMenu;
 import flixel.FlxSubState;
 import lime.app.Application;
+import menu.MenuUtils.setDefaultMenuStyle;
 
 class PauseMenu extends FlxSubState {
 
