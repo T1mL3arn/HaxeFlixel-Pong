@@ -8,6 +8,7 @@ import djFlixel.ui.FlxMenu;
 import flixel.FlxState;
 import flixel.util.FlxColor;
 import lime.app.Application;
+import menu.MenuStyle.setDefaultMenuStyle;
 import network_wrtc.Lobby1v1;
 
 class MainMenu extends FlxState {
@@ -72,7 +73,8 @@ class MainMenu extends FlxState {
 				pos: 'screen,l,c'
 			});
 
-		MenuStyle.setDefaultStyle(menu);
+		setDefaultMenuStyle(menu);
+
 
 		menu.goto('main');
 		menu.onMenuEvent = (e, id) -> {

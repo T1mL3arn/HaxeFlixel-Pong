@@ -6,7 +6,7 @@ import flixel.FlxState;
 import haxe.Json;
 import lime.system.Clipboard as LimeClipboard;
 import menu.MainMenu;
-import menu.MenuStyle;
+import menu.MenuStyle.setDefaultMenuStyle;
 import openfl.desktop.Clipboard;
 import peer.PeerOptions;
 #if html5
@@ -47,7 +47,7 @@ class Lobby1v1 extends FlxState {
 				pos: 'screen,l,c'
 			});
 
-		MenuStyle.setDefaultStyle(menu);
+		setDefaultMenuStyle(menu);
 
 		menu.createPage('accept connection')
 			.add('

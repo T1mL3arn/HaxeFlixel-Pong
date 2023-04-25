@@ -22,7 +22,7 @@ class PauseMenu extends FlxSubState {
 		-| exit game | link | exit_game
 		');
 
-		MenuStyle.setDefaultStyle(menu);
+		setDefaultMenuStyle(menu);
 
 		menu.goto('main');
 
