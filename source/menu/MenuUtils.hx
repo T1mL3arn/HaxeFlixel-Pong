@@ -19,13 +19,19 @@ function setDefaultMenuStyle(menu:FlxMenu) {
 	Wraps menu page with header label and 'go back' action.
 	@param headerLabel header label
 	@param pageData string page data
+	@param goback label for 'go back' action, pass empty string 
+								if you do not want this action
 **/
-function wrapMenuPage(headerLabel:String, pageData:String) {
+function wrapMenuPage(headerLabel:String, pageData:String, ?goback:String = 'go back') {
+	goback = goback == '' ? '' : '
+		-| __________ | label | 3 | U
+		-| $goback | link | @back
+		';
+
 	return '
 		-| $headerLabel | label | 1 | U
 		-| __________ | label | 2 | U
 		$pageData
-		-| __________ | label | 3 | U
-		-| go back | link | @back
+		$goback
 		';
 }

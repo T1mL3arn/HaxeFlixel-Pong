@@ -9,6 +9,7 @@ import flixel.FlxState;
 import flixel.util.FlxColor;
 import lime.app.Application;
 import menu.MenuUtils.setDefaultMenuStyle;
+import menu.MenuUtils.wrapMenuPage;
 import network_wrtc.Lobby1v1;
 
 class MainMenu extends FlxState {
@@ -34,41 +35,31 @@ class MainMenu extends FlxState {
 		menu.PAR.start_button_fire = true;
 
 		menu.createPage('main')
-			.add('
-		-| PONG | label | 1 | U
-		-| __________ | label | 2 | U
-		-| 1 player | link | @1_player
-		-| multiplayer | link | create_multiplayer_lobby
-		-| exit game | link | exit_game
-		')
+			.add(wrapMenuPage('PONG', '
+				-| 1 player | link | @1_player
+				-| multiplayer | link | @multiplayer_menu_page
+				-| exit game | link | exit_game
+		', ''))
 			.par({
 				pos: 'screen,l,c'
 			});
 
 		menu.createPage('1_player')
-			.add('
-		-| Single Player | label | 1 | U
-		-| __________ | label | 2 | U
-		-| training room | link | ${TRAINING_ROOM_MENU_ID}
-		-| vs self | link | ${SELF_ROOM_MENU_ID}
-		-| vs AI | link | @ai_settings
-		-| __________ | label | 3 | U
-		-| go back | link | @back
-		')
+			.add(wrapMenuPage('Single Player', '
+				-| training room | link | ${TRAINING_ROOM_MENU_ID}
+				-| vs self | link | ${SELF_ROOM_MENU_ID}
+				-| vs AI | link | @ai_settings
+		'))
 			.par({
 				pos: 'screen,l,c'
 			});
 
 		menu.createPage('ai_settings')
-			.add('
-		-| Settings | label | 1 | U
-		-| __________ | label | 2 | U
-		-| your position | list | player_pos | left,right
-		-| AI difficulty | list | ai_smarteness | easy,medium,hard
-		-| * START * | link | load_ai_room
-		-| __________ | label | 3 | U
-		-| go back | link | @back
-		')
+			.add(wrapMenuPage('Settngs', '
+				-| your position | list | player_pos | left,right
+				-| AI difficulty | list | ai_smarteness | easy,medium,hard
+				-| * START * | link | load_ai_room
+		'))
 			.par({
 				pos: 'screen,l,c'
 			});
