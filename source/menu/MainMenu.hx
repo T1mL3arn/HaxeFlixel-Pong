@@ -90,7 +90,7 @@ class MainMenu extends FlxState {
 						swap(players, 0, 1);
 					Flixel.switchState(new TwoPlayersRoom(players[0], players[1]));
 
-				case [it_fire, 'create_multiplayer_lobby']:
+				case [it_fire, 'multiplayer_menu_page']:
 					Flixel.switchState(new Lobby1v1());
 
 				default:
