@@ -14,6 +14,7 @@ class Main extends Sprite {
 
 		addChild(new Pong());
 
+		Flixel.autoPause = false;
 		Flixel.switchState(new MainMenu());
 	}
 }
