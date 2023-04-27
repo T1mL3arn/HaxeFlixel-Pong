@@ -85,6 +85,7 @@ class MainMenu extends FlxState {
 					}));
 
 				case [it_fire, 'exit_game']:
+					// TODO remove this functionality for html5 target
 					Application.current.window.close();
 
 				case [it_fire, 'load_ai_room']:

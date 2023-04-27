@@ -10,6 +10,8 @@ class BaseState extends FlxState {
 		super.update(elapsed);
 
 		if (Flixel.keys.anyJustPressed([ESCAPE, P])) {
+			// TODO instead of messing with input states
+			// better ignore the input on first frame inside PauseMenu state
 			@:privateAccess Flixel.keys._keyListMap.get(FlxKey.ESCAPE).reset();
 			@:privateAccess Flixel.keys._keyListMap.get(FlxKey.P).reset();
 			openSubState(new PauseMenu());
