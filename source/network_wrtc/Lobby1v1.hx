@@ -35,7 +35,7 @@ class Lobby1v1 extends FlxState {
 			return;
 		}
 
-		menu = new FlxMenu(0, 0, -1, 5);
+		menu = new FlxMenu(0, 0, 0, 5);
 		menu.createPage('main')
 			.add('
 				-| create  | link | create_lobby
@@ -44,7 +44,7 @@ class Lobby1v1 extends FlxState {
 				-| main menu | link | open_main_menu
 				')
 			.par({
-				pos: 'screen,l,c'
+				pos: 'screen,c,c'
 			});
 
 		setDefaultMenuStyle(menu);
@@ -57,7 +57,7 @@ class Lobby1v1 extends FlxState {
 				-| main menu | link | open_main_menu
 				')
 			.par({
-				pos: 'screen,l,c'
+				pos: 'screen,c,c'
 			});
 
 		menu.createPage('connecting')
@@ -68,7 +68,7 @@ class Lobby1v1 extends FlxState {
 				-| main menu | link | open_main_menu
 				')
 			.par({
-				pos: 'screen,l,c'
+				pos: 'screen,c,c'
 			});
 
 		menu.goto('main');

@@ -32,7 +32,7 @@ class MainMenu extends FlxState {
 
 	override function create() {
 
-		var menu = new FlxMenu(0, 0, -1, 10);
+		var menu = new FlxMenu(0, 0, 0, 10);
 
 		menu.PAR.start_button_fire = true;
 
@@ -43,7 +43,7 @@ class MainMenu extends FlxState {
 				-| exit game | link | exit_game
 		', ''))
 			.par({
-				pos: 'screen,l,c'
+				pos: 'screen,c,c'
 			});
 
 		menu.createPage('1_player')
@@ -53,7 +53,7 @@ class MainMenu extends FlxState {
 				-| vs AI | link | @ai_settings
 		'))
 			.par({
-				pos: 'screen,l,c'
+				pos: 'screen,c,c'
 			});
 
 		menu.createPage('ai_settings')
@@ -63,7 +63,7 @@ class MainMenu extends FlxState {
 				-| * START * | link | load_ai_room
 		'))
 			.par({
-				pos: 'screen,l,c'
+				pos: 'screen,c,c'
 			});
 
 		setDefaultMenuStyle(menu);
