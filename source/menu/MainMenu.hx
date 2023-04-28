@@ -68,6 +68,14 @@ class MainMenu extends FlxState {
 
 		setDefaultMenuStyle(menu);
 
+		menu.createPage('multiplayer_menu_page')
+			.add(wrapMenuPage('multiplayer', '
+				-| split screen | link | split_screen
+				-| internet | link | internet
+		'))
+			.par({
+				pos: 'screen,c,c'
+			});
 
 		menu.goto('main');
 		menu.onMenuEvent = (e, id) -> {
@@ -93,7 +101,7 @@ class MainMenu extends FlxState {
 						swap(players, 0, 1);
 					Flixel.switchState(new TwoPlayersRoom(players[0], players[1]));
 
-				case [it_fire, 'multiplayer_menu_page']:
+				case [it_fire, 'internet']:
 					Flixel.switchState(new Lobby1v1());
 
 				default:
