@@ -6,7 +6,6 @@ import flixel.group.FlxGroup;
 import flixel.input.keyboard.FlxKey;
 import flixel.text.FlxText;
 import haxe.Timer;
-import room.TwoPlayersRoom;
 
 /**
 	Room for two human players meant to play on the same PC.
