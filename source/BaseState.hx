@@ -17,9 +17,4 @@ class BaseState extends FlxSubState {
 			openSubState(new PauseMenu());
 		}
 	}
-
-	override function tryUpdate(elapsed:Float) {
-		if (this.active)
-			super.tryUpdate(elapsed);
-	}
 }

@@ -1,45 +1,59 @@
 package room;
 
-import Player.PlayerOptions;
-import flixel.FlxState;
+import flixel.FlxObject;
+import flixel.FlxSubState;
 
-class SplitscreenRoom extends FlxState {
-
-	var left(default, null):Null<PlayerOptions>;
-	var right(default, null):Null<PlayerOptions>;
-
-	var readyCounter:Int = 0;
-	var playersAreReady:Bool = false;
+class SplitscreenRoom extends TwoPlayersRoom {
 
 	public function new(left, right) {
-		super();
+		super(left, right);
 
-		this.left = left;
-		this.right = right;
 		this.persistentDraw = true;
-		this.persistentUpdate = true;
+		this.persistentUpdate = false;
 	}
 
 	override function create() {
 		super.create();
 
-		this.openSubState(new TwoPlayersRoom(left, right));
-		subStateOpened.addOnce(state -> {
-			state.active = false;
-			trace('substate disabled');
-		});
+		this.openSubState(new SplitscreenRoomGuide(this));
+	}
+}
+
+class SplitscreenRoomGuide extends FlxSubState {
+
+	var room:SplitscreenRoom;
+	var leftIsReady:Bool = false;
+	var rightIsReady:Bool = false;
+
+	public function new(room) {
+		super();
+		this.room = room;
 	}
 
-	override function update(dt:Float) {
-		super.update(dt);
+	override function create() {
+		super.create();
 
-		if (!playersAreReady && Flixel.keys.anyJustPressed([W, S, UP, DOWN])) {
-			readyCounter += 1;
+		add(buildGuideUI('left', 0, 0));
+		add(buildGuideUI('right', 0, 0));
+	}
+
+	function buildGuideUI(label:String, x, y) {
+		return new FlxObject();
+	}
+
+	override function update(elapsed:Float) {
+		super.update(elapsed);
+
+		if (Flixel.keys.anyJustPressed([W, S])) {
+			leftIsReady = true;
 		}
 
-		if (!playersAreReady && readyCounter >= 2) {
-			playersAreReady = true;
-			subState.active = true;
+		if (Flixel.keys.anyJustPressed([UP, DOWN])) {
+			rightIsReady = true;
+		}
+
+		if (leftIsReady && rightIsReady) {
+			close();
 		}
 	}
 }
