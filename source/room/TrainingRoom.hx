@@ -14,6 +14,7 @@ class TrainingRoom extends BaseState {
 	var onGoal:Dynamic->Dynamic->Void;
 
 	override function create() {
+		super.create();
 
 		bgColor = 0xFF111111;
 
