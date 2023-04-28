@@ -1,10 +1,10 @@
 package;
 
-import flixel.FlxState;
+import flixel.FlxSubState;
 import flixel.input.keyboard.FlxKey;
 import menu.PauseMenu;
 
-class BaseState extends FlxState {
+class BaseState extends FlxSubState {
 
 	override function update(elapsed:Float) {
 		super.update(elapsed);
@@ -16,5 +16,10 @@ class BaseState extends FlxState {
 			@:privateAccess Flixel.keys._keyListMap.get(FlxKey.P).reset();
 			openSubState(new PauseMenu());
 		}
+	}
+
+	override function tryUpdate(elapsed:Float) {
+		if (this.active)
+			super.tryUpdate(elapsed);
 	}
 }

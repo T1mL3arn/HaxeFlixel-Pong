@@ -1,6 +1,7 @@
 package menu;
 
 import Player.PlayerOptions;
+import RacketController.KeyboardMovementController;
 import Utils.swap;
 import ai.AIFactory.setAIPlayer;
 import ai.SimpleAI;
@@ -11,6 +12,7 @@ import lime.app.Application;
 import menu.MenuUtils.setDefaultMenuStyle;
 import menu.MenuUtils.wrapMenuPage;
 import network_wrtc.Lobby1v1;
+import room.SplitscreenRoom;
 import room.TrainingRoom;
 import room.TwoPlayersRoom;
 
@@ -103,6 +105,18 @@ class MainMenu extends FlxState {
 
 				case [it_fire, 'internet']:
 					Flixel.switchState(new Lobby1v1());
+
+				case [it_fire, 'split_screen']:
+					Flixel.switchState(new SplitscreenRoom({
+						// Flixel.switchState(new TwoPlayersRoom({
+						name: 'left',
+						position: LEFT,
+						getController: racket -> new KeyboardMovementController(racket, W, S)
+					}, {
+						name: 'right',
+						position: RIGHT,
+						getController: racket -> new KeyboardMovementController(racket, UP, DOWN)
+					}));
 
 				default:
 					0;
