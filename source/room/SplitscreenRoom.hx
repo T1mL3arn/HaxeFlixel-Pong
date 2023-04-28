@@ -5,6 +5,8 @@ import flixel.effects.FlxFlicker;
 import flixel.group.FlxGroup;
 import flixel.input.keyboard.FlxKey;
 import flixel.text.FlxText;
+import haxe.Timer;
+import room.TwoPlayersRoom;
 
 class SplitscreenRoom extends TwoPlayersRoom {
 
@@ -12,16 +14,23 @@ class SplitscreenRoom extends TwoPlayersRoom {
 		super(left, right);
 
 		this.persistentDraw = true;
-		this.persistentUpdate = false;
+		this.persistentUpdate = true;
 	}
 
 	override function create() {
 		super.create();
 
+		// disable players so they could not move
+		// when this state is created
+		for (player in players) {
+			player.active = false;
+		}
+
 		this.openSubState(new SplitscreenRoomGuide(this));
 	}
 }
 
+@:access(room.TwoPlayersRoom)
 class SplitscreenRoomGuide extends FlxSubState {
 
 	var room:SplitscreenRoom;
@@ -44,18 +53,29 @@ class SplitscreenRoomGuide extends FlxSubState {
 	override function update(elapsed:Float) {
 		super.update(elapsed);
 
-		if (left.playerIsReady && right.playerIsReady) {
+		// TODO show countdown when both players are ready
+		// TODO when countdown ends serve the ball for the first time
+		if (left.complete && right.complete) {
 			close();
 		}
+
+		if (left.playerIsReady)
+			room.players[0].active = true;
+
+		if (right.playerIsReady)
+			room.players[1].active = true;
 	}
 }
 
 class PlayerGuideUI extends FlxGroup {
 
 	public var playerIsReady:Bool = false;
+	public var complete:Bool = false;
 
 	var keys:Array<FlxKey>;
 	var flicker:FlxFlicker;
+	var readyLabel:FlxText;
+	var ui:FlxGroup;
 
 	public function new(labelText:String, keys:Array<FlxKey>, xAlignCoord:Float) {
 		super();
@@ -68,19 +88,40 @@ class PlayerGuideUI extends FlxGroup {
 
 		labelText = 'press ${labelText}\nto move your paddle';
 
+		ui = new FlxGroup();
+
+		add(ui);
+
 		var infoLabel = new FlxText(x, y, w, labelText, 18);
 		infoLabel.width = w;
 		infoLabel.alignment = CENTER;
 
-		add(infoLabel);
+		ui.add(infoLabel);
 
-		var waitLabel = new FlxText(x, Flixel.height * 0.8, w, 'waiting player', 16);
+		var waitLabelY = Flixel.height * 0.8;
+		var waitLabel = new FlxText(x, waitLabelY, w, 'waiting player', 16);
 		waitLabel.width = w;
 		waitLabel.alignment = CENTER;
 
-		add(waitLabel);
+		ui.add(waitLabel);
 
 		flicker = FlxFlicker.flicker(waitLabel, 0, 0.5);
+
+		readyLabel = new FlxText(x, waitLabelY, w, 'READY!', 20);
+		readyLabel.alignment = CENTER;
+	}
+
+	function showReadyLabel() {
+		add(readyLabel);
+
+		Timer.delay(() -> {
+			var f = FlxFlicker.flicker(readyLabel, 0.66, 0.066, false);
+			@:privateAccess
+			f.completionCallback = _ -> {
+				readyLabel.kill();
+				this.complete = true;
+			};
+		}, 750);
 	}
 
 	override function update(elapsed:Float) {
@@ -91,11 +132,9 @@ class PlayerGuideUI extends FlxGroup {
 			if (flicker != null) {
 				flicker.stop();
 				flicker = null;
+				ui.kill();
+				showReadyLabel();
 			}
 		}
-	}
-
-	override function destroy() {
-		super.destroy();
 	}
 }

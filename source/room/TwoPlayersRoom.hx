@@ -63,10 +63,12 @@ class TwoPlayersRoom extends BaseState {
 		super.update(dt);
 
 		// NOTE vscode cannot find "firstServe" id to do rename-rafactoring
-		if (ball.velocity.lengthSquared == 0 && firstServe) {
-			var player = Flixel.random.getObject(players);
-			serveBall(player, ball);
-			firstServe = false;
+		if (players[0].active && players[1].active) {
+			if (ball.velocity.lengthSquared == 0 && firstServe) {
+				var player = Flixel.random.getObject(players);
+				serveBall(player, ball);
+				firstServe = false;
+			}
 		}
 
 		Flixel.collide(walls, ball, ballCollision);
