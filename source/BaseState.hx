@@ -11,6 +11,7 @@ class BaseState extends FlxSubState {
 		super.create();
 
 		pauseMenu = new PauseMenu();
+		destroySubStates = false;
 	}
 
 	override function update(elapsed:Float) {
