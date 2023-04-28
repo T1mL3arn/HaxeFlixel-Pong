@@ -8,6 +8,9 @@ import flixel.text.FlxText;
 import haxe.Timer;
 import room.TwoPlayersRoom;
 
+/**
+	Room for two human players meant to play on the same PC.
+**/
 class SplitscreenRoom extends TwoPlayersRoom {
 
 	public function new(left, right) {
@@ -30,6 +33,10 @@ class SplitscreenRoom extends TwoPlayersRoom {
 	}
 }
 
+/**
+	Controls help info for both human players
+	and closes itself when players are ready.
+**/
 @:access(room.TwoPlayersRoom)
 class SplitscreenRoomGuide extends FlxSubState {
 
@@ -67,9 +74,20 @@ class SplitscreenRoomGuide extends FlxSubState {
 	}
 }
 
+/**
+	Help info for a human player
+**/
 class PlayerGuideUI extends FlxGroup {
 
+	/**
+		Indicates the player is ready to play
+	**/
 	public var playerIsReady:Bool = false;
+
+	/**
+		Indicates this ui completed its animations and ready
+		to be disposed.
+	**/
 	public var complete:Bool = false;
 
 	var keys:Array<FlxKey>;
