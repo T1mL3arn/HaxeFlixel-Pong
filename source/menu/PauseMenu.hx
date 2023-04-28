@@ -7,6 +7,8 @@ import menu.MenuUtils.setDefaultMenuStyle;
 
 class PauseMenu extends FlxSubState {
 
+	var stateJustOpenned:Bool = false;
+
 	public function new() {
 		super();
 	}
@@ -44,12 +46,16 @@ class PauseMenu extends FlxSubState {
 		}
 
 		add(menu);
+
+		openCallback = () -> stateJustOpenned = true;
 	}
 
 	override function update(elapsed:Float) {
 		super.update(elapsed);
 
-		if (Flixel.keys.anyJustPressed([ESCAPE, P]))
+		if (!stateJustOpenned && Flixel.keys.anyJustPressed([ESCAPE, P]))
 			this.close();
+
+		stateJustOpenned = false;
 	}
 }
