@@ -89,9 +89,11 @@ class MainMenu extends FlxState {
 					Flixel.switchState(new TwoPlayersRoom({
 						name: 'you',
 						color: FlxColor.WHITE,
+						position: LEFT,
 					}, {
 						name: 'also you',
 						color: FlxColor.WHITE,
+						position: RIGHT,
 					}));
 
 				case [it_fire, 'exit_game']:
