@@ -30,6 +30,7 @@ class TwoPlayersRoom extends BaseState {
 	}
 
 	override function create() {
+		super.create();
 
 		bgColor = 0xFF111111;
 
