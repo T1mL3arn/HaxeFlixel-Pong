@@ -1,7 +1,7 @@
 package room;
 
-import flixel.FlxObject;
 import flixel.FlxSubState;
+import flixel.text.FlxText;
 
 class SplitscreenRoom extends TwoPlayersRoom {
 
@@ -33,12 +33,23 @@ class SplitscreenRoomGuide extends FlxSubState {
 	override function create() {
 		super.create();
 
-		add(buildGuideUI('left', 0, 0));
-		add(buildGuideUI('right', 0, 0));
+		add(buildGuideUI('W and S', Flixel.width * 0.25));
+		add(buildGuideUI('UP and DOWN', Flixel.width * 0.75));
 	}
 
-	function buildGuideUI(label:String, x, y) {
-		return new FlxObject();
+	function buildGuideUI(labelText:String, ?alignLineX:Float):FlxText {
+
+		var w = Flixel.width * 0.5 * 0.8;
+		var y = Flixel.height * 0.6;
+		var x = alignLineX - w * 0.5;
+
+		labelText = 'use ${labelText} keys\nto move your paddle';
+
+		var label = new FlxText(x, y, w, labelText, 18);
+		label.width = w;
+		label.alignment = CENTER;
+
+		return label;
 	}
 
 	override function update(elapsed:Float) {
