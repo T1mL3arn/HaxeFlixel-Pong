@@ -5,6 +5,7 @@ import menu.PauseMenu;
 
 class BaseState extends FlxSubState {
 
+	var canOpenPauseMenu:Bool = true;
 	var pauseMenu:PauseMenu;
 
 	override function create() {
@@ -17,7 +18,7 @@ class BaseState extends FlxSubState {
 	override function update(elapsed:Float) {
 		super.update(elapsed);
 
-		if (Flixel.keys.anyJustPressed([ESCAPE, P])) {
+		if (canOpenPauseMenu && Flixel.keys.anyJustPressed([ESCAPE, P])) {
 			openSubState(pauseMenu);
 		}
 	}
