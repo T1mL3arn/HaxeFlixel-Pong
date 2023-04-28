@@ -15,8 +15,8 @@ class SplitscreenRoom extends TwoPlayersRoom {
 	public function new(left, right) {
 		super(left, right);
 
-		this.persistentDraw = true;
-		this.persistentUpdate = true;
+		persistentDraw = true;
+		persistentUpdate = true;
 	}
 
 	override function create() {
@@ -28,7 +28,14 @@ class SplitscreenRoom extends TwoPlayersRoom {
 			player.active = false;
 		}
 
-		this.openSubState(new SplitscreenRoomGuide(this));
+		canOpenPauseMenu = false;
+		var substate = new SplitscreenRoomGuide(this);
+		substate.closeCallback = () -> {
+			substate.destroy();
+			canOpenPauseMenu = true;
+			persistentUpdate = false;
+		};
+		openSubState(substate);
 	}
 }
 
