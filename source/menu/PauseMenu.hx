@@ -15,7 +15,7 @@ class PauseMenu extends FlxSubState {
 
 	override function create() {
 
-		var menu = new FlxMenu(0, Flixel.height / 2 - 100, -1);
+		var menu = new FlxMenu(0, 0, 0);
 
 		menu.PAR.start_button_fire = true;
 
