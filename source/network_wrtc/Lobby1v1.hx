@@ -118,7 +118,7 @@ class Lobby1v1 extends FlxState {
 							var parsedData = Json.parse(pastedData);
 							localPeer.signal(parsedData);
 						}
-						catch (err) {
+						catch (err:String) {
 							Console.error(err);
 						}
 					}
