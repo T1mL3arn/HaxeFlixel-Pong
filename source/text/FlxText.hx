@@ -35,8 +35,8 @@ class FlxText extends flixel.text.FlxText {
 		}
 
 		var newWidth:Int = Math.ceil(textField.width);
-		// Account for gutter
 		var textfieldHeight = autoHeight ? textField.textHeight : textField.height;
+		// Account for gutter
 		var newHeight:Int = Math.ceil(textfieldHeight) + flixel.text.FlxText.VERTICAL_GUTTER;
 
 		// prevent text height from shrinking on flash if text == ""
