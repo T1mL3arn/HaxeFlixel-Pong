@@ -8,17 +8,19 @@ import lime.system.Clipboard as LimeClipboard;
 import menu.MainMenu;
 import menu.MenuUtils.setDefaultMenuStyle;
 import openfl.desktop.Clipboard;
-import peer.PeerOptions;
+import text.FlxText;
 #if html5
 import js.Browser;
 import js.html.Console;
 import peer.Peer;
+import peer.PeerOptions;
 #end
 
 class Lobby1v1 extends FlxState {
 
 	var signalData:String;
 	var menu:FlxMenu;
+	var infobox:FlxText;
 
 	#if html5
 	var localPeer:Peer;
@@ -73,6 +75,8 @@ class Lobby1v1 extends FlxState {
 
 		menu.goto('main');
 		add(menu);
+
+		add(infobox = buildInfoBox());
 
 		var iceCompleteTimeout = 2 * 60 * 1000;
 
@@ -149,6 +153,28 @@ class Lobby1v1 extends FlxState {
 					0;
 			}
 		}
+	}
+
+	function buildInfoBox() {
+		var margin = 15;
+		var w = Flixel.width * 0.8;
+		var h = Flixel.height * 0.25;
+		var x = Flixel.width * 0.5 - w * 0.5;
+		var y = Flixel.height - h - margin;
+		var infobox = new text.FlxText(x, y, w, 'Hello there', 18);
+		infobox.height = infobox.textField.height = h;
+		infobox.color = 0x111111;
+		infobox.alignment = LEFT;
+		infobox.autoSize = false;
+		infobox.wordWrap = true;
+		infobox.textField.background = true;
+		infobox.textField.backgroundColor = 0xEEEEEE;
+		@:privateAccess
+		var format = infobox._defaultFormat;
+		format.leftMargin = format.rightMargin = margin;
+		@:privateAccess infobox.updateDefaultFormat();
+
+		return infobox;
 	}
 
 	function connect(?options:PeerOptions) {
