@@ -160,11 +160,10 @@ class Lobby1v1 extends FlxState {
 		});
 
 		peer.on('signal', data -> {
-			data = Json.stringify(data);
-			trace('SIGNAL\n$data');
-			signalData = data;
-			Clipboard.generalClipboard.setData(TEXT_FORMAT, data);
-			LimeClipboard.text = data;
+			signalData = Json.stringify(data);
+			trace('SIGNAL\n$signalData');
+			Clipboard.generalClipboard.setData(TEXT_FORMAT, signalData);
+			LimeClipboard.text = signalData;
 			trace('Data is copied into clipboard');
 		});
 
