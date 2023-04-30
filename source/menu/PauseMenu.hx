@@ -20,10 +20,12 @@ class PauseMenu extends FlxSubState {
 		menu.PAR.start_button_fire = true;
 
 		menu.createPage('main').add('
-		-| resume | link | resume
-		-| main menu | link | to_main
-		-| exit game | link | exit_game
-		');
+			-| resume | link | resume
+			-| main menu | link | to_main
+			-| exit game | link | exit_game
+		').par({
+				pos: 'screen,c,c'
+			});
 
 		setDefaultMenuStyle(menu);
 
