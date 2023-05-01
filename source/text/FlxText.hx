@@ -46,7 +46,7 @@ class FlxText extends flixel.text.FlxText {
 
 		if (oldWidth != newWidth || oldHeight != newHeight) {
 			// Need to generate a new buffer to store the text graphic
-			height = newHeight;
+
 			var key:String = FlxG.bitmap.getUniqueKey("text");
 			makeGraphic(newWidth, newHeight, FlxColor.TRANSPARENT, false, key);
 
