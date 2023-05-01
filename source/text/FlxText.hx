@@ -52,7 +52,11 @@ class FlxText extends flixel.text.FlxText {
 
 			if (_hasBorderAlpha)
 				_borderPixels = graphic.bitmap.clone();
-			textField.height = height * 1.2;
+
+			if (autoHeight)
+				// NOTE: unknown magic constant "1.2";
+				textField.height = height * 1.2;
+
 			_flashRect.x = 0;
 			_flashRect.y = 0;
 			_flashRect.width = newWidth;
