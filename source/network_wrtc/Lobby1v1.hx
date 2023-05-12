@@ -3,7 +3,9 @@ package network_wrtc;
 import Utils.merge;
 import djFlixel.ui.FlxMenu;
 import flixel.FlxState;
+import haxe.Exception;
 import haxe.Json;
+import js.lib.Error;
 import lime.system.Clipboard as LimeClipboard;
 import menu.MainMenu;
 import menu.MenuUtils.setDefaultMenuStyle;
@@ -16,11 +18,22 @@ import peer.Peer;
 import peer.PeerOptions;
 #end
 
+enum abstract ConnectionState(String) {
+	var Initial;
+	var CreatingLobby;
+	var LobbyCreated;
+	var ConnectingToLobby;
+	var Connected;
+}
+
 class Lobby1v1 extends FlxState {
 
 	var signalData:String;
 	var menu:FlxMenu;
 	var infobox:FlxText;
+	var connectionState:ConnectionState = Initial;
+	var timer:haxe.Timer;
+	var switchToMainDelay:Int = 4000;
 
 	#if html5
 	var localPeer:Peer;
@@ -36,8 +49,7 @@ class Lobby1v1 extends FlxState {
 			trace(msg);
 			infobox.alignment = CENTER;
 			infobox.text = '$msg\nGoing back to Main menu...';
-			Flixel.log.warn(msg);
-			haxe.Timer.delay(() -> Flixel.switchState(new MainMenu()), 4000);
+			haxe.Timer.delay(() -> Flixel.switchState(new MainMenu()), switchToMainDelay);
 			return;
 		}
 
@@ -57,7 +69,7 @@ class Lobby1v1 extends FlxState {
 
 		menu.createPage('accept connection')
 			.add('
-				-| create lobby | link | create_lobby | D | U |
+				-| create | link | create_lobby | D | U |
 				-| accept connection | link | accept_connection
 				-| __________ | label | 3 | U
 				-| main menu | link | open_main_menu
@@ -68,7 +80,7 @@ class Lobby1v1 extends FlxState {
 
 		menu.createPage('connecting')
 			.add('
-				-| create lobby | link | create_lobby | D | U |
+				-| create | link | create_lobby | D | U |
 				-| connecting | link | wait_connection | D | U |
 				-| __________ | label | 3 | U
 				-| main menu | link | open_main_menu
@@ -105,46 +117,24 @@ class Lobby1v1 extends FlxState {
 			switch ([e, id]) {
 				case [it_fire, 'create_lobby']:
 					if (localPeer == null) {
-						localPeer = connect(untyped merge(peerOptions, {initiator: true}));
+						infobox.text = 'Creating lobby...';
+						connectionState = CreatingLobby;
+						localPeer = connect(cast merge(peerOptions, {initiator: true}));
 					}
 
 					menu.goto('accept connection');
 
 				case [it_fire, 'connect_to_lobby']:
 					if (localPeer == null) {
-						localPeer = connect(untyped merge(peerOptions, {initiator: false}));
+						connectionState = ConnectingToLobby;
+						infobox.text = 'Trying to connect...';
+						localPeer = connect(cast merge(peerOptions, {initiator: false}));
 					}
 
-					var pastedData = Browser.window.prompt('Paste room id');
-					if (pastedData == signalData) {
-						Browser.window.alert('You are pasting the same data, try again!');
-					}
-					else {
-						try {
-							var parsedData = Json.parse(pastedData);
-							localPeer.signal(parsedData);
-						}
-						catch (err:String) {
-							Console.error(err);
-						}
-					}
-
-					menu.goto('connecting');
+					promptLobbyKey('connecting');
 
 				case [it_fire, 'accept_connection']:
-					var pastedData = Browser.window.prompt('Paste room id');
-					if (pastedData == signalData) {
-						Browser.window.alert('You are pasting the same data, try again!');
-					}
-					else {
-						try {
-							var parsedData = Json.parse(pastedData);
-							localPeer.signal(parsedData);
-						}
-						catch (err) {
-							Console.error(err);
-						}
-					}
+					promptLobbyKey();
 
 				case [it_fire, 'open_main_menu']:
 					if (localPeer != null)
@@ -181,21 +171,37 @@ class Lobby1v1 extends FlxState {
 	function connect(?options:PeerOptions) {
 		var peer = new Peer(options);
 
-		peer.on('error', err -> {
-			trace('error');
-			Console.error(err.code, err);
+		peer.on('error', (err:Error) -> {
+			Console.error(err);
+
+			localPeer?.destroy();
+			infobox.text = 'Error: ${err.message}\nGoing back to Main menu...';
+			timer = haxe.Timer.delay(() -> Flixel.switchState(new MainMenu()), switchToMainDelay);
 		});
 
 		peer.on('signal', data -> {
 			signalData = Json.stringify(data);
-			trace('SIGNAL\n$signalData');
+			trace('\nsignal data:\n$signalData');
 			Clipboard.generalClipboard.setData(TEXT_FORMAT, signalData);
 			LimeClipboard.text = signalData;
-			trace('Data is copied into clipboard');
+
+			switch ([connectionState, options.initiator]) {
+				case [CreatingLobby, true]:
+					infobox.text = 'Connection ID is copied into clipboard. Share it with another player, then press "accept connection" and paste the player\'s response';
+					connectionState = LobbyCreated;
+
+				case [ConnectingToLobby, false]:
+					infobox.text = 'Connection ID is copied into clipboard. Share it with another player and wait a little.';
+
+				default:
+			}
 		});
 
 		peer.on('connect', () -> {
 			trace('Connected!');
+			connectionState = Connected;
+			infobox.alignment = CENTER;
+			infobox.text = "Connected!";
 			peer.send('Hello from ${untyped peer.initiator ? 'initiator' : 'peer'}');
 		});
 
@@ -207,9 +213,38 @@ class Lobby1v1 extends FlxState {
 
 		return peer;
 	}
+
+	function promptLobbyKey(?menuPage:String) {
+		var pastedData = Browser.window.prompt('Paste lobby key');
+		if (pastedData == signalData) {
+			Browser.window.alert('You are pasting the same data, try again!');
+		}
+		else {
+			try {
+				var parsedData = Json.parse(pastedData);
+				localPeer.signal(parsedData);
+				if (menuPage != null)
+					menu.goto(menuPage);
+			}
+			catch (err:String) {
+				infobox.text = 'Error: $err';
+				Console.error(err);
+			}
+			catch (err:Exception) {
+				infobox.text = 'Error: ${err.message}';
+				Console.error(err.message);
+			}
+		}
+	}
 	#end
 
 	override function update(elapsed:Float) {
 		super.update(elapsed);
+	}
+
+	override function destroy() {
+		super.destroy();
+
+		timer?.stop();
 	}
 }
