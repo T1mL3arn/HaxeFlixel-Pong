@@ -29,11 +29,15 @@ class Lobby1v1 extends FlxState {
 	override function create() {
 		super.create();
 
+		add(infobox = buildInfoBox());
+
 		if (!Peer.WEBRTC_SUPPORT) {
 			var msg = 'WebRTC is not supported!';
 			trace(msg);
+			infobox.alignment = CENTER;
+			infobox.text = '$msg\nGoing back to Main menu...';
 			Flixel.log.warn(msg);
-			Flixel.switchState(new MainMenu());
+			haxe.Timer.delay(() -> Flixel.switchState(new MainMenu()), 4000);
 			return;
 		}
 
@@ -75,8 +79,6 @@ class Lobby1v1 extends FlxState {
 
 		menu.goto('main');
 		add(menu);
-
-		add(infobox = buildInfoBox());
 
 		var iceCompleteTimeout = 2 * 60 * 1000;
 
