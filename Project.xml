@@ -87,4 +87,7 @@
 	<!-- _________________________________ Custom _______________________________ -->
 
 	<!--Place custom nodes like icons here (higher priority to override the HaxeFlixel icon)-->
+
+	<haxeflag name="-w -WDeprecated" />
+
 </project>
