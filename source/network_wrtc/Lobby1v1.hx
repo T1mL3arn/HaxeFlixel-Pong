@@ -161,7 +161,7 @@ class Lobby1v1 extends FlxState {
 		var h = Flixel.height * 0.25;
 		var x = Flixel.width * 0.5 - w * 0.5;
 		var y = Flixel.height - h - margin;
-		var text = 'Connection ID is copied into clipboard. Share it with another player, then press "accept connection" and paste the player\'s response.';
+		var text = 'Create a lobby or connect to one!';
 		var infobox = new text.FlxText(x, y, w, h, text, 18);
 		infobox.color = 0x111111;
 		infobox.alignment = LEFT;
