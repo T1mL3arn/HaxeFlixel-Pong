@@ -43,8 +43,10 @@ class FlxText extends flixel.text.FlxText {
 
 	var _autoHeight:Bool = true;
 
-	public function new(x = 0.0, y = 0.0, w = 0.0, ?text, size = 8) {
+	public function new(x = 0.0, y = 0.0, w = 0.0, h = 0.0, ?text, size = 8) {
 		super(x, y, w, text, size);
+
+		fieldHeight = h;
 	}
 
 	override function regenGraphic() {
