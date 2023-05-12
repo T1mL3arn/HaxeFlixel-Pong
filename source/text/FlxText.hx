@@ -11,12 +11,37 @@ import openfl.display.BitmapData;
 **/
 class FlxText extends flixel.text.FlxText {
 
-	/**
-		Defines if field's height is determining automatically.
-		`false` by default, so it is possible to create fixed-sized
-		`FlxText` instance.
-	**/
-	public var autoHeight(default, set):Bool = false;
+	public var fieldHeight(get, null):Float;
+
+	function get_fieldHeight():Float {
+		return (textField != null) ? textField.height : 0;
+	}
+
+	function set_fieldHeight(v:Float):Float {
+		if (textField == null)
+			return v;
+		if (v <= 0) {
+			_autoHeight = true;
+		}
+		else {
+			_autoHeight = false;
+
+			textField.height = v;
+		}
+		_regen = true;
+		return v;
+	}
+
+	override function set_fieldWidth(value:Float):Float {
+		super.set_fieldWidth(value);
+
+		if (value <= 0)
+			_autoHeight = true;
+
+		return value;
+	}
+
+	var _autoHeight:Bool = true;
 
 	public function new(x = 0.0, y = 0.0, w = 0.0, ?text, size = 8) {
 		super(x, y, w, text, size);
@@ -35,9 +60,10 @@ class FlxText extends flixel.text.FlxText {
 		}
 
 		var newWidth:Int = Math.ceil(textField.width);
-		var textfieldHeight = autoHeight ? textField.textHeight : textField.height;
+		var textfieldHeight = _autoHeight ? textField.textHeight : textField.height;
+		var vertGutter = _autoHeight ? flixel.text.FlxText.VERTICAL_GUTTER : 0;
 		// Account for gutter
-		var newHeight:Int = Math.ceil(textfieldHeight) + flixel.text.FlxText.VERTICAL_GUTTER;
+		var newHeight:Int = Math.ceil(textfieldHeight) + vertGutter;
 
 		// prevent text height from shrinking on flash if text == ""
 		if (textField.textHeight == 0) {
@@ -52,17 +78,16 @@ class FlxText extends flixel.text.FlxText {
 			if (_hasBorderAlpha)
 				_borderPixels = graphic.bitmap.clone();
 
-			if (autoHeight)
-				// NOTE: unknown magic constant "1.2";
-				textField.height = height * 1.2;
+			if (_autoHeight)
+				textField.height = newHeight;
 
 			_flashRect.x = 0;
 			_flashRect.y = 0;
 			_flashRect.width = newWidth;
 			_flashRect.height = newHeight;
 		}
-		else // Else just clear the old buffer before redrawing the text
-		{
+		else {
+			// Else just clear the old buffer before redrawing the text
 			graphic.bitmap.fillRect(_flashRect, FlxColor.TRANSPARENT);
 			if (_hasBorderAlpha) {
 				if (_borderPixels == null)
@@ -87,12 +112,5 @@ class FlxText extends flixel.text.FlxText {
 
 		_regen = false;
 		resetFrame();
-	}
-
-	function set_autoHeight(value:Bool):Bool {
-		if (autoHeight != value)
-			_regen = true;
-
-		return autoHeight = value;
 	}
 }
