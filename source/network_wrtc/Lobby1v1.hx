@@ -156,19 +156,18 @@ class Lobby1v1 extends FlxState {
 	}
 
 	function buildInfoBox() {
-		var margin = 15;
-		var w = Flixel.width * 0.8;
+		var margin = 12;
+		var w = Flixel.width * 0.875;
 		var h = Flixel.height * 0.25;
 		var x = Flixel.width * 0.5 - w * 0.5;
 		var y = Flixel.height - h - margin;
-		var infobox = new text.FlxText(x, y, w, 'Hello there', 18);
-		infobox.height = infobox.textField.height = h;
+		var text = 'Connection ID is copied into clipboard. Share it with another player, then press "accept connection" and paste the player\'s response.';
+		var infobox = new text.FlxText(x, y, w, h, text, 18);
 		infobox.color = 0x111111;
 		infobox.alignment = LEFT;
-		infobox.autoSize = false;
-		infobox.wordWrap = true;
 		infobox.textField.background = true;
 		infobox.textField.backgroundColor = 0xEEEEEE;
+
 		@:privateAccess
 		var format = infobox._defaultFormat;
 		format.leftMargin = format.rightMargin = margin;
