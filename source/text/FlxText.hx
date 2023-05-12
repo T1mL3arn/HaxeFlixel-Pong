@@ -11,7 +11,7 @@ import openfl.display.BitmapData;
 **/
 class FlxText extends flixel.text.FlxText {
 
-	public var fieldHeight(get, null):Float;
+	public var fieldHeight(get, set):Float;
 
 	function get_fieldHeight():Float {
 		return (textField != null) ? textField.height : 0;
