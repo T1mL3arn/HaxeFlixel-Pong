@@ -10,6 +10,7 @@ var network:Network = null;
 	var PaddleAction;
 	var PaddleData;
 	var BallData;
+	var ScoreData;
 }
 
 typedef NetworkMessage = {

@@ -38,6 +38,11 @@ typedef BallDataPayload = {
 	?hitBy:String,
 }
 
+typedef ScoreDataPayload = {
+	leftScore:Int,
+	rightScore:Int,
+}
+
 class TwoPlayersRoom extends room.TwoPlayersRoom {
 
 	var network:Network;
@@ -53,6 +58,7 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 			switch (msg.type) {
 				case PaddleAction: messagePaddleAction(msg.data);
 				case BallData: messageBallData(msg.data);
+				case ScoreData: messageScoreData(msg.data);
 				default: 0;
 			}
 		});
@@ -80,6 +86,11 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 		ball.velocity.set(data.vx, data.vy);
 	}
 
+	function messageScoreData(data:ScoreDataPayload) {
+		players[0].score = data.leftScore;
+		players[1].score = data.rightScore;
+	}
+
 	override function update(dt:Float) {
 		super.update(dt);
 	}
@@ -100,5 +111,15 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 	override function ballOutWorldBounds() {
 		if (network.initiator)
 			super.ballOutWorldBounds();
+	}
+
+	override function goal(hitArea, ball) {
+		if (network.initiator) {
+			super.goal(hitArea, ball);
+			network.sendMessage(ScoreData, {
+				leftScore: players[0].score,
+				rightScore: players[1].score,
+			});
+		}
 	}
 }
