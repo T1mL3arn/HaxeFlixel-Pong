@@ -1,6 +1,5 @@
 package network_wrtc;
 
-import flixel.input.FlxInput.FlxInputState;
 import flixel.input.keyboard.FlxKey;
 
 typedef PaddleActionPayload = {
@@ -25,8 +24,20 @@ class NetplayRacketController extends RacketController {
 
 	override function update(dt:Float) {
 
-		var actionMoveUp = Flixel.keys.checkStatus(keyUp, FlxInputState.PRESSED) ? true : false;
-		var actionMoveDown = Flixel.keys.checkStatus(keyDown, FlxInputState.PRESSED) ? true : false;
+		var actionMoveUp = Flixel.keys.checkStatus(keyUp, PRESSED);
+		var actionMoveDown = Flixel.keys.checkStatus(keyDown, PRESSED);
+
+		// do not send network message if both UP and DOWN are pressed
+		if (actionMoveDown && actionMoveUp)
+			return;
+
+		var upJustReleased = Flixel.keys.checkStatus(keyUp, JUST_RELEASED);
+		var downJustReleased = Flixel.keys.checkStatus(keyUp, JUST_RELEASED);
+
+		// do not send network message if nothing is pressed and nothing is just released
+		if (!(actionMoveDown || actionMoveUp || upJustReleased || downJustReleased))
+			return;
+		// trace('send data${upJustReleased || downJustReleased ? ' ONCE' : ''}');
 
 		var data:PaddleActionPayload = {
 			paddleName: name,
@@ -34,7 +45,6 @@ class NetplayRacketController extends RacketController {
 			actionMoveDown: actionMoveDown,
 		}
 
-		// TODO send the message only once when no keys are pressed
 		var net = Network.network;
 
 		net.sendMessage(PaddleAction, data);
