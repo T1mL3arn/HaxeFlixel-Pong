@@ -201,11 +201,6 @@ class Lobby1v1 extends FlxState {
 			connectionState = Connected;
 			infobox.alignment = CENTER;
 			infobox.text = "Connected!";
-			peer.send('Hello from ${untyped peer.initiator ? 'initiator' : 'peer'}');
-		});
-
-		peer.on('data', data -> {
-			trace('Recieved data: ${data}');
 		});
 
 		peer.on('close', () -> trace('connection is CLOSED'));
