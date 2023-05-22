@@ -125,6 +125,7 @@ class LevelBuilder {
 		var player = new Player(racket);
 		player.options = options;
 		player.name = options.name;
+		player.uid = options.uid ?? Std.string(haxe.Timer.stamp());
 		player.scoreLabelText = '';
 		player.score = 0;
 		player.add(options.getController(racket));

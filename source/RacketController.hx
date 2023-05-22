@@ -1,7 +1,6 @@
 package;
 
 import flixel.FlxBasic;
-import flixel.input.FlxInput.FlxInputState;
 import flixel.input.keyboard.FlxKey;
 
 class RacketController extends FlxBasic {
@@ -37,9 +36,16 @@ class KeyboardMovementController extends RacketController {
 
 		racket.velocity.set(0, 0);
 
-		if (Flixel.keys.checkStatus(keyUp, FlxInputState.PRESSED))
+		var actionMoveUp = Flixel.keys.checkStatus(keyUp, PRESSED);
+		var actionMoveDown = Flixel.keys.checkStatus(keyDown, PRESSED);
+
+		// do nothing when both UP and DOWN are pressed
+		if (actionMoveDown && actionMoveUp)
+			return;
+
+		if (actionMoveUp)
 			racket.velocity.set(0, -speed);
-		else if (Flixel.keys.checkStatus(keyDown, FlxInputState.PRESSED))
+		if (actionMoveDown)
 			racket.velocity.set(0, speed);
 	}
 }

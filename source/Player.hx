@@ -8,7 +8,10 @@ import flixel.util.FlxColor;
 import flixel.util.FlxDirection;
 
 typedef PlayerOptions = {
+	// visible name
 	?name:String,
+	// unique name
+	?uid:String,
 	?position:FlxDirection,
 	?color:FlxColor,
 	?getController:Racket->RacketController
@@ -28,6 +31,7 @@ class Player extends FlxGroup {
 	};
 
 	public var name:String;
+	public var uid:String;
 	public var racket:Racket;
 	public var score(default, set):Int = 0;
 	public var scoreLabel:FlxText;
@@ -66,9 +70,9 @@ class Player extends FlxGroup {
 		add(hitArea);
 	}
 
-	function set_score(score):Int {
-		this.score = score;
-		scoreLabel.text = '$scoreLabelText$score';
-		return score;
+	function set_score(value):Int {
+		score = value;
+		scoreLabel.text = '$scoreLabelText$value';
+		return value;
 	}
 }

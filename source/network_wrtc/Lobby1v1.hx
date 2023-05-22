@@ -3,6 +3,7 @@ package network_wrtc;
 import Utils.merge;
 import djFlixel.ui.FlxMenu;
 import flixel.FlxState;
+import flixel.util.FlxDirection;
 import haxe.Exception;
 import haxe.Json;
 import js.lib.Error;
@@ -37,7 +38,6 @@ class Lobby1v1 extends FlxState {
 
 	#if html5
 	var localPeer:Peer;
-	var remotePeer:Peer;
 
 	override function create() {
 		super.create();
@@ -202,11 +202,33 @@ class Lobby1v1 extends FlxState {
 			connectionState = Connected;
 			infobox.alignment = CENTER;
 			infobox.text = "Connected!";
-			peer.send('Hello from ${untyped peer.initiator ? 'initiator' : 'peer'}');
-		});
 
-		peer.on('data', data -> {
-			trace('Recieved data: ${data}');
+			// peer is an instance of EventEmitter
+			// but the extern does not provide its methods,
+			// so I use `untyped`
+			untyped peer.removeAllListeners('error');
+			untyped peer.removeAllListeners('signal');
+			untyped peer.removeAllListeners('connect');
+			untyped peer.removeAllListeners('close');
+
+			var leftName = 'left';
+			var leftUid = '$leftName#${FlxDirection.LEFT}';
+			var leftController = options.initiator ? racket -> new NetplayRacketController(racket, leftUid) : r -> null;
+			var rightName = 'right';
+			var rightUid = '$rightName#${FlxDirection.RIGHT}';
+			var rightController = options.initiator ? r -> null : racket -> new NetplayRacketController(racket, rightUid);
+
+			Flixel.switchState(new network_wrtc.TwoPlayersRoom({
+				name: leftName,
+				uid: leftUid,
+				position: LEFT,
+				getController: leftController
+			}, {
+				name: rightName,
+				uid: rightUid,
+				position: RIGHT,
+				getController: rightController,
+			}, Network.network = new Network(peer)));
 		});
 
 		peer.on('close', () -> trace('connection is CLOSED'));

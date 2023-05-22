@@ -1,7 +1,6 @@
 package;
 
 import djFlixel.D;
-import menu.MainMenu;
 import openfl.display.Sprite;
 
 class Main extends Sprite {
@@ -15,6 +14,8 @@ class Main extends Sprite {
 		addChild(new Pong());
 
 		Flixel.autoPause = false;
-		Flixel.switchState(new MainMenu());
+		Flixel.switchState(new network_wrtc.Lobby1v1());
+		// Flixel.switchState(new menu.MainMenu());
+
 	}
 }
