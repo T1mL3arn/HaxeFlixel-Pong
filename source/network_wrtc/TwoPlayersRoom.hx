@@ -51,30 +51,29 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 			// trace('(${untyped network.peer.initiator ? 'server' : 'player'}): on message');
 
 			switch (msg.type) {
-				case PaddleAction:
-					var data:PaddleActionPayload = msg.data;
-
-					var actionUp = data.actionMoveUp ?? false;
-					var actionDown = data.actionMoveDown ?? false;
-					var paddleName = data.paddleName;
-
-					var player = players.find(p -> p.uid == paddleName);
-					player.racket.velocity.set(0, 0);
-
-					// do not update paddle when both movement actions are active
-					if (!(actionUp && actionDown)) {
-						if (actionUp)
-							player.racket.velocity.set(0, -Pong.defaults.racketSpeed);
-						if (actionDown)
-							player.racket.velocity.set(0, Pong.defaults.racketSpeed);
-					}
-
+				case PaddleAction: messagePaddleAction(msg.data);
 				case BallData: messageBallData(msg.data);
 				default: 0;
 			}
 		});
 	}
 
+	function messagePaddleAction(data:PaddleActionPayload) {
+		var actionUp = data.actionMoveUp ?? false;
+		var actionDown = data.actionMoveDown ?? false;
+		var paddleName = data.paddleName;
+
+		var player = players.find(p -> p.uid == paddleName);
+		player.racket.velocity.set(0, 0);
+
+		// do not update paddle when both movement actions are active
+		if (!(actionUp && actionDown)) {
+			if (actionUp)
+				player.racket.velocity.set(0, -Pong.defaults.racketSpeed);
+			if (actionDown)
+				player.racket.velocity.set(0, Pong.defaults.racketSpeed);
+		}
+	}
 
 	function messageBallData(data:BallDataPayload) {
 		ball.setPosition(data.x, data.y);
