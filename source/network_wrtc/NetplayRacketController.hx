@@ -3,7 +3,7 @@ package network_wrtc;
 import flixel.input.FlxInput.FlxInputState;
 import flixel.input.keyboard.FlxKey;
 
-typedef PaddleAction = {
+typedef PaddleActionPayload = {
 	paddleName:String,
 	actionMoveUp:Bool,
 	actionMoveDown:Bool,
@@ -28,7 +28,7 @@ class NetplayRacketController extends RacketController {
 		var actionMoveUp = Flixel.keys.checkStatus(keyUp, FlxInputState.PRESSED) ? true : false;
 		var actionMoveDown = Flixel.keys.checkStatus(keyDown, FlxInputState.PRESSED) ? true : false;
 
-		var data:PaddleAction = {
+		var data:PaddleActionPayload = {
 			paddleName: name,
 			actionMoveUp: actionMoveUp,
 			actionMoveDown: actionMoveDown,

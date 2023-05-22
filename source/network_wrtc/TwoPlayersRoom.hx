@@ -1,6 +1,6 @@
 package network_wrtc;
 
-import network_wrtc.NetplayRacketController.PaddleAction;
+import network_wrtc.NetplayRacketController.PaddleActionPayload;
 
 using Lambda;
 
@@ -44,7 +44,7 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 
 			switch (msg.type) {
 				case PaddleAction:
-					var data:PaddleAction = msg.data;
+					var data:PaddleActionPayload = msg.data;
 
 					var actionUp = data.actionMoveUp ?? false;
 					var actionDown = data.actionMoveDown ?? false;
