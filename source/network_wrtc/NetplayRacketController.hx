@@ -32,7 +32,7 @@ class NetplayRacketController extends RacketController {
 			return;
 
 		var upJustReleased = Flixel.keys.checkStatus(keyUp, JUST_RELEASED);
-		var downJustReleased = Flixel.keys.checkStatus(keyUp, JUST_RELEASED);
+		var downJustReleased = Flixel.keys.checkStatus(keyDown, JUST_RELEASED);
 
 		// do not send network message if nothing is pressed and nothing is just released
 		if (!(actionMoveDown || actionMoveUp || upJustReleased || downJustReleased))
