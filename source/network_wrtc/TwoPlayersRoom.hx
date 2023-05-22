@@ -30,6 +30,14 @@ typedef TwoPlayersGameState = {
 	?winner:Any,
 };
 
+typedef BallDataPayload = {
+	x:Float,
+	y:Float,
+	vx:Float,
+	vy:Float,
+	?hitBy:String,
+}
+
 class TwoPlayersRoom extends room.TwoPlayersRoom {
 
 	var network:Network;
@@ -61,10 +69,16 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 							player.racket.velocity.set(0, Pong.defaults.racketSpeed);
 					}
 
-				default:
-					0;
+				case BallData: messageBallData(msg.data);
+				default: 0;
 			}
 		});
+	}
+
+
+	function messageBallData(data:BallDataPayload) {
+		ball.setPosition(data.x, data.y);
+		ball.velocity.set(data.vx, data.vy);
 	}
 
 	override function update(dt:Float) {
@@ -72,8 +86,16 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 	}
 
 	override function fisrtBallServe() {
-		if (network.initiator)
+		if (network.initiator) {
 			super.fisrtBallServe();
+			network.sendMessage(BallData, {
+				x: ball.x,
+				y: ball.y,
+				vx: ball.velocity.x,
+				vy: ball.velocity.y,
+				hitBy: 'unknown',
+			});
+		}
 	}
 
 	override function ballOutWorldBounds() {
