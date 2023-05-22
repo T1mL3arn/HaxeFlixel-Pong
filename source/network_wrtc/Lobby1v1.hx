@@ -37,7 +37,6 @@ class Lobby1v1 extends FlxState {
 
 	#if html5
 	var localPeer:Peer;
-	var remotePeer:Peer;
 
 	override function create() {
 		super.create();
