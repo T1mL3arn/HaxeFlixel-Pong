@@ -70,9 +70,9 @@ class Player extends FlxGroup {
 		add(hitArea);
 	}
 
-	function set_score(score):Int {
-		this.score = score;
-		scoreLabel.text = '$scoreLabelText$score';
-		return score;
+	function set_score(value):Int {
+		score = value;
+		scoreLabel.text = '$scoreLabelText$value';
+		return value;
 	}
 }
