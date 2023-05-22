@@ -63,6 +63,15 @@ class TwoPlayersRoom extends BaseState {
 	override function update(dt:Float) {
 		super.update(dt);
 
+		fisrtBallServe();
+
+		Flixel.collide(walls, ball, ballCollision);
+		Flixel.overlap(playerGoals, ball, goal);
+
+		ballOutWorldBounds();
+	}
+
+	function fisrtBallServe() {
 		// NOTE vscode cannot find "firstServe" id to do rename-rafactoring
 		if (players[0].active && players[1].active) {
 			if (ball.velocity.lengthSquared == 0 && firstServe) {
@@ -71,10 +80,9 @@ class TwoPlayersRoom extends BaseState {
 				firstServe = false;
 			}
 		}
+	}
 
-		Flixel.collide(walls, ball, ballCollision);
-		Flixel.overlap(playerGoals, ball, goal);
-
+	function ballOutWorldBounds() {
 		if (!ball.inWorldBounds()) {
 			resetBall();
 			serveBall(Flixel.random.getObject(players), ball);
