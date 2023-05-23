@@ -14,4 +14,5 @@ function setAIPlayer(opts:PlayerOptions, aiType:String) {
 			opts.name = 'easy AI';
 			opts.getController = racket -> new NotSoSimpleAI(racket);
 	}
+	return opts;
 }
