@@ -1,5 +1,6 @@
 package network_wrtc;
 
+import menu.PauseMenu;
 import network_wrtc.NetplayRacketController.PaddleActionPayload;
 
 using Lambda;
@@ -46,9 +47,24 @@ typedef ScoreDataPayload = {
 class TwoPlayersRoom extends room.TwoPlayersRoom {
 
 	var network:Network;
+	var currentPlayerUid:String;
 
-	public function new(left, right, network:Network) {
+	public function new(left, right, network:Network, currentPlayerUid:String) {
 		super(left, right);
+
+		this.currentPlayerUid = currentPlayerUid;
+
+		canPause = false;
+
+		subStateOpened.add(state -> {
+			if (state is PauseMenu)
+				players.find(p -> p.uid == this.currentPlayerUid).active = false;
+		});
+
+		subStateClosed.add(state -> {
+			if (state is PauseMenu)
+				players.find(p -> p.uid == this.currentPlayerUid).active = true;
+		});
 
 		this.network = network;
 

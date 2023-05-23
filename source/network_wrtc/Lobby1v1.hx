@@ -228,7 +228,9 @@ class Lobby1v1 extends FlxState {
 				uid: rightUid,
 				position: RIGHT,
 				getController: rightController,
-			}, Network.network = new Network(peer)));
+			}, Network.network = new Network(peer),
+				// NOTE at this moment `server` is LEFT player.
+				options.initiator ? leftUid : rightUid));
 		});
 
 		peer.on('close', () -> trace('connection is CLOSED'));
