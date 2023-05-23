@@ -6,7 +6,7 @@ import menu.PauseMenu;
 class BaseState extends FlxSubState {
 
 	/** 
-		Wether opening substate (like PauseMenu) actually pauses the game, `true` by default.
+		Wether an openned substate (like PauseMenu) actually pauses the game, `true` by default.
 		If you want to update your game while pause menu is open set it to `false`.
 	**/
 	public var canPause(default, set):Bool;
