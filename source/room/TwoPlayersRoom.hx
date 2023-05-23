@@ -116,20 +116,17 @@ class TwoPlayersRoom extends BaseState {
 	function goal(hitArea:FlxBasic, ball:Ball) {
 		var looser = players.find(p -> p.hitArea == hitArea);
 		var winner = players.find(p -> p.racket == ball.hitBy);
+		// NOTE: having a looser without a winner means
+		// it was a ball serve, in this case goal doesnt count
+		// and ball re-served the same way
+		var ballServer = winner ?? looser;
 
-		if (winner != null) {
+		if (winner != null)
 			winner.score += 1;
-			resetBall();
 
-			// winner serves the ball
-			serveBall(winner, ball);
-		}
-		else if (looser != null) {
-			// having a looser without a winner means
-			// it was a ball serve, in this case goal doesnt count
-			// and ball re-served the same way
+		if (ballServer != null) {
 			resetBall();
-			serveBall(looser, ball);
+			serveBall(ballServer, ball);
 		}
 	}
 
