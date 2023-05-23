@@ -5,11 +5,9 @@ import RacketController.KeyboardMovementController;
 import Utils.swap;
 import ai.AIFactory.setAIPlayer;
 import ai.SimpleAI;
-import djFlixel.ui.FlxMenu;
 import flixel.FlxState;
 import flixel.util.FlxColor;
 import lime.app.Application;
-import menu.MenuUtils.setDefaultMenuStyle;
 import menu.MenuUtils.wrapMenuPage;
 import network_wrtc.Lobby1v1;
 import room.SplitscreenRoom;
@@ -34,9 +32,7 @@ class MainMenu extends FlxState {
 
 	override function create() {
 
-		var menu = new FlxMenu(0, 0, 0, 10);
-
-		menu.PAR.start_button_fire = true;
+		var menu = new BaseMenu(0, 0, 0, 10);
 
 		menu.createPage('main')
 			.add(wrapMenuPage('PONG', '
@@ -67,8 +63,6 @@ class MainMenu extends FlxState {
 			.par({
 				pos: 'screen,c,c'
 			});
-
-		setDefaultMenuStyle(menu);
 
 		menu.createPage('multiplayer_menu_page')
 			.add(wrapMenuPage('multiplayer', '

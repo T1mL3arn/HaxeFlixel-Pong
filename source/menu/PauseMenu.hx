@@ -15,9 +15,7 @@ class PauseMenu extends FlxSubState {
 
 	override function create() {
 
-		var menu = new FlxMenu(0, 0, 0);
-
-		menu.PAR.start_button_fire = true;
+		var menu = new BaseMenu(0, 0, 0);
 
 		menu.createPage('main').add('
 			-| resume | link | resume
@@ -26,8 +24,6 @@ class PauseMenu extends FlxSubState {
 		').par({
 				pos: 'screen,c,c'
 			});
-
-		setDefaultMenuStyle(menu);
 
 		menu.goto('main');
 

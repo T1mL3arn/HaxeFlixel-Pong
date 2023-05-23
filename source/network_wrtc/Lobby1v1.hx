@@ -8,8 +8,8 @@ import haxe.Exception;
 import haxe.Json;
 import js.lib.Error;
 import lime.system.Clipboard as LimeClipboard;
+import menu.BaseMenu;
 import menu.MainMenu;
-import menu.MenuUtils.setDefaultMenuStyle;
 import openfl.desktop.Clipboard;
 import text.FlxText;
 #if html5
@@ -53,7 +53,7 @@ class Lobby1v1 extends FlxState {
 			return;
 		}
 
-		menu = new FlxMenu(0, 0, 0, 5);
+		menu = new BaseMenu(0, 0, 0, 5);
 		menu.createPage('main')
 			.add('
 				-| create  | link | create_lobby
@@ -64,8 +64,6 @@ class Lobby1v1 extends FlxState {
 			.par({
 				pos: 'screen,c,c'
 			});
-
-		setDefaultMenuStyle(menu);
 
 		menu.createPage('accept connection')
 			.add('
