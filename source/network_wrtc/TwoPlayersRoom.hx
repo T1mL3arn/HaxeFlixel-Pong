@@ -1,5 +1,6 @@
 package network_wrtc;
 
+import flixel.FlxObject;
 import menu.PauseMenu;
 import network_wrtc.NetplayRacketController.PaddleActionPayload;
 import network_wrtc.Network.NetworkMessage;
@@ -157,5 +158,12 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 				rightScore: players[1].score,
 			});
 		}
+	}
+
+	override function ballCollision(wall:FlxObject, ball:Ball) {
+		super.ballCollision(wall, ball);
+
+		if (network.initiator)
+			network.sendMessage(BallData, getBallPayload());
 	}
 }
