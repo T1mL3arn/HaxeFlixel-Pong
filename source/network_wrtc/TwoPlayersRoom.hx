@@ -2,6 +2,7 @@ package network_wrtc;
 
 import menu.PauseMenu;
 import network_wrtc.NetplayRacketController.PaddleActionPayload;
+import network_wrtc.Network.NetworkMessage;
 
 using Lambda;
 
@@ -67,17 +68,27 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 		});
 
 		this.network = network;
+		this.network.onMessage.add(onMessage);
+	}
 
-		network.onMessage.add(msg -> {
-			// trace('(${untyped network.peer.initiator ? 'server' : 'player'}): on message');
+	override function destroy() {
+		super.destroy();
+		network.onMessage.remove(onMessage);
+	}
 
-			switch (msg.type) {
-				case PaddleAction: messagePaddleAction(msg.data);
-				case BallData: messageBallData(msg.data);
-				case ScoreData: messageScoreData(msg.data);
-				default: 0;
-			}
-		});
+	function onMessage(msg:NetworkMessage) {
+		// trace('(${untyped network.peer.initiator ? 'server' : 'player'}): on message');
+
+		switch (msg.type) {
+			case PaddleAction:
+				messagePaddleAction(msg.data);
+			case BallData:
+				messageBallData(msg.data);
+			case ScoreData:
+				messageScoreData(msg.data);
+			default:
+				0;
+		}
 	}
 
 	function messagePaddleAction(data:PaddleActionPayload) {
