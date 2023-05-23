@@ -134,9 +134,9 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 			super.serveBall(byPlayer, ball, delay);
 			// ball serve has delay, so for correct sync
 			// I have to sync 2 times: right now and after delay
-			network.sendMessage(BallData, getBallPayload());
+			network.send(BallData, getBallPayload());
 
-			haxe.Timer.delay(() -> network.sendMessage(BallData, getBallPayload()), delay);
+			haxe.Timer.delay(() -> network.send(BallData, getBallPayload()), delay);
 		}
 	}
 
@@ -153,7 +153,7 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 	override function goal(hitArea, ball) {
 		if (network.initiator) {
 			super.goal(hitArea, ball);
-			network.sendMessage(ScoreData, {
+			network.send(ScoreData, {
 				leftScore: players[0].score,
 				rightScore: players[1].score,
 			});
@@ -164,6 +164,6 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 		super.ballCollision(wall, ball);
 
 		if (network.initiator)
-			network.sendMessage(BallData, getBallPayload());
+			network.send(BallData, getBallPayload());
 	}
 }

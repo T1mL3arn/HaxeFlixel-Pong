@@ -47,6 +47,6 @@ class NetplayRacketController extends RacketController {
 
 		var net = Network.network;
 
-		net.sendMessage(PaddleAction, data);
+		net.send(PaddleAction, data);
 	}
 }
