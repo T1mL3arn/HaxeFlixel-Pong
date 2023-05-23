@@ -11,6 +11,7 @@ typedef PongParams = {
 	racketThickness:Int,
 	racketSpeed:Float,
 	racketPadding:Float,
+	scoreToWin:Int,
 };
 
 class Pong extends FlxGame {
@@ -27,6 +28,7 @@ class Pong extends FlxGame {
 		racketThickness: 12,
 		racketSpeed: 225.0,
 		racketPadding: 12.0,
+		scoreToWin: 11,
 	};
 
 	public static var params:PongParams = Reflect.copy(defaultParams);

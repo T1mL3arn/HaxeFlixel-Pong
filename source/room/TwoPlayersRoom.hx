@@ -124,7 +124,15 @@ class TwoPlayersRoom extends BaseState {
 		if (winner != null)
 			winner.score += 1;
 
-		if (ballServer != null) {
+		// checking the winner
+		winner = players.find(p -> p.score >= Pong.params.scoreToWin);
+		if (winner != null) {
+			trace('Winner: ${winner.name} !');
+			canPause = true;
+			canOpenPauseMenu = false;
+			// TODO show congrat screen
+		}
+		else if (ballServer != null) {
 			resetBall();
 			serveBall(ballServer, ball);
 		}
