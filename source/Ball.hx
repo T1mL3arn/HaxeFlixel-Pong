@@ -16,7 +16,7 @@ class Ball extends FlxSprite {
 	public function new() {
 		super();
 
-		makeGraphic(Pong.defaults.ballSize, Pong.defaults.ballSize, FlxColor.WHITE);
+		makeGraphic(Pong.params.ballSize, Pong.params.ballSize, FlxColor.WHITE);
 		color = FlxColor.RED;
 		color = FlxColor.WHITE;
 		centerOrigin();

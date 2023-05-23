@@ -140,9 +140,9 @@ class TwoPlayersRoom extends BaseState {
 
 		var velX = switch byPlayer.options.position {
 			case LEFT:
-				-Pong.defaults.ballSpeed;
+				-Pong.params.ballSpeed;
 			case RIGHT:
-				Pong.defaults.ballSpeed;
+				Pong.params.ballSpeed;
 			default:
 				0;
 		}

@@ -103,9 +103,9 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 		// do not update paddle when both movement actions are active
 		if (!(actionUp && actionDown)) {
 			if (actionUp)
-				player.racket.velocity.set(0, -Pong.defaults.racketSpeed);
+				player.racket.velocity.set(0, -Pong.params.racketSpeed);
 			if (actionDown)
-				player.racket.velocity.set(0, Pong.defaults.racketSpeed);
+				player.racket.velocity.set(0, Pong.params.racketSpeed);
 		}
 	}
 
