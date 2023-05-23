@@ -1,6 +1,8 @@
 package network_wrtc;
 
+import menu.PauseMenu;
 import network_wrtc.NetplayRacketController.PaddleActionPayload;
+import network_wrtc.Network.NetworkMessage;
 
 using Lambda;
 
@@ -46,22 +48,47 @@ typedef ScoreDataPayload = {
 class TwoPlayersRoom extends room.TwoPlayersRoom {
 
 	var network:Network;
+	var currentPlayerUid:String;
 
-	public function new(left, right, network:Network) {
+	public function new(left, right, network:Network, currentPlayerUid:String) {
 		super(left, right);
 
-		this.network = network;
+		this.currentPlayerUid = currentPlayerUid;
 
-		network.onMessage.add(msg -> {
-			// trace('(${untyped network.peer.initiator ? 'server' : 'player'}): on message');
+		canPause = false;
 
-			switch (msg.type) {
-				case PaddleAction: messagePaddleAction(msg.data);
-				case BallData: messageBallData(msg.data);
-				case ScoreData: messageScoreData(msg.data);
-				default: 0;
-			}
+		subStateOpened.add(state -> {
+			if (state is PauseMenu)
+				players.find(p -> p.uid == this.currentPlayerUid).active = false;
 		});
+
+		subStateClosed.add(state -> {
+			if (state is PauseMenu)
+				players.find(p -> p.uid == this.currentPlayerUid).active = true;
+		});
+
+		this.network = network;
+		this.network.onMessage.add(onMessage);
+	}
+
+	override function destroy() {
+		super.destroy();
+		network.onMessage.remove(onMessage);
+	}
+
+	function onMessage(msg:NetworkMessage) {
+		// trace('(${untyped network.peer.initiator ? 'server' : 'player'}): on message');
+
+		switch (msg.type) {
+			case PaddleAction:
+				messagePaddleAction(msg.data);
+			case BallData:
+				messageBallData(msg.data);
+			case ScoreData:
+				messageScoreData(msg.data);
+			default:
+				0;
+		}
 	}
 
 	function messagePaddleAction(data:PaddleActionPayload) {
@@ -91,21 +118,30 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 		players[1].score = data.rightScore;
 	}
 
-	override function update(dt:Float) {
-		super.update(dt);
+	function getBallPayload():BallDataPayload {
+		return {
+			x: ball.x,
+			y: ball.y,
+			vx: ball.velocity.x,
+			vy: ball.velocity.y,
+			hitBy: 'unknown',
+		};
+	}
+
+	override function serveBall(byPlayer:Player, ball:Ball, delay:Int = 1000) {
+		if (network.initiator) {
+			super.serveBall(byPlayer, ball, delay);
+			// ball serve has delay, so for correct sync
+			// I have to sync 2 times: right now and after delay
+			network.sendMessage(BallData, getBallPayload());
+
+			haxe.Timer.delay(() -> network.sendMessage(BallData, getBallPayload()), delay);
+		}
 	}
 
 	override function fisrtBallServe() {
-		if (network.initiator) {
+		if (network.initiator)
 			super.fisrtBallServe();
-			network.sendMessage(BallData, {
-				x: ball.x,
-				y: ball.y,
-				vx: ball.velocity.x,
-				vy: ball.velocity.y,
-				hitBy: 'unknown',
-			});
-		}
 	}
 
 	override function ballOutWorldBounds() {
