@@ -133,7 +133,7 @@ class TwoPlayersRoom extends BaseState {
 		}
 	}
 
-	function serveBall(byPlayer:Player, ball:Ball) {
+	function serveBall(byPlayer:Player, ball:Ball, delay:Int = 1000) {
 
 		var p = byPlayer;
 		ball.y = p.racket.y + p.racket.height * 0.5 - ball.height * 0.5;
@@ -147,6 +147,6 @@ class TwoPlayersRoom extends BaseState {
 				0;
 		}
 
-		Timer.delay(() -> ball.velocity.set(velX, 0), 1000);
+		Timer.delay(() -> ball.velocity.set(velX, 0), delay);
 	}
 }

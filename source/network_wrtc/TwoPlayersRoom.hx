@@ -118,21 +118,30 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 		players[1].score = data.rightScore;
 	}
 
-	override function update(dt:Float) {
-		super.update(dt);
+	function getBallPayload():BallDataPayload {
+		return {
+			x: ball.x,
+			y: ball.y,
+			vx: ball.velocity.x,
+			vy: ball.velocity.y,
+			hitBy: 'unknown',
+		};
+	}
+
+	override function serveBall(byPlayer:Player, ball:Ball, delay:Int = 1000) {
+		if (network.initiator) {
+			super.serveBall(byPlayer, ball, delay);
+			// ball serve has delay, so for correct sync
+			// I have to sync 2 times: right now and after delay
+			network.sendMessage(BallData, getBallPayload());
+
+			haxe.Timer.delay(() -> network.sendMessage(BallData, getBallPayload()), delay);
+		}
 	}
 
 	override function fisrtBallServe() {
-		if (network.initiator) {
+		if (network.initiator)
 			super.fisrtBallServe();
-			network.sendMessage(BallData, {
-				x: ball.x,
-				y: ball.y,
-				vx: ball.velocity.x,
-				vy: ball.velocity.y,
-				hitBy: 'unknown',
-			});
-		}
 	}
 
 	override function ballOutWorldBounds() {
