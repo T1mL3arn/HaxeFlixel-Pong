@@ -3,6 +3,11 @@ package menu;
 import djFlixel.ui.FlxMenu;
 import menu.MenuUtils.setDefaultMenuStyle;
 
+enum abstract MenuCommand(String) to String {
+	var EXIT_GAME;
+	var SWITCH_TO_MAIN_MENU;
+}
+
 @:forward
 abstract BaseMenu(FlxMenu) to FlxMenu {
 
