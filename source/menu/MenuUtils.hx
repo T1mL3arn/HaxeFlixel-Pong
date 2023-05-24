@@ -12,7 +12,7 @@ function setDefaultMenuStyle(menu:FlxMenu) {
 	// setting up menu items text
 	menu.STP.align = 'center';
 	menu.STP.item.text = {
-		s: 30,
+		s: 32,
 		a: 'center'
 	};
 }
