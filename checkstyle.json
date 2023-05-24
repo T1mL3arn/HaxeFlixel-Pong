@@ -653,8 +653,7 @@
 		{
 			"type": "UnusedImport",
 			"props": {
-				"ignoreModules": [],
-				"moduleTypeMap": {}
+				"severity": "IGNORE"
 			}
 		},
 		{
