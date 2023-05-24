@@ -14,7 +14,9 @@ class Main extends Sprite {
 		addChild(new Pong());
 
 		Flixel.autoPause = false;
-		Flixel.switchState(new network_wrtc.Lobby1v1());
+		// Flixel.switchState(new room.AIRoom());
+		Flixel.switchState(new menu.CongratScreen());
+		// Flixel.switchState(new network_wrtc.Lobby1v1());
 		// Flixel.switchState(new menu.MainMenu());
 
 	}
