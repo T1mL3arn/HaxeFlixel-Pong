@@ -4,8 +4,10 @@ import Player.PlayerOptions;
 import flixel.FlxBasic;
 import flixel.FlxObject;
 import flixel.group.FlxGroup.FlxTypedGroup;
+import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import haxe.Timer;
+import menu.CongratScreen;
 
 using Lambda;
 using StringTools;
