@@ -10,6 +10,7 @@ class CongratScreen extends FlxSubState {
 	override function create() {
 		super.create();
 
+		var bottomPadding = -Flixel.height * #if !html5 0.05 #else 0.1 #end;
 		var menu = new BaseMenu(0, 0, 0, 4);
 		menu.createPage('main')
 			.add('
@@ -19,7 +20,7 @@ class CongratScreen extends FlxSubState {
 			.addExitGameItem()
 			.par({
 				pos: 'screen,c,b',
-				y: Flixel.height * -0.05,
+				y: bottomPadding,
 			});
 
 		menu.goto('main');
