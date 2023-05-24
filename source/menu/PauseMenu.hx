@@ -1,9 +1,10 @@
 package menu;
 
-import djFlixel.ui.FlxMenu;
 import flixel.FlxSubState;
 import lime.app.Application;
-import menu.MenuUtils.setDefaultMenuStyle;
+import menu.BaseMenu.MenuCommand;
+
+using menu.MenuUtils;
 
 class PauseMenu extends FlxSubState {
 
@@ -17,11 +18,13 @@ class PauseMenu extends FlxSubState {
 
 		var menu = new BaseMenu(0, 0, 0);
 
-		menu.createPage('main').add('
+		menu.createPage('main')
+			.add('
 			-| resume | link | resume
 			-| main menu | link | to_main
-			-| exit game | link | exit_game
-		').par({
+		')
+			.addExitGameItem()
+			.par({
 				pos: 'screen,c,c'
 			});
 
@@ -35,7 +38,7 @@ class PauseMenu extends FlxSubState {
 				case [it_fire, 'to_main']:
 					Flixel.switchState(new MainMenu());
 
-				case [it_fire, 'exit_game']:
+				case [it_fire, EXIT_GAME]:
 					Application.current.window.close();
 
 				default:

@@ -8,11 +8,14 @@ import ai.SimpleAI;
 import flixel.FlxState;
 import flixel.util.FlxColor;
 import lime.app.Application;
+import menu.BaseMenu.MenuCommand;
 import menu.MenuUtils.wrapMenuPage;
 import network_wrtc.Lobby1v1;
 import room.SplitscreenRoom;
 import room.TrainingRoom;
 import room.TwoPlayersRoom;
+
+using menu.MenuUtils;
 
 class MainMenu extends FlxState {
 
@@ -38,8 +41,8 @@ class MainMenu extends FlxState {
 			.add(wrapMenuPage('PONG', '
 				-| 1 player | link | @1_player
 				-| multiplayer | link | @multiplayer_menu_page
-				-| exit game | link | exit_game
-		', ''))
+		', null))
+			.addExitGameItem()
 			.par({
 				pos: 'screen,c,c'
 			});
@@ -90,7 +93,7 @@ class MainMenu extends FlxState {
 						position: RIGHT,
 					}));
 
-				case [it_fire, 'exit_game']:
+				case [it_fire, EXIT_GAME]:
 					// TODO remove this functionality for html5 target
 					Application.current.window.close();
 
