@@ -7,7 +7,6 @@ import ai.AIFactory.setAIPlayer;
 import ai.SimpleAI;
 import flixel.FlxState;
 import flixel.util.FlxColor;
-import lime.app.Application;
 import menu.BaseMenu.MenuCommand;
 import menu.MenuUtils.wrapMenuPage;
 import network_wrtc.Lobby1v1;
