@@ -38,9 +38,6 @@ class PauseMenu extends FlxSubState {
 				case [it_fire, SWITCH_TO_MAIN_MENU]:
 					Flixel.switchState(new MainMenu());
 
-				case [it_fire, EXIT_GAME]:
-					Application.current.window.close();
-
 				default:
 					0;
 			}

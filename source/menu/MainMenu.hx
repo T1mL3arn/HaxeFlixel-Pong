@@ -93,10 +93,6 @@ class MainMenu extends FlxState {
 						position: RIGHT,
 					}));
 
-				case [it_fire, EXIT_GAME]:
-					// TODO remove this functionality for html5 target
-					Application.current.window.close();
-
 				case [it_fire, 'load_ai_room']:
 					if (players[0].position == RIGHT)
 						swap(players, 0, 1);
