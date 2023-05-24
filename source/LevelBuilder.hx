@@ -24,7 +24,7 @@ final defaultWallParams:WallParams = {
 
 class LevelBuilder {
 
-	static public final inst = new LevelBuilder();
+	public static final inst = new LevelBuilder();
 
 	function new() {}
 
