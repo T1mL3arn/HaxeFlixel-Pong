@@ -130,7 +130,12 @@ class TwoPlayersRoom extends BaseState {
 			trace('Winner: ${winner.name} !');
 			canPause = true;
 			canOpenPauseMenu = false;
-			// TODO show congrat screen
+			for (player in players) {
+				player.active = false;
+				// AI moves its racket with FlxTween, so such tweens must be canceled.
+				FlxTween.cancelTweensOf(player.racket);
+			}
+			openSubState(new CongratScreen());
 		}
 		else if (ballServer != null) {
 			resetBall();
