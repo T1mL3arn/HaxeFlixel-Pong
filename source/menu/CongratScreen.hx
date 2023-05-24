@@ -1,6 +1,7 @@
 package menu;
 
 import flixel.FlxSubState;
+import menu.BaseMenu.MenuCommand;
 
 using menu.MenuUtils;
 
@@ -14,7 +15,7 @@ class CongratScreen extends FlxSubState {
 		menu.createPage('main')
 			.add('
 			-| play again | link | again
-			-| main menu | link | to_main
+			-| main menu | link | $SWITCH_TO_MAIN_MENU
 		')
 			.addExitGameItem()
 			.par({

@@ -21,7 +21,7 @@ class PauseMenu extends FlxSubState {
 		menu.createPage('main')
 			.add('
 			-| resume | link | resume
-			-| main menu | link | to_main
+			-| main menu | link | $SWITCH_TO_MAIN_MENU
 		')
 			.addExitGameItem()
 			.par({
@@ -35,7 +35,7 @@ class PauseMenu extends FlxSubState {
 				case [it_fire, 'resume']:
 					this.close();
 
-				case [it_fire, 'to_main']:
+				case [it_fire, SWITCH_TO_MAIN_MENU]:
 					Flixel.switchState(new MainMenu());
 
 				case [it_fire, EXIT_GAME]:
