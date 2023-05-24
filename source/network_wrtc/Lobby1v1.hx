@@ -1,7 +1,6 @@
 package network_wrtc;
 
 import Utils.merge;
-import djFlixel.ui.FlxMenu;
 import flixel.FlxState;
 import flixel.util.FlxDirection;
 import haxe.Exception;
@@ -30,7 +29,7 @@ enum abstract ConnectionState(String) {
 class Lobby1v1 extends FlxState {
 
 	var signalData:String;
-	var menu:FlxMenu;
+	var menu:BaseMenu;
 	var infobox:FlxText;
 	var connectionState:ConnectionState = Initial;
 	var timer:haxe.Timer;
@@ -111,7 +110,7 @@ class Lobby1v1 extends FlxState {
 			// },
 		};
 
-		menu.onMenuEvent = (e, id) -> {
+		menu.menuEvent.add((e, id) -> {
 			switch ([e, id]) {
 				case [it_fire, 'create_lobby']:
 					if (localPeer == null) {
@@ -142,7 +141,7 @@ class Lobby1v1 extends FlxState {
 				default:
 					0;
 			}
-		}
+		});
 	}
 
 	function buildInfoBox() {

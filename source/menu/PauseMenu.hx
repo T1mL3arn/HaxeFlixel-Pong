@@ -30,7 +30,7 @@ class PauseMenu extends FlxSubState {
 
 		menu.goto('main');
 
-		menu.onMenuEvent = (e, id) -> {
+		menu.menuEvent.add((e, id) -> {
 			switch ([e, id]) {
 				case [it_fire, 'resume']:
 					this.close();
@@ -41,7 +41,7 @@ class PauseMenu extends FlxSubState {
 				default:
 					0;
 			}
-		}
+		});
 
 		add(menu);
 

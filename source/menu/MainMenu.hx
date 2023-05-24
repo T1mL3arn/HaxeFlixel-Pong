@@ -77,7 +77,7 @@ class MainMenu extends FlxState {
 			});
 
 		menu.goto('main');
-		menu.onMenuEvent = (e, id) -> {
+		menu.menuEvent.add((e, id) -> {
 			switch ([e, id]) {
 				case [it_fire, TRAINING_ROOM_MENU_ID]:
 					Flixel.switchState(new TrainingRoom());
@@ -116,9 +116,9 @@ class MainMenu extends FlxState {
 				default:
 					0;
 			}
-		}
+		});
 
-		menu.onItemEvent = (event, item) -> {
+		menu.itemEvent.add((event, item) -> {
 			switch ([event, item.ID]) {
 				case [change, 'player_pos']:
 					var pos = item.P.list[item.P.c];
@@ -138,7 +138,7 @@ class MainMenu extends FlxState {
 				default:
 					0;
 			}
-		}
+		});
 
 		add(menu);
 	}
