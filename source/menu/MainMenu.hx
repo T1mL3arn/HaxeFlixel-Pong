@@ -41,7 +41,7 @@ class MainMenu extends FlxState {
 			.add(wrapMenuPage('PONG', '
 				-| 1 player | link | @1_player
 				-| multiplayer | link | @multiplayer_menu_page
-		', null))
+		', ''))
 			.addExitGameItem()
 			.par({
 				pos: 'screen,c,c'
