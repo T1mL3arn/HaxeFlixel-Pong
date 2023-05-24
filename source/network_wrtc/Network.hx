@@ -6,7 +6,7 @@ import peer.Peer;
 
 var network:Network = null;
 
-@:enum abstract NetworkMessageType(String) {
+enum abstract NetworkMessageType(String) {
 	var PaddleAction;
 	var PaddleData;
 	var BallData;
