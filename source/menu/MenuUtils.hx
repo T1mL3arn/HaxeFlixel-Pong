@@ -23,7 +23,7 @@ function setDefaultMenuStyle(menu:FlxMenu) {
 								if you do not want this action
 **/
 function wrapMenuPage(headerLabel:String, pageData:String, ?goback:String = 'go back') {
-	goback = goback == '' ? '' : '
+	goback = goback != 'go back' ? '' : '
 		-| __________ | label | 3 | U
 		-| $goback | link | @back
 		';
