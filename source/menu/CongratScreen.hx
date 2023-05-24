@@ -26,6 +26,13 @@ class CongratScreen extends FlxSubState {
 		menu.goto('main');
 		add(menu);
 
+		menu.menuEvent.add((e, pageId) -> {
+			switch ([e, pageId]) {
+				case [it_fire, SWITCH_TO_MAIN_MENU]:
+					Flixel.switchState(new MainMenu());
+				default:
+			}
+		});
 		this.openCallback = () -> trace('congrat screen is open');
 
 		// TODO congratulations text (show player name)
