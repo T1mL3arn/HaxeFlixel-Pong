@@ -59,7 +59,7 @@ class Lobby1v1 extends FlxState {
 				-| create  | link | create_lobby
 				-| connect | link | connect_to_lobby
 				-| __________ | label | 3 | U
-				-| main menu | link | open_main_menu
+				-| main menu | link | switch_to_main_menu
 				')
 			.par({
 				pos: 'screen,c,c'
@@ -70,7 +70,7 @@ class Lobby1v1 extends FlxState {
 				-| create | link | create_lobby | D | U |
 				-| accept connection | link | accept_connection
 				-| __________ | label | 3 | U
-				-| main menu | link | open_main_menu
+				-| main menu | link | switch_to_main_menu
 				')
 			.par({
 				pos: 'screen,c,c'
@@ -81,7 +81,7 @@ class Lobby1v1 extends FlxState {
 				-| create | link | create_lobby | D | U |
 				-| connecting | link | wait_connection | D | U |
 				-| __________ | label | 3 | U
-				-| main menu | link | open_main_menu
+				-| main menu | link | switch_to_main_menu
 				')
 			.par({
 				pos: 'screen,c,c'
@@ -134,7 +134,7 @@ class Lobby1v1 extends FlxState {
 				case [it_fire, 'accept_connection']:
 					promptLobbyKey();
 
-				case [it_fire, 'open_main_menu']:
+				case [it_fire, 'switch_to_main_menu']:
 					if (localPeer != null)
 						localPeer.destroy();
 					Flixel.switchState(new MainMenu());
