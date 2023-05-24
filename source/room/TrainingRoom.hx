@@ -50,7 +50,7 @@ class TrainingRoom extends BaseState {
 		super.update(dt);
 
 		if (ball.velocity.lengthSquared == 0 && Flixel.keys.justPressed.ANY) {
-			ball.velocity.setPolarDegrees(Pong.defaults.ballSpeed, Flixel.random.int(135, 225));
+			ball.velocity.setPolarDegrees(Pong.params.ballSpeed, Flixel.random.int(135, 225));
 		}
 
 		Flixel.collide(walls, ball, ballCollision);

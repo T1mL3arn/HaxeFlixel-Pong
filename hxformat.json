@@ -19,6 +19,10 @@
 			"beginType": 1,
 			"endType": 1
 		},
+		"abstractEmptyLines": {
+			"beginType": 1,
+			"endType": 1
+		},
 		"afterLeftCurly": "keep",
 		"maxAnywhereInFile": 1
 	},
@@ -26,6 +30,5 @@
 		"character": "tab",
 		"tabWidth": 2
 	},
-	"whitespace": {
-	}
+	"whitespace": {}
 }

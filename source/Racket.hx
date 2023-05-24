@@ -133,7 +133,7 @@ class Racket extends FlxSprite {
 				// so to limit bounce angle in 120 degrees
 				// I calc it like 120/7 ~ 17.
 				var angleStep = 17;
-				ball.velocity.setPolarDegrees(Pong.defaults.ballSpeed + Math.abs(speedScale * 40), angleStep * speedScale);
+				ball.velocity.setPolarDegrees(Pong.params.ballSpeed + Math.abs(speedScale * 40), angleStep * speedScale);
 				if (position == RIGHT)
 					ball.velocity.x *= -1;
 			case UP, DOWN:

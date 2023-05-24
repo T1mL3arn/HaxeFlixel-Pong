@@ -4,8 +4,10 @@ import Player.PlayerOptions;
 import flixel.FlxBasic;
 import flixel.FlxObject;
 import flixel.group.FlxGroup.FlxTypedGroup;
+import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import haxe.Timer;
+import menu.CongratScreen;
 
 using Lambda;
 using StringTools;
@@ -116,20 +118,30 @@ class TwoPlayersRoom extends BaseState {
 	function goal(hitArea:FlxBasic, ball:Ball) {
 		var looser = players.find(p -> p.hitArea == hitArea);
 		var winner = players.find(p -> p.racket == ball.hitBy);
+		// NOTE: having a looser without a winner means
+		// it was a ball serve, in this case goal doesnt count
+		// and ball re-served the same way
+		var ballServer = winner ?? looser;
 
-		if (winner != null) {
+		if (winner != null)
 			winner.score += 1;
-			resetBall();
 
-			// winner serves the ball
-			serveBall(winner, ball);
+		// checking the winner
+		winner = players.find(p -> p.score >= Pong.params.scoreToWin);
+		if (winner != null) {
+			trace('Winner: ${winner.name} !');
+			canPause = true;
+			canOpenPauseMenu = false;
+			for (player in players) {
+				player.active = false;
+				// AI moves its racket with FlxTween, so such tweens must be canceled.
+				FlxTween.cancelTweensOf(player.racket);
+			}
+			openSubState(new CongratScreen().setWinner(winner.name, true));
 		}
-		else if (looser != null) {
-			// having a looser without a winner means
-			// it was a ball serve, in this case goal doesnt count
-			// and ball re-served the same way
+		else if (ballServer != null) {
 			resetBall();
-			serveBall(looser, ball);
+			serveBall(ballServer, ball);
 		}
 	}
 
@@ -140,9 +152,9 @@ class TwoPlayersRoom extends BaseState {
 
 		var velX = switch byPlayer.options.position {
 			case LEFT:
-				-Pong.defaults.ballSpeed;
+				-Pong.params.ballSpeed;
 			case RIGHT:
-				Pong.defaults.ballSpeed;
+				Pong.params.ballSpeed;
 			default:
 				0;
 		}

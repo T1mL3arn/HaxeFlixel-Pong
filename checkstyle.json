@@ -76,7 +76,9 @@
 			"type": "ConstantName",
 			"props": {
 				"format": "^[A-Z][A-Z0-9]*(_[A-Z0-9_]+)*$",
-				"tokens": [],
+				"tokens": [
+					"INLINE"
+				],
 				"ignoreExtern": true
 			}
 		},
@@ -109,7 +111,9 @@
 		},
 		{
 			"type": "Dynamic",
-			"props": {}
+			"props": {
+				"severity": "IGNORE"
+			}
 		},
 		{
 			"type": "ERegLiteral",
@@ -199,7 +203,9 @@
 		},
 		{
 			"type": "Final",
-			"props": {}
+			"props": {
+				"severity": "IGNORE"
+			}
 		},
 		{
 			"type": "HexadecimalLiteral",
@@ -647,8 +653,7 @@
 		{
 			"type": "UnusedImport",
 			"props": {
-				"ignoreModules": [],
-				"moduleTypeMap": {}
+				"severity": "IGNORE"
 			}
 		},
 		{

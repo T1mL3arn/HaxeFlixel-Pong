@@ -1,9 +1,10 @@
 package menu;
 
-import djFlixel.ui.FlxMenu;
 import flixel.FlxSubState;
 import lime.app.Application;
-import menu.MenuUtils.setDefaultMenuStyle;
+import menu.BaseMenu.MenuCommand;
+
+using menu.MenuUtils;
 
 class PauseMenu extends FlxSubState {
 
@@ -15,37 +16,32 @@ class PauseMenu extends FlxSubState {
 
 	override function create() {
 
-		var menu = new FlxMenu(0, 0, 0);
+		var menu = new BaseMenu(0, 0, 0);
 
-		menu.PAR.start_button_fire = true;
-
-		menu.createPage('main').add('
+		menu.createPage('main')
+			.add('
 			-| resume | link | resume
-			-| main menu | link | to_main
-			-| exit game | link | exit_game
-		').par({
+			-| main menu | link | $SWITCH_TO_MAIN_MENU
+		')
+			.addExitGameItem()
+			.par({
 				pos: 'screen,c,c'
 			});
 
-		setDefaultMenuStyle(menu);
-
 		menu.goto('main');
 
-		menu.onMenuEvent = (e, id) -> {
+		menu.menuEvent.add((e, id) -> {
 			switch ([e, id]) {
 				case [it_fire, 'resume']:
 					this.close();
 
-				case [it_fire, 'to_main']:
+				case [it_fire, SWITCH_TO_MAIN_MENU]:
 					Flixel.switchState(new MainMenu());
-
-				case [it_fire, 'exit_game']:
-					Application.current.window.close();
 
 				default:
 					0;
 			}
-		}
+		});
 
 		add(menu);
 

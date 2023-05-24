@@ -1,6 +1,8 @@
 package menu;
 
 import djFlixel.ui.FlxMenu;
+import djFlixel.ui.menu.MPageData;
+import menu.BaseMenu.MenuCommand;
 
 function setDefaultMenuStyle(menu:FlxMenu) {
 	// disabling menu items tweening
@@ -10,7 +12,7 @@ function setDefaultMenuStyle(menu:FlxMenu) {
 	// setting up menu items text
 	menu.STP.align = 'center';
 	menu.STP.item.text = {
-		s: 30,
+		s: 32,
 		a: 'center'
 	};
 }
@@ -34,4 +36,14 @@ function wrapMenuPage(headerLabel:String, pageData:String, ?goback:String = 'go 
 		$pageData
 		$goback
 		';
+}
+
+/**
+	Adds "exit game" menu item if current target platform supports it
+	@param menuPage 
+	@param at
+	@return MPageData
+**/
+function addExitGameItem(menuPage:MPageData, at:Int = -1):MPageData {
+	return menuPage.add(#if !html5 'exit game | link | ${EXIT_GAME}' #else '' #end, at);
 }

@@ -24,7 +24,7 @@ final defaultWallParams:WallParams = {
 
 class LevelBuilder {
 
-	static public final inst = new LevelBuilder();
+	public static final inst = new LevelBuilder();
 
 	function new() {}
 
@@ -91,7 +91,7 @@ class LevelBuilder {
 			getWall({pos: RIGHT, padding: 5, size: 0.95})
 		];
 
-		var batHole = Math.ceil(Pong.defaults.ballSize * 1.5);
+		var batHole = Math.ceil(Pong.params.ballSize * 1.5);
 
 		player.racket.movementBounds = getMovementBounds(walls[0], walls[1], batHole);
 		player.scoreLabel.setPosition(Flixel.width * 0.75, Flixel.height * 0.15);
@@ -108,16 +108,16 @@ class LevelBuilder {
 	function getPlayer(options:PlayerOptions):Player {
 		var racket = new Racket({
 			direction: options.position,
-			thickness: Pong.defaults.racketThickness,
-			size: Pong.defaults.racketLength,
+			thickness: Pong.params.racketThickness,
+			size: Pong.params.racketLength,
 			color: options.color
 		});
 		racket.screenCenter();
 		racket.x = switch (options.position) {
 			case LEFT:
-				Pong.defaults.racketPadding;
+				Pong.params.racketPadding;
 			case RIGHT:
-				Flixel.width - racket.width - Pong.defaults.racketPadding;
+				Flixel.width - racket.width - Pong.params.racketPadding;
 			default:
 				racket.x;
 		}
@@ -152,7 +152,7 @@ class LevelBuilder {
 
 		var walls = [getWall({pos: UP, padding: 0}), getWall({pos: DOWN, padding: 0})];
 
-		var batHole = Math.ceil(Pong.defaults.ballSize * 1.5);
+		var batHole = Math.ceil(Pong.params.ballSize * 1.5);
 		var movementBounds = getMovementBounds(walls[0], walls[1], batHole);
 
 		var players = [getPlayer(left), getPlayer(right)];

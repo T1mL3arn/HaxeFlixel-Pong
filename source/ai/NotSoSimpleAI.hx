@@ -110,7 +110,7 @@ class NotSoSimpleAI extends RacketController {
 					targetRacketY = Flixel.random.float(targetRacketY - variance, targetRacketY + variance);
 
 					var path = Math.abs(targetRacketY - racketBounds.y);
-					var duration = path / Pong.defaults.racketSpeed;
+					var duration = path / Pong.params.racketSpeed;
 					tween = FlxTween.tween(racket, {y: targetRacketY}, duration, {ease: FlxEase.linear});
 				case UP, DOWN:
 					// TODO

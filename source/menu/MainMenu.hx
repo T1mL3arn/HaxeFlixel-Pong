@@ -5,16 +5,16 @@ import RacketController.KeyboardMovementController;
 import Utils.swap;
 import ai.AIFactory.setAIPlayer;
 import ai.SimpleAI;
-import djFlixel.ui.FlxMenu;
 import flixel.FlxState;
 import flixel.util.FlxColor;
-import lime.app.Application;
-import menu.MenuUtils.setDefaultMenuStyle;
+import menu.BaseMenu.MenuCommand;
 import menu.MenuUtils.wrapMenuPage;
 import network_wrtc.Lobby1v1;
 import room.SplitscreenRoom;
 import room.TrainingRoom;
 import room.TwoPlayersRoom;
+
+using menu.MenuUtils;
 
 class MainMenu extends FlxState {
 
@@ -34,16 +34,14 @@ class MainMenu extends FlxState {
 
 	override function create() {
 
-		var menu = new FlxMenu(0, 0, 0, 10);
-
-		menu.PAR.start_button_fire = true;
+		var menu = new BaseMenu(0, 0, 0, 10);
 
 		menu.createPage('main')
 			.add(wrapMenuPage('PONG', '
 				-| 1 player | link | @1_player
 				-| multiplayer | link | @multiplayer_menu_page
-				-| exit game | link | exit_game
 		', ''))
+			.addExitGameItem()
 			.par({
 				pos: 'screen,c,c'
 			});
@@ -68,8 +66,6 @@ class MainMenu extends FlxState {
 				pos: 'screen,c,c'
 			});
 
-		setDefaultMenuStyle(menu);
-
 		menu.createPage('multiplayer_menu_page')
 			.add(wrapMenuPage('multiplayer', '
 				-| split screen | link | split_screen
@@ -80,7 +76,7 @@ class MainMenu extends FlxState {
 			});
 
 		menu.goto('main');
-		menu.onMenuEvent = (e, id) -> {
+		menu.menuEvent.add((e, id) -> {
 			switch ([e, id]) {
 				case [it_fire, TRAINING_ROOM_MENU_ID]:
 					Flixel.switchState(new TrainingRoom());
@@ -95,10 +91,6 @@ class MainMenu extends FlxState {
 						color: FlxColor.WHITE,
 						position: RIGHT,
 					}));
-
-				case [it_fire, 'exit_game']:
-					// TODO remove this functionality for html5 target
-					Application.current.window.close();
 
 				case [it_fire, 'load_ai_room']:
 					if (players[0].position == RIGHT)
@@ -123,9 +115,9 @@ class MainMenu extends FlxState {
 				default:
 					0;
 			}
-		}
+		});
 
-		menu.onItemEvent = (event, item) -> {
+		menu.itemEvent.add((event, item) -> {
 			switch ([event, item.ID]) {
 				case [change, 'player_pos']:
 					var pos = item.P.list[item.P.c];
@@ -145,7 +137,7 @@ class MainMenu extends FlxState {
 				default:
 					0;
 			}
-		}
+		});
 
 		add(menu);
 	}

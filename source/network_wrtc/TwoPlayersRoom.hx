@@ -1,5 +1,6 @@
 package network_wrtc;
 
+import flixel.FlxObject;
 import menu.PauseMenu;
 import network_wrtc.NetplayRacketController.PaddleActionPayload;
 import network_wrtc.Network.NetworkMessage;
@@ -102,9 +103,9 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 		// do not update paddle when both movement actions are active
 		if (!(actionUp && actionDown)) {
 			if (actionUp)
-				player.racket.velocity.set(0, -Pong.defaults.racketSpeed);
+				player.racket.velocity.set(0, -Pong.params.racketSpeed);
 			if (actionDown)
-				player.racket.velocity.set(0, Pong.defaults.racketSpeed);
+				player.racket.velocity.set(0, Pong.params.racketSpeed);
 		}
 	}
 
@@ -133,9 +134,9 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 			super.serveBall(byPlayer, ball, delay);
 			// ball serve has delay, so for correct sync
 			// I have to sync 2 times: right now and after delay
-			network.sendMessage(BallData, getBallPayload());
+			network.send(BallData, getBallPayload());
 
-			haxe.Timer.delay(() -> network.sendMessage(BallData, getBallPayload()), delay);
+			haxe.Timer.delay(() -> network.send(BallData, getBallPayload()), delay);
 		}
 	}
 
@@ -152,10 +153,17 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 	override function goal(hitArea, ball) {
 		if (network.initiator) {
 			super.goal(hitArea, ball);
-			network.sendMessage(ScoreData, {
+			network.send(ScoreData, {
 				leftScore: players[0].score,
 				rightScore: players[1].score,
 			});
 		}
+	}
+
+	override function ballCollision(wall:FlxObject, ball:Ball) {
+		super.ballCollision(wall, ball);
+
+		if (network.initiator)
+			network.send(BallData, getBallPayload());
 	}
 }

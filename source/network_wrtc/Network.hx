@@ -6,7 +6,7 @@ import peer.Peer;
 
 var network:Network = null;
 
-@:enum abstract NetworkMessageType(String) {
+enum abstract NetworkMessageType(String) {
 	var PaddleAction;
 	var PaddleData;
 	var BallData;
@@ -39,9 +39,9 @@ class Network {
 		onMessage.dispatch(parsed);
 	}
 
-	public function sendMessage(type:NetworkMessageType, data:Any) {
+	public function send(msgType:NetworkMessageType, data:Any) {
 		var msg = {
-			type: type,
+			type: msgType,
 			data: data
 		};
 		peer.send(Json.stringify(msg));

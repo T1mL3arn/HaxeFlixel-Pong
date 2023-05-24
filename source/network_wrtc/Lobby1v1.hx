@@ -1,15 +1,14 @@
 package network_wrtc;
 
 import Utils.merge;
-import djFlixel.ui.FlxMenu;
 import flixel.FlxState;
 import flixel.util.FlxDirection;
 import haxe.Exception;
 import haxe.Json;
 import js.lib.Error;
 import lime.system.Clipboard as LimeClipboard;
+import menu.BaseMenu;
 import menu.MainMenu;
-import menu.MenuUtils.setDefaultMenuStyle;
 import openfl.desktop.Clipboard;
 import text.FlxText;
 #if html5
@@ -30,7 +29,7 @@ enum abstract ConnectionState(String) {
 class Lobby1v1 extends FlxState {
 
 	var signalData:String;
-	var menu:FlxMenu;
+	var menu:BaseMenu;
 	var infobox:FlxText;
 	var connectionState:ConnectionState = Initial;
 	var timer:haxe.Timer;
@@ -53,26 +52,24 @@ class Lobby1v1 extends FlxState {
 			return;
 		}
 
-		menu = new FlxMenu(0, 0, 0, 5);
+		menu = new BaseMenu(0, 0, 0, 5);
 		menu.createPage('main')
 			.add('
 				-| create  | link | create_lobby
 				-| connect | link | connect_to_lobby
 				-| __________ | label | 3 | U
-				-| main menu | link | open_main_menu
+				-| main menu | link | $SWITCH_TO_MAIN_MENU
 				')
 			.par({
 				pos: 'screen,c,c'
 			});
-
-		setDefaultMenuStyle(menu);
 
 		menu.createPage('accept connection')
 			.add('
 				-| create | link | create_lobby | D | U |
 				-| accept connection | link | accept_connection
 				-| __________ | label | 3 | U
-				-| main menu | link | open_main_menu
+				-| main menu | link | $SWITCH_TO_MAIN_MENU
 				')
 			.par({
 				pos: 'screen,c,c'
@@ -83,7 +80,7 @@ class Lobby1v1 extends FlxState {
 				-| create | link | create_lobby | D | U |
 				-| connecting | link | wait_connection | D | U |
 				-| __________ | label | 3 | U
-				-| main menu | link | open_main_menu
+				-| main menu | link | $SWITCH_TO_MAIN_MENU
 				')
 			.par({
 				pos: 'screen,c,c'
@@ -113,7 +110,7 @@ class Lobby1v1 extends FlxState {
 			// },
 		};
 
-		menu.onMenuEvent = (e, id) -> {
+		menu.menuEvent.add((e, id) -> {
 			switch ([e, id]) {
 				case [it_fire, 'create_lobby']:
 					if (localPeer == null) {
@@ -136,7 +133,7 @@ class Lobby1v1 extends FlxState {
 				case [it_fire, 'accept_connection']:
 					promptLobbyKey();
 
-				case [it_fire, 'open_main_menu']:
+				case [it_fire, SWITCH_TO_MAIN_MENU]:
 					if (localPeer != null)
 						localPeer.destroy();
 					Flixel.switchState(new MainMenu());
@@ -144,7 +141,7 @@ class Lobby1v1 extends FlxState {
 				default:
 					0;
 			}
-		}
+		});
 	}
 
 	function buildInfoBox() {

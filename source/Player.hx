@@ -25,7 +25,7 @@ class Player extends FlxGroup {
 		color: FlxColor.WHITE,
 		getController: racket -> {
 			var c = new KeyboardMovementController(racket);
-			c.speed = Pong.defaults.racketSpeed;
+			c.speed = Pong.params.racketSpeed;
 			return c;
 		},
 	};
