@@ -30,5 +30,8 @@
 		"character": "tab",
 		"tabWidth": 2
 	},
-	"whitespace": {}
+	"whitespace": {
+		"functionTypeHaxe3Policy": "none",
+		"functionTypeHaxe4Policy": "none"
+	}
 }
