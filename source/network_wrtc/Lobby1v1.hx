@@ -5,7 +5,6 @@ import flixel.FlxState;
 import flixel.util.FlxDirection;
 import haxe.Exception;
 import haxe.Json;
-import js.lib.Error;
 import lime.system.Clipboard as LimeClipboard;
 import menu.BaseMenu;
 import menu.MainMenu;
@@ -14,6 +13,7 @@ import text.FlxText;
 #if html5
 import js.Browser;
 import js.html.Console;
+import js.lib.Error;
 import peer.Peer;
 import peer.PeerOptions;
 #end
