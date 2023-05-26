@@ -40,6 +40,8 @@ class Pong extends FlxGame {
 		return cast Flixel.state;
 
 	public function new() {
-		super(0, 0);
+		// Until https://github.com/HaxeFlixel/flixel/pull/2819 is fixed
+		// I have to skip splash.
+		super(0, 0, null, true);
 	}
 }
