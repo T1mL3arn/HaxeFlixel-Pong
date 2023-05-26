@@ -2,6 +2,8 @@ package menu;
 
 import flixel.FlxSprite;
 import flixel.FlxSubState;
+import flixel.group.FlxGroup;
+import flixel.group.FlxSpriteGroup;
 import flixel.util.FlxColor;
 import flixel.util.FlxGradient;
 import flixel.util.FlxSpriteUtil;
@@ -15,6 +17,8 @@ class CongratScreen extends FlxSubState {
 	var winnerName:String = 'Unknown';
 	var winnerLabel:FlxText;
 	var forWinner:Bool = true;
+	var winnerSprite:WinnerSprite;
+	var looserSprite:WinnerSprite;
 
 	public function setWinner(name:String, forWinner:Bool = true):CongratScreen {
 		winnerName = name;
@@ -25,33 +29,8 @@ class CongratScreen extends FlxSubState {
 	override function create() {
 		super.create();
 
-		var congrats = new FlxText('Congratulations!');
-		congrats.size = 32;
-		congrats.screenCenter(X);
-		congrats.y = Flixel.height * 0.075;
-		add(congrats);
-
-		var cup = new FlxSprite();
-		cup.loadGraphic(AssetPaths.cup__png);
-		cup.scale.set(2, 2);
-		cup.updateHitbox();
-		cup.screenCenter();
-		cup.y = congrats.height + congrats.y + 20;
-		add(cup);
-
-		winnerLabel = new FlxText();
-		winnerLabel.size = 24;
-		winnerLabel.screenCenter(X);
-		winnerLabel.y = cup.y + cup.height + 20;
-		add(winnerLabel);
-
-		var line = new FlxSprite();
-		var w = Math.floor(Flixel.width * 0.75);
-		line.makeGraphic(w, 4);
-		FlxSpriteUtil.drawRect(line, 0, 0, w, 4, FlxColor.WHITE);
-		line.screenCenter(X);
-		line.y = winnerLabel.y + winnerLabel.height + 25;
-		add(line);
+		winnerSprite = new WinnerSprite();
+		looserSprite = new WinnerSprite(false);
 
 		var bottomPadding = -Flixel.height * #if !html5 0.05 #else 0.1 #end;
 		var menu = new BaseMenu(0, 0, 0, 4);
@@ -78,21 +57,85 @@ class CongratScreen extends FlxSubState {
 		});
 
 		openCallback = () -> {
-			// TODO make `maxlen` into top-level const
-			var maxlen = 15;
-			winnerLabel.text = 'winner: ${winnerName.substr(0, maxlen)}';
-			winnerLabel.screenCenter(X);
+			remove(winnerSprite);
+			remove(looserSprite);
+
+			var sprite = forWinner ? winnerSprite : looserSprite;
+			sprite.setWinnerName(winnerName);
+			add(sprite);
+			trace('winner screen is open');
 		}
 
+		openCallback();
+
+		// TODO black backdrop to hide score labels (or maybe hide everything)
 		// TODO state has params controlling how "play again" works
-		// TODO this screen works differently for winner and looser
+	}
+}
+
+class WinnerSprite extends FlxSpriteGroup {
+
+	var winnerLabel:FlxText;
+	var isWinner:Bool;
+
+	@:access(FlxTypedSpriteGroup)
+	public function new(isWinner:Bool = true) {
+		super();
+		this.isWinner = isWinner;
+
+		var congratText = isWinner ? 'Congratulations!' : 'GAME OVER';
+		var congrats = new FlxText(congratText);
+		congrats.size = 32;
+		congrats.screenCenter(X);
+		add((cast congrats : FlxSprite));
+
+		var nextY = congrats.height + congrats.y;
+
+		if (isWinner) {
+			var cup = new FlxSprite();
+			cup.loadGraphic(AssetPaths.cup__png);
+			cup.scale.set(2, 2);
+			cup.updateHitbox();
+			cup.screenCenter();
+			cup.y = nextY + 20;
+			add(cup);
+			nextY = cup.y + cup.height;
+		}
+
+		winnerLabel = new FlxText('winner: unknown');
+		winnerLabel.size = 24;
+		winnerLabel.screenCenter(X);
+		winnerLabel.y = nextY + 20;
+		add(winnerLabel);
+		nextY = winnerLabel.y + winnerLabel.height;
+
+		var line = new FlxSprite();
+		var w = Math.floor(Flixel.width * 0.75);
+		line.makeGraphic(w, 4);
+		FlxSpriteUtil.drawRect(line, 0, 0, w, 4, FlxColor.WHITE);
+		line.screenCenter(X);
+		line.y = nextY + 25;
+		add(line);
+
+		// Since the items are place in screen center
+		// I need to fix sprite group position.
+		var dx = -findMinX();
+		var dy = -findMinY();
+		// due to this shit https://github.com/HaxeFoundation/haxe/issues/10635
+		// I cant call multiTransformChildren()
+		// multiTransformChildren([xTransform, yTransform], [dx, dy]);
+		// TODO ask on Haxe gitbug about it?
+		transformChildren(xTransform, dx);
+		transformChildren(yTransform, dy);
+
+		screenCenter(X);
+		y = Flixel.height * (isWinner ? 0.075 : 0.15);
 	}
 
-	function getWinnerScreen() {
-		//
-	}
-
-	function getLooserScreen() {
-		//
+	public function setWinnerName(name:String) {
+		// TODO make `maxlen` into top-level const
+		var maxlen = 15;
+		winnerLabel.text = 'winner: ${name.substr(0, maxlen)}';
+		winnerLabel.screenCenter(X);
 	}
 }

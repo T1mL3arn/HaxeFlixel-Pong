@@ -12,8 +12,8 @@ enum abstract MenuCommand(String) to String {
 	var SWITCH_TO_MAIN_MENU;
 }
 
-typedef MenuEventHandler = (MenuEvent, String) -> Void;
-typedef MenuItemEventHandler = (ListItemEvent, MItemData) -> Void;
+typedef MenuEventHandler = (MenuEvent, String)->Void;
+typedef MenuItemEventHandler = (ListItemEvent, MItemData)->Void;
 
 @:forward
 abstract BaseMenu(BaseMenuImpl) to BaseMenuImpl {
