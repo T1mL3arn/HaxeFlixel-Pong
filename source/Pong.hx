@@ -33,7 +33,7 @@ class Pong extends FlxGame {
 
 	public static var params:PongParams = Reflect.copy(defaultParams);
 
-	public var ballCollision:FlxTypedSignal<(FlxObject, Ball) -> Void> = new FlxTypedSignal();
+	public var ballCollision:FlxTypedSignal<(FlxObject, Ball)->Void> = new FlxTypedSignal();
 	public var state(get, never):{ball:Null<Ball>};
 
 	inline function get_state()
