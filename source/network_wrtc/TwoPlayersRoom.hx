@@ -153,11 +153,15 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 	override function goal(hitArea, ball) {
 		if (network.initiator) {
 			super.goal(hitArea, ball);
-			network.send(ScoreData, {
-				leftScore: players[0].score,
-				rightScore: players[1].score,
-			});
 		}
+	}
+
+	override function updateScore(player:Player, score:Int) {
+		super.updateScore(player, score);
+		network.send(ScoreData, {
+			leftScore: players[0].score,
+			rightScore: players[1].score,
+		});
 	}
 
 	override function ballCollision(wall:FlxObject, ball:Ball) {
