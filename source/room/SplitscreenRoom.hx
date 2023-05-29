@@ -28,13 +28,13 @@ class SplitscreenRoom extends TwoPlayersRoom {
 			player.active = false;
 		}
 
-		var substate = new SplitscreenRoomGuide(this);
-		substate.closeCallback = () -> {
-			substate.destroy();
+		var guideState = new SplitscreenRoomGuide(this);
+		guideState.closeCallback = () -> {
+			guideState.destroy();
 			canOpenPauseMenu = true;
 			canPause = true;
 		};
-		openSubState(substate);
+		openSubState(guideState);
 	}
 }
 
