@@ -137,7 +137,9 @@ class TwoPlayersRoom extends BaseState {
 				// AI moves its racket with FlxTween, so such tweens must be canceled.
 				FlxTween.cancelTweensOf(player.racket);
 			}
-			openSubState(new CongratScreen().setWinner(winner.name, true));
+			openSubState(new CongratScreen(_ -> {
+				Flixel.switchState(new TwoPlayersRoom(leftOptions, rightOptions));
+			}).setWinner(winner.name, true));
 		}
 		else if (ballServer != null) {
 			resetBall();

@@ -19,6 +19,12 @@ class CongratScreen extends FlxSubState {
 	var forWinner:Bool = true;
 	var winnerSprite:WinnerSprite;
 	var looserSprite:WinnerSprite;
+	var playAgainMenuAction:CongratScreen->Void;
+
+	public function new(?playAgainMenuAction) {
+		super();
+		this.playAgainMenuAction = playAgainMenuAction;
+	}
 
 	public function setWinner(name:String, forWinner:Bool = true):CongratScreen {
 		winnerName = name;
@@ -61,6 +67,8 @@ class CongratScreen extends FlxSubState {
 			switch ([e, pageId]) {
 				case [it_fire, SWITCH_TO_MAIN_MENU]:
 					Flixel.switchState(new MainMenu());
+				case [it_fire, 'again']:
+					if (playAgainMenuAction != null) playAgainMenuAction(this);
 				default:
 			}
 		});
@@ -78,7 +86,6 @@ class CongratScreen extends FlxSubState {
 		openCallback();
 
 		// TODO black backdrop to hide score labels (or maybe hide everything)
-		// TODO state has params controlling how "play again" works
 	}
 }
 
