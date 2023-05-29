@@ -22,7 +22,7 @@ class CongratScreen extends FlxSubState {
 	var playAgainMenuAction:CongratScreen->Void;
 
 	public function new(?playAgainMenuAction) {
-		super();
+		super(0xEE000000);
 		this.playAgainMenuAction = playAgainMenuAction;
 	}
 
@@ -84,8 +84,6 @@ class CongratScreen extends FlxSubState {
 		}
 
 		openCallback();
-
-		// TODO black backdrop to hide score labels (or maybe hide everything)
 	}
 }
 
