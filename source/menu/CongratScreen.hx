@@ -26,6 +26,15 @@ class CongratScreen extends FlxSubState {
 		return this;
 	}
 
+	override function destroy() {
+		super.destroy();
+
+		if (winnerSprite.exists)
+			winnerSprite.destroy();
+		if (looserSprite.exists)
+			looserSprite.destroy();
+	}
+
 	override function create() {
 		super.create();
 
