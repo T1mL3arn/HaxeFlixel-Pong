@@ -30,7 +30,6 @@ class SplitscreenRoom extends TwoPlayersRoom {
 
 		var guideState = new SplitscreenRoomGuide(this);
 		guideState.closeCallback = () -> {
-			guideState.destroy();
 			canOpenPauseMenu = true;
 			canPause = true;
 		};
