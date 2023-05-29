@@ -12,11 +12,16 @@ import text.FlxText;
 
 using menu.MenuUtils;
 
+enum abstract CongratScreenType(Bool) to Bool {
+	var FOR_WINNER = true;
+	var FOR_LOOSER = false;
+}
+
 class CongratScreen extends FlxSubState {
 
 	var winnerName:String = 'Unknown';
 	var winnerLabel:FlxText;
-	var forWinner:Bool = true;
+	var screenType:Bool = true;
 	var winnerSprite:WinnerSprite;
 	var looserSprite:WinnerSprite;
 	var playAgainMenuAction:CongratScreen->Void;
@@ -26,9 +31,9 @@ class CongratScreen extends FlxSubState {
 		this.playAgainMenuAction = playAgainMenuAction;
 	}
 
-	public function setWinner(name:String, forWinner:Bool = true):CongratScreen {
+	public function setWinner(name:String, screenType:CongratScreenType = FOR_WINNER):CongratScreen {
 		winnerName = name;
-		this.forWinner = forWinner;
+		this.screenType = screenType;
 		return this;
 	}
 
@@ -77,7 +82,10 @@ class CongratScreen extends FlxSubState {
 			remove(winnerSprite);
 			remove(looserSprite);
 
-			var sprite = forWinner ? winnerSprite : looserSprite;
+			var sprite = switch (screenType) {
+				case FOR_WINNER: winnerSprite;
+				case FOR_LOOSER: looserSprite;
+			}
 			sprite.setWinnerName(winnerName);
 			add(sprite);
 			trace('winner screen is open');
