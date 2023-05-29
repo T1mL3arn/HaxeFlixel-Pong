@@ -11,6 +11,7 @@ enum abstract NetworkMessageType(String) {
 	var PaddleData;
 	var BallData;
 	var ScoreData;
+	var CongratScreenData;
 }
 
 typedef NetworkMessage = {

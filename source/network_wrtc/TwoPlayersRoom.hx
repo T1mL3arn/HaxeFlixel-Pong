@@ -1,6 +1,8 @@
 package network_wrtc;
 
 import flixel.FlxObject;
+import menu.CongratScreen.CongratScreenType;
+import menu.CongratScreen;
 import menu.PauseMenu;
 import network_wrtc.NetplayRacketController.PaddleActionPayload;
 import network_wrtc.Network.NetworkMessage;
@@ -46,6 +48,11 @@ typedef ScoreDataPayload = {
 	rightScore:Int,
 }
 
+typedef CongratScreenDataPayload = {
+	winnerName:String,
+	winnerUid:String,
+}
+
 class TwoPlayersRoom extends room.TwoPlayersRoom {
 
 	var network:Network;
@@ -87,6 +94,8 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 				messageBallData(msg.data);
 			case ScoreData:
 				messageScoreData(msg.data);
+			case CongratScreenData:
+				messageCongratScreenData(msg.data);
 			default:
 				0;
 		}
@@ -117,6 +126,11 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 	function messageScoreData(data:ScoreDataPayload) {
 		players[0].score = data.leftScore;
 		players[1].score = data.rightScore;
+	}
+
+	function messageCongratScreenData(data:CongratScreenDataPayload) {
+		var player = players.find(p -> p.uid == data.winnerUid);
+		showCongratScreen(player, data.winnerUid == currentPlayerUid ? FOR_WINNER : FOR_LOOSER);
 	}
 
 	function getBallPayload():BallDataPayload {
@@ -162,6 +176,15 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 			leftScore: players[0].score,
 			rightScore: players[1].score,
 		});
+	}
+
+	override function showCongratScreen(player:Player, screenType:CongratScreenType) {
+		screenType = player.uid == currentPlayerUid ? FOR_WINNER : FOR_LOOSER;
+		// TODO playAgain callback
+		// TODO playAgain callback should send network message
+		openSubState(new CongratScreen().setWinner(player.name, screenType));
+		if (network.initiator)
+			network.send(CongratScreenData, {winnerName: player.name, winnerUid: player.uid});
 	}
 
 	override function ballCollision(wall:FlxObject, ball:Ball) {
