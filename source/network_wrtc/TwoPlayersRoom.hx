@@ -198,3 +198,25 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 			network.send(BallData, getBallPayload());
 	}
 }
+
+/**
+	This congrat screen disables "play again" menu item
+	for non-server player, so the only server can chose 
+	"play again".
+**/
+class NetplayCongratScreen extends CongratScreen {
+
+	public var isServer:Bool = false;
+
+	override function create() {
+		super.create();
+
+		// disable "play again" for non-server
+		if (!isServer) {
+			var itemData = menu.pages['main'].get('again');
+			itemData.disabled = true;
+			itemData.selectable = false;
+			menu.mpActive.item_update(itemData);
+		}
+	}
+}

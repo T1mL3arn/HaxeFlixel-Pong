@@ -19,6 +19,7 @@ enum abstract CongratScreenType(Bool) to Bool {
 
 class CongratScreen extends FlxSubState {
 
+	var menu:BaseMenu;
 	var winnerName:String = 'Unknown';
 	var winnerLabel:FlxText;
 	var screenType:Bool = true;
@@ -53,7 +54,7 @@ class CongratScreen extends FlxSubState {
 		looserSprite = new WinnerSprite(false);
 
 		var bottomPadding = -Flixel.height * #if !html5 0.05 #else 0.1 #end;
-		var menu = new BaseMenu(0, 0, 0, 4);
+		menu = new BaseMenu(0, 0, 0, 4);
 		menu.createPage('main')
 			.add('
 			-| play again | link | again
