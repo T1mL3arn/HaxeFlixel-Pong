@@ -48,5 +48,12 @@ class Network {
 		peer.send(Json.stringify(msg));
 		onMessage.dispatch(msg);
 	}
+
+	public function destroy() {
+		peer.destroy();
+		onMessage.destroy();
+		peer = null;
+		onMessage = null;
+	}
 }
 #end
