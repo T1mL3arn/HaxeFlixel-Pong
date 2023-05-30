@@ -76,7 +76,13 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 		});
 
 		this.network = network;
-		this.network.onMessage.add(onMessage);
+		// NOTE: never add() handlers during FlxSignal.dispatch()
+		// this.network.onMessage.add(onMessage);
+	}
+
+	override function create() {
+		super.create();
+		network.onMessage.add(onMessage);
 	}
 
 	override function destroy() {
