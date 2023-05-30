@@ -129,6 +129,10 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 	}
 
 	function messageCongratScreenData(data:CongratScreenDataPayload) {
+		// since a server(initiator) already switched to CongratScreen
+		// I don't need it to react on this message.
+		if (network.initiator)
+			return;
 		var player = players.find(p -> p.uid == data.winnerUid);
 		showCongratScreen(player, data.winnerUid == currentPlayerUid ? FOR_WINNER : FOR_LOOSER);
 	}
