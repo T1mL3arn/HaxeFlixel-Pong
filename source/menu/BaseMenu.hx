@@ -62,4 +62,11 @@ private class BaseMenuImpl extends FlxMenu {
 		});
 		#end
 	}
+
+	override function destroy() {
+		super.destroy();
+
+		menuEvent.removeAll();
+		itemEvent.removeAll();
+	}
 }
