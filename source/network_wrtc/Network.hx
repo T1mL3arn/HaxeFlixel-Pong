@@ -12,6 +12,7 @@ enum abstract NetworkMessageType(String) {
 	var BallData;
 	var ScoreData;
 	var CongratScreenData;
+	var ResetRoom;
 }
 
 typedef NetworkMessage = {
@@ -40,7 +41,7 @@ class Network {
 		onMessage.dispatch(parsed);
 	}
 
-	public function send(msgType:NetworkMessageType, data:Any) {
+	public function send(msgType:NetworkMessageType, ?data:Any = null) {
 		var msg = {
 			type: msgType,
 			data: data

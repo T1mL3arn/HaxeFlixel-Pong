@@ -27,7 +27,9 @@ class CongratScreen extends FlxSubState {
 	var looserSprite:WinnerSprite;
 	var playAgainMenuAction:CongratScreen->Void;
 
-	public function new(?playAgainMenuAction) {
+	public var openMainMenuAction:Void->Void;
+
+	public function new(?playAgainMenuAction:CongratScreen->Void) {
 		super(0xEE000000);
 		this.playAgainMenuAction = playAgainMenuAction;
 	}
@@ -73,6 +75,7 @@ class CongratScreen extends FlxSubState {
 			switch ([e, pageId]) {
 				case [it_fire, SWITCH_TO_MAIN_MENU]:
 					Flixel.switchState(new MainMenu());
+					if (openMainMenuAction != null) openMainMenuAction();
 				case [it_fire, 'again']:
 					if (playAgainMenuAction != null) playAgainMenuAction(this);
 				default:

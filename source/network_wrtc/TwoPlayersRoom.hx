@@ -102,6 +102,8 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 				messageScoreData(msg.data);
 			case CongratScreenData:
 				messageCongratScreenData(msg.data);
+			case ResetRoom:
+				messageResetRoom();
 			default:
 				0;
 		}
@@ -141,6 +143,10 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 			return;
 		var player = players.find(p -> p.uid == data.winnerUid);
 		showCongratScreen(player, data.winnerUid == currentPlayerUid ? FOR_WINNER : FOR_LOOSER);
+	}
+
+	function messageResetRoom() {
+		Flixel.switchState(new TwoPlayersRoom(leftOptions, rightOptions, network, currentPlayerUid));
 	}
 
 	function getBallPayload():BallDataPayload {
@@ -189,10 +195,18 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 	}
 
 	override function showCongratScreen(player:Player, screenType:CongratScreenType) {
-		screenType = player.uid == currentPlayerUid ? FOR_WINNER : FOR_LOOSER;
-		// TODO playAgain callback
-		// TODO playAgain callback should send network message
-		openSubState(new CongratScreen().setWinner(player.name, screenType));
+		var congrats = new NetplayCongratScreen(_ -> {
+			network.send(ResetRoom);
+		});
+		congrats.isServer = network.initiator;
+		congrats.openMainMenuAction = () -> {
+			network.destroy();
+			Network.network = null;
+		}
+
+		canOpenPauseMenu = false;
+		openSubState(congrats.setWinner(player.name, player.uid == currentPlayerUid ? FOR_WINNER : FOR_LOOSER));
+
 		if (network.initiator)
 			network.send(CongratScreenData, {winnerName: player.name, winnerUid: player.uid});
 	}
