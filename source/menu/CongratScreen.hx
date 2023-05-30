@@ -88,7 +88,6 @@ class CongratScreen extends FlxSubState {
 			}
 			sprite.setWinnerName(winnerName);
 			add(sprite);
-			trace('winner screen is open');
 		}
 
 		openCallback();
