@@ -12,18 +12,41 @@ import text.FlxText;
 
 using menu.MenuUtils;
 
+enum abstract CongratScreenType(Bool) to Bool {
+	var FOR_WINNER = true;
+	var FOR_LOOSER = false;
+}
+
 class CongratScreen extends FlxSubState {
 
+	var menu:BaseMenu;
 	var winnerName:String = 'Unknown';
 	var winnerLabel:FlxText;
-	var forWinner:Bool = true;
+	var screenType:Bool = true;
 	var winnerSprite:WinnerSprite;
 	var looserSprite:WinnerSprite;
+	var playAgainMenuAction:CongratScreen->Void;
 
-	public function setWinner(name:String, forWinner:Bool = true):CongratScreen {
+	public var openMainMenuAction:Void->Void;
+
+	public function new(?playAgainMenuAction:CongratScreen->Void) {
+		super(0xEE000000);
+		this.playAgainMenuAction = playAgainMenuAction;
+	}
+
+	public function setWinner(name:String, screenType:CongratScreenType = FOR_WINNER):CongratScreen {
 		winnerName = name;
-		this.forWinner = forWinner;
+		this.screenType = screenType;
 		return this;
+	}
+
+	override function destroy() {
+		super.destroy();
+
+		if (winnerSprite.exists)
+			winnerSprite.destroy();
+		if (looserSprite.exists)
+			looserSprite.destroy();
 	}
 
 	override function create() {
@@ -33,7 +56,7 @@ class CongratScreen extends FlxSubState {
 		looserSprite = new WinnerSprite(false);
 
 		var bottomPadding = -Flixel.height * #if !html5 0.05 #else 0.1 #end;
-		var menu = new BaseMenu(0, 0, 0, 4);
+		menu = new BaseMenu(0, 0, 0, 4);
 		menu.createPage('main')
 			.add('
 			-| play again | link | again
@@ -52,6 +75,9 @@ class CongratScreen extends FlxSubState {
 			switch ([e, pageId]) {
 				case [it_fire, SWITCH_TO_MAIN_MENU]:
 					Flixel.switchState(new MainMenu());
+					if (openMainMenuAction != null) openMainMenuAction();
+				case [it_fire, 'again']:
+					if (playAgainMenuAction != null) playAgainMenuAction(this);
 				default:
 			}
 		});
@@ -60,16 +86,15 @@ class CongratScreen extends FlxSubState {
 			remove(winnerSprite);
 			remove(looserSprite);
 
-			var sprite = forWinner ? winnerSprite : looserSprite;
+			var sprite = switch (screenType) {
+				case FOR_WINNER: winnerSprite;
+				case FOR_LOOSER: looserSprite;
+			}
 			sprite.setWinnerName(winnerName);
 			add(sprite);
-			trace('winner screen is open');
 		}
 
 		openCallback();
-
-		// TODO black backdrop to hide score labels (or maybe hide everything)
-		// TODO state has params controlling how "play again" works
 	}
 }
 

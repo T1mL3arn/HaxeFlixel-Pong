@@ -11,6 +11,8 @@ enum abstract NetworkMessageType(String) {
 	var PaddleData;
 	var BallData;
 	var ScoreData;
+	var CongratScreenData;
+	var ResetRoom;
 }
 
 typedef NetworkMessage = {
@@ -39,13 +41,20 @@ class Network {
 		onMessage.dispatch(parsed);
 	}
 
-	public function send(msgType:NetworkMessageType, data:Any) {
+	public function send(msgType:NetworkMessageType, ?data:Any = null) {
 		var msg = {
 			type: msgType,
 			data: data
 		};
 		peer.send(Json.stringify(msg));
 		onMessage.dispatch(msg);
+	}
+
+	public function destroy() {
+		peer.destroy();
+		onMessage.destroy();
+		peer = null;
+		onMessage = null;
 	}
 }
 #end

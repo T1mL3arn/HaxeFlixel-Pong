@@ -28,19 +28,18 @@ class SplitscreenRoom extends TwoPlayersRoom {
 			player.active = false;
 		}
 
-		var substate = new SplitscreenRoomGuide(this);
-		substate.closeCallback = () -> {
-			substate.destroy();
+		var guideState = new SplitscreenRoomGuide(this);
+		guideState.closeCallback = () -> {
 			canOpenPauseMenu = true;
 			canPause = true;
 		};
-		openSubState(substate);
+		openSubState(guideState);
 	}
 }
 
 /**
-	Controls help info for both human players
-	and closes itself when players are ready.
+	Substate to show Help info for both human players.
+	Closes itself when players are ready.
 **/
 @:access(room.TwoPlayersRoom)
 class SplitscreenRoomGuide extends FlxSubState {

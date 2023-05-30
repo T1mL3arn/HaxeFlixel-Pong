@@ -1,6 +1,8 @@
 package network_wrtc;
 
 import flixel.FlxObject;
+import menu.CongratScreen.CongratScreenType;
+import menu.CongratScreen;
 import menu.PauseMenu;
 import network_wrtc.NetplayRacketController.PaddleActionPayload;
 import network_wrtc.Network.NetworkMessage;
@@ -46,6 +48,11 @@ typedef ScoreDataPayload = {
 	rightScore:Int,
 }
 
+typedef CongratScreenDataPayload = {
+	winnerName:String,
+	winnerUid:String,
+}
+
 class TwoPlayersRoom extends room.TwoPlayersRoom {
 
 	var network:Network;
@@ -69,7 +76,13 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 		});
 
 		this.network = network;
-		this.network.onMessage.add(onMessage);
+		// NOTE: never add() handlers during FlxSignal.dispatch()
+		// this.network.onMessage.add(onMessage);
+	}
+
+	override function create() {
+		super.create();
+		network.onMessage.add(onMessage);
 	}
 
 	override function destroy() {
@@ -87,6 +100,10 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 				messageBallData(msg.data);
 			case ScoreData:
 				messageScoreData(msg.data);
+			case CongratScreenData:
+				messageCongratScreenData(msg.data);
+			case ResetRoom:
+				messageResetRoom();
 			default:
 				0;
 		}
@@ -117,6 +134,19 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 	function messageScoreData(data:ScoreDataPayload) {
 		players[0].score = data.leftScore;
 		players[1].score = data.rightScore;
+	}
+
+	function messageCongratScreenData(data:CongratScreenDataPayload) {
+		// since a server(initiator) already switched to CongratScreen
+		// I don't need it to react on this message.
+		if (network.initiator)
+			return;
+		var player = players.find(p -> p.uid == data.winnerUid);
+		showCongratScreen(player, data.winnerUid == currentPlayerUid ? FOR_WINNER : FOR_LOOSER);
+	}
+
+	function messageResetRoom() {
+		Flixel.switchState(new TwoPlayersRoom(leftOptions, rightOptions, network, currentPlayerUid));
 	}
 
 	function getBallPayload():BallDataPayload {
@@ -153,11 +183,32 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 	override function goal(hitArea, ball) {
 		if (network.initiator) {
 			super.goal(hitArea, ball);
-			network.send(ScoreData, {
-				leftScore: players[0].score,
-				rightScore: players[1].score,
-			});
 		}
+	}
+
+	override function updateScore(player:Player, score:Int) {
+		super.updateScore(player, score);
+		network.send(ScoreData, {
+			leftScore: players[0].score,
+			rightScore: players[1].score,
+		});
+	}
+
+	override function showCongratScreen(player:Player, screenType:CongratScreenType) {
+		var congrats = new NetplayCongratScreen(_ -> {
+			network.send(ResetRoom);
+		});
+		congrats.isServer = network.initiator;
+		congrats.openMainMenuAction = () -> {
+			network.destroy();
+			Network.network = null;
+		}
+
+		canOpenPauseMenu = false;
+		openSubState(congrats.setWinner(player.name, player.uid == currentPlayerUid ? FOR_WINNER : FOR_LOOSER));
+
+		if (network.initiator)
+			network.send(CongratScreenData, {winnerName: player.name, winnerUid: player.uid});
 	}
 
 	override function ballCollision(wall:FlxObject, ball:Ball) {
@@ -165,5 +216,27 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 
 		if (network.initiator)
 			network.send(BallData, getBallPayload());
+	}
+}
+
+/**
+	This congrat screen disables "play again" menu item
+	for non-server player, so the only server can chose 
+	"play again".
+**/
+class NetplayCongratScreen extends CongratScreen {
+
+	public var isServer:Bool = false;
+
+	override function create() {
+		super.create();
+
+		// disable "play again" for non-server
+		if (!isServer) {
+			var itemData = menu.pages['main'].get('again');
+			itemData.disabled = true;
+			itemData.selectable = false;
+			menu.mpActive.item_update(itemData);
+		}
 	}
 }

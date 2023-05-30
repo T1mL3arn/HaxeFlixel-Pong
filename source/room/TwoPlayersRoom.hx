@@ -124,7 +124,7 @@ class TwoPlayersRoom extends BaseState {
 		var ballServer = winner ?? looser;
 
 		if (winner != null)
-			winner.score += 1;
+			updateScore(winner, winner.score + 1);
 
 		// checking the winner
 		winner = players.find(p -> p.score >= Pong.params.scoreToWin);
@@ -137,12 +137,21 @@ class TwoPlayersRoom extends BaseState {
 				// AI moves its racket with FlxTween, so such tweens must be canceled.
 				FlxTween.cancelTweensOf(player.racket);
 			}
-			openSubState(new CongratScreen().setWinner(winner.name, true));
+			showCongratScreen(winner, FOR_WINNER);
 		}
 		else if (ballServer != null) {
 			resetBall();
 			serveBall(ballServer, ball);
 		}
+	}
+
+	function updateScore(player:Player, score) {
+		player.score = score;
+	}
+
+	function showCongratScreen(player:Player, screenType:CongratScreenType) {
+		var playAgainAction = _ -> Flixel.switchState(new TwoPlayersRoom(leftOptions, rightOptions));
+		openSubState(new CongratScreen(playAgainAction).setWinner(player.name, screenType));
 	}
 
 	function serveBall(byPlayer:Player, ball:Ball, delay:Int = 1000) {

@@ -35,7 +35,7 @@
 
 	<!-- _______________________________ Libraries ______________________________ -->
 
-	<haxelib name="flixel" />
+	<haxelib name="flixel" version="5.3.1" />
 	<haxelib name="djFlixel" />
 	<haxelib name="simple-peer" />
 
@@ -88,6 +88,8 @@
 
 	<!--Place custom nodes like icons here (higher priority to override the HaxeFlixel icon)-->
 
-	<!-- <haxeflag name="-w -WDeprecated" /> -->
+
+	<!-- makes source maps work in Firefox -->
+	<haxedef name="source-map-content" if="html5" />
 
 </project>
