@@ -81,7 +81,7 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 
 	override function destroy() {
 		super.destroy();
-		network.destroy();
+		network.onMessage.remove(onMessage);
 	}
 
 	function onMessage(msg:NetworkMessage) {
