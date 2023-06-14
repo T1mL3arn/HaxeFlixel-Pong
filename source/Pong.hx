@@ -23,7 +23,7 @@ class Pong extends FlxGame {
 
 	public static final defaultParams:PongParams = {
 		ballSize: 12,
-		ballSpeed: 280,
+		ballSpeed: 310,
 		racketLength: 80,
 		racketThickness: 12,
 		racketSpeed: 225.0,
