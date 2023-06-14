@@ -1,9 +1,12 @@
 package room;
 
 import Player.PlayerOptions;
+import Pong.PongParams;
+import Utils.merge;
 import flixel.FlxBasic;
 import flixel.FlxObject;
 import flixel.group.FlxGroup.FlxTypedGroup;
+import flixel.sound.FlxSound;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import haxe.Timer;
@@ -19,6 +22,7 @@ class TwoPlayersRoom extends BaseState {
 	var players:Array<Player>;
 	var playerGoals:FlxTypedGroup<FlxObject>;
 	var ball:Ball;
+	var ballSpeedup:BallSpeedup;
 
 	var leftOptions:PlayerOptions;
 	var rightOptions:PlayerOptions;
@@ -51,6 +55,7 @@ class TwoPlayersRoom extends BaseState {
 			walls.add(player.racket);
 			playerGoals.add(player.hitArea);
 		});
+		ballSpeedup = new BallSpeedup();
 	}
 
 	override function destroy() {
@@ -108,6 +113,7 @@ class TwoPlayersRoom extends BaseState {
 
 	function ballCollision(wall:FlxObject, ball:Ball) {
 		if (wall is Racket) {
+			ballSpeedup.onRacketHit();
 			(cast wall : Racket).ballCollision(ball);
 			colorizeBall(cast wall, ball);
 		}
@@ -123,8 +129,10 @@ class TwoPlayersRoom extends BaseState {
 		// and ball re-served the same way
 		var ballServer = winner ?? looser;
 
-		if (winner != null)
+		if (winner != null) {
 			updateScore(winner, winner.score + 1);
+			ballSpeedup.onGoal();
+		}
 
 		// checking the winner
 		winner = players.find(p -> p.score >= Pong.params.scoreToWin);
@@ -169,5 +177,62 @@ class TwoPlayersRoom extends BaseState {
 		}
 
 		Timer.delay(() -> ball.velocity.set(velX, 0), delay);
+	}
+}
+
+/**
+	This object tracks goals and paddle hits to update
+	initial ball speed in the way that the speed increases after 
+	every goal and after series of a paddle collision. 
+	Thus, making gameplay more spicy.
+**/
+class BallSpeedup {
+
+	var ballSpeedMaxFactor:Float = 1.55;
+	var afterGoalSpeedMod:Float;
+	// speed mod after N racket hits
+	var racketHitsSpeedMod:Float = 0.035;
+	// number of racket hits (let it be ODD number)
+	var racketHitsBeforeSpeedup:Int = 5;
+
+	var racketHitsCount:Int = 0;
+	var goalsCount:Int = 0;
+
+	var initialParams:PongParams;
+	var currentParams:PongParams;
+
+	var speedUpSound:FlxSound;
+
+	public function new() {
+		initialParams = merge({}, Pong.params);
+		currentParams = Pong.params;
+
+		// speed mod is calculated to fit the max ball speed
+		// Math.max() is to prevent devision by ZERO (it could happern during some tests)
+		afterGoalSpeedMod = (ballSpeedMaxFactor - 1) / Math.max(1, (Pong.params.scoreToWin - 1) * 2);
+
+		speedUpSound = new FlxSound().loadEmbedded(AssetPaths.sfx_speedup__ogg);
+		speedUpSound.volume = 0.7;
+	}
+
+	public function onGoal() {
+		goalsCount += 1;
+		racketHitsCount = 0;
+		currentParams.ballSpeed = limitBallSpeed(initialParams.ballSpeed * (1 + goalsCount * afterGoalSpeedMod));
+	}
+
+	public function onRacketHit() {
+		racketHitsCount += 1;
+		if (racketHitsCount % racketHitsBeforeSpeedup == 0) {
+			var speedAddon = initialParams.ballSpeed * racketHitsSpeedMod;
+			currentParams.ballSpeed += speedAddon;
+			// let's not limit such speed
+			// currentParams.ballSpeed = limitBallSpeed(currentParams.ballSpeed);
+			speedUpSound.play();
+		}
+	}
+
+	inline function limitBallSpeed(speed):Float {
+		return Math.min(speed, initialParams.ballSpeed * ballSpeedMaxFactor);
 	}
 }

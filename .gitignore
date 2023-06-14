@@ -13,3 +13,8 @@ export/*
 !.vscode/launch.json
 !.vscode/extensions.json
 vscode-project.hxml
+# ignore local js libs
+lib/*.js
+# ignore unused (for now) assets
+_bongo_4*
+_Mouth_Sound_*

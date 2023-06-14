@@ -25,10 +25,10 @@ class Ball extends FlxSprite {
 
 		// TODO the faster ball moves, the higher the pitch should be
 		sounds = [
-			new FlxSound().loadEmbedded(AssetPaths.sfx_4360_4948_lq__freesound__ogg),
-			new FlxSound().loadEmbedded(AssetPaths.sfx_4370_4948_lq__freesound__ogg),
-			new FlxSound().loadEmbedded(AssetPaths.sfx_4382_4948_lq__freesound__ogg),
-			new FlxSound().loadEmbedded(AssetPaths.sfx_4391_4948_lq__freesound__ogg),
+			new FlxSound().loadEmbedded(AssetPaths.sfx_ball_collision_1__ogg),
+			new FlxSound().loadEmbedded(AssetPaths.sfx_ball_collision_2__ogg),
+			new FlxSound().loadEmbedded(AssetPaths.sfx_ball_collision_3__ogg),
+			new FlxSound().loadEmbedded(AssetPaths.sfx_ball_collision_4__ogg),
 		];
 		for (sound in sounds)
 			sound.volume = 0.75;

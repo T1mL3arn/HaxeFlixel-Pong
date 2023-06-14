@@ -36,7 +36,7 @@
 	<!-- _______________________________ Libraries ______________________________ -->
 
 	<haxelib name="flixel" version="5.3.1" />
-	<haxelib name="djFlixel" />
+	<haxelib name="djFlixel" version="0.5.7" />
 	<haxelib name="simple-peer" />
 
 	<dependency name="https://unpkg.com/simple-peer@9.11.1/simplepeer.min.js" path="https://unpkg.com/simple-peer@9.11.1/simplepeer.min.js"/>
