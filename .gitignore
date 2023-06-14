@@ -13,3 +13,5 @@ export/*
 !.vscode/launch.json
 !.vscode/extensions.json
 vscode-project.hxml
+# ignore local js libs
+lib/*.js
