@@ -2,3 +2,5 @@
 license: CC Attribution 3.0 Unported (CC BY 3.0) https://creativecommons.org/licenses/by/3.0/
 author credits: https://freesound.org/people/NoiseCollector/
 
+## samplefocus
+at this time their sounds is not used https://samplefocus.com/license
