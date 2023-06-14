@@ -1,6 +1,7 @@
 package network_wrtc;
 
 import flixel.FlxObject;
+import menu.BaseMenu.MenuCommand;
 import menu.CongratScreen.CongratScreenType;
 import menu.CongratScreen;
 import menu.PauseMenu;
@@ -237,6 +238,7 @@ class NetplayCongratScreen extends CongratScreen {
 			itemData.disabled = true;
 			itemData.selectable = false;
 			menu.mpActive.item_update(itemData);
+			menu.mpActive.item_moveCursorTo(MenuCommand.SWITCH_TO_MAIN_MENU);
 		}
 	}
 }
