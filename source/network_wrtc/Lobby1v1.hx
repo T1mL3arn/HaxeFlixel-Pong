@@ -56,7 +56,7 @@ class Lobby1v1 extends FlxState {
 		menu.createPage('main')
 			.add('
 				-| create  | link | create_lobby
-				-| connect | link | connect_to_lobby
+				-| join | link | connect_to_lobby
 				-| __________ | label | 3 | U
 				-| main menu | link | $SWITCH_TO_MAIN_MENU
 				')
@@ -124,7 +124,7 @@ class Lobby1v1 extends FlxState {
 				case [it_fire, 'connect_to_lobby']:
 					if (localPeer == null) {
 						connectionState = ConnectingToLobby;
-						infobox.text = 'Trying to connect...';
+						infobox.text = 'Trying to join...';
 						localPeer = connect(cast merge(peerOptions, {initiator: false}));
 					}
 
@@ -150,7 +150,7 @@ class Lobby1v1 extends FlxState {
 		var h = Flixel.height * 0.25;
 		var x = Flixel.width * 0.5 - w * 0.5;
 		var y = Flixel.height - h - margin;
-		var text = 'Create a lobby or connect to one!';
+		var text = 'Create a lobby or join to one!';
 		var infobox = new text.FlxText(x, y, w, h, text, 18);
 		infobox.color = 0x111111;
 		infobox.alignment = LEFT;
