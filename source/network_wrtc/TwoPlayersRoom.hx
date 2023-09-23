@@ -238,7 +238,7 @@ class NetplayCongratScreen extends CongratScreen {
 			itemData.disabled = true;
 			itemData.selectable = false;
 			menu.mpActive.item_update(itemData);
-			menu.mpActive.item_moveCursorTo(MenuCommand.SWITCH_TO_MAIN_MENU);
+			menu.mpActive.item_focus(MenuCommand.SWITCH_TO_MAIN_MENU);
 		}
 	}
 }
