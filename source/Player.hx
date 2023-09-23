@@ -63,8 +63,7 @@ class Player extends FlxGroup {
 			case RIGHT:
 				hitArea.x = Flixel.width + hitArea.width * 0.2;
 			default:
-				// TODO UP and DOWN
-				0;
+				throw "Implement it later";
 		}
 
 		add(hitArea);
