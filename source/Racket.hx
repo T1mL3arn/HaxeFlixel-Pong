@@ -142,8 +142,7 @@ class Racket extends FlxSprite {
 				if (position == RIGHT)
 					ball.velocity.x *= -1;
 			case UP, DOWN:
-				// TODO
-				0;
+				throw "Implement it later";
 		}
 	}
 }

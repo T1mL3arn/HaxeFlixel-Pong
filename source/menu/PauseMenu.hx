@@ -1,6 +1,7 @@
 package menu;
 
 import flixel.FlxSubState;
+import flixel.tweens.FlxTween;
 import lime.app.Application;
 import menu.BaseMenu.MenuCommand;
 
@@ -45,7 +46,11 @@ class PauseMenu extends FlxSubState {
 
 		add(menu);
 
-		openCallback = () -> stateJustOpenned = true;
+		openCallback = () -> {
+			stateJustOpenned = true;
+			Pong.inst.gameTweens.active = false;
+		};
+		closeCallback = () -> Pong.inst.gameTweens.active = true;
 	}
 
 	override function update(elapsed:Float) {

@@ -98,7 +98,10 @@ class MainMenu extends FlxState {
 					Flixel.switchState(new TwoPlayersRoom(players[0], players[1]));
 
 				case [it_fire, 'internet']:
+					#if html5
 					Flixel.switchState(new Lobby1v1());
+					#end
+					0;
 
 				case [it_fire, 'split_screen']:
 					Flixel.switchState(new SplitscreenRoom({

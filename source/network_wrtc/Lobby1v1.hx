@@ -1,15 +1,16 @@
 package network_wrtc;
 
-import Utils.merge;
-import flixel.FlxState;
-import flixel.util.FlxDirection;
 import haxe.Exception;
 import haxe.Json;
+import Utils.merge;
+import flixel.FlxState;
+import flixel.input.mouse.FlxMouseEvent;
+import flixel.text.FlxText;
+import flixel.util.FlxDirection;
 import lime.system.Clipboard as LimeClipboard;
 import menu.BaseMenu;
 import menu.MainMenu;
 import openfl.desktop.Clipboard;
-import text.FlxText;
 #if html5
 import js.Browser;
 import js.html.Console;
@@ -56,7 +57,7 @@ class Lobby1v1 extends FlxState {
 		menu.createPage('main')
 			.add('
 				-| create  | link | create_lobby
-				-| connect | link | connect_to_lobby
+				-| join | link | connect_to_lobby
 				-| __________ | label | 3 | U
 				-| main menu | link | $SWITCH_TO_MAIN_MENU
 				')
@@ -124,7 +125,7 @@ class Lobby1v1 extends FlxState {
 				case [it_fire, 'connect_to_lobby']:
 					if (localPeer == null) {
 						connectionState = ConnectingToLobby;
-						infobox.text = 'Trying to connect...';
+						infobox.text = 'Trying to join...';
 						localPeer = connect(cast merge(peerOptions, {initiator: false}));
 					}
 
@@ -150,8 +151,9 @@ class Lobby1v1 extends FlxState {
 		var h = Flixel.height * 0.25;
 		var x = Flixel.width * 0.5 - w * 0.5;
 		var y = Flixel.height - h - margin;
-		var text = 'Create a lobby or connect to one!';
-		var infobox = new text.FlxText(x, y, w, h, text, 18);
+		var text = 'Create a lobby or join to one!';
+		var infobox = new FlxText(x, y, w, text, 18);
+		infobox.height = h;
 		infobox.color = 0x111111;
 		infobox.alignment = LEFT;
 		infobox.textField.background = true;
@@ -163,6 +165,11 @@ class Lobby1v1 extends FlxState {
 		@:privateAccess infobox.updateDefaultFormat();
 
 		return infobox;
+	}
+
+	function copyToCLipboard(text:String) {
+		Clipboard.generalClipboard.setData(TEXT_FORMAT, text);
+		LimeClipboard.text = text;
 	}
 
 	function connect(?options:PeerOptions) {
@@ -179,16 +186,22 @@ class Lobby1v1 extends FlxState {
 		peer.on('signal', data -> {
 			signalData = Json.stringify(data);
 			trace('\nsignal data:\n$signalData');
-			Clipboard.generalClipboard.setData(TEXT_FORMAT, signalData);
-			LimeClipboard.text = signalData;
+
+			// copy data to clipboard when it is necessary
+			switch ([connectionState, options.initiator]) {
+				case [CreatingLobby, true] | [ConnectingToLobby, false]:
+					copyToCLipboard(signalData);
+					FlxMouseEvent.add(infobox, _ -> copyToCLipboard(signalData));
+				case _: 0;
+			}
 
 			switch ([connectionState, options.initiator]) {
 				case [CreatingLobby, true]:
-					infobox.text = 'Connection ID is copied into clipboard. Share it with another player, then press "accept connection" and paste the player\'s response';
+					infobox.text = 'Connection ID is copied into clipboard. Share it with another player, then press "accept connection" and paste the player\'s response. Click here to copy ID again.';
 					connectionState = LobbyCreated;
 
 				case [ConnectingToLobby, false]:
-					infobox.text = 'Connection ID is copied into clipboard. Share it with another player and wait a little.';
+					infobox.text = 'Connection ID is copied into clipboard. Share it with another player and wait a little. Click here to copy ID again.';
 
 				default:
 			}
@@ -237,8 +250,11 @@ class Lobby1v1 extends FlxState {
 
 	function promptLobbyKey(?menuPage:String) {
 		var pastedData = Browser.window.prompt('Paste lobby key');
-		if (pastedData == signalData) {
-			Browser.window.alert('You are pasting the same data, try again!');
+		if (pastedData == null || pastedData == '') {
+			Browser.window.alert('You paste nothing, try again.');
+		}
+		else if (pastedData == signalData) {
+			Browser.window.alert('You are pasting the same data, try again.');
 		}
 		else {
 			try {
@@ -264,8 +280,9 @@ class Lobby1v1 extends FlxState {
 	}
 
 	override function destroy() {
-		super.destroy();
+		FlxMouseEvent.remove(infobox);
 
+		super.destroy();
 		timer?.stop();
 	}
 }

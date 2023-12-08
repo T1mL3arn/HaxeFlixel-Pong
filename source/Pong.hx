@@ -2,6 +2,7 @@ package;
 
 import flixel.FlxGame;
 import flixel.FlxObject;
+import flixel.tweens.FlxTween.FlxTweenManager;
 import flixel.util.FlxSignal;
 
 typedef PongParams = {
@@ -39,9 +40,23 @@ class Pong extends FlxGame {
 	inline function get_state()
 		return cast Flixel.state;
 
+	/**
+		Manages all tweens with gameplay object.
+		When game is paused such tweens are also paused.
+	**/
+	public var gameTweens(default, null):FlxTweenManager;
+
 	public function new() {
 		// Until https://github.com/HaxeFlixel/flixel/pull/2819 is fixed
 		// I have to skip splash.
 		super(0, 0, null, true);
+
+		gameTweens = Flixel.plugins.add(new GameTweenManager());
 	}
 }
+
+/**
+	Crutch to allow the same type of plugin to be used twice 
+	in PluginFrontEnd
+**/
+class GameTweenManager extends FlxTweenManager {}

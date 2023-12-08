@@ -4,11 +4,11 @@ import flixel.FlxSprite;
 import flixel.FlxSubState;
 import flixel.group.FlxGroup;
 import flixel.group.FlxSpriteGroup;
+import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import flixel.util.FlxGradient;
 import flixel.util.FlxSpriteUtil;
 import menu.BaseMenu.MenuCommand;
-import text.FlxText;
 
 using menu.MenuUtils;
 
@@ -26,12 +26,19 @@ class CongratScreen extends FlxSubState {
 	var winnerSprite:WinnerSprite;
 	var looserSprite:WinnerSprite;
 	var playAgainMenuAction:CongratScreen->Void;
+	var menuParams:Dynamic;
 
 	public var openMainMenuAction:Void->Void;
 
 	public function new(?playAgainMenuAction:CongratScreen->Void) {
 		super(0xEE000000);
 		this.playAgainMenuAction = playAgainMenuAction;
+
+		var bottomPadding = -Flixel.height * #if !html5 0.05 #else 0.1 #end;
+		menuParams = {
+			pos: 'screen,c,b',
+			y: bottomPadding,
+		};
 	}
 
 	public function setWinner(name:String, screenType:CongratScreenType = FOR_WINNER):CongratScreen {
@@ -55,7 +62,6 @@ class CongratScreen extends FlxSubState {
 		winnerSprite = new WinnerSprite();
 		looserSprite = new WinnerSprite(false);
 
-		var bottomPadding = -Flixel.height * #if !html5 0.05 #else 0.1 #end;
 		menu = new BaseMenu(0, 0, 0, 4);
 		menu.createPage('main')
 			.add('
@@ -63,10 +69,7 @@ class CongratScreen extends FlxSubState {
 			-| main menu | link | $SWITCH_TO_MAIN_MENU
 		')
 			.addExitGameItem()
-			.par({
-				pos: 'screen,c,b',
-				y: bottomPadding,
-			});
+			.par(menuParams);
 
 		menu.goto('main');
 		add(menu);

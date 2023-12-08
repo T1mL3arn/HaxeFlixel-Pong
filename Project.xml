@@ -35,8 +35,12 @@
 
 	<!-- _______________________________ Libraries ______________________________ -->
 
-	<haxelib name="flixel" version="5.3.1" />
-	<haxelib name="djFlixel" version="0.5.7" />
+	<haxelib name="flixel" version="5.4.1" />
+	<haxelib 
+		name="djFlixel" 
+		comment="use version: 0.5.8, since it is GIT lib I cannot use Lime attribute
+		'version' directly cause haxelib won't see the library" 
+	/>
 	<haxelib name="simple-peer" />
 
 	<dependency name="https://unpkg.com/simple-peer@9.11.1/simplepeer.min.js" path="https://unpkg.com/simple-peer@9.11.1/simplepeer.min.js"/>

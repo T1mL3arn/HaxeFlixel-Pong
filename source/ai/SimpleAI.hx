@@ -62,10 +62,9 @@ class SimpleAI extends RacketController {
 
 					var path = Math.abs(targetRacketY - racketBounds.y);
 					var duration = path / Pong.params.racketSpeed;
-					tween = FlxTween.tween(racket, {y: targetRacketY}, duration, {ease: FlxEase.linear});
+					tween = Pong.inst.gameTweens.tween(racket, {y: targetRacketY}, duration, {ease: FlxEase.linear});
 				case UP, DOWN:
-					// TODO
-					0;
+					throw "Implement it later";
 			}
 		}
 
