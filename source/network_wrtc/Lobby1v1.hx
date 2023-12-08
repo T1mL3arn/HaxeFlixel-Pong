@@ -1,15 +1,15 @@
 package network_wrtc;
 
-import Utils.merge;
-import flixel.FlxState;
-import flixel.util.FlxDirection;
 import haxe.Exception;
 import haxe.Json;
+import Utils.merge;
+import flixel.FlxState;
+import flixel.text.FlxText;
+import flixel.util.FlxDirection;
 import lime.system.Clipboard as LimeClipboard;
 import menu.BaseMenu;
 import menu.MainMenu;
 import openfl.desktop.Clipboard;
-import text.FlxText;
 #if html5
 import js.Browser;
 import js.html.Console;

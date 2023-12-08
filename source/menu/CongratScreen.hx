@@ -4,11 +4,11 @@ import flixel.FlxSprite;
 import flixel.FlxSubState;
 import flixel.group.FlxGroup;
 import flixel.group.FlxSpriteGroup;
+import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import flixel.util.FlxGradient;
 import flixel.util.FlxSpriteUtil;
 import menu.BaseMenu.MenuCommand;
-import text.FlxText;
 
 using menu.MenuUtils;
 
