@@ -151,7 +151,8 @@ class Lobby1v1 extends FlxState {
 		var x = Flixel.width * 0.5 - w * 0.5;
 		var y = Flixel.height - h - margin;
 		var text = 'Create a lobby or join to one!';
-		var infobox = new text.FlxText(x, y, w, h, text, 18);
+		var infobox = new FlxText(x, y, w, text, 18);
+		infobox.height = h;
 		infobox.color = 0x111111;
 		infobox.alignment = LEFT;
 		infobox.textField.background = true;
