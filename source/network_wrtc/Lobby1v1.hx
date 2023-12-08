@@ -4,6 +4,7 @@ import haxe.Exception;
 import haxe.Json;
 import Utils.merge;
 import flixel.FlxState;
+import flixel.input.mouse.FlxMouseEvent;
 import flixel.text.FlxText;
 import flixel.util.FlxDirection;
 import lime.system.Clipboard as LimeClipboard;
@@ -166,6 +167,11 @@ class Lobby1v1 extends FlxState {
 		return infobox;
 	}
 
+	function copyToCLipboard(text:String) {
+		Clipboard.generalClipboard.setData(TEXT_FORMAT, text);
+		LimeClipboard.text = text;
+	}
+
 	function connect(?options:PeerOptions) {
 		var peer = new Peer(options);
 
@@ -180,16 +186,22 @@ class Lobby1v1 extends FlxState {
 		peer.on('signal', data -> {
 			signalData = Json.stringify(data);
 			trace('\nsignal data:\n$signalData');
-			Clipboard.generalClipboard.setData(TEXT_FORMAT, signalData);
-			LimeClipboard.text = signalData;
+
+			// copy data to clipboard when it is necessary
+			switch ([connectionState, options.initiator]) {
+				case [CreatingLobby, true] | [ConnectingToLobby, false]:
+					copyToCLipboard(signalData);
+					FlxMouseEvent.add(infobox, _ -> copyToCLipboard(signalData));
+				case _: 0;
+			}
 
 			switch ([connectionState, options.initiator]) {
 				case [CreatingLobby, true]:
-					infobox.text = 'Connection ID is copied into clipboard. Share it with another player, then press "accept connection" and paste the player\'s response';
+					infobox.text = 'Connection ID is copied into clipboard. Share it with another player, then press "accept connection" and paste the player\'s response. Click here to copy ID again.';
 					connectionState = LobbyCreated;
 
 				case [ConnectingToLobby, false]:
-					infobox.text = 'Connection ID is copied into clipboard. Share it with another player and wait a little.';
+					infobox.text = 'Connection ID is copied into clipboard. Share it with another player and wait a little. Click here to copy ID again.';
 
 				default:
 			}
@@ -238,8 +250,11 @@ class Lobby1v1 extends FlxState {
 
 	function promptLobbyKey(?menuPage:String) {
 		var pastedData = Browser.window.prompt('Paste lobby key');
-		if (pastedData == signalData) {
-			Browser.window.alert('You are pasting the same data, try again!');
+		if (pastedData == null || pastedData == '') {
+			Browser.window.alert('You paste nothing, try again.');
+		}
+		else if (pastedData == signalData) {
+			Browser.window.alert('You are pasting the same data, try again.');
 		}
 		else {
 			try {
@@ -265,8 +280,9 @@ class Lobby1v1 extends FlxState {
 	}
 
 	override function destroy() {
-		super.destroy();
+		FlxMouseEvent.remove(infobox);
 
+		super.destroy();
 		timer?.stop();
 	}
 }
