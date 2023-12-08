@@ -199,6 +199,7 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 		var congrats = new NetplayCongratScreen(_ -> {
 			network.send(ResetRoom);
 		});
+		congrats.network = Network.network;
 		congrats.isServer = network.initiator;
 		congrats.openMainMenuAction = () -> {
 			network.destroy();
@@ -222,12 +223,13 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 
 /**
 	This congrat screen disables "play again" menu item
-	for non-server player, so the only server can chose 
-	"play again".
+	for non-server player, so the only server can choose 
+	to "play again".
 **/
 class NetplayCongratScreen extends CongratScreen {
 
 	public var isServer:Bool = false;
+	public var network:Network;
 
 	override function create() {
 		super.create();
@@ -240,5 +242,23 @@ class NetplayCongratScreen extends CongratScreen {
 			menu.mpActive.item_update(itemData);
 			menu.mpActive.item_focus(MenuCommand.SWITCH_TO_MAIN_MENU);
 		}
+
+		network.peer.on('close', onDisconnect);
+		network.peer.on('error', onDisconnect);
+	}
+
+	function onDisconnect() {
+		network.destroy();
+
+		// disable "play again" if second user disconnected during CongratScreen
+		// show "user disconnected" info if user disconnects during CongratScreen
+		var itemData = menu.pages['main'].get('again');
+		itemData.disabled = true;
+		itemData.selectable = false;
+		itemData.label = 'disconnected';
+		menu.mpActive.item_update(itemData);
+		menu.mpActive.item_focus(MenuCommand.SWITCH_TO_MAIN_MENU);
+		// re-align menu items
+		menu.mpActive.setDataSource(menu.mpActive.page.items);
 	}
 }
