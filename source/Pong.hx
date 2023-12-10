@@ -4,6 +4,8 @@ import flixel.FlxGame;
 import flixel.FlxObject;
 import flixel.tweens.FlxTween.FlxTweenManager;
 import flixel.util.FlxSignal;
+import openfl.filters.ShaderFilter;
+import shader.CrtShader;
 
 typedef PongParams = {
 	ballSize:Int,
@@ -52,6 +54,15 @@ class Pong extends FlxGame {
 		super(0, 0, null, true);
 
 		gameTweens = Flixel.plugins.add(new GameTweenManager());
+
+		var crtShader = new CrtShader();
+		var filter = new ShaderFilter(crtShader);
+		Flixel.signals.preUpdate.add(()->crtShader.update(Flixel.elapsed));
+		Flixel.signals.postStateSwitch.add(() -> Flixel.camera.filters = [filter]);
+
+		// NOTE: set filters does not work in debug mode
+		// see https://discord.com/channels/162395145352904705/165234904815239168/1183246310858571847
+		// Flixel.game.setFilters([filter]);
 	}
 }
 
