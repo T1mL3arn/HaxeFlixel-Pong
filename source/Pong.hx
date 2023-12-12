@@ -55,10 +55,28 @@ class Pong extends FlxGame {
 
 		gameTweens = Flixel.plugins.add(new GameTweenManager());
 
+		// try to use this to fix your crt shader:
+		Flixel.camera.screen.frame.uv;
+		// also check this post
+		// https://github.com/HaxeFlixel/flixel/issues/2181#issuecomment-447118529
+		// and this issue https://github.com/HaxeFlixel/flixel/issues/2258
+
 		var crtShader = new CrtShader();
 		var filter = new ShaderFilter(crtShader);
 		Flixel.signals.preUpdate.add(()->crtShader.update(Flixel.elapsed));
 		Flixel.signals.postStateSwitch.add(() -> Flixel.camera.filters = [filter]);
+		Flixel.signals.gameResized.add((_, _) -> {
+
+			// Flixel.camera.flashSprite.invalidate();
+			trace('resize');
+			haxe.Timer.delay(() -> Flixel.camera.filters = [filter], 1);
+			// Flixel.camera.flashSprite.cacheAsBitmap
+			// this.__cacheBitmap = null;
+			// this.__cacheBitmapData = null;
+			// this.__cacheBitmapData2 = null;
+			// this.__cacheBitmapData3 = null;
+			// this.__cacheBitmapColorTransform = null;
+		});
 
 		// NOTE: set filters does not work in debug mode
 		// see https://discord.com/channels/162395145352904705/165234904815239168/1183246310858571847

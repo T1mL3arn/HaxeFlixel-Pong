@@ -1,11 +1,11 @@
 package flixel.system;
 
-import flash.Lib;
-import flash.display.Graphics;
-import flash.display.Sprite;
-import flash.text.TextField;
-import flash.text.TextFormat;
-import flash.text.TextFormatAlign;
+import openfl.Lib;
+import openfl.display.Graphics;
+import openfl.display.Sprite;
+import openfl.text.TextField;
+import openfl.text.TextFormat;
+import openfl.text.TextFormatAlign;
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.tweens.FlxEase;
