@@ -27,6 +27,8 @@ class BaseState extends FlxSubState {
 	override function create() {
 		super.create();
 
+		bgColor = 0xFF222222;
+
 		pauseMenu = new PauseMenu();
 		destroySubStates = false;
 	}
