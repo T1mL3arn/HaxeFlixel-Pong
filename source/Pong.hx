@@ -68,27 +68,8 @@ class Pong extends FlxGame {
 			// https://discord.com/channels/162395145352904705/165234904815239168/1044303305108639834
 			// https://dixonary.co.uk/blog/shadertoy#a-couple-of-gotchas
 
-			trace('resize');
-
 			Flixel.cameras.reset();
 			Flixel.camera.filters = cast filters;
-
-			return;
-
-			// camera structure
-			// camera.flashSprite <- scrollRect <- canvas
-			// So, some of these sprite updates on resize and breaks my shader
-
-			var fs = Flixel.cameras.list[0].flashSprite;
-			var sr = fs.getChildAt(0);
-			var c = Flixel.cameras.list[0].canvas;
-			var str = (spr:DisplayObject, lbl) -> '$lbl: ${spr.x}, ${spr.y}, ${spr.width}, ${spr.height}, ${spr.scaleX}, ${spr.scaleY}';
-
-			trace('\n\n
-${str(fs, 'flash sprite:')}
-${str(sr, 'scroll rect :')}
-${str(c, 'canvas      :')}
-');
 		});
 	}
 }
