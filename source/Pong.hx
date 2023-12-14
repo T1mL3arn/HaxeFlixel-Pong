@@ -4,6 +4,7 @@ import flixel.FlxGame;
 import flixel.FlxObject;
 import flixel.tweens.FlxTween.FlxTweenManager;
 import flixel.util.FlxSignal;
+import openfl.display.DisplayObject;
 import openfl.filters.ShaderFilter;
 import shader.CrtShader;
 
@@ -55,32 +56,40 @@ class Pong extends FlxGame {
 
 		gameTweens = Flixel.plugins.add(new GameTweenManager());
 
-		// try to use this to fix your crt shader:
-		Flixel.camera.screen.frame.uv;
-		// also check this post
-		// https://github.com/HaxeFlixel/flixel/issues/2181#issuecomment-447118529
-		// and this issue https://github.com/HaxeFlixel/flixel/issues/2258
-
 		var crtShader = new CrtShader();
-		var filter = new ShaderFilter(crtShader);
+		var filters = [new ShaderFilter(crtShader)];
 		Flixel.signals.preUpdate.add(()->crtShader.update(Flixel.elapsed));
-		Flixel.signals.postStateSwitch.add(() -> Flixel.camera.filters = [filter]);
+		Flixel.signals.postStateSwitch.add(() -> Flixel.camera.filters = cast filters);
 		Flixel.signals.gameResized.add((_, _) -> {
 
-			// Flixel.camera.flashSprite.invalidate();
-			trace('resize');
-			haxe.Timer.delay(() -> Flixel.camera.filters = [filter], 1);
-			// Flixel.camera.flashSprite.cacheAsBitmap
-			// this.__cacheBitmap = null;
-			// this.__cacheBitmapData = null;
-			// this.__cacheBitmapData2 = null;
-			// this.__cacheBitmapData3 = null;
-			// this.__cacheBitmapColorTransform = null;
-		});
+			// NOTE: shader distortion problem
+			// https://github.com/HaxeFlixel/flixel/issues/2181#issuecomment-447118529
+			// https://github.com/HaxeFlixel/flixel/issues/2258
+			// https://discord.com/channels/162395145352904705/165234904815239168/1044303305108639834
+			// https://dixonary.co.uk/blog/shadertoy#a-couple-of-gotchas
 
-		// NOTE: set filters does not work in debug mode
-		// see https://discord.com/channels/162395145352904705/165234904815239168/1183246310858571847
-		// Flixel.game.setFilters([filter]);
+			trace('resize');
+
+			Flixel.cameras.reset();
+			Flixel.camera.filters = cast filters;
+
+			return;
+
+			// camera structure
+			// camera.flashSprite <- scrollRect <- canvas
+			// So, some of these sprite updates on resize and breaks my shader
+
+			var fs = Flixel.cameras.list[0].flashSprite;
+			var sr = fs.getChildAt(0);
+			var c = Flixel.cameras.list[0].canvas;
+			var str = (spr:DisplayObject, lbl) -> '$lbl: ${spr.x}, ${spr.y}, ${spr.width}, ${spr.height}, ${spr.scaleX}, ${spr.scaleY}';
+
+			trace('\n\n
+${str(fs, 'flash sprite:')}
+${str(sr, 'scroll rect :')}
+${str(c, 'canvas      :')}
+');
+		});
 	}
 }
 
