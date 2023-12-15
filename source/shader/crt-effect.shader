@@ -6,6 +6,10 @@
 // https://www.shadertoy.com/view/lslGRN
 // https://www.shadertoy.com/view/4sXcDN
 
+
+// see other crt shaders
+// https://www.shadertoy.com/view/DlfSz8
+
 #pragma header
 
 uniform float iTime;
