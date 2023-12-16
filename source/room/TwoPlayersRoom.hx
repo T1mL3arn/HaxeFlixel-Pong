@@ -40,6 +40,8 @@ class TwoPlayersRoom extends BaseState {
 
 		var room = LevelBuilder.inst.buildTwoPlayersRoom(leftOptions, rightOptions);
 
+		add(room.middleLine);
+
 		ball = room.ball;
 		add(ball);
 

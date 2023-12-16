@@ -5,8 +5,11 @@ import RacketController.KeyboardMovementController;
 import Utils.merge;
 import flixel.FlxObject;
 import flixel.FlxSprite;
+import flixel.math.FlxPoint;
 import flixel.util.FlxColor;
 import flixel.util.FlxDirection;
+import utils.FlxSpriteDraw.DashedLineStyle;
+import utils.FlxSpriteDraw.drawDashedLine;
 
 typedef WallParams = {
 	?pos:FlxDirection,
@@ -133,11 +136,7 @@ class LevelBuilder {
 		return player;
 	}
 
-	public function buildTwoPlayersRoom(?left:PlayerOptions, ?right:PlayerOptions):{
-		ball:Ball,
-		walls:Array<FlxSprite>,
-		players:Array<Player>,
-	} {
+	public function buildTwoPlayersRoom(?left:PlayerOptions, ?right:PlayerOptions) {
 		if (left == null)
 			left = Reflect.copy(Player.defaultOptions);
 		else
@@ -151,6 +150,23 @@ class LevelBuilder {
 			right = merge(Reflect.copy(Player.defaultOptions), right);
 
 		var walls = [getWall({pos: UP, padding: 0}), getWall({pos: DOWN, padding: 0})];
+
+		var middleLine = new FlxSprite();
+		var th = 5;
+		middleLine.makeGraphic(th, Flixel.height, FlxColor.TRANSPARENT);
+		middleLine.centerOrigin();
+		middleLine.centerOffsets(true);
+
+		var lineStyle:DashedLineStyle = {
+			thickness: th,
+			color: FlxColor.WHITE,
+			capsStyle: NONE,
+			segmentCount: 12,
+			// dashLength: 20,
+			// gapLength: 20,
+		};
+		drawDashedLine(middleLine, FlxPoint.weak(th / 2, 15), FlxPoint.weak(th / 2, Flixel.height - 15), lineStyle);
+		middleLine.screenCenter();
 
 		var batHole = Math.ceil(Pong.params.ballSize * 1.5);
 		var movementBounds = getMovementBounds(walls[0], walls[1], batHole);
@@ -176,6 +192,7 @@ class LevelBuilder {
 			ball: new Ball(),
 			walls: walls,
 			players: players,
+			middleLine: middleLine,
 		};
 	}
 }
