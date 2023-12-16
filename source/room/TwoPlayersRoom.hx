@@ -38,8 +38,6 @@ class TwoPlayersRoom extends BaseState {
 	override function create() {
 		super.create();
 
-		bgColor = 0xFF222222;
-
 		var room = LevelBuilder.inst.buildTwoPlayersRoom(leftOptions, rightOptions);
 
 		ball = room.ball;
