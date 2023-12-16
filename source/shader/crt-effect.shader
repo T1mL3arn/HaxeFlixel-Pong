@@ -29,11 +29,11 @@ vec2 curve(vec2 uv)
 
 void main()
 {
-	vec2 uv = openfl_TextureCoordv;
+	vec2 uv = openfl_TextureCoordv.xy;
 	uv = curve( uv );
 	
 	vec3 col;
-	
+
 	// Chromatic
 	col.r = flixel_texture2D(bitmap, vec2(uv.x+0.00225, uv.y)).x;
 	col.g = flixel_texture2D(bitmap, vec2(uv.x+0.00000, uv.y+0.00125)).y;
