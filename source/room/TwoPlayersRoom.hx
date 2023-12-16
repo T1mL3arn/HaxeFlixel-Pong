@@ -1,5 +1,6 @@
 package room;
 
+import haxe.Timer;
 import Player.PlayerOptions;
 import Pong.PongParams;
 import Utils.merge;
@@ -9,7 +10,6 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.sound.FlxSound;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
-import haxe.Timer;
 import menu.CongratScreen;
 
 using Lambda;
@@ -37,8 +37,6 @@ class TwoPlayersRoom extends BaseState {
 
 	override function create() {
 		super.create();
-
-		bgColor = 0xFF111111;
 
 		var room = LevelBuilder.inst.buildTwoPlayersRoom(leftOptions, rightOptions);
 
