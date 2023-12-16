@@ -12,6 +12,8 @@
 
 #pragma header
 
+#define PI 3.1415926535
+
 uniform float iTime;
 
 vec2 curve(vec2 uv)
@@ -33,9 +35,9 @@ void main()
 	vec3 col;
 	
 	// Chromatic
-	col.r = flixel_texture2D(bitmap, vec2(uv.x+0.002,uv.y)).x;
-	col.g = flixel_texture2D(bitmap, vec2(uv.x+0.000,uv.y)).y;
-	col.b = flixel_texture2D(bitmap, vec2(uv.x-0.002,uv.y)).z;
+	col.r = flixel_texture2D(bitmap, vec2(uv.x+0.00225, uv.y)).x;
+	col.g = flixel_texture2D(bitmap, vec2(uv.x+0.00000, uv.y+0.00125)).y;
+	col.b = flixel_texture2D(bitmap, vec2(uv.x-0.00225, uv.y+0.00125)).z;
 
 	// hide parts out of the original texture
 	col *= step(0.0, uv.x) * step(0.0, uv.y);
@@ -52,11 +54,16 @@ void main()
 	// Stripes
 	float stripesSpeed = 20.0;
 	// bigger factor - more stripes
-	float stripesCountFactor = 400.0;
-	col *= 0.9+0.125*sin(stripesSpeed * iTime + uv.y * stripesCountFactor);
+	float stripesCountFactor = 600.0;
+	float s_am = 0.125;
+	float s_m = 1.0 - s_am;
+	col *= s_m + s_am*sin(stripesSpeed * iTime + uv.y * stripesCountFactor);
 
 	// add screen flickering
-	col *= 0.99+0.075*sin(75.0*iTime);
+	float freq = 100.0*PI;			// PI is used to make it "per second"
+	float f_am = 0.025;					// amplitude modulation
+	float f_m = 1.0 - f_am;	
+	col *= f_m + f_am*sin(freq*iTime);
 
 	gl_FragColor = vec4(col, 1.0);
 }
