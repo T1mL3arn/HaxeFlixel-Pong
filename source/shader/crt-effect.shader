@@ -52,12 +52,17 @@ void main()
 	col *= 1.1;
 
 	// Stripes
-	float stripesSpeed = 20.0;
+	float stripesSpeed = 30.0;
 	// bigger factor - more stripes
-	float stripesCountFactor = 600.0;
-	float s_am = 0.125;
+	float stripesCountFactor = 400.0;
+	float s_am = 0.075;
 	float s_m = 1.0 - s_am;
-	col *= s_m + s_am*sin(stripesSpeed * iTime + uv.y * stripesCountFactor);
+  col *= s_m + s_am*sin(stripesSpeed * iTime + uv.y * stripesCountFactor);
+
+	// // another way to do stripes
+	// float dash = 10.0 / 640.0;
+	// float space = dash;
+	// step(0.0, dash - mod(uv.y + iTime, dash+space));
 
 	// add screen flickering
 	float freq = 100.0*PI;			// PI is used to make it "per second"
