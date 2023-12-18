@@ -10,6 +10,9 @@ import flixel.tweens.FlxTween;
 	This AI pretends to be not so smart:
 		- its think timer is randomized sometiems (like it is distracted)
 		- its racket positioning is randomized
+
+	NOTE in its current form this AI is bad
+	at reflecting ball on sharp angles!
 **/
 class NotSoSimpleAI extends RacketController {
 
@@ -65,8 +68,6 @@ class NotSoSimpleAI extends RacketController {
 
 	override function update(dt) {
 
-		// NOTE in its current form this AI is bad
-		// at reflecting ball on sharp angles!
 		var ball = getBall();
 		if (ball == null)
 			return;

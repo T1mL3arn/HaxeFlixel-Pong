@@ -11,12 +11,13 @@ class BaseState extends FlxSubState {
 	**/
 	public var canPause(default, set):Bool;
 
+	public var canOpenPauseMenu:Bool = true;
+
 	function set_canPause(v:Bool):Bool {
 		persistentUpdate = !v;
 		return canPause = v;
 	}
 
-	var canOpenPauseMenu:Bool = true;
 	var pauseMenu:PauseMenu;
 
 	public function new() {

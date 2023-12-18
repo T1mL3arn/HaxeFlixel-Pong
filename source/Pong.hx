@@ -35,7 +35,17 @@ class Pong extends FlxGame {
 		scoreToWin: 11,
 	};
 
+	/**
+		Current game params.
+	**/
 	public static var params:PongParams = Reflect.copy(defaultParams);
+
+	/**
+		Resets `params` to its default value, using `defaultParams`
+	**/
+	public static inline function resetParams() {
+		params = Reflect.copy(defaultParams);
+	}
 
 	public var ballCollision:FlxTypedSignal<(FlxObject, Ball)->Void> = new FlxTypedSignal();
 	public var state(get, never):{ball:Null<Ball>};

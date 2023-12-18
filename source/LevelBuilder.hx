@@ -174,19 +174,20 @@ class LevelBuilder {
 		var players = [getPlayer(left), getPlayer(right)];
 		players[0].racket.movementBounds = players[1].racket.movementBounds = movementBounds;
 
+		final scoreLabelPadding = 60.0;
 		var label = players[0].scoreLabel;
 		label.alignment = RIGHT;
 		label.width = label.fieldWidth = 50;
 		label.screenCenter(X);
-		label.y = Flixel.height * 0.07;
-		label.x -= 50;
+		label.y = Flixel.height * 0.0675;
+		label.x -= scoreLabelPadding;
 
 		label = players[1].scoreLabel;
 		label.alignment = LEFT;
 		label.width = label.fieldWidth = 50;
 		label.screenCenter(X);
-		label.y = Flixel.height * 0.07;
-		label.x += 50;
+		label.y = Flixel.height * 0.0675;
+		label.x += scoreLabelPadding;
 
 		return {
 			ball: new Ball(),
