@@ -10,6 +10,8 @@ class RacketController extends FlxBasic {
 	public function new(racket:Racket) {
 		super();
 		this.racket = racket;
+
+		Pong.inst.gameTweens.active = true;
 	}
 }
 

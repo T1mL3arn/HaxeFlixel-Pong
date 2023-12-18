@@ -85,6 +85,8 @@ class Pong extends FlxGame {
 			Flixel.cameras.reset();
 			Flixel.camera.filters = cast filters;
 		});
+
+		Flixel.signals.postGameReset.add(() -> gameTweens.active = true);
 	}
 }
 
