@@ -38,6 +38,8 @@ class TwoPlayersRoom extends BaseState {
 	override function create() {
 		super.create();
 
+		Pong.resetParams();
+
 		var room = LevelBuilder.inst.buildTwoPlayersRoom(leftOptions, rightOptions);
 
 		add(room.middleLine);
