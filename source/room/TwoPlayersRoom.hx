@@ -210,15 +210,19 @@ class BallSpeedup {
 	var speedUpSound:FlxSound;
 
 	public function new() {
+		init();
+
+		speedUpSound = new FlxSound().loadEmbedded(AssetPaths.sfx_speedup__ogg);
+		speedUpSound.volume = 0.5;
+	}
+
+	public function init() {
 		initialParams = merge({}, Pong.params);
 		currentParams = Pong.params;
 
 		// speed mod is calculated to fit the max ball speed
-		// Math.max() is to prevent devision by ZERO (it could happern during some tests)
+		// Math.max() is to prevent devision by ZERO (it happened during tests)
 		afterGoalSpeedMod = (ballSpeedMaxFactor - 1) / Math.max(1, (Pong.params.scoreToWin - 1) * 2);
-
-		speedUpSound = new FlxSound().loadEmbedded(AssetPaths.sfx_speedup__ogg);
-		speedUpSound.volume = 0.7;
 	}
 
 	public function onGoal() {
