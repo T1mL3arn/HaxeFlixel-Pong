@@ -55,10 +55,8 @@ class SimpleAI extends RacketController {
 					var targetCenterY = (ballBounds.y + ballBounds.bottom) / 2;
 					var targetRacketY = targetCenterY - racketBounds.height / 2;
 
-					if (tween != null) {
+					if (tween != null)
 						tween.cancel();
-						tween.destroy();
-					}
 
 					var path = Math.abs(targetRacketY - racketBounds.y);
 					var duration = path / Pong.params.racketSpeed;
