@@ -63,7 +63,7 @@ class NotSoSimpleAI extends RacketController {
 	}
 
 	function getBall():Ball {
-		return Reflect.getProperty(Flixel.state, 'ball');
+		return Pong.inst.room.ball;
 	}
 
 	override function update(dt) {

@@ -57,7 +57,10 @@ class TwoPlayersRoom extends BaseState {
 			walls.add(player.racket);
 			playerGoals.add(player.hitArea);
 		});
+
 		ballSpeedup = new BallSpeedup();
+
+		Pong.inst.room = cast this;
 	}
 
 	override function destroy() {
@@ -67,6 +70,7 @@ class TwoPlayersRoom extends BaseState {
 		players.iter(p -> p.destroy());
 		playerGoals.destroy();
 		ball.destroy();
+		Pong.inst.room = null;
 	}
 
 	override function update(dt:Float) {

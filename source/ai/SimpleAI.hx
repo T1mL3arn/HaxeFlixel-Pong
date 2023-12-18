@@ -37,7 +37,7 @@ class SimpleAI extends RacketController {
 
 	override function update(dt:Float) {
 
-		var ball = Pong.inst.state.ball;
+		var ball = Pong.inst.room.ball;
 		if (ball == null)
 			return;
 

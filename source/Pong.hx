@@ -48,10 +48,14 @@ class Pong extends FlxGame {
 	}
 
 	public var ballCollision:FlxTypedSignal<(FlxObject, Ball)->Void> = new FlxTypedSignal();
-	public var state(get, never):{ball:Null<Ball>};
 
 	inline function get_state()
 		return cast Flixel.state;
+
+	/**
+		Current room
+	**/
+	public var room:{ball:Null<Ball>};
 
 	/**
 		Manages all tweens with gameplay object.
