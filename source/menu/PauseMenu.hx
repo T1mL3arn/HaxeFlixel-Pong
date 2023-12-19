@@ -7,6 +7,7 @@ import menu.BaseMenu.MenuCommand;
 
 using menu.MenuUtils;
 
+@:build(utils.BuildMacro.addField_GAME())
 class PauseMenu extends FlxSubState {
 
 	var stateJustOpenned:Bool = false;
@@ -48,9 +49,9 @@ class PauseMenu extends FlxSubState {
 
 		openCallback = () -> {
 			stateJustOpenned = true;
-			Pong.inst.gameTweens.active = false;
+			GAME.gameTweens.active = false;
 		};
-		closeCallback = () -> Pong.inst.gameTweens.active = true;
+		closeCallback = () -> GAME.gameTweens.active = true;
 	}
 
 	override function update(elapsed:Float) {

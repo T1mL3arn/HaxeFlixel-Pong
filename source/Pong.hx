@@ -20,9 +20,9 @@ typedef PongParams = {
 
 class Pong extends FlxGame {
 
-	public static var inst(get, never):Pong;
+	public static var game(get, never):Pong;
 
-	static inline function get_inst():Pong
+	inline static function get_game():Pong
 		return cast Flixel.game;
 
 	public static final defaultParams:PongParams = {

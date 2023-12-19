@@ -61,7 +61,7 @@ class TwoPlayersRoom extends BaseState {
 
 		ballSpeedup = new BallSpeedup();
 
-		Pong.inst.room = cast this;
+		GAME.room = cast this;
 	}
 
 	override function destroy() {
@@ -71,7 +71,7 @@ class TwoPlayersRoom extends BaseState {
 		players.iter(p -> p.destroy());
 		playerGoals.destroy();
 		ball.destroy();
-		Pong.inst.room = null;
+		GAME.room = null;
 	}
 
 	override function update(dt:Float) {
@@ -125,7 +125,7 @@ class TwoPlayersRoom extends BaseState {
 			colorizeBall(cast wall, ball);
 		}
 		ball.collision(wall);
-		Pong.inst.ballCollision.dispatch(wall, ball);
+		GAME.ballCollision.dispatch(wall, ball);
 	}
 
 	function goal(hitArea:FlxBasic, ball:Ball) {
@@ -150,7 +150,7 @@ class TwoPlayersRoom extends BaseState {
 			for (player in players) {
 				player.active = false;
 				// AI moves its racket with FlxTween, so such tweens must be canceled.
-				Pong.inst.gameTweens.cancelTweensOf(player.racket);
+				GAME.gameTweens.cancelTweensOf(player.racket);
 			}
 			showCongratScreen(winner, FOR_WINNER);
 		}

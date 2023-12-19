@@ -57,7 +57,7 @@ class NotSoSimpleAI extends SimpleAI {
 		targetX = Flixel.width * 0.5;
 		targetY = Flixel.height * 0.5;
 
-		Pong.inst.ballCollision.add(ballCollision);
+		GAME.ballCollision.add(ballCollision);
 	}
 
 	function ballCollision(obj:FlxObject, ball:Ball) {
@@ -73,12 +73,12 @@ class NotSoSimpleAI extends SimpleAI {
 			tween.cancel();
 			tween.destroy();
 		}
-		Pong.inst.ballCollision.remove(ballCollision);
+		GAME.ballCollision.remove(ballCollision);
 	}
 
 	override function update(dt) {
 
-		var ball = Pong.inst.room.ball;
+		var ball = GAME.room.ball;
 		if (ball == null)
 			return;
 
@@ -123,7 +123,7 @@ class NotSoSimpleAI extends SimpleAI {
 
 					var path = Math.abs(targetRacketY - racketBounds.y);
 					var duration = path / Pong.params.racketSpeed;
-					tween = Pong.inst.gameTweens.tween(racket, {y: targetRacketY}, duration, {ease: FlxEase.linear});
+					tween = GAME.gameTweens.tween(racket, {y: targetRacketY}, duration, {ease: FlxEase.linear});
 				case UP, DOWN:
 					throw "Implement it later";
 			}

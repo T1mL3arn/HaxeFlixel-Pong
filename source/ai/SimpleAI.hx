@@ -41,7 +41,7 @@ class SimpleAI extends RacketController {
 
 	override function update(dt:Float) {
 
-		var ball = Pong.inst.room.ball;
+		var ball = GAME.room.ball;
 		if (ball == null)
 			return;
 
@@ -65,7 +65,7 @@ class SimpleAI extends RacketController {
 
 					var path = Math.abs(targetRacketY - racketBounds.y);
 					var duration = path / Pong.params.racketSpeed;
-					tween = Pong.inst.gameTweens.tween(racket, {y: targetRacketY}, duration, {ease: FlxEase.linear});
+					tween = GAME.gameTweens.tween(racket, {y: targetRacketY}, duration, {ease: FlxEase.linear});
 				case UP, DOWN:
 					throw "Implement it later";
 			}

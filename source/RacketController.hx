@@ -3,6 +3,7 @@ package;
 import flixel.FlxBasic;
 import flixel.input.keyboard.FlxKey;
 
+@:build(utils.BuildMacro.addField_GAME())
 class RacketController extends FlxBasic {
 
 	public var racket:Racket;
@@ -11,7 +12,7 @@ class RacketController extends FlxBasic {
 		super();
 		this.racket = racket;
 
-		Pong.inst.gameTweens.active = true;
+		GAME.gameTweens.active = true;
 	}
 }
 

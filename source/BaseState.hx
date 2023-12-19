@@ -3,6 +3,7 @@ package;
 import flixel.FlxSubState;
 import menu.PauseMenu;
 
+@:build(utils.BuildMacro.addField_GAME())
 class BaseState extends FlxSubState {
 
 	/** 
