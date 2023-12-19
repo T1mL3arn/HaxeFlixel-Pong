@@ -11,6 +11,7 @@ import flixel.sound.FlxSound;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import menu.CongratScreen;
+import mod.BallSpeedup;
 
 using Lambda;
 using StringTools;
@@ -183,66 +184,5 @@ class TwoPlayersRoom extends BaseState {
 		}
 
 		Timer.delay(() -> ball.velocity.set(velX, 0), delay);
-	}
-}
-
-/**
-	This object tracks goals and paddle hits to update
-	initial ball speed in the way that the speed increases after 
-	every goal and after series of a paddle collision. 
-	Thus, making gameplay more spicy.
-**/
-class BallSpeedup {
-
-	var ballSpeedMaxFactor:Float = 1.55;
-	var afterGoalSpeedMod:Float;
-	// speed mod after N racket hits
-	var racketHitsSpeedMod:Float = 0.0325;
-	// number of racket hits (let it be ODD number)
-	var racketHitsBeforeSpeedup:Int = 5;
-
-	var racketHitsCount:Int = 0;
-	var goalsCount:Int = 0;
-
-	var initialParams:PongParams;
-	var currentParams:PongParams;
-
-	var speedUpSound:FlxSound;
-
-	public function new() {
-		init();
-
-		speedUpSound = new FlxSound().loadEmbedded(AssetPaths.sfx_speedup__ogg);
-		speedUpSound.volume = 0.5;
-	}
-
-	public function init() {
-		initialParams = merge({}, Pong.params);
-		currentParams = Pong.params;
-
-		// Speed mod is calculated to fit the max ball speed.
-		// Math.max() is to prevent devision by ZERO (it happened during tests)
-		afterGoalSpeedMod = (ballSpeedMaxFactor - 1) / Math.max(1, (initialParams.scoreToWin - 1) * 2);
-	}
-
-	public function onGoal() {
-		goalsCount += 1;
-		racketHitsCount = 0;
-		currentParams.ballSpeed = limitBallSpeed(initialParams.ballSpeed * (1 + goalsCount * afterGoalSpeedMod));
-	}
-
-	public function onRacketHit() {
-		racketHitsCount += 1;
-		if (racketHitsCount % racketHitsBeforeSpeedup == 0) {
-			var speedAddon = initialParams.ballSpeed * racketHitsSpeedMod;
-			currentParams.ballSpeed += speedAddon;
-			// let's not limit such speed
-			// currentParams.ballSpeed = limitBallSpeed(currentParams.ballSpeed);
-			speedUpSound.play();
-		}
-	}
-
-	inline function limitBallSpeed(speed):Float {
-		return Math.min(speed, initialParams.ballSpeed * ballSpeedMaxFactor);
 	}
 }
