@@ -153,6 +153,16 @@ class MainMenu extends FlxState {
 
 		add(menu);
 
+		// actually center main page on the screen
+		menu.mpActive.forEach(s -> s.screenCenter(X));
+		// TODO update menu class for better alignment?
+		// var bounds = getGroupBounds(menu.mpActive);
+		// var newX = Flixel.width * 0.5 - bounds.width * 0.5;
+		// var newY = Flixel.height * 0.5 - bounds.height * 0.5;
+		// var dx = newX - bounds.x;
+		// var dy = newY - bounds.y;
+		// // menu.mpActive.setPosition(newX, newY);
+
 		insert(0, backGame = new AIRoom(null, null, true));
 		backGame.create();
 		backGame.canOpenPauseMenu = false;
