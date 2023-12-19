@@ -3,14 +3,13 @@ package ai;
 import Utils.merge;
 import flixel.FlxObject;
 import flixel.math.FlxMath;
-import flixel.math.FlxRect;
 import flixel.tweens.FlxEase;
-import flixel.tweens.FlxTween;
 
 /**
 	This AI pretends to be not so smart:
 		- its think timer is randomized sometiems (like it is distracted)
-		- its racket positioning is randomized
+		- its racket's target position get randomzied in some degree to immitate
+			errors in movement
 
 	NOTE in its current form this AI is bad
 	at reflecting ball on sharp angles!
