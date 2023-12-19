@@ -5,14 +5,22 @@ import RacketController.KeyboardMovementController;
 import Utils.swap;
 import ai.AIFactory.setAIPlayer;
 import ai.SimpleAI;
+import flixel.FlxBasic;
+import flixel.FlxObject;
+import flixel.FlxSprite;
 import flixel.FlxState;
+import flixel.group.FlxGroup;
+import flixel.sound.FlxSoundGroup;
 import flixel.util.FlxColor;
-import menu.BaseMenu.MenuCommand;
-import menu.MenuUtils.wrapMenuPage;
 import network_wrtc.Lobby1v1;
+import room.AIRoom;
 import room.SplitscreenRoom;
 import room.TrainingRoom;
 import room.TwoPlayersRoom;
+import menu.BaseMenu.MenuCommand;
+import menu.MenuUtils.wrapMenuPage;
+
+using menu.MenuUtils;
 
 using menu.MenuUtils;
 
@@ -22,6 +30,7 @@ class MainMenu extends FlxState {
 	static final SELF_ROOM_MENU_ID = 'load_self_room';
 
 	var players:Array<PlayerOptions>;
+	var backGame:AIRoom;
 
 	public function new() {
 		super();
@@ -33,6 +42,8 @@ class MainMenu extends FlxState {
 	}
 
 	override function create() {
+
+		bgColor = 0xFF222222;
 
 		var menu = new BaseMenu(0, 0, 0, 10);
 
@@ -143,5 +154,19 @@ class MainMenu extends FlxState {
 		});
 
 		add(menu);
+
+		insert(0, backGame = new AIRoom(null, null, true));
+		backGame.create();
+		backGame.canOpenPauseMenu = false;
+		iterSpriteDeep(backGame.members, s -> s.alpha = 0.5);
+	}
+
+	function iterSpriteDeep(list:Array<FlxBasic>, f:FlxSprite->Void) {
+		for (obj in list) {
+			if (obj is FlxSprite)
+				f(cast obj);
+			if (obj is FlxGroup)
+				iterSpriteDeep((cast obj : FlxGroup).members, f);
+		}
 	}
 }

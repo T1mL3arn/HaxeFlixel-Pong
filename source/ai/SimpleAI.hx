@@ -13,6 +13,8 @@ import flixel.tweens.FlxTween;
 **/
 class SimpleAI extends RacketController {
 
+	public var name:String;
+
 	var timeToThink:Float = 0.1;
 	var timer:Float;
 
@@ -20,8 +22,10 @@ class SimpleAI extends RacketController {
 	var tmprect2:FlxRect = FlxRect.get();
 	var tween:FlxTween;
 
-	public function new(racket:Racket) {
+	public function new(racket:Racket, ?name:String) {
 		super(racket);
+
+		this.name = name ?? 'simple AI';
 	}
 
 	override function destroy() {
@@ -37,7 +41,7 @@ class SimpleAI extends RacketController {
 
 	override function update(dt:Float) {
 
-		var ball = Pong.inst.state.ball;
+		var ball = GAME.room.ball;
 		if (ball == null)
 			return;
 
@@ -54,15 +58,14 @@ class SimpleAI extends RacketController {
 				case LEFT, RIGHT:
 					var targetCenterY = (ballBounds.y + ballBounds.bottom) / 2;
 					var targetRacketY = targetCenterY - racketBounds.height / 2;
+					Flixel.watch.addQuick('${racket.position}: med ai t_Y', targetRacketY);
 
-					if (tween != null) {
+					if (tween != null)
 						tween.cancel();
-						tween.destroy();
-					}
 
 					var path = Math.abs(targetRacketY - racketBounds.y);
 					var duration = path / Pong.params.racketSpeed;
-					tween = Pong.inst.gameTweens.tween(racket, {y: targetRacketY}, duration, {ease: FlxEase.linear});
+					tween = GAME.gameTweens.tween(racket, {y: targetRacketY}, duration, {ease: FlxEase.linear});
 				case UP, DOWN:
 					throw "Implement it later";
 			}

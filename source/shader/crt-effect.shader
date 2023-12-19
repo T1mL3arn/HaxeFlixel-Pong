@@ -29,11 +29,11 @@ vec2 curve(vec2 uv)
 
 void main()
 {
-	vec2 uv = openfl_TextureCoordv;
+	vec2 uv = openfl_TextureCoordv.xy;
 	uv = curve( uv );
 	
 	vec3 col;
-	
+
 	// Chromatic
 	col.r = flixel_texture2D(bitmap, vec2(uv.x+0.00225, uv.y)).x;
 	col.g = flixel_texture2D(bitmap, vec2(uv.x+0.00000, uv.y+0.00125)).y;
@@ -52,12 +52,17 @@ void main()
 	col *= 1.1;
 
 	// Stripes
-	float stripesSpeed = 20.0;
+	float stripesSpeed = 30.0;
 	// bigger factor - more stripes
-	float stripesCountFactor = 600.0;
-	float s_am = 0.125;
+	float stripesCountFactor = 400.0;
+	float s_am = 0.075;
 	float s_m = 1.0 - s_am;
-	col *= s_m + s_am*sin(stripesSpeed * iTime + uv.y * stripesCountFactor);
+  col *= s_m + s_am*sin(stripesSpeed * iTime + uv.y * stripesCountFactor);
+
+	// // another way to do stripes
+	// float dash = 10.0 / 640.0;
+	// float space = dash;
+	// step(0.0, dash - mod(uv.y + iTime, dash+space));
 
 	// add screen flickering
 	float freq = 100.0*PI;			// PI is used to make it "per second"

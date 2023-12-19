@@ -1,46 +1,63 @@
 package ai;
 
+import Utils.merge;
 import flixel.FlxObject;
 import flixel.math.FlxMath;
-import flixel.math.FlxRect;
 import flixel.tweens.FlxEase;
-import flixel.tweens.FlxTween;
 
 /**
 	This AI pretends to be not so smart:
 		- its think timer is randomized sometiems (like it is distracted)
-		- its racket positioning is randomized
-**/
-class NotSoSimpleAI extends RacketController {
+		- its racket's target position get randomzied in some degree to immitate
+			errors in movement
 
-	static final SETTINGS = {
+	NOTE in its current form this AI is bad
+	at reflecting ball on sharp angles!
+**/
+class NotSoSimpleAI extends SimpleAI {
+
+	public static final SETTINGS_DEFAULT = {
 		timeToThink: 0.09,
-		timeToThinkMax: 0.18,
-		distractedChance: 0.1,
-		misscalcChance: 0.15,
+		timeToThinkMax: 0.25,
+		distractedChance: 0.2,
+		misscalcChance: 0.2,
 		calcError: 0.15,
 		calcErrorBig: 0.3,
 	};
 
-	var tmprect1 = FlxRect.get();
-	var tmprect2 = FlxRect.get();
+	public static function buildEasyAI(racket, ?name:String) {
+		var ai = new NotSoSimpleAI(racket, name ?? 'NotSoSimpleAI ez AI');
+		ai.SETTINGS = merge({}, SETTINGS_DEFAULT);
+		return ai;
+	}
+
+	public static function buildMediumAI(racket, ?name:String) {
+		var ai = new NotSoSimpleAI(racket, name ?? 'NotSoSimpleAI med AI');
+		ai.SETTINGS = {
+			timeToThink: 0.08,
+			timeToThinkMax: 0.20,
+			distractedChance: 0.125,
+			misscalcChance: 0.1,
+			calcError: 0.1,
+			calcErrorBig: 0.25,
+		};
+		return ai;
+	}
 
 	var targetX:Float;
 	var targetY:Float;
 
-	/** This gets randomized! */
-	var timeToThink:Float = 0.1;
-
 	var currentTimer:Float = 0;
-	var tween:FlxTween;
 
-	public function new(racket:Racket) {
-		super(racket);
+	var SETTINGS = SETTINGS_DEFAULT;
+
+	public function new(racket:Racket, ?name:String) {
+		super(racket, name ?? 'NOT simple AI');
 
 		targetX = Flixel.width * 0.5;
 		targetY = Flixel.height * 0.5;
 
-		Pong.inst.ballCollision.add(ballCollision);
+		GAME.ballCollision.add(ballCollision);
 	}
 
 	function ballCollision(obj:FlxObject, ball:Ball) {
@@ -56,18 +73,12 @@ class NotSoSimpleAI extends RacketController {
 			tween.cancel();
 			tween.destroy();
 		}
-		Pong.inst.ballCollision.remove(ballCollision);
-	}
-
-	function getBall():Ball {
-		return Reflect.getProperty(Flixel.state, 'ball');
+		GAME.ballCollision.remove(ballCollision);
 	}
 
 	override function update(dt) {
 
-		// NOTE in its current form this AI is bad
-		// at reflecting ball on sharp angles!
-		var ball = getBall();
+		var ball = GAME.room.ball;
 		if (ball == null)
 			return;
 
@@ -76,7 +87,7 @@ class NotSoSimpleAI extends RacketController {
 			currentTimer = 0;
 			// there is a chance AI got distracted
 			timeToThink = if (Math.random() < SETTINGS.distractedChance) {
-				SETTINGS.timeToThink * 1.5 + Math.random() * SETTINGS.timeToThinkMax;
+				SETTINGS.timeToThink * 1.25 + Math.random() * SETTINGS.timeToThinkMax;
 			}
 			else {
 				SETTINGS.timeToThink;
@@ -91,6 +102,7 @@ class NotSoSimpleAI extends RacketController {
 				case LEFT, RIGHT:
 					var targetCenterY = (ballBounds.y + ballBounds.bottom) / 2;
 					var targetRacketY = targetCenterY - racketBounds.height / 2;
+					Flixel.watch.addQuick('${racket.position}:\n$name', targetRacketY);
 
 					if (tween != null)
 						tween.cancel();
@@ -111,7 +123,7 @@ class NotSoSimpleAI extends RacketController {
 
 					var path = Math.abs(targetRacketY - racketBounds.y);
 					var duration = path / Pong.params.racketSpeed;
-					tween = Pong.inst.gameTweens.tween(racket, {y: targetRacketY}, duration, {ease: FlxEase.linear});
+					tween = GAME.gameTweens.tween(racket, {y: targetRacketY}, duration, {ease: FlxEase.linear});
 				case UP, DOWN:
 					throw "Implement it later";
 			}

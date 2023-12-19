@@ -18,21 +18,11 @@ typedef PongParams = {
 	scoreToWin:Int,
 };
 
-typedef PongParams = {
-	ballSize:Int,
-	ballSpeed:Float,
-	racketLength:Int,
-	racketThickness:Int,
-	racketSpeed:Float,
-	racketPadding:Float,
-	scoreToWin:Int,
-};
-
 class Pong extends FlxGame {
 
-	public static var inst(get, never):Pong;
+	public static var game(get, never):Pong;
 
-	static inline function get_inst():Pong
+	inline static function get_game():Pong
 		return cast Flixel.game;
 
 	public static final defaultParams:PongParams = {
@@ -45,13 +35,27 @@ class Pong extends FlxGame {
 		scoreToWin: 11,
 	};
 
+	/**
+		Current game params.
+	**/
 	public static var params:PongParams = Reflect.copy(defaultParams);
 
+	/**
+		Resets `params` to its default value, using `defaultParams`
+	**/
+	public static inline function resetParams() {
+		params = Reflect.copy(defaultParams);
+	}
+
 	public var ballCollision:FlxTypedSignal<(FlxObject, Ball)->Void> = new FlxTypedSignal();
-	public var state(get, never):{ball:Null<Ball>};
 
 	inline function get_state()
 		return cast Flixel.state;
+
+	/**
+		Current room
+	**/
+	public var room:{ball:Null<Ball>};
 
 	/**
 		Manages all tweens with gameplay object.
@@ -81,6 +85,8 @@ class Pong extends FlxGame {
 			Flixel.cameras.reset();
 			Flixel.camera.filters = cast filters;
 		});
+
+		Flixel.signals.postGameReset.add(() -> gameTweens.active = true);
 	}
 }
 

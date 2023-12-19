@@ -72,6 +72,6 @@ class TrainingRoom extends BaseState {
 			(cast wall : Racket).ballCollision(ball);
 
 		ball.collision(wall);
-		Pong.inst.ballCollision.dispatch(wall, ball);
+		GAME.ballCollision.dispatch(wall, ball);
 	}
 }
