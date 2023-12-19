@@ -41,6 +41,8 @@ class MainMenu extends FlxState {
 
 	override function create() {
 
+		bgColor = 0xFF222222;
+
 		var menu = new BaseMenu(0, 0, 0, 10);
 
 		menu.createPage('main')
@@ -155,7 +157,6 @@ class MainMenu extends FlxState {
 		backGame.create();
 		backGame.canOpenPauseMenu = false;
 		iterSpriteDeep(backGame.members, s -> s.alpha = 0.5);
-
 	}
 
 	function iterSpriteDeep(list:Array<FlxBasic>, f:FlxSprite->Void) {
