@@ -131,7 +131,7 @@ class LevelBuilder {
 		player.uid = options.uid ?? Std.string(haxe.Timer.stamp());
 		player.scoreLabelText = '';
 		player.score = 0;
-		player.add(options.getController(racket));
+		player.racketController = options.getController(racket);
 
 		return player;
 	}

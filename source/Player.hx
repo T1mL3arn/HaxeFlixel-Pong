@@ -74,4 +74,15 @@ class Player extends FlxGroup {
 		scoreLabel.text = '$scoreLabelText$value';
 		return value;
 	}
+
+	function set_racketController(v:RacketController):RacketController {
+		if (racketController != null) {
+			remove(racketController, true);
+			racketController.destroy();
+		}
+		if (v != null)
+			add(v);
+
+		return racketController = v;
+	}
 }
