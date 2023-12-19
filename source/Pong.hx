@@ -4,7 +4,6 @@ import flixel.FlxGame;
 import flixel.FlxObject;
 import flixel.tweens.FlxTween.FlxTweenManager;
 import flixel.util.FlxSignal;
-import openfl.display.DisplayObject;
 import openfl.filters.ShaderFilter;
 import shader.CrtShader;
 
@@ -87,6 +86,12 @@ class Pong extends FlxGame {
 		});
 
 		Flixel.signals.postGameReset.add(() -> gameTweens.active = true);
+
+		// disable/enable camera filters
+		Flixel.signals.postUpdate.add(() -> {
+			if (Flixel.keys.justPressed.T)
+				Flixel.camera.filtersEnabled = !Flixel.camera.filtersEnabled;
+		});
 	}
 }
 
