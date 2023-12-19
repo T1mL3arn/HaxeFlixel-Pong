@@ -57,17 +57,17 @@ class Pong extends FlxGame {
 	public var room:{ball:Null<Ball>};
 
 	/**
-		Manages all tweens with gameplay object.
+		Manages all ai tweens with object.
 		When game is paused such tweens are also paused.
 	**/
-	public var gameTweens(default, null):FlxTweenManager;
+	public var aiTweens(default, null):FlxTweenManager;
 
 	public function new() {
 		// Until https://github.com/HaxeFlixel/flixel/pull/2819 is fixed
 		// I have to skip splash.
 		super(0, 0, null, true);
 
-		gameTweens = Flixel.plugins.add(new GameTweenManager());
+		aiTweens = Flixel.plugins.addPlugin(new FlxTweenManager());
 
 		var crtShader = new CrtShader();
 		var filters = [new ShaderFilter(crtShader)];
@@ -85,7 +85,7 @@ class Pong extends FlxGame {
 			Flixel.camera.filters = cast filters;
 		});
 
-		Flixel.signals.postGameReset.add(() -> gameTweens.active = true);
+		Flixel.signals.postGameReset.add(() -> aiTweens.active = true);
 
 		// disable/enable camera filters
 		Flixel.signals.postUpdate.add(() -> {
@@ -94,9 +94,3 @@ class Pong extends FlxGame {
 		});
 	}
 }
-
-/**
-	Crutch to allow the same type of plugin to be used twice 
-	in PluginFrontEnd
-**/
-class GameTweenManager extends FlxTweenManager {}

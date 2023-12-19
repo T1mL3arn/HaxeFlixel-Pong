@@ -150,7 +150,7 @@ class TwoPlayersRoom extends BaseState {
 			for (player in players) {
 				player.active = false;
 				// AI moves its racket with FlxTween, so such tweens must be canceled.
-				GAME.gameTweens.cancelTweensOf(player.racket);
+				GAME.aiTweens.cancelTweensOf(player.racket);
 			}
 			showCongratScreen(winner, FOR_WINNER);
 		}

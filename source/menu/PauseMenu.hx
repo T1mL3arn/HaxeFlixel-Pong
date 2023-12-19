@@ -49,9 +49,9 @@ class PauseMenu extends FlxSubState {
 
 		openCallback = () -> {
 			stateJustOpenned = true;
-			GAME.gameTweens.active = false;
+			GAME.aiTweens.active = false;
 		};
-		closeCallback = () -> GAME.gameTweens.active = true;
+		closeCallback = () -> GAME.aiTweens.active = true;
 	}
 
 	override function update(elapsed:Float) {
