@@ -197,7 +197,7 @@ class BallSpeedup {
 	var ballSpeedMaxFactor:Float = 1.55;
 	var afterGoalSpeedMod:Float;
 	// speed mod after N racket hits
-	var racketHitsSpeedMod:Float = 0.035;
+	var racketHitsSpeedMod:Float = 0.0325;
 	// number of racket hits (let it be ODD number)
 	var racketHitsBeforeSpeedup:Int = 5;
 
@@ -220,9 +220,9 @@ class BallSpeedup {
 		initialParams = merge({}, Pong.params);
 		currentParams = Pong.params;
 
-		// speed mod is calculated to fit the max ball speed
+		// Speed mod is calculated to fit the max ball speed.
 		// Math.max() is to prevent devision by ZERO (it happened during tests)
-		afterGoalSpeedMod = (ballSpeedMaxFactor - 1) / Math.max(1, (Pong.params.scoreToWin - 1) * 2);
+		afterGoalSpeedMod = (ballSpeedMaxFactor - 1) / Math.max(1, (initialParams.scoreToWin - 1) * 2);
 	}
 
 	public function onGoal() {
