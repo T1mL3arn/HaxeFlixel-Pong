@@ -16,8 +16,6 @@ class TrainingRoom extends BaseState {
 	override function create() {
 		super.create();
 
-		bgColor = 0xFF111111;
-
 		walls = new FlxTypedGroup();
 
 		var room = LevelBuilder.inst.buildTraningRoom();
