@@ -19,11 +19,6 @@ typedef PongParams = {
 
 class Pong extends FlxGame {
 
-	public static var game(get, never):Pong;
-
-	inline static function get_game():Pong
-		return cast Flixel.game;
-
 	public static final defaultParams:PongParams = {
 		ballSize: 12,
 		ballSpeed: 310,
