@@ -33,6 +33,7 @@ class Player extends FlxGroup {
 	public var name:String;
 	public var uid:String;
 	public var racket:Racket;
+	public var racketController(default, set):RacketController;
 	public var score(default, set):Int = 0;
 	public var scoreLabel:FlxText;
 	public var scoreLabelText:String = '';
