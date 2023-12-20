@@ -54,12 +54,17 @@ class Pong extends FlxGame {
 	**/
 	public var aiTweens(default, null):FlxTweenManager;
 
+	public var signals:{
+		keyPress:FlxSignal
+	};
+
 	public function new() {
 		// Until https://github.com/HaxeFlixel/flixel/pull/2819 is fixed
 		// I have to skip splash.
 		super(0, 0, null, true);
 
 		aiTweens = Flixel.plugins.addPlugin(new FlxTweenManager());
+		signals.keyPress = Flixel.signals.postUpdate;
 
 		var crtShader = new CrtShader();
 		var filters = [new ShaderFilter(crtShader)];
@@ -80,7 +85,7 @@ class Pong extends FlxGame {
 		Flixel.signals.postGameReset.add(() -> aiTweens.active = true);
 
 		// disable/enable camera filters
-		Flixel.signals.postUpdate.add(() -> {
+		signals.keyPress.add(() -> {
 			if (Flixel.keys.justPressed.T)
 				Flixel.camera.filtersEnabled = !Flixel.camera.filtersEnabled;
 		});
