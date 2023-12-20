@@ -48,9 +48,6 @@ class Pong extends FlxGame {
 
 	public var ballCollision:FlxTypedSignal<(FlxObject, Ball)->Void> = new FlxTypedSignal();
 
-	inline function get_state()
-		return cast Flixel.state;
-
 	/**
 		Current room
 	**/
