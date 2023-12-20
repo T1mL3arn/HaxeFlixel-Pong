@@ -64,7 +64,10 @@ class Pong extends FlxGame {
 		super(0, 0, null, true);
 
 		aiTweens = Flixel.plugins.addPlugin(new FlxTweenManager());
-		signals.keyPress = Flixel.signals.postUpdate;
+
+		signals = {
+			keyPress: Flixel.signals.postUpdate,
+		}
 
 		var crtShader = new CrtShader();
 		var filters = [new ShaderFilter(crtShader)];
