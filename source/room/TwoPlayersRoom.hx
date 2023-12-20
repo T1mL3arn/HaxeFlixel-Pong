@@ -8,6 +8,7 @@ import flixel.FlxBasic;
 import flixel.FlxObject;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.sound.FlxSound;
+import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import menu.CongratScreen;
@@ -188,5 +189,17 @@ class TwoPlayersRoom extends BaseState {
 		Timer.delay(() -> ball.velocity.set(velX, 0), Math.round(delay * 1000));
 
 		twinkle(ball, FlxColor.ORANGE, delay, 0.1);
+
+		// scale-out effect for the ball
+		final scale = 5.0;
+		var tb = ball.clone();
+		tb.setPosition(ball.x, ball.y);
+		FlxTween.tween(tb.scale, {x: scale, y: scale}, delay * 0.5, {ease: FlxEase.linear});
+		FlxTween.tween(tb, {alpha: 0.0}, delay * 0.5, {
+			ease: FlxEase.linear,
+			// remove and destroy temp ball after tween is complete
+			onComplete: _ -> remove(tb).destroy()
+		});
+		add(tb);
 	}
 }
