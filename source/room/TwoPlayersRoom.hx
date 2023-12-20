@@ -12,6 +12,7 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import menu.CongratScreen;
 import mod.BallSpeedup;
+import utils.FlxSpriteDraw.twinkle;
 
 using Lambda;
 using StringTools;
@@ -184,5 +185,7 @@ class TwoPlayersRoom extends BaseState {
 		}
 
 		Timer.delay(() -> ball.velocity.set(velX, 0), delay);
+
+		twinkle(ball, FlxColor.ORANGE, delay * 0.001, 0.1);
 	}
 }
