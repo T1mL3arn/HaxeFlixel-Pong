@@ -24,11 +24,13 @@ function addField_GAME():Array<Field> {
 		ret: TPath({pack: [], name: "Pong"}),
 	};
 
+	var docString = 'Pong game class, subclass of `flixel.FlxGame`\n\nThis field was generated automatically by `utils.BuildMacro.addField_GAME` macro';
+
 	// property with accessor
 	// i.e. `public var GAME(get, never):Pong`
 	fields.push({
 		name: fieldName,
-		doc: 'Pong game class, subclass of `flixel.FlxGame`',
+		doc: docString,
 		access: [Access.APublic],
 		// declare that prop has getter, has no setter at all
 		// and has type Pong
