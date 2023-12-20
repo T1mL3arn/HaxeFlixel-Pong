@@ -7,8 +7,8 @@ final ais = ['easy', 'medium', 'hard'];
 /**
 	Returns random AI type
 **/
-inline function getRandomAI() {
-	return Flixel.random.getObject(ais);
+inline function getRandomAI(?list:Array<String>) {
+	return Flixel.random.getObject(list ?? ais);
 }
 
 function setAIPlayer(opts:PlayerOptions, aiType:String) {
