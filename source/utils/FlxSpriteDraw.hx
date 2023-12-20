@@ -14,21 +14,50 @@ typedef DashedLineStyle = {
 		You must set either `segmentCount` (and `dashLength`)
 		or `dashLength` (and `gapLength`).
 	**/
-	?segmentCount:Int,
+	@:optional var segmentCount:Int;
 
 	/**
 		Length of dash.
 		You must set either `segmentCount` (and `gapLength`)
 		or `dashLength` (and `gapLength`).
 	**/
-	?dashLength:Float,
+	@:optional var dashLength:Float;
 
 	/**
 		Length of gap between dashes.
 	**/
-	?gapLength:Float,
+	@:optional var gapLength:Float;
 }
 
+/**
+	Draw a dashed line on a sprite. 
+
+	**NOTE**: function respects flixel's weak points convention!
+
+	**Example**:
+	```haxe
+	drawDashedLine(sprite, FlxPoint.weak(0,0),  FlxPoint.weak(100,100), {
+		thickness: 10,
+		// there will be exactly 10 dashes and (9 gaps)
+		segmentCount: 10,
+		// all gaps will be 5px (dash length is calculated) 
+		gapLength: 5,
+	});
+	// or
+	drawDashedLine(sprite, FlxPoint.weak(0,0),  FlxPoint.weak(100,100), {
+		thickness: 10,
+		// dash length will be exactly 15px
+		dashLength: 15,
+		// gap length will be exactly 10px
+		gapLength: 10,
+	});
+	```
+
+	@param sprite target sprite
+	@param start start point of the line
+	@param end end point of the line
+	@param lineStyle line options like thickness, dash counts etc, see `utils.DashedLineStyle`
+**/
 function drawDashedLine(sprite:FlxSprite, start:FlxPoint, end:FlxPoint, lineStyle:DashedLineStyle):Void {
 
 	final dist = start.distanceTo(FlxPoint.weak(end.x, end.y));
