@@ -160,14 +160,14 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 		};
 	}
 
-	override function serveBall(byPlayer:Player, ball:Ball, delay:Int = 1000) {
+	override function serveBall(byPlayer:Player, ball:Ball, ?delay:Float) {
 		if (network.initiator) {
 			super.serveBall(byPlayer, ball, delay);
 			// ball serve has delay, so for correct sync
 			// I have to sync 2 times: right now and after delay
 			network.send(BallData, getBallPayload());
 
-			haxe.Timer.delay(() -> network.send(BallData, getBallPayload()), delay);
+			haxe.Timer.delay(() -> network.send(BallData, getBallPayload()), Math.round(delay * 1000));
 		}
 	}
 

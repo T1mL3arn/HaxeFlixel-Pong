@@ -170,7 +170,8 @@ class TwoPlayersRoom extends BaseState {
 		openSubState(new CongratScreen(playAgainAction).setWinner(player.name, screenType));
 	}
 
-	function serveBall(byPlayer:Player, ball:Ball, delay:Int = 1000) {
+	function serveBall(byPlayer:Player, ball:Ball, ?delay:Float) {
+		delay = delay ?? Pong.params.ballServeDelay;
 
 		var p = byPlayer;
 		ball.y = p.racket.y + p.racket.height * 0.5 - ball.height * 0.5;
@@ -184,8 +185,8 @@ class TwoPlayersRoom extends BaseState {
 				0;
 		}
 
-		Timer.delay(() -> ball.velocity.set(velX, 0), delay);
+		Timer.delay(() -> ball.velocity.set(velX, 0), Math.round(delay * 1000));
 
-		twinkle(ball, FlxColor.ORANGE, delay * 0.001, 0.1);
+		twinkle(ball, FlxColor.ORANGE, delay, 0.1);
 	}
 }

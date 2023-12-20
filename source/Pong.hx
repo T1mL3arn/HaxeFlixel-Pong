@@ -10,6 +10,10 @@ import shader.CrtShader;
 typedef PongParams = {
 	ballSize:Int,
 	ballSpeed:Float,
+
+	/** Dealy before ball is served **/
+	ballServeDelay:Float,
+
 	racketLength:Int,
 	racketThickness:Int,
 	racketSpeed:Float,
@@ -22,6 +26,7 @@ class Pong extends FlxGame {
 	public static final defaultParams:PongParams = {
 		ballSize: 12,
 		ballSpeed: 310,
+		ballServeDelay: 1.5,
 		racketLength: 80,
 		racketThickness: 12,
 		racketSpeed: 225.0,
