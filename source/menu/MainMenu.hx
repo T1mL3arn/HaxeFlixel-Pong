@@ -57,9 +57,9 @@ class MainMenu extends FlxState {
 
 		menu.createPage('1_player')
 			.add(wrapMenuPage('Single Player', '
-				-| training room | link | ${TRAINING_ROOM_MENU_ID}
-				-| vs self | link | ${SELF_ROOM_MENU_ID}
 				-| vs AI | link | @ai_settings
+				-| vs self | link | ${SELF_ROOM_MENU_ID}
+				-| training room | link | ${TRAINING_ROOM_MENU_ID}
 		'))
 			.par({
 				pos: 'screen,c,c'
