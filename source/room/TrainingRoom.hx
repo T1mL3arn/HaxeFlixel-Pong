@@ -16,6 +16,8 @@ class TrainingRoom extends BaseState {
 	override function create() {
 		super.create();
 
+		Pong.resetParams();
+
 		walls = new FlxTypedGroup();
 
 		var room = LevelBuilder.inst.buildTraningRoom();
