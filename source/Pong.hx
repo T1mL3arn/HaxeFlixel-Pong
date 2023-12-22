@@ -5,6 +5,7 @@ import flixel.FlxObject;
 import flixel.tweens.FlxTween.FlxTweenManager;
 import flixel.util.FlxSignal;
 import openfl.filters.ShaderFilter;
+import room.RoomModel;
 import shader.CrtShader;
 
 typedef PongParams = {
@@ -51,7 +52,7 @@ class Pong extends FlxGame {
 	/**
 		Current room
 	**/
-	public var room:{ball:Null<Ball>};
+	public var room:RoomModel;
 
 	/**
 		Manages all ai tweens with object.
