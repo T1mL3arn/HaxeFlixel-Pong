@@ -186,7 +186,11 @@ class TwoPlayersRoom extends BaseState {
 				0;
 		}
 
-		Timer.delay(() -> ball.velocity.set(velX, 0), Math.round(delay * 1000));
+		// ball starts moving after some delay
+		Timer.delay(() -> {
+			ball.velocity.set(velX, 0);
+			GAME.signals.ballServed.dispatch();
+		}, Math.round(delay * 1000));
 
 		twinkle(ball, FlxColor.ORANGE, delay, 0.1);
 

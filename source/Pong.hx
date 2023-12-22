@@ -61,7 +61,8 @@ class Pong extends FlxGame {
 	public var aiTweens(default, null):FlxTweenManager;
 
 	public var signals:{
-		keyPress:FlxSignal
+		keyPress:FlxSignal,
+		ballServed:FlxSignal,
 	};
 
 	public function new() {
@@ -73,6 +74,7 @@ class Pong extends FlxGame {
 
 		signals = {
 			keyPress: Flixel.signals.postUpdate,
+			ballServed: new FlxTypedSignal(),
 		}
 
 		var crtShader = new CrtShader();
