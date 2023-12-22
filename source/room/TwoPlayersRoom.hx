@@ -11,6 +11,7 @@ import flixel.sound.FlxSound;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
+import flixel.util.FlxTimer;
 import menu.CongratScreen;
 import mod.BallSpeedup;
 import utils.FlxSpriteDraw.twinkle;
@@ -187,10 +188,10 @@ class TwoPlayersRoom extends BaseState {
 		}
 
 		// ball starts moving after some delay
-		Timer.delay(() -> {
+		new FlxTimer().start(delay, _ -> {
 			ball.velocity.set(velX, 0);
 			GAME.signals.ballServed.dispatch();
-		}, Math.round(delay * 1000));
+		});
 
 		twinkle(ball, FlxColor.ORANGE, delay, 0.1);
 
