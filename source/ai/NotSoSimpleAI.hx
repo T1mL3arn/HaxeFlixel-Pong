@@ -102,7 +102,6 @@ class NotSoSimpleAI extends SimpleAI {
 				case LEFT, RIGHT:
 					var targetCenterY = (ballBounds.y + ballBounds.bottom) / 2;
 					var targetRacketY = targetCenterY - racketBounds.height / 2;
-					Flixel.watch.addQuick('${racket.position}:\n$name', targetRacketY);
 
 					if (tween != null)
 						tween.cancel();
