@@ -1,5 +1,7 @@
 package math;
 
+import haxe.Log;
+import haxe.PosInfos;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.FlxState;
@@ -9,6 +11,7 @@ import flixel.math.FlxRect;
 import flixel.util.FlxColor;
 import openfl.display.Graphics;
 import utils.FlxDragManager;
+import math.LineSegment.LineSegmentTest;
 
 class RayCast {
 
@@ -17,6 +20,8 @@ class RayCast {
 	public var path(default, null):Array<FlxPoint>;
 
 	var seg:LineSegment;
+
+	public var rays:Array<LineSegment> = [];
 
 	public function new() {
 		seg = new LineSegment();
@@ -29,6 +34,11 @@ class RayCast {
 			point.put();
 		}
 		path = [];
+
+		for (ray in rays) {
+			ray.destroy();
+		}
+		rays = [];
 
 		// test intersection with room model, starting with START point
 		// if intersection (A) is found with our goal
@@ -44,17 +54,29 @@ class RayCast {
 		end.add(start.x, start.y);
 		var seg = new LineSegment(start.x, start.y, end.x, end.y);
 
+		rays.push(seg.clone());
+
+		trace('RAY CAST started');
+
 		// first point of trajectory - segment start
 		path.push(seg.start.clone());
 
 		// excluding the rect if a ray was cast outside the rect
 		// this prevents fals positive collision check
-
 		var exclude:FlxRect = Lambda.find(model, r -> r.containsPoint(seg.start));
 		var edgeNormal = FlxPoint.get(0, 0);
 
-		for (i in 0...refractions + 1) {
+		for (i in 0...refractions) {
+			trace('cast $i');
+			trace('Ray: $seg');
+
 			var pathPoint:FlxPoint = null;
+
+			var results:Array<{
+				point:FlxPoint,
+				rect:FlxRect,
+				normal:FlxPoint,
+			}> = [];
 
 			for (rect in model) {
 				// intersection point lies on a target segment
@@ -67,38 +89,71 @@ class RayCast {
 				pathPoint = seg.intersectionPointWithRect(rect, edgeNormal);
 				if (pathPoint != null) {
 
+					trace('intersection with ${rect}: $pathPoint');
+
 					// round point
-					pathPoint.set(FlxMath.roundDecimal(pathPoint.x, 1), FlxMath.roundDecimal(pathPoint.y, 1));
+					// pathPoint.set(FlxMath.roundDecimal(pathPoint.x, 1), FlxMath.roundDecimal(pathPoint.y, 1));
 
-					// path.push(seg.start.clone());
-					path.push(pathPoint);
-
-					// getting the normal of intersection
-					// to immitate ball velocity change after
-					// "collision" with the wall
-					edgeNormal.normalize().round();
-					if (Math.abs(edgeNormal.x) == 1)
-						velocity.x *= -1;
-					if (Math.abs(edgeNormal.y) == 1)
-						velocity.y *= -1;
-
-					// updating segment
-					seg.start.copyFrom(pathPoint);
-					seg.end.copyFrom(velocity).addPoint(pathPoint);
-					// seg.end.copyFrom(velocity.scale(100).truncate(1000)).add(pathPoint.x, pathPoint.y);
-					// seg.end.copyFrom(velocity).add(pathPoint.x, pathPoint.y);
-					exclude = rect;
-					break;
+					results.push({point: pathPoint, rect: rect, normal: edgeNormal.clone().normalize().round()});
+				}
+				else {
+					trace('intersection with ${rect}: NO');
 				}
 			}
 
-			// abort when no intersection was found
-			if (pathPoint == null)
+			// finding a point closest to segment's END
+			var closestPoint:FlxPoint = null;
+			var closestNormal:FlxPoint = null;
+			exclude = null;
+			var br = 1.0;
+			for (res in results) {
+				var ratio = seg.ratioOf(res.point);
+				if (ratio < br) {
+					closestPoint = res.point;
+					closestNormal = res.normal;
+					exclude = res.rect;
+					trace('exclude $exclude');
+					br = ratio;
+				}
+			}
+
+			if (closestPoint != null) {
+				var closestIntersection = closestPoint.clone();
+				var closestIntersectionNormal = closestNormal.clone();
+				for (res in results) {
+					res.point.put();
+					res.normal.put();
+				}
+
+				trace('closest intersection: $closestIntersection');
+
+				// use normal of intersection
+				// to immitate ball velocity change after
+				// "collision" with the wall
+				if (Math.abs(closestIntersectionNormal.x) == 1)
+					velocity.x *= -1;
+				if (Math.abs(closestIntersectionNormal.y) == 1)
+					velocity.y *= -1;
+
+				// updating segment
+				var endp = closestIntersection.clone(FlxPoint.weak()).addPoint(velocity);
+				seg.setPoints(closestIntersection, endp);
+
+				path.push(closestIntersection);
+				rays.push(seg.clone());
+				closestIntersectionNormal.put();
+			}
+			else {
+				// abort when no intersection was found
+				trace('NO INTERSECTIONS!');
 				break;
+			}
 		}
 
 		if (path.length == 1)
 			path.push(seg.end.clone());
+
+		trace('RAY CAST completed, points found: ${path.length}\n.\n..\n.');
 
 		seg.destroy();
 		velocity.put();
@@ -106,6 +161,7 @@ class RayCast {
 		end.put();
 		start.putWeak();
 		dir.putWeak();
+
 		return path;
 	}
 
@@ -161,6 +217,15 @@ class RayCast {
 		}
 		gfx.endFill();
 	}
+
+	public function drawRays(gfx:Graphics, color:Int = 0x7EFFA5) {
+		gfx.lineStyle(1, color, 0.33);
+		for (ray in rays) {
+			gfx.moveTo(ray.start.x, ray.start.y);
+			gfx.lineTo(ray.end.x, ray.end.y);
+		}
+		gfx.endFill();
+	}
 }
 
 class RayCastTest extends FlxState {
@@ -207,7 +272,16 @@ class RayCastTest extends FlxState {
 
 		rayCast.model = buildModel();
 		doCast();
+
+		lst = new LineSegmentTest();
+
+		// Ray: (x: 245 | y: 223.097) - (x: -64 | y: 484.097)
+		// intersection with (x: 10 | y: 20 | w: 20 | h: 400)
+		var seg = new LineSegment(245, 223.097, -64, 484.097);
+		trace('\n\nTest intersection: ${seg.intersectionPointWithRect(FlxRect.weak(10, 10, 20, 400))}\n\n');
 	}
+
+	var lst:LineSegmentTest;
 
 	function buildModel() {
 		var model = [];
@@ -242,7 +316,14 @@ class RayCastTest extends FlxState {
 	override function draw() {
 		super.draw();
 
+		// lst.update(Flixel.elapsed);
+
 		updatePositions();
+
+		if (Flixel.mouse.justMoved && Flixel.mouse.pressed) {
+			// updatePositions();
+			// doCast();
+		}
 
 		var gfx = Flixel.camera.debugLayer.graphics;
 		rayCast.draw(gfx);
@@ -252,5 +333,7 @@ class RayCastTest extends FlxState {
 		gfx.moveTo(startPoint.x, startPoint.y);
 		gfx.lineTo(endPoint.x, endPoint.y);
 		gfx.endFill();
+
+		rayCast.drawRays(gfx);
 	}
 }
