@@ -273,7 +273,7 @@ class LineSegment {
 			return null;
 
 		var r = 1.0;
-		var pointInd = 1;
+		var pointInd = 0;
 		result = points[0];
 		for (i in 0...points.length) {
 			var point = points[i];
