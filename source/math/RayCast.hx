@@ -11,7 +11,6 @@ import flixel.math.FlxRect;
 import flixel.util.FlxColor;
 import openfl.display.Graphics;
 import utils.FlxDragManager;
-import math.LineSegment.LineSegmentTest;
 
 class RayCast {
 
@@ -272,16 +271,7 @@ class RayCastTest extends FlxState {
 
 		rayCast.model = buildModel();
 		doCast();
-
-		lst = new LineSegmentTest();
-
-		// Ray: (x: 245 | y: 223.097) - (x: -64 | y: 484.097)
-		// intersection with (x: 10 | y: 20 | w: 20 | h: 400)
-		var seg = new LineSegment(245, 223.097, -64, 484.097);
-		trace('\n\nTest intersection: ${seg.intersectionPointWithRect(FlxRect.weak(10, 10, 20, 400))}\n\n');
 	}
-
-	var lst:LineSegmentTest;
 
 	function buildModel() {
 		var model = [];
