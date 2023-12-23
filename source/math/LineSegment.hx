@@ -436,8 +436,19 @@ class LineSegmentTest {
 
 		// intersection point
 		var ip = seg.intersectionPointWithRect(rect);
-		if (ip != null) {
-			// gfx.lineStyle(1, 0xFF0000);
+
+		// Well, Flixel actually has methods to find intersection
+		// but the API is confusing I didn't understand it at first
+		// so I implemented my own version.
+		// seg.start.findIntersectionInBounds()
+		// var right = new LineSegment(rect.right, rect.top, rect.right, rect.bottom);
+		// var ip = seg.start.intersectionWithSegment(seg.end - seg.start, right.start, right.end - right.start);
+
+		if (ip != null && ip.isValid()) {
+			if (ip.x < 0 || ip.x > Flixel.width || ip.y < 0 || ip.y > Flixel.height) {
+				ip.put();
+				return;
+			}
 			gfx.endFill();
 			gfx.lineStyle(null);
 			gfx.beginFill(0x00FF6A);
@@ -445,5 +456,6 @@ class LineSegmentTest {
 			gfx.endFill();
 			ip.put();
 		}
+		gfx.endFill();
 	}
 }
