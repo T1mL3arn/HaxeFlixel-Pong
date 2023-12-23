@@ -51,8 +51,19 @@ class LineSegment {
 
 	public static var EPSILON = 0.000001;
 
-	public var start:FlxPoint;
-	public var end:FlxPoint;
+	/**
+		Start coord of this segment. 
+
+		NEVER write this directly, use `set()` or `setPoints()`
+	**/
+	public var start(default, null):FlxPoint;
+
+	/**
+		End coord of this segment. 
+
+		NEVER write this directly, use `set()` or `setPoints()`
+	**/
+	public var end(default, null):FlxPoint;
 
 	/**
 		Left normal of last rect edge intersection.
@@ -71,17 +82,24 @@ class LineSegment {
 
 		xInterval = FlxPoint.get();
 		yInterval = FlxPoint.get();
-		setInterval();
+		invalidateInterval();
 	}
 
 	public function set(sx, sy, ex, ey) {
 		start.set(sx, sy);
 		end.set(ex, ey);
-		setInterval();
+		invalidateInterval();
 		return this;
 	}
 
-	function setInterval() {
+	public inline function setPoints(start:FlxPoint, end:FlxPoint):LineSegment {
+		set(start.x, start.y, end.x, end.y);
+		start.putWeak();
+		end.putWeak();
+		return this;
+	}
+
+	function invalidateInterval() {
 		xInterval.set(Math.min(start.x, end.x), Math.max(start.x, end.x));
 		yInterval.set(Math.min(start.y, end.y), Math.max(start.y, end.y));
 	}
@@ -156,7 +174,7 @@ class LineSegment {
 	public function translate(dx:Float = 0, dy:Float = 0) {
 		start.add(dx, dy);
 		end.add(dx, dy);
-		setInterval();
+		invalidateInterval();
 		return this;
 	}
 
@@ -172,7 +190,7 @@ class LineSegment {
 
 		start.rotateByRadians(rad);
 		end.rotateByRadians(rad);
-		setInterval();
+		invalidateInterval();
 		return this;
 	}
 
@@ -277,14 +295,11 @@ class LineSegment {
 		result = points[0];
 		for (i in 0...points.length) {
 			var point = points[i];
-			// finding ratio of current point on the line segment
-			// NOTE: in case of horizontal|vertical lines
-			// I have to opt out division by zero (comes from invLerp)
-			var pr = point.x == end.x ? invLerp(start.y, end.y, point.y) : invLerp(start.x, end.x, point.x);
-			if (pr < r) {
+			var ratio = ratioOf(point);
+			if (ratio < r) {
 				pointInd = i;
 				result = point;
-				r = pr;
+				r = ratio;
 			}
 		}
 
@@ -303,6 +318,17 @@ class LineSegment {
 		}
 
 		return result;
+	}
+
+	/**
+		Finds ratio of given point on the line segment,
+		assuming the given point actually lies on the line.
+		@param p 
+	**/
+	public function ratioOf(p:FlxPoint) {
+		// NOTE: in case of horizontal|vertical lines
+		// I have to opt out division by zero (comes from invLerp)
+		return p.x == end.x ? invLerp(start.y, end.y, p.y) : invLerp(start.x, end.x, p.x);
 	}
 
 	public function toString() {
