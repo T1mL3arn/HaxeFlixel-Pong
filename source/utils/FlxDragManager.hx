@@ -14,6 +14,9 @@ class FlxDragManager extends FlxBasic {
 	var objects:Array<FlxObject>;
 	var current:FlxObject;
 
+	public var onDragStart:FlxObject->Void;
+	public var onDragStop:FlxObject->Void;
+
 	public function new() {
 		super();
 		objects = [];
@@ -60,6 +63,9 @@ class FlxDragManager extends FlxBasic {
 		offset.y = FlxG.mouse.screenY + obj.scrollFactor.y * (FlxG.mouse.y - FlxG.mouse.screenY) - obj.y;
 		current = obj;
 		isDragging = true;
+
+		if (onDragStart != null)
+			onDragStart(obj);
 	}
 
 	function stopDrag(?obj:FlxObject) {
@@ -68,8 +74,12 @@ class FlxDragManager extends FlxBasic {
 			offset.y = FlxG.mouse.screenY + obj.scrollFactor.y * (FlxG.mouse.y - FlxG.mouse.screenY) - obj.y;
 		}
 		offset.set(0, 0);
+		var c = current;
 		current = null;
 		isDragging = false;
+
+		if (onDragStop != null)
+			onDragStop(c);
 	}
 
 	override function update(dt:Float) {
