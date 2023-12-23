@@ -27,7 +27,19 @@ class RayCast {
 		path = [];
 	}
 
-	public function castRay(start:FlxPoint, dir:FlxPoint, refractions:Int = 7, maxLength:Float = 0):Array<FlxPoint> {
+	/**
+		Performs a ray cast and returns a trajectory.
+		@param start Ray origin
+		@param dir Ray direction vector (its lenght is taken into account)
+		@param reflections Maximum number of reflections. 
+												With 2 reflections there will be max 3 segments of trajectory
+		@param maxLength	Ray length limit. If it zero than `dir` parameter will be used
+											as it is. Otherwise `dir` will be truncated.
+		@return List of points representing ray path.
+						In case where were no obstacles the list will contain
+						ray's `start` and `end` points.
+	**/
+	public function castRay(start:FlxPoint, dir:FlxPoint, reflections:Int = 5, maxLength:Float = 0):Array<FlxPoint> {
 
 		for (point in path) {
 			point.put();
@@ -65,7 +77,7 @@ class RayCast {
 		var exclude:FlxRect = Lambda.find(model, r -> r.containsPoint(seg.start));
 		var edgeNormal = FlxPoint.get(0, 0);
 
-		for (i in 0...refractions) {
+		for (i in 0...reflections + 1) {
 			trace('cast $i');
 			trace('Ray: $seg');
 
