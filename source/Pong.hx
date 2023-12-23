@@ -7,6 +7,7 @@ import flixel.util.FlxSignal;
 import openfl.filters.ShaderFilter;
 import room.RoomModel;
 import shader.CrtShader;
+import utils.FlxDragManager;
 
 typedef PongParams = {
 	ballSize:Int,
@@ -100,5 +101,10 @@ class Pong extends FlxGame {
 			if (Flixel.keys.justPressed.T)
 				Flixel.camera.filtersEnabled = !Flixel.camera.filtersEnabled;
 		});
+		FLixel.signals.preGameStart.add(preGameStart);
+	}
+
+	function preGameStart() {
+		Flixel.plugins.add(new FlxDragManager());
 	}
 }
