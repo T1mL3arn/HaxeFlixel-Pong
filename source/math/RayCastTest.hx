@@ -102,7 +102,5 @@ class RayCastTest extends FlxState {
 		gfx.moveTo(startPoint.x, startPoint.y);
 		gfx.lineTo(endPoint.x, endPoint.y);
 		gfx.endFill();
-
-		rayCast.drawRays(gfx);
 	}
 }
