@@ -23,7 +23,7 @@ class FlxDragManager extends FlxBasic {
 		offset = FlxPoint.get();
 	}
 
-	public function add<T:FlxObject>(object:T) {
+	public function add(object:FlxObject) {
 		if (object == null)
 			return;
 
@@ -33,7 +33,7 @@ class FlxDragManager extends FlxBasic {
 		FlxMouseEvent.add(object, startDrag, stopDrag, null, null, false);
 	}
 
-	public function remove<T:FlxObject>(object:T) {
+	public function remove(object:FlxObject) {
 		if (object == null)
 			return;
 		objects.remove(object);
