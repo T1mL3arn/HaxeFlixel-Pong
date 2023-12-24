@@ -18,9 +18,14 @@ class RayCast {
 	public var model:Array<FlxRect>;
 	public var path(default, null):Array<FlxPoint>;
 
+	public var drawCastedRays:Bool = false;
+
 	var seg:LineSegment;
 
-	public var rays:Array<LineSegment> = [];
+	/**
+		Rays for debug draw
+	**/
+	var rays:Array<LineSegment> = [];
 
 	public function new() {
 		seg = new LineSegment();
@@ -46,10 +51,12 @@ class RayCast {
 		}
 		path = [];
 
-		for (ray in rays) {
-			ray.destroy();
+		if (drawCastedRays) {
+			for (ray in rays) {
+				ray.destroy();
+			}
+			rays = [];
 		}
-		rays = [];
 
 		// test intersection with room model, starting with START point
 		// if intersection (A) is found with our goal
@@ -65,9 +72,10 @@ class RayCast {
 		end.add(start.x, start.y);
 		var seg = new LineSegment(start.x, start.y, end.x, end.y);
 
-		rays.push(seg.clone());
+		if (drawCastedRays)
+			rays.push(seg.clone());
 
-		trace('RAY CAST started');
+		// trace('RAY CAST started');
 
 		// first point of trajectory - segment start
 		path.push(seg.start.clone());
@@ -78,8 +86,8 @@ class RayCast {
 		var edgeNormal = FlxPoint.get(0, 0);
 
 		for (i in 0...reflections + 1) {
-			trace('cast $i');
-			trace('Ray: $seg');
+			// trace('cast $i');
+			// trace('Ray: $seg');
 
 			var pathPoint:FlxPoint = null;
 
@@ -100,7 +108,7 @@ class RayCast {
 				pathPoint = seg.intersectionPointWithRect(rect, edgeNormal);
 				if (pathPoint != null) {
 
-					trace('intersection with ${rect}: $pathPoint');
+					// trace('intersection with ${rect}: $pathPoint');
 
 					// round point
 					// pathPoint.set(FlxMath.roundDecimal(pathPoint.x, 1), FlxMath.roundDecimal(pathPoint.y, 1));
@@ -108,7 +116,7 @@ class RayCast {
 					results.push({point: pathPoint, rect: rect, normal: edgeNormal.clone().normalize().round()});
 				}
 				else {
-					trace('intersection with ${rect}: NO');
+					// trace('intersection with ${rect}: NO');
 				}
 			}
 
@@ -123,7 +131,7 @@ class RayCast {
 					closestPoint = res.point;
 					closestNormal = res.normal;
 					exclude = res.rect;
-					trace('exclude $exclude');
+					// trace('exclude $exclude');
 					br = ratio;
 				}
 			}
@@ -136,7 +144,7 @@ class RayCast {
 					res.normal.put();
 				}
 
-				trace('closest intersection: $closestIntersection');
+				// trace('closest intersection: $closestIntersection');
 
 				// use normal of intersection
 				// to immitate ball velocity change after
@@ -151,12 +159,15 @@ class RayCast {
 				seg.setPoints(closestIntersection, endp);
 
 				path.push(closestIntersection);
-				rays.push(seg.clone());
+
+				if (drawCastedRays)
+					rays.push(seg.clone());
+
 				closestIntersectionNormal.put();
 			}
 			else {
 				// abort when no intersection was found
-				trace('NO INTERSECTIONS!');
+				// trace('NO INTERSECTIONS!');
 				break;
 			}
 		}
@@ -164,7 +175,7 @@ class RayCast {
 		if (path.length == 1)
 			path.push(seg.end.clone());
 
-		trace('RAY CAST completed, points found: ${path.length}\n.\n..\n.');
+		// trace('RAY CAST completed, points found: ${path.length}\n.\n..\n.');
 
 		seg.destroy();
 		velocity.put();
@@ -179,19 +190,15 @@ class RayCast {
 	public function draw(gfx:Graphics) {
 		drawPath(gfx);
 		drawModel(gfx);
-
-		// draw segment;
-		gfx.lineStyle(1.5, 0xFFFFFF, 0.5);
-		gfx.moveTo(seg.start.x, seg.start.y + 15);
-		gfx.lineTo(seg.end.x, seg.end.y + 15);
-		gfx.endFill();
+		if (drawCastedRays)
+			drawRays(gfx);
 	}
 
 	public function drawPath(gfx:Graphics, color:Int = 0xFF0000) {
 		if (path.length == 0)
 			return;
 
-		var ab = 0.33;
+		var ab = 0.2;
 		var astep = (1 - ab) / path.length;
 		var start = path[0];
 		var gfx = Flixel.camera.debugLayer.graphics;
@@ -206,18 +213,12 @@ class RayCast {
 		}
 		gfx.endFill();
 
-		// rect size
-		var rs = 5;
 		// draw rects
-		for (point in path) {
-			drawRect(point, rs, color, gfx);
-		}
-	}
-
-	function drawRect(p:FlxPoint, size, color, gfx:Graphics) {
-		final hs = size * 0.5;
+		var size = 5;
 		gfx.beginFill(color, 0.8);
-		gfx.drawRect(p.x - hs, p.y - hs, size, size);
+		for (point in path) {
+			gfx.drawRect(point.x - size * 0.5, point.y - size * 0.5, size, size);
+		}
 		gfx.endFill();
 	}
 
