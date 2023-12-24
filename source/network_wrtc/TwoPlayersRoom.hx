@@ -1,6 +1,7 @@
 package network_wrtc;
 
 import flixel.FlxObject;
+import flixel.util.FlxTimer;
 import menu.BaseMenu.MenuCommand;
 import menu.CongratScreen.CongratScreenType;
 import menu.CongratScreen;
@@ -79,6 +80,7 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 		this.network = network;
 		// NOTE: never add() handlers during FlxSignal.dispatch()
 		// this.network.onMessage.add(onMessage);
+		// TODO show "user disconnected" info if user disconnects during the game
 	}
 
 	override function create() {
@@ -167,7 +169,8 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 			// I have to sync 2 times: right now and after delay
 			network.send(BallData, getBallPayload());
 
-			haxe.Timer.delay(() -> network.send(BallData, getBallPayload()), Math.round(delay * 1000));
+			// TODO probably better use haxe Timer here in netplay
+			new FlxTimer().start(delay, _ -> network.send(BallData, getBallPayload()));
 		}
 	}
 
