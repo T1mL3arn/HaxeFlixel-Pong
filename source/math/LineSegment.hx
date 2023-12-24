@@ -40,28 +40,6 @@ abstract Interval(FlxPoint) from FlxPoint to FlxPoint {
 	}
 }
 
-@:forward
-abstract IntersectionPoint(FlxPoint) from FlxPoint to FlxPoint {
-
-	/**
-		Contains left normal of edge's rect intersection
-		found with `LineSegment.intersectionPointWithRect`.
-
-		**NOTE**: Internally it uses single static variable, 
-		so the actual value 
-		@return FlxPoint
-	**/
-	public inline function intersectionLeftNormal():FlxPoint
-		return @:privateAccess LineSegment.ilNormal;
-
-	/**
-		Same as `intersectionLeftNormal`
-		@return FlxPoint 
-	**/
-	public inline function iLeftNorm():FlxPoint
-		return @:privateAccess LineSegment.ilNormal;
-}
-
 /**
 	Line segment
 **/
@@ -83,17 +61,12 @@ class LineSegment {
 	**/
 	public var end(default, null):FlxPoint;
 
-	/**
-		Left normal of last rect edge intersection.
-	**/
-	static private var ilNormal(default, null):FlxPoint = new FlxPoint();
-
 	var xInterval:Interval;
 	var yInterval:Interval;
 
+	var tmpSeg:LineSegment;
+
 	public function new(sx = 0.0, sy = 0.0, ex = 1.0, ey = 1.0) {
-		if (ilNormal == null)
-			ilNormal = new FlxPoint();
 
 		start = point(sx, sy);
 		end = point(ex, ey);
@@ -129,9 +102,10 @@ class LineSegment {
 		**NOTE**: If both segments are lie on the same line and overlaping
 		it still means NO INTERSECTION
 		@param seg 
-		@return FlxPoint
+		@param normal vector to store normal of the intersected edge
+		@return point of intersection or `null` if segments don't intersect
 	**/
-	public function intersectionPoint(seg:LineSegment):Null<FlxPoint> {
+	public function intersectionPoint(seg:LineSegment, ?normal:FlxPoint):Null<FlxPoint> {
 
 		var x1 = start.x;
 		var y1 = start.y;
@@ -171,6 +145,11 @@ class LineSegment {
 
 		// 3. so if the intersection belongs to both segments' intervals
 		if (inBounds) {
+			if (normal != null) {
+				var vec = getVector();
+				setIntersectionNormal(vec, seg, normal);
+				vec.put();
+			}
 			// 4. it is the correct intersection
 			return intersection;
 		}
@@ -265,77 +244,85 @@ class LineSegment {
 		return end.clone(p).subtractPoint(start).leftNormal(p);
 	}
 
+	public inline function getVector():FlxPoint {
+		return end.subtractNew(start);
+	}
+
 	/**
 		Returns an intersection point with given rect.
 		The closest (to the segment start) point will return.
 		@param rect 
 		@param normal vector to store normal of the intersected edge
-		@return IntersectionPoint
+		@return Intersection point or null
 	**/
-	public function intersectionPointWithRect(rect:FlxRect, ?normal:FlxPoint):Null<IntersectionPoint> {
-		// reset global normal storage
-		LineSegment.ilNormal.set(0, 0);
-		var points = [];
-		var normals = [];
-		var needNormal = normal != null;
-		var result:FlxPoint = null;
+	public function intersectionPointWithRect(rect:FlxRect, ?normal:FlxPoint):Null<FlxPoint> {
+		if (tmpSeg == null)
+			tmpSeg = new LineSegment();
 
-		var top = new LineSegment(rect.left, rect.top, rect.right, rect.top);
-		if ((result = this.intersectionPoint(top)) != null) {
-			points.push(result);
-			needNormal ? normals.push(top.leftNormal()) : 0;
-		}
+		// reset internal data structure
+		intersectionResult.ratio = 1.0;
+		intersectionResult.point = null;
+		intersectionResult.normal = normal;
+
+		// getting direction vector of this segment
+		var thisVec:FlxPoint = end.subtractNew(start);
+
+		// process every edge of given rect
+		var top = tmpSeg.set(rect.left, rect.top, rect.right, rect.top);
+		processIntersection(top, thisVec, intersectionResult);
 
 		var right = top.set(rect.right, rect.top, rect.right, rect.bottom);
-		if ((result = this.intersectionPoint(right)) != null) {
-			points.push(result);
-			needNormal ? normals.push(right.leftNormal()) : 0;
-		}
+		processIntersection(right, thisVec, intersectionResult);
 
 		var bottom = right.set(rect.right, rect.bottom, rect.left, rect.bottom);
-		if ((result = this.intersectionPoint(bottom)) != null) {
-			points.push(result);
-			needNormal ? normals.push(bottom.leftNormal()) : 0;
-		}
+		processIntersection(bottom, thisVec, intersectionResult);
 
 		var left = bottom.set(rect.left, rect.bottom, rect.left, rect.top);
-		if ((result = this.intersectionPoint(left)) != null) {
-			points.push(result);
-			needNormal ? normals.push(left.leftNormal()) : 0;
-		}
+		processIntersection(left, thisVec, intersectionResult);
 
-		left.destroy();
-		if (points.length == 0)
-			return null;
+		thisVec.put();
 
-		var r = 1.0;
-		var pointInd = 0;
-		result = points[0];
-		for (i in 0...points.length) {
-			var point = points[i];
-			var ratio = ratioOf(point);
-			if (ratio < r) {
-				pointInd = i;
-				result = point;
-				r = ratio;
+		return intersectionResult.point;
+	}
+
+	var intersectionResult:{
+		ratio:Float,
+		point:FlxPoint,
+		normal:FlxPoint,
+	} = {
+		ratio: 1.0,
+		point: null,
+		normal: null,
+	};
+
+	function processIntersection(seg:LineSegment, thisVec:FlxPoint, result) {
+		// finds intersection with given segment
+		// and updates result object
+		// with the closest intersection to this.start point
+		var intersection = intersectionPoint(seg);
+		if (intersection != null) {
+			var r = ratioOf(intersection);
+			if (r < result.ratio) {
+				result.point = intersection;
+				result.ratio = r;
+				if (result.normal != null)
+					setIntersectionNormal(thisVec, seg, result.normal);
+			}
+			else {
+				intersection.put();
 			}
 		}
+	}
 
-		result = result.clone();
-		if (needNormal) {
-			normal.copyFrom(normals[pointInd]);
-			ilNormal.copyFrom(normal);
+	function setIntersectionNormal(thisVec:FlxPoint, seg:LineSegment, normal:FlxPoint) {
+		// getting segment vector
+		var segVec = seg.end.subtractNew(seg.start);
+
+		if (thisVec.dotProduct(segVec.leftNormal(normal)) > 0) {
+			segVec.rightNormal(normal);
 		}
-
-		for (point in points) {
-			point.put();
-		}
-
-		for (n in normals) {
-			n.put();
-		}
-
-		return result;
+		normal.normalize();
+		segVec.put();
 	}
 
 	/**

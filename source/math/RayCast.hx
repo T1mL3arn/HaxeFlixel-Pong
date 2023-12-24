@@ -107,7 +107,7 @@ class RayCast {
 					// round point
 					// pathPoint.set(FlxMath.roundDecimal(pathPoint.x, 1), FlxMath.roundDecimal(pathPoint.y, 1));
 
-					results.push({point: pathPoint, rect: rect, normal: edgeNormal.clone().normalize().round()});
+					results.push({point: pathPoint, rect: rect, normal: edgeNormal.clone()});
 				}
 				else {
 					// trace('intersection with ${rect}: NO');
@@ -140,15 +140,10 @@ class RayCast {
 
 				// trace('closest intersection: $closestIntersection');
 
-				// use normal of intersection
-				// to immitate ball velocity change after
-				// "collision" with the wall
-				if (Math.abs(closestIntersectionNormal.x) == 1)
-					velocity.x *= -1;
-				if (Math.abs(closestIntersectionNormal.y) == 1)
-					velocity.y *= -1;
+				// reflect velocity vector for next reflected segment
+				velocity.bounce(closestIntersectionNormal, 1);
 
-				// updating segment
+				// make the segment to be reflected one
 				var endp = closestIntersection.clone(FlxPoint.weak()).addPoint(velocity);
 				seg.setPoints(closestIntersection, endp);
 
