@@ -34,7 +34,7 @@ class RayCast {
 		@param maxLength	Ray length limit. If it zero than `dir` parameter will be used
 											as it is. Otherwise `dir` will be truncated.
 		@return List of points representing ray path.
-						In case where were no obstacles the list will contain
+						In case of no obstacles the list will contain
 						ray's `start` and `end` points.
 	**/
 	public function castRay(start:FlxPoint, dir:FlxPoint, reflections:Int = 5, maxLength:Float = 0):Array<FlxPoint> {
