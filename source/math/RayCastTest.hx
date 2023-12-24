@@ -87,8 +87,6 @@ class RayCastTest extends FlxState {
 	override function draw() {
 		super.draw();
 
-		// lst.update(Flixel.elapsed);
-
 		updatePositions();
 
 		if (Flixel.mouse.justMoved && Flixel.mouse.pressed) {
