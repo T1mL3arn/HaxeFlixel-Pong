@@ -7,6 +7,7 @@ import flixel.math.FlxPoint;
 import flixel.math.FlxRect;
 import flixel.util.FlxColor;
 import utils.FlxSpriteDraw.lerpPoint;
+import math.MathUtils.point;
 
 /**
 	Represents interval like [min, max]
@@ -94,11 +95,11 @@ class LineSegment {
 		if (ilNormal == null)
 			ilNormal = new FlxPoint();
 
-		start = FlxPoint.get(sx, sy);
-		end = FlxPoint.get(ex, ey);
+		start = point(sx, sy);
+		end = point(ex, ey);
 
-		xInterval = FlxPoint.get();
-		yInterval = FlxPoint.get();
+		xInterval = point();
+		yInterval = point();
 		invalidateInterval();
 	}
 
@@ -162,7 +163,7 @@ class LineSegment {
 		var py = ((x1 * y2 - y1 * x2) * l2_dy - l1_dy * (x3 * y4 - y3 * x4)) / denominator;
 
 		// 1. here is an intersection point like these are LINES and not SEGMENTS!
-		var intersection = FlxPoint.get(px, py);
+		var intersection = point(px, py);
 
 		// 2. the idea is to test that intersection point lies
 		// inside both X and Y intervals constructed from segments
@@ -260,7 +261,7 @@ class LineSegment {
 	}
 
 	public function leftNormal(?p:FlxPoint):FlxPoint {
-		p = p ?? FlxPoint.get(0, 0);
+		p = p ?? point(0, 0);
 		return end.clone(p).subtractPoint(start).leftNormal(p);
 	}
 

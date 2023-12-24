@@ -9,6 +9,7 @@ import flixel.math.FlxRect;
 import flixel.path.FlxPath;
 import flixel.util.FlxSpriteUtil;
 import math.LineSegment;
+import math.MathUtils.wp;
 import math.RayCast;
 import openfl.display.Graphics;
 
@@ -123,9 +124,9 @@ class SmartAI extends SimpleAI {
 		var bhs = ball.width * 0.5;
 		var x = ball.x + bhs;
 		var y = ball.y + bhs;
-		var rayEnd = FlxPoint.weak().copyFrom(ball.velocity).scale(100);
+		var rayEnd = wp().copyFrom(ball.velocity).scale(100);
 
-		rayCast.castRay(FlxPoint.weak(x, y), rayEnd, 10, 1000);
+		rayCast.castRay(wp(x, y), rayEnd, 10, 1000);
 	}
 
 	override function update(dt:Float) {

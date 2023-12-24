@@ -31,3 +31,13 @@ overload extern inline function wp(x:Float = 0, y:Float = 0):FlxPoint {
 inline function p(x = 0.0, y = 0.0):FlxPoint {
 	return FlxPoint.get(x, y);
 }
+
+/**
+	Retrives a new point from the pool.
+	@param x = 0.0 
+	@param y = 0.0 
+	@return FlxPoint
+**/
+inline function point(x = 0.0, y = 0.0):FlxPoint {
+	return FlxPoint.get(x, y);
+}

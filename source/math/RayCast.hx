@@ -4,6 +4,7 @@ import flixel.FlxObject;
 import flixel.math.FlxPoint;
 import flixel.math.FlxRect;
 import openfl.display.Graphics;
+import math.MathUtils.point;
 
 class RayCast {
 
@@ -76,7 +77,7 @@ class RayCast {
 		// excluding the rect if a ray was cast outside the rect
 		// this prevents fals positive collision check
 		var exclude:FlxRect = Lambda.find(model, r -> r.containsPoint(seg.start));
-		var edgeNormal = FlxPoint.get(0, 0);
+		var edgeNormal = point(0, 0);
 
 		for (i in 0...reflections + 1) {
 			// trace('cast $i');

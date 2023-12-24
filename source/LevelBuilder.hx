@@ -8,6 +8,7 @@ import flixel.FlxSprite;
 import flixel.math.FlxPoint;
 import flixel.util.FlxColor;
 import flixel.util.FlxDirection;
+import math.MathUtils.wp;
 import utils.FlxSpriteDraw.DashedLineStyle;
 import utils.FlxSpriteDraw.drawDashedLine;
 
@@ -165,7 +166,7 @@ class LevelBuilder {
 			// dashLength: 20,
 			// gapLength: 20,
 		};
-		drawDashedLine(middleLine, FlxPoint.weak(th / 2, 15), FlxPoint.weak(th / 2, Flixel.height - 15), lineStyle);
+		drawDashedLine(middleLine, wp(th / 2, 15), wp(th / 2, Flixel.height - 15), lineStyle);
 		middleLine.screenCenter();
 
 		var batHole = Math.ceil(Pong.params.ballSize * 1.5);
