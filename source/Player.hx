@@ -33,7 +33,13 @@ class Player extends FlxGroup {
 	public var name:String;
 	public var uid:String;
 	public var racket:Racket;
+
+	/**
+		If you set this to `null` previous controller 
+		is not destroyed automatically!
+	**/
 	public var racketController(default, set):RacketController;
+
 	public var score(default, set):Int = 0;
 	public var scoreLabel:FlxText;
 	public var scoreLabelText:String = '';
@@ -79,7 +85,6 @@ class Player extends FlxGroup {
 	function set_racketController(v:RacketController):RacketController {
 		if (racketController != null) {
 			remove(racketController, true);
-			racketController.destroy();
 		}
 		if (v != null)
 			add(v);
