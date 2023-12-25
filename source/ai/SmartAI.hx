@@ -13,24 +13,12 @@ import math.MathUtils.wp;
 import math.RayCast;
 import openfl.display.Graphics;
 
-class WallModel extends FlxRect {
-
-	public var source:FlxObject;
-}
-
 class SmartAI extends SimpleAI {
 
 	/**
 		Room objects to model ball trajectory 
 	**/
 	var roomModel:Array<FlxRect>;
-
-	/**
-		Link between real flixel objects and their models.
-	**/
-	var objToModel:Map<FlxObject, FlxRect>;
-
-	final maxTrajectorySegments:Int = 10;
 
 	public function new(racket, name) {
 		super(racket, name);
@@ -50,9 +38,12 @@ class SmartAI extends SimpleAI {
 		path = [];
 
 		rayCast = new RayCast();
+		rayCast2 = new RayCast();
+		rayCast2.trajectoryColor = 0xFFBB00;
 	}
 
 	var rayCast:RayCast;
+	var rayCast2:RayCast;
 
 	override function destroy() {
 		super.destroy();
@@ -77,10 +68,8 @@ class SmartAI extends SimpleAI {
 
 	function buildRoomModel() {
 
-		objToModel = new ObjectMap();
 		roomModel = [];
 
-		// ~adjust~ box
 		final bhw = GAME.room.ball.width * 0.5;
 
 		// - use ball's center of mass to calc its trajectory and collisions
@@ -90,8 +79,8 @@ class SmartAI extends SimpleAI {
 		for (w in GAME.room.walls.members) {
 			var box = w.getHitbox();
 			if (w is Racket) {
-				// wall model from racket inflates to fill
-				// entire screen height
+				// wall model from racket get scaled to fill
+				// the entire screen height
 				box.top = 0;
 				box.bottom = Flixel.height;
 			}
@@ -102,16 +91,20 @@ class SmartAI extends SimpleAI {
 			box.bottom += bhw;
 
 			roomModel.push(box);
-			objToModel.set(w, box);
 		}
 
-		rayCast.model = roomModel;
-		rayCast.objToModel = objToModel;
+		rayCast.model = rayCast2.model = roomModel;
 	}
 
 	var path:Array<FlxPoint>;
 
 	function calcTrajectory(object:FlxObject, ball:Ball) {
+
+		// trajectory is calculated only when
+		// - ball is served
+		// - when ball is hit by other racket
+		if (!(object == null || object is Racket))
+			return;
 
 		// test intersection with room model, starting with START point
 		// if intersection (A) is found with our goal
@@ -124,19 +117,26 @@ class SmartAI extends SimpleAI {
 		var bhs = ball.width * 0.5;
 		var x = ball.x + bhs;
 		var y = ball.y + bhs;
-		var rayEnd = wp().copyFrom(ball.velocity).scale(100);
+		var ray1 = wp().copyFrom(ball.velocity);
+		// max trajectory length is a diagonal of screen
+		ray1.length = Math.sqrt(Math.pow(Flixel.width, 2) + Math.pow(Flixel.height, 2));
+		var ray2 = ray1.clone(wp());
 
-		rayCast.castRay(wp(x, y), rayEnd, 10, 1000);
+		var error = 0.5;
+		ray1.rotateByDegrees(-error);
+		ray2.rotateByDegrees(error);
+
+		rayCast.castRay(wp(x, y), ray1, 3);
+		rayCast2.castRay(wp(x, y), ray2, 3);
 	}
 
 	override function update(dt:Float) {
 		super.update(dt);
 
-		// if (path.length > (maxTrajectorySegments + 1))
-		// 	path = path.slice(path.length - (maxTrajectorySegments + 1));
-
 		rayCast.draw(Flixel.camera.debugLayer.graphics);
+		rayCast2.draw(Flixel.camera.debugLayer.graphics);
 
+		return;
 		// draw
 		var gfx = Flixel.camera.debugLayer.graphics;
 		// draw ball velocity

@@ -15,6 +15,8 @@ class RayCast {
 
 	public var drawCastedRays:Bool = false;
 
+	public var trajectoryColor:Int = 0xFF0000;
+
 	var ray:LineSegment;
 
 	/**
@@ -174,7 +176,7 @@ class RayCast {
 	}
 
 	public function draw(gfx:Graphics) {
-		drawPath(gfx);
+		drawPath(gfx, trajectoryColor);
 		drawModel(gfx);
 		if (drawCastedRays)
 			drawRays(gfx);
@@ -187,7 +189,6 @@ class RayCast {
 		var ab = 0.2;
 		var astep = (1 - ab) / path.length;
 		var start = path[0];
-		var gfx = Flixel.camera.debugLayer.graphics;
 
 		// draw lines
 		var w = 1.5;
@@ -202,7 +203,7 @@ class RayCast {
 
 		// draw rects
 		var size = 5;
-		gfx.beginFill(color, 0.8);
+		gfx.beginFill(color, 0.6);
 		for (point in path) {
 			gfx.drawRect(point.x - size * 0.5, point.y - size * 0.5, size, size);
 		}
