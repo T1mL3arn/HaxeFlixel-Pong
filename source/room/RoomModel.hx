@@ -6,8 +6,8 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 typedef RoomModel = {
 
 	/**
-		Solid objects to test collision agains ball.
-		This could contain not solid walls but rackets as well
+		Solid objects to test collision against ball.
+		This can contain not just solid walls but rackets as well
 	**/
 	public var walls:FlxTypedGroup<FlxObject>;
 
