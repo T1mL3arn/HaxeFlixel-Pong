@@ -1,5 +1,6 @@
 package math;
 
+import flixel.math.FlxMath;
 import flixel.math.FlxPoint;
 
 /**
@@ -40,4 +41,8 @@ inline function p(x = 0.0, y = 0.0):FlxPoint {
 **/
 inline function point(x = 0.0, y = 0.0):FlxPoint {
 	return FlxPoint.get(x, y);
+}
+
+overload extern inline function lerp(a:FlxPoint, b:FlxPoint, r:Float = 0.5, ?p:FlxPoint):FlxPoint {
+	return (p ?? point(0, 0)).set(FlxMath.lerp(a.x, b.x, r), FlxMath.lerp(a.y, b.y, r));
 }
