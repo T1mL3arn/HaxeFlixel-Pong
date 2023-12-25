@@ -143,6 +143,7 @@ class Racket extends FlxSprite {
 				ball.velocity.setPolarDegrees(magnitude, angle);
 				if (position == RIGHT)
 					ball.velocity.x *= -1;
+			// trace('bounce segment: $speedScale');
 			case UP, DOWN:
 				throw "Implement it later";
 		}
