@@ -10,11 +10,10 @@ import math.MathUtils.wp;
 
 class RayCast {
 
-	public var objToModel:Map<FlxObject, FlxRect>;
 	public var model:Array<FlxRect>;
 	public var path(default, null):Array<FlxPoint>;
 
-	public var drawCastedRays:Bool = true;
+	public var drawCastedRays:Bool = false;
 
 	var ray:LineSegment;
 
@@ -134,7 +133,7 @@ class RayCast {
 
 		// trace('RAY CAST completed, points found: ${path.length}\n.\n..\n.');
 
-		ray.destroy();
+		ray.set(0, 0, 0, 0);
 		velocity.put();
 		end.put();
 		normal.put();
@@ -191,12 +190,13 @@ class RayCast {
 		var gfx = Flixel.camera.debugLayer.graphics;
 
 		// draw lines
+		var w = 1.5;
 		gfx.moveTo(start.x, start.y);
-		gfx.lineStyle(3, color, 0.5);
+		gfx.lineStyle(w, color, 0.5);
 		for (i in 1...path.length) {
 			var p = path[i];
 			gfx.lineTo(p.x, p.y);
-			gfx.lineStyle(3, color, 0.5 + astep * (i - 1));
+			gfx.lineStyle(w, color, 0.5 + astep * (i - 1));
 		}
 		gfx.endFill();
 
