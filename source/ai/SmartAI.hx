@@ -122,59 +122,71 @@ class SmartAI extends SimpleAI {
 		ray1.length = Math.sqrt(Math.pow(Flixel.width, 2) + Math.pow(Flixel.height, 2));
 		var ray2 = ray1.clone(wp());
 
-		var error = 0.5;
+		var error = 0.6;
 		ray1.rotateByDegrees(-error);
 		ray2.rotateByDegrees(error);
 
 		var t1 = rayCast.castRay(ballPos, ray1, 3, 0, thisGoal);
 		var t2 = rayCast2.castRay(ballPos, ray2, 3, 0, thisGoal);
 
+		// possible ball position segment
+		var p1 = t1[t1.length - 1].clone();
+		var p2 = t2[t2.length - 1].clone();
+
 		if (t1.length == t2.length) {
 			// 99% sure trajectories are hit the same vertical wall
 
 			// TODO be 100% sure that last points of both trajectories
-			// are lie on the same vertical line, or at least "close enough".
-
-			var p1 = t1[t1.length - 1].clone();
-			var p2 = t2[t2.length - 1].clone();
+			// are lie on the same vertical line, or at least "close enough" ?
 
 			target = lerp(p1, p2, Flixel.random.int(0, 1000) * 0.001, target);
 
-			p1.put();
-			p2.put();
-
-			target = calcRacketDestination(ball);
+			target = calcRacketDestination(ball, target);
 			moveRacketTo(target);
 		}
 		else {
-			// but if they dont ???
+			// but if these trajectories dont ???
+
+			var closest = p1.distSquared(wp(racket.x, racket.y)) < p2.distSquared(wp(racket.x, racket.y)) ? p1 : p2;
+
+			target.copyFrom(closest);
+			target = calcRacketDestination(ball, target);
+			moveRacketTo(target);
 		}
 
+		p1.put();
+		p2.put();
 		ballPos.put();
 	}
 
 	function getBall() {}
 
 	var bouncePlaceBias = [0.4, 1.0, 0.7, 0.1, 0.7, 1.0, 0.4];
-	var bouncePlace = [-3, -2, -1, 0, 1, 2, 3];
+	var bouncePlace = [-3, -2, -1, 0, 1, 2, 3].map(x -> x + 3);
 
-	function calcRacketDestination(ball:Ball):FlxPoint {
+	function calcRacketDestination(ball:Ball, ballPos:FlxPoint):FlxPoint {
 		var bhs = ball.width * 0.5;
 		// var ballBounds = ball.getHitbox(tmprect1);
 		var racketBounds = racket.getHitbox(tmprect2);
 
 		switch (racket.position) {
 			case LEFT, RIGHT:
-				// expand target to be in range of ball's size
-				var targetCenterY = Flixel.random.float(target.y - bhs * 0.99, target.y + bhs);
-				var targetRacketY = targetCenterY - racketBounds.height / 2;
+				var target = ballPos;
 
-				// Flixel.random.getObject()
+				// in model the target point represents ball's center,
+				// here I convert modeled Y back to ball's real Y
+				target.y -= ball.height * 0.5;
 
+				// TODO store and read this from racket?
+				final segmentCount = 7;
+				var hitZone = racket.height + ball.height;
+				var segmentSize = hitZone / segmentCount;
 				// randomly choose what part of 7-parts model to use
 				var part = Flixel.random.getObject(bouncePlace, bouncePlaceBias);
-				// convert
-				// get racket size according to 7-parts model
+				trace('chosen bounce segment ${part - 3}');
+				// displacement of racket in relation to target
+				var racketDisplacement = -(segmentSize * part + FLixel.random.float(0, segmentSize));
+				var targetRacketY = target.y + racketDisplacement;
 
 				return target.set(racket.x, targetRacketY);
 			case UP, DOWN:
