@@ -16,22 +16,39 @@ import math.MathUtils.wp;
 import math.RayCast;
 import openfl.display.Graphics;
 
+typedef SmartAIParams = {
+
+	/**
+		Angle variance in degrees
+	**/
+	angleVariance:Float,
+
+	bouncePlaceBias:Array<Float>,
+};
+
+/**
+	- listens ball_serve and ball_collision
+	- on these signals calcs possible ball trajectory
+	- if trajectory is towards this AI - find the best spot to hit the ball
+**/
 class SmartAI extends SimpleAI {
 
 	public var drawTrajectory:Bool = true;
 
 	var target:FlxPoint;
 
+	var SETTINGS:SmartAIParams = {
+		angleVariance: 0.6,
+		bouncePlaceBias: [0.4, 1.0, 0.7, 0.1, 0.7, 1.0, 0.4],
+	};
+
+	// bias for ball serve to be sure that AI never misses the first ball
+	var bouncePlaceBiasSafe = [0.0, 1.0, 0.7, 0.1, 0.7, 1.0, 0.0];
+
 	public function new(racket, name) {
 		super(racket, name);
 
 		// how does this AI work?
-
-		/**
-			- listens ball_serve and ball_collision
-			- on these signals calcs possible ball trajectory
-			- if trajectory is towards this AI - find the best spot to hit the ball
-		**/
 
 		GAME.ballCollision.add(calcTrajectory);
 		GAME.signals.ballServed.add(onBallServed);
@@ -103,6 +120,9 @@ class SmartAI extends SimpleAI {
 
 	function calcTrajectory(object:FlxObject, ball:Ball) {
 
+		// TODO when ball is served (object arg will be null)
+		// then never try to bounce the ball with racket's angles
+
 		// trajectory is calculated only when:
 		// - ball is served
 		// - when ball is hit by other racket
@@ -122,9 +142,8 @@ class SmartAI extends SimpleAI {
 		ray1.length = Math.sqrt(Math.pow(Flixel.width, 2) + Math.pow(Flixel.height, 2));
 		var ray2 = ray1.clone(wp());
 
-		var error = 0.6;
-		ray1.rotateByDegrees(-error);
-		ray2.rotateByDegrees(error);
+		ray1.rotateByDegrees(-SETTINGS.angleVariance);
+		ray2.rotateByDegrees(SETTINGS.angleVariance);
 
 		var t1 = rayCast.castRay(ballPos, ray1, 3, 0, thisGoal);
 		var t2 = rayCast2.castRay(ballPos, ray2, 3, 0, thisGoal);
@@ -132,6 +151,12 @@ class SmartAI extends SimpleAI {
 		// possible ball position segment
 		var p1 = t1[t1.length - 1].clone();
 		var p2 = t2[t2.length - 1].clone();
+
+		// adjusting bias for the ball-serve case
+		var biasOriginal = SETTINGS.bouncePlaceBias;
+		if (object == null) {
+			SETTINGS.bouncePlaceBias = bouncePlaceBiasSafe;
+		}
 
 		if (t1.length == t2.length) {
 			// 99% sure trajectories are hit the same vertical wall
@@ -154,14 +179,14 @@ class SmartAI extends SimpleAI {
 			moveRacketTo(target);
 		}
 
+		// restoring bias
+		SETTINGS.bouncePlaceBias = biasOriginal;
+
 		p1.put();
 		p2.put();
 		ballPos.put();
 	}
 
-	function getBall() {}
-
-	var bouncePlaceBias = [0.4, 1.0, 0.7, 0.1, 0.7, 1.0, 0.4];
 	var bouncePlace = [-3, -2, -1, 0, 1, 2, 3].map(x -> x + 3);
 
 	function calcRacketDestination(ball:Ball, ballPos:FlxPoint):FlxPoint {
@@ -182,8 +207,9 @@ class SmartAI extends SimpleAI {
 				var hitZone = racket.height + ball.height;
 				var segmentSize = hitZone / segmentCount;
 				// randomly choose what part of 7-parts model to use
-				var part = Flixel.random.getObject(bouncePlace, bouncePlaceBias);
-				trace('chosen bounce segment ${part - 3}');
+				var part = Flixel.random.getObject(bouncePlace, SETTINGS.bouncePlaceBias);
+				// trace('chosen bounce segment ${part - 3}');
+
 				// displacement of racket in relation to target
 				var racketDisplacement = -(segmentSize * part + FLixel.random.float(0, segmentSize));
 				var targetRacketY = target.y + racketDisplacement;
