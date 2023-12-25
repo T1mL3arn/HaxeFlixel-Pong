@@ -49,11 +49,13 @@ class RayCast {
 												With 2 reflections there will be max 3 segments of trajectory
 		@param maxLength	Ray length limit. If it zero than `dir` parameter will be used
 											as it is. Otherwise `dir` will be truncated.
+		@param target When it is set then method will return when the ray hits this rect
+									without reflecting any longer.
 		@return List of points representing ray path.
 						In case of no obstacles the list will contain
 						ray's `start` and `end` points.
 	**/
-	public function castRay(start:FlxPoint, dir:FlxPoint, reflections:Int = 5, maxLength:Float = 0):Array<FlxPoint> {
+	public function castRay(start:FlxPoint, dir:FlxPoint, reflections:Int = 5, maxLength:Float = 0, ?target:FlxRect):Array<FlxPoint> {
 
 		for (point in path) {
 			point.put();
@@ -122,6 +124,11 @@ class RayCast {
 
 				if (drawCastedRays)
 					rays.push(ray.clone());
+
+				if (target != null && target == castResult.exclude) {
+					// trace('Found target rect, stop reflecting');
+					break;
+				}
 			}
 			else {
 				// abort when no intersection was found
@@ -225,5 +232,26 @@ class RayCast {
 			gfx.lineTo(ray.end.x, ray.end.y);
 		}
 		gfx.endFill();
+	}
+
+	public function destroy() {
+		for (rect in model) {
+			if (@:privateAccess !rect._inPool)
+				rect.put();
+		}
+		model = null;
+
+		for (point in path) {
+			point.put();
+		}
+		path = null;
+
+		for (ray in rays) {
+			ray.destroy();
+		}
+		rays = null;
+
+		ray.destroy();
+		ray = null;
 	}
 }
