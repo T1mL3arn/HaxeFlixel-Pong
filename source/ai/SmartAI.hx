@@ -27,6 +27,10 @@ typedef SmartAIParams = {
 };
 
 /**
+	This AI calculates ball trajectory to find the best
+	spot to bounce the ball. Potentially can be made to never
+	miss the ball.
+
 	- listens ball_serve and ball_collision
 	- on these signals calcs possible ball trajectory
 	- if trajectory is towards this AI - find the best spot to hit the ball
@@ -120,21 +124,11 @@ class SmartAI extends SimpleAI {
 
 	function calcTrajectory(object:FlxObject, ball:Ball) {
 
-		// TODO when ball is served (object arg will be null)
-		// then never try to bounce the ball with racket's angles
-
 		// trajectory is calculated only when:
 		// - ball is served
 		// - when ball is hit by other racket
 		if (!(object == null || (object is Racket && object != racket)))
 			return;
-
-		// test intersection with room model, starting with START point
-		// if intersection (A) is found with our goal
-		// 		calc position to bounce
-		// otherwise
-		// 		add data to the trajectory path (?)
-		// 		start new intersection test starting at (A)
 
 		var ballPos = ball.getWorldPos();
 		var ray1 = ball.velocity.clone(wp());
@@ -153,6 +147,8 @@ class SmartAI extends SimpleAI {
 		var p2 = t2[t2.length - 1].clone();
 
 		// adjusting bias for the ball-serve case
+		// so the AI will never try to bounce a ball
+		// with racket's angles in ball-serve
 		var biasOriginal = SETTINGS.bouncePlaceBias;
 		if (object == null) {
 			SETTINGS.bouncePlaceBias = bouncePlaceBiasSafe;
