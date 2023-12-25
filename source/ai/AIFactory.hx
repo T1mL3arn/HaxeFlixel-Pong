@@ -18,7 +18,7 @@ function setAIPlayer(opts:PlayerOptions, aiType:String) {
 			opts.getController = racket -> NotSoSimpleAI.buildMediumAI(racket, opts.name);
 		case 'hard':
 			opts.name = 'hard AI (${opts.position})';
-			opts.getController = racket -> new SimpleAI(racket);
+			opts.getController = racket -> new SmartAI(racket, opts.name);
 		default:
 			opts.name = 'easy AI (${opts.position})';
 			opts.getController = racket -> NotSoSimpleAI.buildEasyAI(racket, opts.name);
