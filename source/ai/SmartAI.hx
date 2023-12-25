@@ -20,11 +20,6 @@ class SmartAI extends SimpleAI {
 
 	public var drawTrajectory:Bool = true;
 
-	/**
-		Room objects to model ball trajectory 
-	**/
-	var roomModel:Array<FlxRect>;
-
 	var target:FlxPoint;
 
 	public function new(racket, name) {
@@ -63,10 +58,6 @@ class SmartAI extends SimpleAI {
 
 		Flixel.signals.postStateSwitch.remove(buildRoomModel);
 
-		for (rect in roomModel) {
-			rect.put();
-		}
-
 		rayCast.destroy();
 		rayCast2.destroy();
 
@@ -79,7 +70,7 @@ class SmartAI extends SimpleAI {
 
 	function buildRoomModel() {
 
-		roomModel = [];
+		var roomModel = [];
 
 		final bhw = GAME.room.ball.width * 0.5;
 
