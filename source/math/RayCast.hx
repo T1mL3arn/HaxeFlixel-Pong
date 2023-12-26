@@ -14,6 +14,7 @@ class RayCast {
 	public var path(default, null):Array<FlxPoint>;
 
 	public var drawCastedRays:Bool = false;
+	public var drawCollisionModel:Bool = false;
 
 	public var trajectoryColor:Int = 0xFF0000;
 
@@ -184,7 +185,8 @@ class RayCast {
 
 	public function draw(gfx:Graphics) {
 		drawPath(gfx, trajectoryColor);
-		drawModel(gfx);
+		if (drawCollisionModel)
+			drawModel(gfx);
 		if (drawCastedRays)
 			drawRays(gfx);
 	}
