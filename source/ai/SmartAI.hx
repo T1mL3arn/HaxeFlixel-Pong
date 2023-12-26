@@ -37,7 +37,7 @@ typedef SmartAIParams = {
 **/
 class SmartAI extends SimpleAI {
 
-	public var drawTrajectory:Bool = true;
+	public var drawTrajectory:Bool = false;
 
 	var target:FlxPoint;
 
@@ -233,20 +233,26 @@ class SmartAI extends SimpleAI {
 		tween = GAME.aiTweens.tween(racket, {y: p.y, x: p.x}, duration, {ease: FlxEase.linear});
 	}
 
-	override function update(dt:Float) {
+	override function update(dt:Float) {}
 
-		if (drawTrajectory) {
-			rayCast.draw(Flixel.camera.debugLayer.graphics);
-			rayCast2.draw(Flixel.camera.debugLayer.graphics);
+	override function draw() {
+		super.draw();
 
-			return;
-			var gfx = Flixel.camera.debugLayer.graphics;
-			// draw ball velocity
-			var ball = GAME.room.ball;
-			gfx.lineStyle(1.5, 0x00FF55, 0.5);
-			gfx.moveTo(ball.x, ball.y - 15);
-			gfx.lineTo(ball.velocity.x + ball.x, ball.velocity.y + ball.y - 15);
-			gfx.endFill();
-		}
+		if (drawTrajectory)
+			debugDraw();
+	}
+
+	function debugDraw() {
+		rayCast.draw(Flixel.camera.debugLayer.graphics);
+		rayCast2.draw(Flixel.camera.debugLayer.graphics);
+
+		return;
+		var gfx = Flixel.camera.debugLayer.graphics;
+		// draw ball velocity
+		var ball = GAME.room.ball;
+		gfx.lineStyle(1.5, 0x00FF55, 0.5);
+		gfx.moveTo(ball.x, ball.y - 15);
+		gfx.lineTo(ball.velocity.x + ball.x, ball.velocity.y + ball.y - 15);
+		gfx.endFill();
 	}
 }
