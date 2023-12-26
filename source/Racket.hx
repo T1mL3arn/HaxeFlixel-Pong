@@ -137,10 +137,13 @@ class Racket extends FlxSprite {
 				// let's use 1/7 of the current ball's speed as addition.
 				// This gives the maximum available added speed (at the paddle corner)
 				// to be 3/7 of the current ball's speed (almost a half).
-				var speedModPerStep = Pong.params.ballSpeed / 7;
-				ball.velocity.setPolarDegrees(Pong.params.ballSpeed + Math.abs(speedScale * speedModPerStep), angleStep * speedScale);
+				final speedModPerStep = Pong.params.ballSpeed / 7;
+				final magnitude = Pong.params.ballSpeed + Math.abs(speedScale * speedModPerStep);
+				final angle = angleStep * speedScale;
+				ball.velocity.setPolarDegrees(magnitude, angle);
 				if (position == RIGHT)
 					ball.velocity.x *= -1;
+			// trace('bounce segment: $speedScale');
 			case UP, DOWN:
 				throw "Implement it later";
 		}

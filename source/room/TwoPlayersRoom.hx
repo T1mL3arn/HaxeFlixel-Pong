@@ -8,10 +8,13 @@ import flixel.FlxBasic;
 import flixel.FlxObject;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.sound.FlxSound;
+import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
+import flixel.util.FlxTimer;
 import menu.CongratScreen;
 import mod.BallSpeedup;
+import utils.FlxSpriteDraw.twinkle;
 
 using Lambda;
 using StringTools;
@@ -145,12 +148,18 @@ class TwoPlayersRoom extends BaseState {
 		winner = players.find(p -> p.score >= Pong.params.scoreToWin);
 		if (winner != null) {
 			trace('Winner: ${winner.name} !');
+
+			// place ball out of goals to fix rare bug
+			// with two immediate win events
+			ball.x = 100;
+			ball.y = -100;
+
 			canPause = true;
 			canOpenPauseMenu = false;
 			for (player in players) {
 				player.active = false;
 				// AI moves its racket with FlxTween, so such tweens must be canceled.
-				GAME.gameTweens.cancelTweensOf(player.racket);
+				GAME.aiTweens.cancelTweensOf(player.racket);
 			}
 			showCongratScreen(winner, FOR_WINNER);
 		}
@@ -169,7 +178,8 @@ class TwoPlayersRoom extends BaseState {
 		openSubState(new CongratScreen(playAgainAction).setWinner(player.name, screenType));
 	}
 
-	function serveBall(byPlayer:Player, ball:Ball, delay:Int = 1000) {
+	function serveBall(byPlayer:Player, ball:Ball, ?delay:Float) {
+		delay = delay ?? Pong.params.ballServeDelay;
 
 		var p = byPlayer;
 		ball.y = p.racket.y + p.racket.height * 0.5 - ball.height * 0.5;
@@ -183,6 +193,24 @@ class TwoPlayersRoom extends BaseState {
 				0;
 		}
 
-		Timer.delay(() -> ball.velocity.set(velX, 0), delay);
+		// ball starts moving after some delay
+		new FlxTimer().start(delay, _ -> {
+			ball.velocity.set(velX, 0);
+			GAME.signals.ballServed.dispatch();
+		});
+
+		twinkle(ball, FlxColor.ORANGE, delay, 0.1);
+
+		// scale-out effect for the ball
+		final scale = 5.0;
+		var tb = ball.clone();
+		tb.setPosition(ball.x, ball.y);
+		FlxTween.tween(tb.scale, {x: scale, y: scale}, delay * 0.5, {ease: FlxEase.linear});
+		FlxTween.tween(tb, {alpha: 0.0}, delay * 0.5, {
+			ease: FlxEase.linear,
+			// remove and destroy temp ball after tween is complete
+			onComplete: _ -> remove(tb).destroy()
+		});
+		add(tb);
 	}
 }

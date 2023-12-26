@@ -2,15 +2,22 @@ package;
 
 import flixel.FlxGame;
 import flixel.FlxObject;
+import flixel.FlxState;
+import flixel.FlxSubState;
 import flixel.tweens.FlxTween.FlxTweenManager;
 import flixel.util.FlxSignal;
-import openfl.display.DisplayObject;
 import openfl.filters.ShaderFilter;
+import room.RoomModel;
 import shader.CrtShader;
+import utils.FlxDragManager;
 
 typedef PongParams = {
 	ballSize:Int,
 	ballSpeed:Float,
+
+	/** Dealy before ball is served **/
+	ballServeDelay:Float,
+
 	racketLength:Int,
 	racketThickness:Int,
 	racketSpeed:Float,
@@ -20,14 +27,10 @@ typedef PongParams = {
 
 class Pong extends FlxGame {
 
-	public static var game(get, never):Pong;
-
-	inline static function get_game():Pong
-		return cast Flixel.game;
-
 	public static final defaultParams:PongParams = {
 		ballSize: 12,
 		ballSpeed: 310,
+		ballServeDelay: 1.5,
 		racketLength: 80,
 		racketThickness: 12,
 		racketSpeed: 225.0,
@@ -49,8 +52,22 @@ class Pong extends FlxGame {
 
 	public var ballCollision:FlxTypedSignal<(FlxObject, Ball)->Void> = new FlxTypedSignal();
 
-	inline function get_state()
-		return cast Flixel.state;
+	/**
+		Current room
+	**/
+	public var room:RoomModel;
+
+	/**
+		Manages all ai tweens with object.
+		When game is paused such tweens are also paused.
+	**/
+	public var aiTweens(default, null):FlxTweenManager;
+
+	public var signals:{
+		keyPress:FlxSignal,
+		ballServed:FlxSignal,
+		substateOpened:FlxTypedSignal<(FlxSubState, FlxState)->Void>,
+	};
 
 	/**
 		Current room
@@ -68,7 +85,13 @@ class Pong extends FlxGame {
 		// I have to skip splash.
 		super(0, 0, null, true);
 
-		gameTweens = Flixel.plugins.add(new GameTweenManager());
+		aiTweens = Flixel.plugins.addPlugin(new FlxTweenManager());
+
+		signals = {
+			keyPress: Flixel.signals.postUpdate,
+			ballServed: new FlxTypedSignal(),
+			substateOpened: new FlxTypedSignal(),
+		}
 
 		var crtShader = new CrtShader();
 		var filters = [new ShaderFilter(crtShader)];
@@ -86,7 +109,28 @@ class Pong extends FlxGame {
 			Flixel.camera.filters = cast filters;
 		});
 
-		Flixel.signals.postGameReset.add(() -> gameTweens.active = true);
+		Flixel.signals.postGameReset.add(() -> aiTweens.active = true);
+
+		// disable/enable camera filters
+		signals.keyPress.add(() -> {
+			if (Flixel.keys.justPressed.T)
+				Flixel.camera.filtersEnabled = !Flixel.camera.filtersEnabled;
+		});
+		FLixel.signals.preGameStart.add(preGameStart);
+
+		// Crutch to redispatch substate-opened events.
+		// Flixel thiks I dont need such event in global scope,
+		// and it is wrong.
+		Flixel.signals.postStateSwitch.add(() -> {
+			Flixel.state.subStateOpened.add(sub -> {
+				trace('re-dispatch SUBSTATE-OPEN event to global scope');
+				signals.substateOpened.dispatch(sub, @:privateAccess sub._parentState);
+			});
+		});
+	}
+
+	function preGameStart() {
+		Flixel.plugins.add(new FlxDragManager());
 	}
 }
 

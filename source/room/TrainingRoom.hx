@@ -16,7 +16,7 @@ class TrainingRoom extends BaseState {
 	override function create() {
 		super.create();
 
-		bgColor = 0xFF111111;
+		Pong.resetParams();
 
 		walls = new FlxTypedGroup();
 

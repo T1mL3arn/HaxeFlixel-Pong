@@ -3,6 +3,7 @@ package menu;
 import Player.PlayerOptions;
 import RacketController.KeyboardMovementController;
 import Utils.swap;
+import ai.AIFactory.ais;
 import ai.AIFactory.setAIPlayer;
 import ai.SimpleAI;
 import flixel.FlxBasic;
@@ -22,8 +23,7 @@ import menu.MenuUtils.wrapMenuPage;
 
 using menu.MenuUtils;
 
-using menu.MenuUtils;
-
+@:build(utils.BuildMacro.addField_GAME())
 class MainMenu extends FlxState {
 
 	static final TRAINING_ROOM_MENU_ID = 'load_training_room';
@@ -59,9 +59,9 @@ class MainMenu extends FlxState {
 
 		menu.createPage('1_player')
 			.add(wrapMenuPage('Single Player', '
-				-| training room | link | ${TRAINING_ROOM_MENU_ID}
-				-| vs self | link | ${SELF_ROOM_MENU_ID}
 				-| vs AI | link | @ai_settings
+				-| vs self | link | ${SELF_ROOM_MENU_ID}
+				-| training room | link | ${TRAINING_ROOM_MENU_ID}
 		'))
 			.par({
 				pos: 'screen,c,c'
@@ -70,7 +70,7 @@ class MainMenu extends FlxState {
 		menu.createPage('ai_settings')
 			.add(wrapMenuPage('Settngs', '
 				-| your position | list | player_pos | left,right
-				-| AI difficulty | list | ai_smarteness | easy,medium,hard
+				-| AI difficulty | list | ai_smarteness | ${ais.join(',')}
 				-| * START * | link | load_ai_room
 		'))
 			.par({
@@ -116,7 +116,6 @@ class MainMenu extends FlxState {
 
 				case [it_fire, 'split_screen']:
 					Flixel.switchState(new SplitscreenRoom({
-						// Flixel.switchState(new TwoPlayersRoom({
 						name: 'left',
 						position: LEFT,
 						getController: racket -> new KeyboardMovementController(racket, W, S)
@@ -155,10 +154,15 @@ class MainMenu extends FlxState {
 
 		add(menu);
 
-		insert(0, backGame = new AIRoom(null, null, true));
+		// actually center main page on the screen
+		menu.mpActive.forEach(s -> s.screenCenter(X));
+		// TODO update menu class for better alignment?
+
+		insert(0, backGame = new AIRoom('hardest', 'hard', true));
 		backGame.create();
 		backGame.canOpenPauseMenu = false;
 		iterSpriteDeep(backGame.members, s -> s.alpha = 0.5);
+		GAME.signals.substateOpened.dispatch(backGame, this);
 	}
 
 	function iterSpriteDeep(list:Array<FlxBasic>, f:FlxSprite->Void) {

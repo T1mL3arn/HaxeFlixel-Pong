@@ -1,5 +1,6 @@
 package room;
 
+import ai.AIFactory.ais;
 import ai.AIFactory.getRandomAI;
 import ai.AIFactory.setAIPlayer;
 import menu.CongratScreen.CongratScreenType;
@@ -13,14 +14,21 @@ class AIRoom extends TwoPlayersRoom {
 	var endless:Bool;
 
 	/**
+		NOTE: If either ai is null, then random ai is chosen
+		in a whay where no duplicates is possible.
 		@param left 
 		@param right 
 		@param endless reset the score and re-enable AI so they can play forever
 	**/
 	public function new(left:String = null, right:String = null, endless:Bool = false) {
 
-		left = left ?? getRandomAI();
-		right = right ?? getRandomAI();
+		if (left == null || right == null) {
+			left = left ?? getRandomAI();
+
+			var aiList = ais.copy();
+			aiList.remove(left);
+			right = getRandomAI(aiList);
+		}
 
 		super(setAIPlayer({position: LEFT}, left), setAIPlayer({position: RIGHT}, right));
 
@@ -45,8 +53,8 @@ class AIRoom extends TwoPlayersRoom {
 		Pong.params.scoreToWin = 3;
 		Pong.params.ballSpeed *= 1.15;
 
-		Flixel.watch.addQuick('P ${players[0].options.position}', players[0].options.name);
-		Flixel.watch.addQuick('P ${players[1].options.position}', players[1].options.name);
+		Flixel.watch.addQuick('P ${players[0].options.position}', players[0].name);
+		Flixel.watch.addQuick('P ${players[1].options.position}', players[1].name);
 	}
 
 	override function showCongratScreen(player:Player, screenType:CongratScreenType) {
@@ -59,12 +67,20 @@ class AIRoom extends TwoPlayersRoom {
 				player.score = 0;
 			}
 
-			// get new AI pair
-			tryReplaceAI(players[0], getRandomAI());
-			tryReplaceAI(players[1], getRandomAI());
+			var leftAI = getRandomAI();
+			tryReplaceAI(players[0], leftAI);
+
+			// disallow the same ai twice
+			var aiList = ais.copy();
+			aiList.remove(leftAI);
+			var rightAI = getRandomAI(aiList);
+			tryReplaceAI(players[1], rightAI);
 
 			setGameParams();
 			ballSpeedup.init();
+
+			// immitate substate switch
+			GAME.signals.substateOpened.dispatch(this, null);
 			return;
 		}
 
@@ -73,7 +89,9 @@ class AIRoom extends TwoPlayersRoom {
 	}
 
 	function tryReplaceAI(player:Player, aiType:String) {
-		if (player.name.indexOf(aiType) == -1) {
+		// trace('try replace AI ${player.options.name} to $aiType');
+		if (player.options.name.indexOf(aiType) == -1) {
+			// trace('AI replaced');
 
 			// if new AI is really new - dispose old
 			var c = player.racketController;
@@ -83,6 +101,7 @@ class AIRoom extends TwoPlayersRoom {
 			// use new
 			// trace('new ai: $aiType ${player.racket.position}');
 			player.racketController = setAIPlayer(player.options, aiType).getController(player.racket);
+			player.name = player.options.name;
 		}
 	}
 }

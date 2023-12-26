@@ -1,10 +1,63 @@
 package utils;
 
 import flixel.FlxSprite;
+import flixel.effects.FlxFlicker;
 import flixel.math.FlxMath;
 import flixel.math.FlxPoint;
 import flixel.util.FlxSpriteUtil;
 
+typedef DashedLineStyle = {
+	> flixel.util.FlxSpriteUtil.LineStyle,
+
+	/**
+		Number of dashes between start and end points.
+		You must set either `segmentCount` (and `dashLength`)
+		or `dashLength` (and `gapLength`).
+	**/
+	@:optional var segmentCount:Int;
+
+	/**
+		Length of dash.
+		You must set either `segmentCount` (and `gapLength`)
+		or `dashLength` (and `gapLength`).
+	**/
+	@:optional var dashLength:Float;
+
+	/**
+		Length of gap between dashes.
+	**/
+	@:optional var gapLength:Float;
+}
+
+/**
+	Draw a dashed line on a sprite. 
+
+	**NOTE**: function respects flixel's weak points convention!
+
+	**Example**:
+	```haxe
+	drawDashedLine(sprite, FlxPoint.weak(0,0),  FlxPoint.weak(100,100), {
+		thickness: 10,
+		// there will be exactly 10 dashes and (9 gaps)
+		segmentCount: 10,
+		// all gaps will be 5px (dash length is calculated) 
+		gapLength: 5,
+	});
+	// or
+	drawDashedLine(sprite, FlxPoint.weak(0,0),  FlxPoint.weak(100,100), {
+		thickness: 10,
+		// dash length will be exactly 15px
+		dashLength: 15,
+		// gap length will be exactly 10px
+		gapLength: 10,
+	});
+	```
+
+	@param sprite target sprite
+	@param start start point of the line
+	@param end end point of the line
+	@param lineStyle line options like thickness, dash counts etc, see `utils.DashedLineStyle`
+**/
 function drawDashedLine(sprite:FlxSprite, start:FlxPoint, end:FlxPoint, lineStyle:DashedLineStyle):Void {
 
 	final dist = start.distanceTo(FlxPoint.weak(end.x, end.y));
@@ -69,25 +122,21 @@ inline function clampPoint(p:FlxPoint, ?min:FlxPoint, ?max:FlxPoint) {
 	}
 }
 
-typedef DashedLineStyle = {
-	> flixel.util.FlxSpriteUtil.LineStyle,
-
-	/**
-		Number of dashes between start and end points.
-		You must set either `segmentCount` (and `dashLength`)
-		or `dashLength` (and `gapLength`).
-	**/
-	?segmentCount:Int,
-
-	/**
-		Length of dash.
-		You must set either `segmentCount` (and `gapLength`)
-		or `dashLength` (and `gapLength`).
-	**/
-	?dashLength:Float,
-
-	/**
-		Length of gap between dashes.
-	**/
-	?gapLength:Float,
+/**
+	Twinkle a sprite with given color.
+	It is a shorthand for setting `FlxFlicker` to do the same.
+	@param sprite object to twinkle
+	@param color target color
+	@param duration how long effect lasts, in seconds
+	@param interval how long before changing the color, in seconds
+	@return `FlxFlicker` object
+**/
+function twinkle(sprite:FlxSprite, color:Int, duration:Float, interval:Float):FlxFlicker {
+	final initialColor = sprite.color;
+	return FlxFlicker.flicker(sprite, duration, interval, true, true, _ -> {
+		sprite.color = initialColor;
+	}, f -> {
+		sprite.visible = true;
+		sprite.color = f.timer.loopsLeft % 2 == 0 ? color : initialColor;
+	});
 }

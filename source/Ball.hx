@@ -2,8 +2,10 @@ package;
 
 import flixel.FlxObject;
 import flixel.FlxSprite;
+import flixel.math.FlxPoint;
 import flixel.sound.FlxSound;
 import flixel.util.FlxColor;
+import math.MathUtils.point;
 
 using Utils;
 
@@ -32,6 +34,14 @@ class Ball extends FlxSprite {
 		];
 		for (sound in sounds)
 			sound.volume = 0.75;
+	}
+
+	/**
+		Returns ball's center coord in world.
+		@param p 
+	**/
+	public inline function getWorldPos(?p:FlxPoint):FlxPoint {
+		return (p ?? point()).set(x + width * 0.5, y + height * 0.5);
 	}
 
 	override function destroy() {
