@@ -89,7 +89,9 @@ class AIRoom extends TwoPlayersRoom {
 	}
 
 	function tryReplaceAI(player:Player, aiType:String) {
+		// trace('try replace AI ${player.options.name} to $aiType');
 		if (player.options.name.indexOf(aiType) == -1) {
+			// trace('AI replaced');
 
 			// if new AI is really new - dispose old
 			var c = player.racketController;
