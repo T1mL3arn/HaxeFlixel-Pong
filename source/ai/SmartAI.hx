@@ -126,6 +126,16 @@ class SmartAI extends SimpleAI {
 
 	function calcTrajectory(object:FlxObject, ball:Ball) {
 
+		if (object == racket) {
+			// ball is bounced by this ai lets return to the middle (sometime)
+			if (Math.random() >= SETTINGS.returnToMiddleChance) {
+				target.y = Flixel.height * 0.5 - racket.height * 0.5;
+				moveRacketTo(target);
+			}
+
+			return;
+		}
+
 		// trajectory is calculated only when:
 		// - ball is served
 		// - when ball is hit by other racket
