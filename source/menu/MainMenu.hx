@@ -3,6 +3,7 @@ package menu;
 import Player.PlayerOptions;
 import RacketController.KeyboardMovementController;
 import Utils.swap;
+import ai.AIFactory.ais;
 import ai.AIFactory.setAIPlayer;
 import ai.SimpleAI;
 import flixel.FlxBasic;
@@ -68,7 +69,7 @@ class MainMenu extends FlxState {
 		menu.createPage('ai_settings')
 			.add(wrapMenuPage('Settngs', '
 				-| your position | list | player_pos | left,right
-				-| AI difficulty | list | ai_smarteness | easy,medium,hard
+				-| AI difficulty | list | ai_smarteness | ${ais.join(',')}
 				-| * START * | link | load_ai_room
 		'))
 			.par({

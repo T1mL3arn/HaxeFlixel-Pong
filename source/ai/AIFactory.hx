@@ -2,7 +2,7 @@ package ai;
 
 import Player.PlayerOptions;
 
-final ais = ['easy', 'medium', 'hard'];
+final ais = ['easy', 'medium', 'hard', 'hardest'];
 
 /**
 	Returns random AI type
@@ -12,7 +12,7 @@ inline function getRandomAI(?list:Array<String>) {
 }
 
 function setAIPlayer(opts:PlayerOptions, aiType:String) {
-	switch (aiType) {
+	switch (aiType.toLowerCase()) {
 		case 'medium':
 			opts.name = 'medium AI (${opts.position})';
 			opts.getController = racket -> NotSoSimpleAI.buildMediumAI(racket, opts.name);
