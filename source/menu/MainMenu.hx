@@ -115,7 +115,6 @@ class MainMenu extends FlxState {
 
 				case [it_fire, 'split_screen']:
 					Flixel.switchState(new SplitscreenRoom({
-						// Flixel.switchState(new TwoPlayersRoom({
 						name: 'left',
 						position: LEFT,
 						getController: racket -> new KeyboardMovementController(racket, W, S)
