@@ -148,6 +148,12 @@ class TwoPlayersRoom extends BaseState {
 		winner = players.find(p -> p.score >= Pong.params.scoreToWin);
 		if (winner != null) {
 			trace('Winner: ${winner.name} !');
+
+			// place ball out of goals to fix rare bug
+			// with two immediate win events
+			ball.x = 100;
+			ball.y = -100;
+
 			canPause = true;
 			canOpenPauseMenu = false;
 			for (player in players) {
