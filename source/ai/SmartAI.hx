@@ -1,20 +1,13 @@
 package ai;
 
-import haxe.ds.ObjectMap;
 import flixel.FlxObject;
-import flixel.group.FlxGroup.FlxTypedGroup;
-import flixel.math.FlxMath;
 import flixel.math.FlxPoint.get as point;
 import flixel.math.FlxPoint;
 import flixel.math.FlxRect;
-import flixel.path.FlxPath;
 import flixel.tweens.FlxEase;
-import flixel.util.FlxSpriteUtil;
-import math.LineSegment;
-import math.MathUtils.lerp;
+import flixel.util.FlxColor;
 import math.MathUtils.wp;
 import math.RayCast;
-import openfl.display.Graphics;
 
 typedef SmartAIParams = {
 
@@ -23,11 +16,16 @@ typedef SmartAIParams = {
 	**/
 	angleVariance:Float,
 
+	/** Min part of `angleVariance` to use **/
+	angleVarianceMinFactor:Float,
+
 	bouncePlaceBias:Array<Float>,
+
 	// bias for ball serve to be sure that AI never misses the first ball
 	bouncePlaceBiasSafe:Array<Float>,
 
 	returnToMiddleChance:Float,
+	chanceForRealTrajectory:Float,
 };
 
 /**
@@ -47,23 +45,27 @@ class SmartAI extends SimpleAI {
 
 	public static function buildHardestAI(racket, name) {
 		var ai = new SmartAI(racket, name);
-		ai.SETTINGS.angleVariance = 0.3;
+		ai.SETTINGS.angleVariance = 0.35;
+		ai.SETTINGS.angleVarianceMinFactor = 0.1;
 		ai.SETTINGS.bouncePlaceBias = [6, 10, 7, 0.5, 7, 10, 6];
 		ai.SETTINGS.bouncePlaceBiasSafe = [0, 1, 0, 0, 0, 1, 0];
 		ai.SETTINGS.returnToMiddleChance = 0.75;
+		ai.SETTINGS.chanceForRealTrajectory = 0.33;
 		return ai;
 	}
 
-	public var drawTrajectory:Bool = false;
+	public var drawTrajectory:Bool = true;
 
 	var target:FlxPoint;
 
 	// some resonable defaults
 	var SETTINGS:SmartAIParams = {
 		angleVariance: 0.6,
+		angleVarianceMinFactor: 0.2,
 		bouncePlaceBias: [4, 10, 7, 1, 7, 10, 4],
 		bouncePlaceBiasSafe: [0, 2, 3, 0, 3, 1, 0],
 		returnToMiddleChance: 0.25,
+		chanceForRealTrajectory: 0.1,
 	};
 
 	public function new(racket, name) {
@@ -77,8 +79,14 @@ class SmartAI extends SimpleAI {
 
 		rayCast = new RayCast();
 		rayCast2 = new RayCast();
-		rayCast2.trajectoryColor = 0xFFBB00;
 
+		// Flixel.random.color()
+		var hue = Flixel.random.float(30, 360);
+		var tjColor = FlxColor.fromHSB(hue, 1, 1);
+		var tjRealColor = FlxColor.WHITE;
+
+		rayCast.trajectoryColor = tjColor;
+		rayCast2.trajectoryColor = tjRealColor;
 		target = point();
 	}
 
@@ -140,7 +148,7 @@ class SmartAI extends SimpleAI {
 	function calcTrajectory(object:FlxObject, ball:Ball) {
 
 		if (object == racket) {
-			// ball is bounced by this ai lets return to the middle (sometime)
+			// ball is bounced by this ai, lets return to the middle (sometime)
 			if (Math.random() <= SETTINGS.returnToMiddleChance) {
 				target.y = Flixel.height * 0.5 - racket.height * 0.5;
 				moveRacketTo(target);
@@ -150,10 +158,11 @@ class SmartAI extends SimpleAI {
 			return;
 		}
 
+		final ballServe = object == null;
 		// trajectory is calculated only when:
 		// - ball is served
 		// - when ball is hit by other racket
-		if (!(object == null || (object is Racket && object != racket)))
+		if (!(ballServe || (object is Racket && object != racket)))
 			return;
 
 		var ballPos = ball.getWorldPos();
@@ -162,36 +171,23 @@ class SmartAI extends SimpleAI {
 		ray1.length = Math.sqrt(Math.pow(Flixel.width, 2) + Math.pow(Flixel.height, 2));
 		var ray2 = ray1.clone(wp());
 
-		ray1.rotateByDegrees(-SETTINGS.angleVariance);
-		ray2.rotateByDegrees(SETTINGS.angleVariance);
+		var a = 0.0;
 
-		var t1 = rayCast.castRay(ballPos, ray1, 3, 0, thisGoal);
-		var t2 = rayCast2.castRay(ballPos, ray2, 3, 0, thisGoal);
-
-		// possible ball position segment
-		var p1 = t1[t1.length - 1].clone();
-		var p2 = t2[t2.length - 1].clone();
-
-		if (t1.length == t2.length) {
-			// 99% sure trajectories are hit the same vertical wall
-
-			// TODO be 100% sure that last points of both trajectories
-			// are lie on the same vertical line, or at least "close enough" ?
-
-			target = lerp(p1, p2, Flixel.random.int(0, 1000) * 0.001, target);
-		}
-		else {
-			// but if these trajectories dont
-
-			var closest = p1.distSquared(wp(racket.x, racket.y)) < p2.distSquared(wp(racket.x, racket.y)) ? p1 : p2;
-			target.copyFrom(closest);
+		if (Math.random() >= SETTINGS.chanceForRealTrajectory) {
+			a = SETTINGS.angleVariance;
+			a = Flixel.random.float(a * SETTINGS.angleVarianceMinFactor, a);
+			a *= Flixel.random.sign();
 		}
 
-		target = calcRacketDestination(ball, target, object == null);
+		// real trajectory (for debug purpose)
+		rayCast2.castRay(ballPos, ray2, 3, 0, thisGoal);
+
+		var tj = rayCast.castRay(ballPos, ray1.rotateByDegrees(a), 3, 0, thisGoal);
+		target = tj[tj.length - 1].copyTo(target);
+
+		target = calcRacketDestination(ball, target, ballServe);
 		moveRacketTo(target);
 
-		p1.put();
-		p2.put();
 		ballPos.put();
 	}
 
