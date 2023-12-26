@@ -53,8 +53,8 @@ class AIRoom extends TwoPlayersRoom {
 		Pong.params.scoreToWin = 3;
 		Pong.params.ballSpeed *= 1.15;
 
-		Flixel.watch.addQuick('P ${players[0].options.position}', players[0].options.name);
-		Flixel.watch.addQuick('P ${players[1].options.position}', players[1].options.name);
+		Flixel.watch.addQuick('P ${players[0].options.position}', players[0].name);
+		Flixel.watch.addQuick('P ${players[1].options.position}', players[1].name);
 	}
 
 	override function showCongratScreen(player:Player, screenType:CongratScreenType) {
@@ -86,7 +86,7 @@ class AIRoom extends TwoPlayersRoom {
 	}
 
 	function tryReplaceAI(player:Player, aiType:String) {
-		if (player.name.indexOf(aiType) == -1) {
+		if (player.options.name.indexOf(aiType) == -1) {
 
 			// if new AI is really new - dispose old
 			var c = player.racketController;
@@ -96,6 +96,7 @@ class AIRoom extends TwoPlayersRoom {
 			// use new
 			// trace('new ai: $aiType ${player.racket.position}');
 			player.racketController = setAIPlayer(player.options, aiType).getController(player.racket);
+			player.name = player.options.name;
 		}
 	}
 }
