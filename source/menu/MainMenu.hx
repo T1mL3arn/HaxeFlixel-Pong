@@ -158,7 +158,7 @@ class MainMenu extends FlxState {
 		menu.mpActive.forEach(s -> s.screenCenter(X));
 		// TODO update menu class for better alignment?
 
-		insert(0, backGame = new AIRoom(null, null, true));
+		insert(0, backGame = new AIRoom('hardest', 'hardest', true));
 		backGame.create();
 		backGame.canOpenPauseMenu = false;
 		iterSpriteDeep(backGame.members, s -> s.alpha = 0.5);
