@@ -26,6 +26,8 @@ typedef SmartAIParams = {
 	bouncePlaceBias:Array<Float>,
 	// bias for ball serve to be sure that AI never misses the first ball
 	bouncePlaceBiasSafe:Array<Float>,
+
+	returnToMiddleChance:Float,
 };
 
 /**
@@ -39,17 +41,30 @@ typedef SmartAIParams = {
 **/
 class SmartAI extends SimpleAI {
 
+	public static function buildHardAI(racket, name) {
+		return new SmartAI(racket, name);
+	}
+
+	public static function buildHardestAI(racket, name) {
+		var ai = new SmartAI(racket, name);
+		ai.SETTINGS.angleVariance = 0.3;
+		ai.SETTINGS.bouncePlaceBias = [6, 10, 7, 0.5, 7, 10, 6];
+		ai.SETTINGS.bouncePlaceBiasSafe = [0, 1, 0, 0, 0, 1, 0];
+		ai.SETTINGS.returnToMiddleChance = 0.75;
+		return ai;
+	}
+
 	public var drawTrajectory:Bool = false;
 
 	var target:FlxPoint;
 
+	// some resonable defaults
 	var SETTINGS:SmartAIParams = {
 		angleVariance: 0.6,
 		bouncePlaceBias: [4, 10, 7, 1, 7, 10, 4],
-		bouncePlaceBiasSafe: [0, 10, 7, 0, 7, 10, 0],
+		bouncePlaceBiasSafe: [0, 2, 3, 0, 3, 1, 0],
+		returnToMiddleChance: 0.25,
 	};
-
-	var bouncePlaceBiasSafe = [0, 10, 7, 0, 7, 10, 0];
 
 	public function new(racket, name) {
 		super(racket, name);
@@ -128,9 +143,10 @@ class SmartAI extends SimpleAI {
 
 		if (object == racket) {
 			// ball is bounced by this ai lets return to the middle (sometime)
-			if (Math.random() >= SETTINGS.returnToMiddleChance) {
+			if (Math.random() <= SETTINGS.returnToMiddleChance) {
 				target.y = Flixel.height * 0.5 - racket.height * 0.5;
 				moveRacketTo(target);
+				// trace('$name: return to middle');
 			}
 
 			return;
