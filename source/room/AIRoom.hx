@@ -78,6 +78,9 @@ class AIRoom extends TwoPlayersRoom {
 
 			setGameParams();
 			ballSpeedup.init();
+
+			// immitate substate switch
+			GAME.signals.substateOpened.dispatch(this, null);
 			return;
 		}
 

@@ -2,6 +2,8 @@ package;
 
 import flixel.FlxGame;
 import flixel.FlxObject;
+import flixel.FlxState;
+import flixel.FlxSubState;
 import flixel.tweens.FlxTween.FlxTweenManager;
 import flixel.util.FlxSignal;
 import openfl.filters.ShaderFilter;
@@ -64,6 +66,7 @@ class Pong extends FlxGame {
 	public var signals:{
 		keyPress:FlxSignal,
 		ballServed:FlxSignal,
+		substateOpened:FlxTypedSignal<(FlxSubState, FlxState)->Void>,
 	};
 
 	public function new() {
@@ -76,6 +79,7 @@ class Pong extends FlxGame {
 		signals = {
 			keyPress: Flixel.signals.postUpdate,
 			ballServed: new FlxTypedSignal(),
+			substateOpened: new FlxTypedSignal(),
 		}
 
 		var crtShader = new CrtShader();
@@ -102,6 +106,16 @@ class Pong extends FlxGame {
 				Flixel.camera.filtersEnabled = !Flixel.camera.filtersEnabled;
 		});
 		FLixel.signals.preGameStart.add(preGameStart);
+
+		// Crutch to redispatch substate-opened events.
+		// Flixel thiks I dont need such event in global scope,
+		// and it is wrong.
+		Flixel.signals.postStateSwitch.add(() -> {
+			Flixel.state.subStateOpened.add(sub -> {
+				trace('re-dispatch SUBSTATE-OPEN event to global scope');
+				signals.substateOpened.dispatch(sub, @:privateAccess sub._parentState);
+			});
+		});
 	}
 
 	function preGameStart() {

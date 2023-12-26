@@ -23,6 +23,7 @@ import menu.MenuUtils.wrapMenuPage;
 
 using menu.MenuUtils;
 
+@:build(utils.BuildMacro.addField_GAME())
 class MainMenu extends FlxState {
 
 	static final TRAINING_ROOM_MENU_ID = 'load_training_room';
@@ -161,6 +162,7 @@ class MainMenu extends FlxState {
 		backGame.create();
 		backGame.canOpenPauseMenu = false;
 		iterSpriteDeep(backGame.members, s -> s.alpha = 0.5);
+		GAME.signals.substateOpened.dispatch(backGame, this);
 	}
 
 	function iterSpriteDeep(list:Array<FlxBasic>, f:FlxSprite->Void) {
