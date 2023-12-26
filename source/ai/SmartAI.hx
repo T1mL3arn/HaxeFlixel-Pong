@@ -227,7 +227,9 @@ class SmartAI extends SimpleAI {
 		tween = GAME.aiTweens.tween(racket, {y: p.y, x: p.x}, duration, {ease: FlxEase.linear});
 	}
 
-	override function update(dt:Float) {}
+	override function update(dt:Float) {
+		// I dont want any update code from the superclass
+	}
 
 	override function draw() {
 		super.draw();
@@ -241,6 +243,7 @@ class SmartAI extends SimpleAI {
 		rayCast2.draw(Flixel.camera.debugLayer.graphics);
 
 		return;
+
 		var gfx = Flixel.camera.debugLayer.graphics;
 		// draw ball velocity
 		var ball = GAME.room.ball;
