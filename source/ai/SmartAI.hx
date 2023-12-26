@@ -47,14 +47,17 @@ class SmartAI extends SimpleAI {
 		var ai = new SmartAI(racket, name);
 		ai.SETTINGS.angleVariance = 0.35;
 		ai.SETTINGS.angleVarianceMinFactor = 0.1;
-		ai.SETTINGS.bouncePlaceBias = [6, 10, 7, 0.5, 7, 10, 6];
+		ai.SETTINGS.bouncePlaceBias = [5, 10, 7, 0.25, 7, 10, 5];
+		// bias below to test how AI behaves trying to hit
+		// ball with only racket corners
+		// ai.SETTINGS.bouncePlaceBias = [1, 0, 0, 0, 0, 0, 1];
 		ai.SETTINGS.bouncePlaceBiasSafe = [0, 1, 0, 0, 0, 1, 0];
 		ai.SETTINGS.returnToMiddleChance = 0.75;
-		ai.SETTINGS.chanceForRealTrajectory = 0.33;
+		ai.SETTINGS.chanceForRealTrajectory = 0.4;
 		return ai;
 	}
 
-	public var drawTrajectory:Bool = true;
+	public var drawTrajectory:Bool = false;
 
 	var target:FlxPoint;
 
@@ -62,7 +65,7 @@ class SmartAI extends SimpleAI {
 	var SETTINGS:SmartAIParams = {
 		angleVariance: 0.6,
 		angleVarianceMinFactor: 0.2,
-		bouncePlaceBias: [4, 10, 7, 1, 7, 10, 4],
+		bouncePlaceBias: [5, 8, 7, 1, 7, 8, 5],
 		bouncePlaceBiasSafe: [0, 2, 3, 0, 3, 1, 0],
 		returnToMiddleChance: 0.25,
 		chanceForRealTrajectory: 0.1,
