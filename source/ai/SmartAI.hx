@@ -197,7 +197,7 @@ class SmartAI extends SimpleAI {
 	var bouncePlace = [-3, -2, -1, 0, 1, 2, 3].map(x -> x + 3);
 
 	function calcRacketDestination(ball:Ball, ballPos:FlxPoint, isServe:Bool):FlxPoint {
-		var bhs = ball.width * 0.5;
+		// var bhs = ball.width * 0.5;
 		// var ballBounds = ball.getHitbox(tmprect1);
 		// var racketBounds = racket.getHitbox(tmprect2);
 
@@ -209,23 +209,57 @@ class SmartAI extends SimpleAI {
 				// here I convert modeled Y back to ball's real Y
 				target.y -= ball.height * 0.5;
 
+				/**
+					By, Bh - ball Y and Height
+					Ry, Rh - racket Y and Height
+					Racket can hit the ball in segment of (By + Bh, By - Rh) => hit-zone (HZ)
+					but ONLY when Ry0 = By + Bh.
+					So I can chose any value from HZ and
+					So target Ry must be:
+					Ry = Ry0 + rnd(0, HZ)
+					(HZ can be simplified to Rh + Bh)
+				**/
+
 				// TODO store and read this from racket?
 				final segmentCount = 7;
-				var hitZone = racket.height + ball.height;
-				var segmentSize = hitZone / segmentCount;
+				var HZ = racket.height + ball.height - 2; // -2 to be sure the ball will be hit
+				var SS = HZ / segmentCount;
+				var Ry0 = target.y + ball.height - 1; // -1 to be sure the ball will be hit
 
 				// adjusting bias for the ball-serve case
 				// so the AI will never try to bounce a ball
 				// with racket's angles in ball-serve
 				var bias = isServe ? SETTINGS.bouncePlaceBiasSafe : SETTINGS.bouncePlaceBias;
 
+				// when target is in dead zone adjust bias in a way
+				// to prevent moving low/high part of racket to the deadzone
+				if (target.y < (racket.movementBounds.top + HZ * 5 / 7)) {
+					bias = bias.slice(0, 3).concat([0, 0, 0, 0]);
+					// trace('top deadzone hit', bias);
+				}
+				else if (target.y > (racket.movementBounds.bottom - HZ * 5 / 7)) {
+					bias = [0, 0, 0, 0.0].concat(bias.slice(4));
+					// trace('bottom deadzone hit', bias);
+				}
+
 				// randomly choose what part of 7-parts model to use
 				var part = Flixel.random.getObject(bouncePlace, bias);
 				// trace('chosen bounce segment ${part - 3}');
 
 				// displacement of racket in relation to target
-				var racketDisplacement = -(segmentSize * part + FLixel.random.float(0, segmentSize));
-				var targetRacketY = target.y + racketDisplacement;
+				var racketDisplacement = -(SS * part + FLixel.random.float(0, SS) * 0);
+				var targetRacketY = Ry0 + racketDisplacement;
+
+				// tests to see the real ball target
+				// var realTarget = rayCast2.path[rayCast.path.length - 1].clone();
+				// var b = realTarget;
+				// b.y -= ball.height * 0.5;
+
+				// if (name.indexOf('hardest') != -1) {
+				// 	var diff = Math.abs((b.y + ball.height - 1) - (b.y + 1 - racket.height));
+				// 	trace(b.y + 1 - racket.height, b.y + ball.height - 1, targetRacketY, diff, HZ, racket.height + ball.height);
+				// }
+				// realTarget.put();
 
 				return target.set(racket.x, targetRacketY);
 			case UP, DOWN:
