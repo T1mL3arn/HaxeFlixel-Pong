@@ -24,6 +24,8 @@ typedef SmartAIParams = {
 	angleVariance:Float,
 
 	bouncePlaceBias:Array<Float>,
+	// bias for ball serve to be sure that AI never misses the first ball
+	bouncePlaceBiasSafe:Array<Float>,
 };
 
 /**
@@ -43,11 +45,11 @@ class SmartAI extends SimpleAI {
 
 	var SETTINGS:SmartAIParams = {
 		angleVariance: 0.6,
-		bouncePlaceBias: [0.4, 1.0, 0.7, 0.1, 0.7, 1.0, 0.4],
+		bouncePlaceBias: [4, 10, 7, 1, 7, 10, 4],
+		bouncePlaceBiasSafe: [0, 10, 7, 0, 7, 10, 0],
 	};
 
-	// bias for ball serve to be sure that AI never misses the first ball
-	var bouncePlaceBiasSafe = [0.0, 1.0, 0.7, 0.1, 0.7, 1.0, 0.0];
+	var bouncePlaceBiasSafe = [0, 10, 7, 0, 7, 10, 0];
 
 	public function new(racket, name) {
 		super(racket, name);
@@ -146,14 +148,6 @@ class SmartAI extends SimpleAI {
 		var p1 = t1[t1.length - 1].clone();
 		var p2 = t2[t2.length - 1].clone();
 
-		// adjusting bias for the ball-serve case
-		// so the AI will never try to bounce a ball
-		// with racket's angles in ball-serve
-		var biasOriginal = SETTINGS.bouncePlaceBias;
-		if (object == null) {
-			SETTINGS.bouncePlaceBias = bouncePlaceBiasSafe;
-		}
-
 		if (t1.length == t2.length) {
 			// 99% sure trajectories are hit the same vertical wall
 
@@ -161,22 +155,16 @@ class SmartAI extends SimpleAI {
 			// are lie on the same vertical line, or at least "close enough" ?
 
 			target = lerp(p1, p2, Flixel.random.int(0, 1000) * 0.001, target);
-
-			target = calcRacketDestination(ball, target);
-			moveRacketTo(target);
 		}
 		else {
-			// but if these trajectories dont ???
+			// but if these trajectories dont
 
 			var closest = p1.distSquared(wp(racket.x, racket.y)) < p2.distSquared(wp(racket.x, racket.y)) ? p1 : p2;
-
 			target.copyFrom(closest);
-			target = calcRacketDestination(ball, target);
-			moveRacketTo(target);
 		}
 
-		// restoring bias
-		SETTINGS.bouncePlaceBias = biasOriginal;
+		target = calcRacketDestination(ball, target, object == null);
+		moveRacketTo(target);
 
 		p1.put();
 		p2.put();
@@ -185,10 +173,10 @@ class SmartAI extends SimpleAI {
 
 	var bouncePlace = [-3, -2, -1, 0, 1, 2, 3].map(x -> x + 3);
 
-	function calcRacketDestination(ball:Ball, ballPos:FlxPoint):FlxPoint {
+	function calcRacketDestination(ball:Ball, ballPos:FlxPoint, isServe:Bool):FlxPoint {
 		var bhs = ball.width * 0.5;
 		// var ballBounds = ball.getHitbox(tmprect1);
-		var racketBounds = racket.getHitbox(tmprect2);
+		// var racketBounds = racket.getHitbox(tmprect2);
 
 		switch (racket.position) {
 			case LEFT, RIGHT:
@@ -202,8 +190,14 @@ class SmartAI extends SimpleAI {
 				final segmentCount = 7;
 				var hitZone = racket.height + ball.height;
 				var segmentSize = hitZone / segmentCount;
+
+				// adjusting bias for the ball-serve case
+				// so the AI will never try to bounce a ball
+				// with racket's angles in ball-serve
+				var bias = isServe ? SETTINGS.bouncePlaceBiasSafe : SETTINGS.bouncePlaceBias;
+
 				// randomly choose what part of 7-parts model to use
-				var part = Flixel.random.getObject(bouncePlace, SETTINGS.bouncePlaceBias);
+				var part = Flixel.random.getObject(bouncePlace, bias);
 				// trace('chosen bounce segment ${part - 3}');
 
 				// displacement of racket in relation to target
