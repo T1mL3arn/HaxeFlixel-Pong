@@ -124,7 +124,11 @@ class SmartAI extends SimpleAI {
 
 	function buildRoomModel() {
 
-		var roomModel = [];
+		// dont build the model more than once
+		if (model != null)
+			return;
+
+		model = [];
 
 		final bhw = GAME.room.ball.width * 0.5;
 
@@ -149,10 +153,10 @@ class SmartAI extends SimpleAI {
 			box.right += bhw;
 			box.bottom += bhw;
 
-			roomModel.push(box);
+			model.push(box);
 		}
 
-		rayCast.model = rayCast2.model = roomModel;
+		rayCast.model = rayCast2.model = model;
 	}
 
 	function calcTrajectory(object:FlxObject, ball:Ball) {
