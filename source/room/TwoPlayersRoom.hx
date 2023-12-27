@@ -151,8 +151,7 @@ class TwoPlayersRoom extends BaseState {
 
 			// place ball out of goals to fix rare bug
 			// with two immediate win events
-			ball.x = 100;
-			ball.y = -100;
+			ball.x -= Flixel.width * 2;
 
 			canPause = true;
 			canOpenPauseMenu = false;
