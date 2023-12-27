@@ -128,7 +128,7 @@ class TwoPlayersRoom extends BaseState {
 			colorizeBall(cast wall, ball);
 		}
 		ball.collision(wall);
-		GAME.ballCollision.dispatch(wall, ball);
+		GAME.signals.ballCollision.dispatch(wall, ball);
 	}
 
 	function goal(hitArea:FlxBasic, ball:Ball) {

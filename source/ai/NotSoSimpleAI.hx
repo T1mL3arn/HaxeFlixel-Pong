@@ -57,7 +57,7 @@ class NotSoSimpleAI extends SimpleAI {
 		targetX = Flixel.width * 0.5;
 		targetY = Flixel.height * 0.5;
 
-		GAME.ballCollision.add(ballCollision);
+		GAME.signals.ballCollision.add(ballCollision);
 	}
 
 	function ballCollision(obj:FlxObject, ball:Ball) {
@@ -73,7 +73,7 @@ class NotSoSimpleAI extends SimpleAI {
 			tween.cancel();
 			tween.destroy();
 		}
-		GAME.ballCollision.remove(ballCollision);
+		GAME.signals.ballCollision.remove(ballCollision);
 	}
 
 	override function update(dt) {

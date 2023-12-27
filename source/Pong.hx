@@ -50,8 +50,6 @@ class Pong extends FlxGame {
 		params = Reflect.copy(defaultParams);
 	}
 
-	public var ballCollision:FlxTypedSignal<(FlxObject, Ball)->Void> = new FlxTypedSignal();
-
 	/**
 		Current room
 	**/
@@ -67,6 +65,7 @@ class Pong extends FlxGame {
 		keyPress:FlxSignal,
 		ballServed:FlxSignal,
 		substateOpened:FlxTypedSignal<(FlxSubState, FlxState)->Void>,
+		ballCollision:FlxTypedSignal<(FlxObject, Ball)->Void>,
 	};
 
 	public function new() {

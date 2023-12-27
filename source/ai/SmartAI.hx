@@ -76,7 +76,7 @@ class SmartAI extends SimpleAI {
 
 		// how does this AI work?
 
-		GAME.ballCollision.add(calcTrajectory);
+		GAME.signals.ballCollision.add(calcTrajectory);
 		GAME.signals.ballServed.add(onBallServed);
 		GAME.signals.substateOpened.addOnce((_, _) -> buildRoomModel());
 
@@ -102,7 +102,7 @@ class SmartAI extends SimpleAI {
 	override function destroy() {
 		super.destroy();
 
-		GAME.ballCollision.remove(calcTrajectory);
+		GAME.signals.ballCollision.remove(calcTrajectory);
 		GAME.signals.ballServed.remove(onBallServed);
 
 		rayCast.destroy();
