@@ -60,6 +60,7 @@ class SmartAI extends SimpleAI {
 	public var drawTrajectory:Bool = false;
 
 	var target:FlxPoint;
+	var model:Array<FlxRect>;
 
 	// some resonable defaults
 	var SETTINGS:SmartAIParams = {
@@ -107,6 +108,12 @@ class SmartAI extends SimpleAI {
 
 		rayCast.destroy();
 		rayCast2.destroy();
+
+		for (rect in model) {
+			if (@:privateAccess !rect._inPool)
+				rect.put();
+		}
+		model = null;
 
 		target.put();
 	}
