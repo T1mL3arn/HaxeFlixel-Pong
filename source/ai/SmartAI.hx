@@ -79,7 +79,9 @@ class SmartAI extends SimpleAI {
 
 		GAME.signals.ballCollision.add(calcTrajectory);
 		GAME.signals.ballServed.add(onBallServed);
+		// NOTE: buildRoomModel() can be called twice
 		GAME.signals.substateOpened.addOnce((_, _) -> buildRoomModel());
+		Flixel.signals.postStateSwitch.addOnce(buildRoomModel);
 
 		rayCast = new RayCast();
 		rayCast2 = new RayCast();
@@ -105,6 +107,7 @@ class SmartAI extends SimpleAI {
 
 		GAME.signals.ballCollision.remove(calcTrajectory);
 		GAME.signals.ballServed.remove(onBallServed);
+		Flixel.signals.postStateSwitch.remove(buildRoomModel);
 
 		rayCast.destroy();
 		rayCast2.destroy();
