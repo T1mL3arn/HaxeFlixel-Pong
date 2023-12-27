@@ -57,6 +57,16 @@ class SmartAI extends SimpleAI {
 		return ai;
 	}
 
+	public static function buildMediumAI(racket, name) {
+		var ai = new SmartAI(racket, name);
+		ai.SETTINGS.angleVariance = 0.8;
+		ai.SETTINGS.angleVarianceMinFactor = 0.4;
+		ai.SETTINGS.returnToMiddleChance *= 0.5;
+		ai.SETTINGS.bouncePlaceBias = [2, 2, 3, 2, 3, 2, 2];
+		ai.SETTINGS.bouncePlaceBiasSafe = [0, 0, 2, 1, 2, 0, 0];
+		return ai;
+	}
+
 	public var drawTrajectory:Bool = false;
 
 	var target:FlxPoint;
