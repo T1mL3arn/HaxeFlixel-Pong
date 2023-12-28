@@ -37,7 +37,7 @@ typedef SmartAIParams = {
 	- on these signals calcs possible ball trajectory
 	- if trajectory is towards this AI - find the best spot to hit the ball
 **/
-class SmartAI extends SimpleAI {
+class SmartAI extends BaseAI {
 
 	public static function buildHardAI(racket, name) {
 		return new SmartAI(racket, name);
@@ -59,17 +59,16 @@ class SmartAI extends SimpleAI {
 
 	public static function buildMediumAI(racket, name) {
 		var ai = new SmartAI(racket, name);
-		ai.SETTINGS.angleVariance = 0.8;
-		ai.SETTINGS.angleVarianceMinFactor = 0.4;
+		ai.SETTINGS.angleVariance = 0.75;
+		ai.SETTINGS.angleVarianceMinFactor = 0.3;
 		ai.SETTINGS.returnToMiddleChance *= 0.5;
-		ai.SETTINGS.bouncePlaceBias = [2, 2, 3, 2, 3, 2, 2];
+		ai.SETTINGS.bouncePlaceBias = [1.75, 2, 3, 2, 3, 2, 1.75];
 		ai.SETTINGS.bouncePlaceBiasSafe = [0, 0, 2, 1, 2, 0, 0];
 		return ai;
 	}
 
 	public var drawTrajectory:Bool = false;
 
-	var target:FlxPoint;
 	var model:Array<FlxRect>;
 
 	// some resonable defaults
