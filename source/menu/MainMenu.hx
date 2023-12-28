@@ -68,7 +68,7 @@ class MainMenu extends FlxState {
 			});
 
 		menu.createPage('ai_settings')
-			.add(wrapMenuPage('Settngs', '
+			.add(wrapMenuPage('Settings', '
 				-| your position | list | player_pos | left,right
 				-| AI difficulty | list | ai_smarteness | ${ais.join(',')}
 				-| * START * | link | load_ai_room
