@@ -101,12 +101,12 @@ class BaseAI2 extends BaseAI {
 
 	function updateVariance() {
 		var ball = GAME.room.ball;
-		var b = projectBallPos(timeToThink * 1.25);
+		var b = projectBallPos(timeToThink * 1.15);
 		var newShift = previousShift;
-		if (b.y + ball.height < racket.y || b.y < racket.movementBounds.top + racket.height * .5) {
+		if (b.y + ball.height < racket.y || b.y > racket.movementBounds.bottom - racket.height * .5) {
 			newShift = 1;
 		}
-		else if (b.y > racket.y + racket.height || b.y > racket.movementBounds.bottom - racket.height * .5) {
+		else if (b.y > racket.y + racket.height || b.y < racket.movementBounds.top + racket.height * .5) {
 			newShift = 3;
 		}
 		else {
@@ -117,13 +117,13 @@ class BaseAI2 extends BaseAI {
 		if (newShift != previousShift) {
 			switch (newShift) {
 				case 1:
-					// variance to hit mostly by racket' top
-					positionVariance = Flixel.random.float(0, 3 / 7);
+					// variance to hit mostly by racket's top
+					positionVariance = Flixel.random.float(4 / 7, 1);
 				case 2:
 					positionVariance = Flixel.random.float(1 / 7, 6 / 7);
 				case 3:
-					// variance to hit mostly by racket bottom
-					positionVariance = Flixel.random.float(4 / 7, 1);
+					// variance to hit mostly by racket's bottom
+					positionVariance = Flixel.random.float(0, 3 / 7);
 			}
 			trace('$name: NEW variance: ${FlxMath.roundDecimal(positionVariance, 2)}\n');
 			Flixel.watch.addQuick('$name var:', '${FlxMath.roundDecimal(positionVariance, 2)}');
@@ -171,7 +171,7 @@ class BaseAI2 extends BaseAI {
 	}
 
 	function calcTargetPosition() {
-		//
+
 		var ball = GAME.room.ball;
 		switch (racket.position) {
 			case LEFT, RIGHT:
@@ -179,24 +179,22 @@ class BaseAI2 extends BaseAI {
 				// var targetRacketY = targetCenterY - racket.height / 2;
 
 				// var b = projectBallPos(Math.max(timeToThink * 2, 0.175));
-				var b = projectBallPos(timeToThink * 1.25);
+				var b = projectBallPos(timeToThink * 1.15);
 
+				var moveBounds = racket.movementBounds;
 				// take new projected value as initial value for calculation
-				var top = Math.max(b.y + 1 - racket.height, racket.movementBounds.top);
-				var bottom = Math.min(b.y + ball.height - 1, racket.movementBounds.bottom - racket.height);
+				var top = Math.max(b.y + 1 - racket.height, moveBounds.top);
+				var bottom = Math.min(b.y + ball.height - 1, moveBounds.bottom - racket.height);
 
-				top = Math.min(top, racket.movementBounds.bottom - racket.height);
-				bottom = Math.max(bottom, racket.movementBounds.top + racket.height);
-
-				top = FlxMath.bound(b.y + 1 - racket.height, racket.movementBounds.top, racket.movementBounds.bottom - racket.height);
-				bottom = FlxMath.bound(b.y + ball.height - 1, racket.movementBounds.top + racket.height, racket.movementBounds.bottom);
+				top = FlxMath.bound(b.y + 1 - racket.height, moveBounds.top, moveBounds.bottom - racket.height);
+				bottom = FlxMath.bound(b.y + ball.height - 1, moveBounds.top, moveBounds.bottom - racket.height);
 
 				target.y = FlxMath.lerp(top, bottom, positionVariance);
 				topz = top;
 				btmz = bottom;
 				bx = b.x;
 				by = b.y;
-				// target.y = FlxMath.bound(target.y, racket.movementBounds.top, racket.movementBounds.bottom - racket.height);
+				// target.y = FlxMath.bound(target.y, moveBounds.top, moveBounds.bottom - racket.height);
 
 				var path = Math.abs(target.y - racket.y);
 				var duration = path / Pong.params.racketSpeed;
@@ -213,11 +211,15 @@ class BaseAI2 extends BaseAI {
 				Flixel.watch.addQuick('$name ty:', '${FlxMath.roundDecimal(target.y, 2)}');
 
 				b.put();
-			// if (name.indexOf('L') != -1)
-			// 	trace('timer RESET');
 			case _:
 				0;
 		}
+	}
+
+	function stopRacket(_) {
+		racket.velocity.set(0, 0);
+		// racket.y = target.y;
+		// calcTargetPosition();
 	}
 
 	var topz = 0.0;
@@ -228,12 +230,14 @@ class BaseAI2 extends BaseAI {
 	override function draw() {
 		super.draw();
 
+		#if debug
 		var ball = GAME.room.ball;
 		var gfx = Flixel.camera.debugLayer.graphics;
 
 		gfx.lineStyle(1.5, 0x8DDBFF, 0.75);
 		gfx.moveTo(racket.x - 20, topz);
 		gfx.lineTo(racket.x + 20, topz);
+		gfx.lineStyle(1.5, 0x68F88C, 0.75);
 		gfx.moveTo(racket.x - 20, btmz);
 		gfx.lineTo(racket.x + 20, btmz);
 		gfx.lineStyle(1.5, 0xFD7BDD, 0.75);
@@ -242,13 +246,6 @@ class BaseAI2 extends BaseAI {
 		gfx.lineStyle(1, 0xFF0000, 0.5);
 		gfx.drawRect(bx, by, ball.width, ball.height);
 		gfx.endFill();
-	}
-
-	function stopRacket(_) {
-		// if (name.indexOf('L') != -1)
-		// 	trace('timer COMPLETE');
-		racket.velocity.set(0, 0);
-		// racket.y = target.y;
-		// calcTargetPosition();
+		#end
 	}
 }
