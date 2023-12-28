@@ -16,6 +16,8 @@ class BaseAI extends RacketController {
 
 	public var name:String;
 
+	public var drawDebugInfo:Bool = false;
+
 	/**
 		Target coord for the racket.
 	**/
@@ -51,6 +53,20 @@ class BaseAI extends RacketController {
 		@param ball 
 	**/
 	function onBallEvent(obj:FlxObject, ball:Ball) {}
+
+	/**
+		Draw any debug things you implemented.
+	**/
+	public function drawDebug() {}
+
+	#if debug
+	override function draw() {
+		super.draw();
+
+		if (drawDebugInfo)
+			drawDebug();
+	}
+	#end
 }
 
 class BaseAI2 extends BaseAI {
@@ -64,8 +80,6 @@ class BaseAI2 extends BaseAI {
 	public var positionVariance:Float = 0.5;
 
 	var timer:Float;
-	var moveDuration:Float = 0.0;
-	var moveDurationTime:Float = 0;
 
 	/**
 		Used instead of tween objects to "tween" racket
@@ -96,7 +110,6 @@ class BaseAI2 extends BaseAI {
 			// updateVariance();
 		}
 		calcTargetPosition();
-		trace('$name: new target');
 	}
 
 	function updateVariance() {
@@ -118,24 +131,21 @@ class BaseAI2 extends BaseAI {
 			switch (newShift) {
 				case 1:
 					// variance to hit mostly by racket's top
-					positionVariance = Flixel.random.float(4 / 7, 1);
+					positionVariance = Flixel.random.float(3 / 7, 1);
 				case 2:
 					positionVariance = Flixel.random.float(1 / 7, 6 / 7);
 				case 3:
 					// variance to hit mostly by racket's bottom
-					positionVariance = Flixel.random.float(0, 3 / 7);
+					positionVariance = Flixel.random.float(0, 4 / 7);
 			}
-			trace('$name: NEW variance: ${FlxMath.roundDecimal(positionVariance, 2)}\n');
-			Flixel.watch.addQuick('$name var:', '${FlxMath.roundDecimal(positionVariance, 2)}');
 			previousShift = newShift;
+			// Flixel.watch.addQuick('$name var:', '${FlxMath.roundDecimal(positionVariance, 2)}');
 		}
 
 		b.put();
 	}
 
 	override function update(dt:Float) {
-
-		moveDurationTime += dt;
 
 		// check if it is time to recalc racket position
 		if (timer >= timeToThink) {
@@ -145,14 +155,8 @@ class BaseAI2 extends BaseAI {
 		if (timer == 0) {
 			calcTargetPosition();
 			// update variance according to ball's shift from hitzone
-			updateVariance();
+			// updateVariance();
 		}
-
-		// if (moveDurationTime >= moveDuration) {
-		// 	moveDurationTime = 0;
-		// 	moveDuration = 0;
-		// 	racket.velocity.set(0, 0);
-		// }
 
 		timer += dt;
 	}
@@ -198,7 +202,6 @@ class BaseAI2 extends BaseAI {
 
 				var path = Math.abs(target.y - racket.y);
 				var duration = path / Pong.params.racketSpeed;
-				moveDuration = duration;
 
 				racket.velocity.set(0, Pong.params.racketSpeed);
 				racket.y > target.y ? racket.velocity.y *= -1 : 0;
@@ -208,7 +211,7 @@ class BaseAI2 extends BaseAI {
 				// tween?.cancel();
 				// tween = GAME.aiTweens.tween(racket, {y: target.y}, duration, {ease: FlxEase.linear});
 
-				Flixel.watch.addQuick('$name ty:', '${FlxMath.roundDecimal(target.y, 2)}');
+				// Flixel.watch.addQuick('$name ty:', '${FlxMath.roundDecimal(target.y, 2)}');
 
 				b.put();
 			case _:
@@ -227,10 +230,7 @@ class BaseAI2 extends BaseAI {
 	var bx = 0.0;
 	var by = 0.0;
 
-	override function draw() {
-		super.draw();
-
-		#if debug
+	override function drawDebug() {
 		var ball = GAME.room.ball;
 		var gfx = Flixel.camera.debugLayer.graphics;
 
@@ -246,6 +246,5 @@ class BaseAI2 extends BaseAI {
 		gfx.lineStyle(1, 0xFF0000, 0.5);
 		gfx.drawRect(bx, by, ball.width, ball.height);
 		gfx.endFill();
-		#end
 	}
 }
