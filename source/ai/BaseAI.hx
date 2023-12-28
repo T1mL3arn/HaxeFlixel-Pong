@@ -165,8 +165,8 @@ class BaseAI2 extends BaseAI {
 			b.set(ball.x, ball.y).addPoint(wp(ball.velocity * timeToThink));
 		}
 		// clamp that value to be in world's bounds
-		FlxMath.bound(b.x, 0, Flixel.width);
-		FlxMath.bound(b.y, 0, Flixel.height);
+		b.x = FlxMath.bound(b.x, 0, Flixel.width);
+		b.y = FlxMath.bound(b.y, 0, Flixel.height);
 		return b;
 	}
 
