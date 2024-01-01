@@ -36,6 +36,7 @@ class MainMenu extends FlxState {
 		super();
 
 		players = [Reflect.copy(Player.defaultOptions), Reflect.copy(Player.defaultOptions)];
+		players[0].name = 'YOU';
 		players[0].position = LEFT;
 		players[1].position = RIGHT;
 	}
