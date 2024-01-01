@@ -99,8 +99,6 @@ class SimpleAI extends BaseAI {
 
 		if (timer == 0) {
 			calcTargetPosition();
-			// update variance according to ball's shift from hitzone
-			// updateVariance();
 		}
 
 		timer += dt;
