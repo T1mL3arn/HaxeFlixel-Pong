@@ -21,14 +21,14 @@ class BaseAI extends RacketController {
 		super(racket);
 		this.name = name ?? 'base AI';
 		GAME.aiTweens.active = true;
-		GAME.signals.ballCollision.add(onBallEvent);
+		GAME.signals.ballCollision.add(onBallCollision);
 		GAME.signals.ballServed.add(onBallServe);
 	}
 
 	override function destroy() {
 		super.destroy();
 
-		GAME.signals.ballCollision.remove(onBallEvent);
+		GAME.signals.ballCollision.remove(onBallCollision);
 		GAME.signals.ballServed.remove(onBallServe);
 	}
 
@@ -36,15 +36,15 @@ class BaseAI extends RacketController {
 
 	@:noCompletion
 	function onBallServe() {
-		onBallEvent(null, GAME.room.ball);
+		onBallCollision(null, GAME.room.ball);
 	}
 
 	/**
 		Called when ball is served or colide with something
-		@param obj 
+		@param obj an object with which a ball is collide (`null` if it is `serve` event)
 		@param ball 
 	**/
-	function onBallEvent(obj:FlxObject, ball:Ball) {}
+	function onBallCollision(obj:FlxObject, ball:Ball) {}
 
 	/**
 		Draw any debug things you implemented.

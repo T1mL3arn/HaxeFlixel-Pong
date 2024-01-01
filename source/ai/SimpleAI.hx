@@ -42,7 +42,7 @@ class SimpleAI extends BaseAI {
 		target = point();
 	}
 
-	override function onBallEvent(obj:FlxObject, ball:Ball) {
+	override function onBallCollision(obj:FlxObject, ball:Ball) {
 
 		var isServe = obj == null;
 

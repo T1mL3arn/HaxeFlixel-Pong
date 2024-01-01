@@ -9,6 +9,12 @@ import flixel.util.FlxColor;
 import math.MathUtils.wp;
 import math.RayCast;
 
+enum abstract Behavior(Int) to Int {
+	var DO_NOTHING;
+	var FOLLOW_BALL;
+	var GO_TO_MIDDLE;
+}
+
 typedef SmartAIParams = {
 
 	/**
@@ -26,6 +32,9 @@ typedef SmartAIParams = {
 
 	returnToMiddleChance:Float,
 	chanceForRealTrajectory:Float,
+
+	?behaviorList:Array<Any>,
+	?behaviorListBias:Array<Any>,
 };
 
 /**
@@ -64,6 +73,8 @@ class SmartAI extends BaseAI {
 		ai.SETTINGS.returnToMiddleChance *= 0.5;
 		ai.SETTINGS.bouncePlaceBias = [1.75, 2, 3, 2, 3, 2, 1.75];
 		ai.SETTINGS.bouncePlaceBiasSafe = [0, 0, 2, 1, 2, 0, 0];
+		ai.SETTINGS.behaviorList = [DO_NOTHING, GO_TO_MIDDLE, FOLLOW_BALL];
+		ai.SETTINGS.behaviorListBias = [3, 1, 6];
 		return ai;
 	}
 
@@ -86,8 +97,6 @@ class SmartAI extends BaseAI {
 
 		// how does this AI work?
 
-		GAME.signals.ballCollision.add(calcTrajectory);
-		GAME.signals.ballServed.add(onBallServed);
 		// NOTE: buildRoomModel() can be called twice
 		GAME.signals.substateOpened.addOnce((_, _) -> buildRoomModel());
 		Flixel.signals.postStateSwitch.addOnce(buildRoomModel);
@@ -114,8 +123,6 @@ class SmartAI extends BaseAI {
 	override function destroy() {
 		super.destroy();
 
-		GAME.signals.ballCollision.remove(calcTrajectory);
-		GAME.signals.ballServed.remove(onBallServed);
 		Flixel.signals.postStateSwitch.remove(buildRoomModel);
 
 		rayCast.destroy();
@@ -128,10 +135,6 @@ class SmartAI extends BaseAI {
 		model = null;
 
 		target.put();
-	}
-
-	function onBallServed() {
-		calcTrajectory(null, GAME.room.ball);
 	}
 
 	function buildRoomModel() {
@@ -171,7 +174,7 @@ class SmartAI extends BaseAI {
 		rayCast.model = rayCast2.model = model;
 	}
 
-	function calcTrajectory(object:FlxObject, ball:Ball) {
+	override function onBallCollision(object:FlxObject, ball:Ball) {
 
 		if (object == racket) {
 			// ball is bounced by this ai, lets return to the middle (sometime)
