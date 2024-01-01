@@ -11,8 +11,6 @@ class RacketController extends FlxBasic {
 	public function new(racket:Racket) {
 		super();
 		this.racket = racket;
-
-		GAME.aiTweens.active = true;
 	}
 }
 
