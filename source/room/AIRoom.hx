@@ -89,6 +89,9 @@ class AIRoom extends TwoPlayersRoom {
 	}
 
 	function tryReplaceAI(player:Player, aiType:String) {
+		// NOTE: atm when current ai is "hardest" and new ai is "hard"
+		// no replacement happens. So it is possible that 2 "hardest" ai
+		// will stay in the room
 		// trace('try replace AI ${player.options.name} to $aiType');
 		if (player.options.name.indexOf(aiType) == -1) {
 			// trace('AI replaced');
