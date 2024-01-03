@@ -6,6 +6,7 @@ import flixel.FlxState;
 import flixel.FlxSubState;
 import flixel.tweens.FlxTween.FlxTweenManager;
 import flixel.util.FlxSignal;
+import openfl.events.MouseEvent;
 import openfl.filters.ShaderFilter;
 import room.RoomModel;
 import shader.CrtShader;
@@ -116,6 +117,28 @@ class Pong extends FlxGame {
 				signals.substateOpened.dispatch(sub, @:privateAccess sub._parentState);
 			});
 		});
+
+		#if debug
+		Flixel.signals.postGameStart.addOnce(() -> {
+
+			var wasPaused = false;
+			var step = Flixel.game.debugger.getChildByName('stepbtn');
+			step.addEventListener(MouseEvent.MOUSE_DOWN, e -> {
+				//
+				if (Flixel.vcr.paused) {
+					Flixel.vcr.resume();
+					wasPaused = true;
+				}
+				FLixel.timeScale = 0.2;
+			});
+			step.addEventListener(MouseEvent.MOUSE_UP, e -> {
+				//
+				if (!wasPaused)
+					Flixel.vcr.resume();
+				Flixel.timeScale = 1.0;
+			});
+		});
+		#end
 	}
 
 	function preGameStart() {
