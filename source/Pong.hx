@@ -79,6 +79,7 @@ class Pong extends FlxGame {
 			keyPress: Flixel.signals.postUpdate,
 			ballServed: new FlxTypedSignal(),
 			substateOpened: new FlxTypedSignal(),
+			ballCollision: new FlxTypedSignal(),
 		}
 
 		var crtShader = new CrtShader();
