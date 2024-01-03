@@ -38,7 +38,7 @@ class SimpleAI extends BaseAI {
 	public function new(racket, name) {
 		super(racket, name ?? 'BaseAIv2');
 
-		moveTimer = new FlxTimer();
+		moveTimer = new FlxTimer(new FlxTimerManager());
 		target = point();
 	}
 
@@ -102,6 +102,7 @@ class SimpleAI extends BaseAI {
 		}
 
 		timer += dt;
+		moveTimer.manager.update(dt);
 	}
 
 	function projectBallPos(time:Float) {
@@ -137,18 +138,19 @@ class SimpleAI extends BaseAI {
 				btmz = bottom;
 				bx = b.x;
 				by = b.y;
-				// target.y = FlxMath.bound(target.y, moveBounds.top, moveBounds.bottom - racket.height);
 
 				var path = Math.abs(target.y - racket.y);
 				var duration = path / Pong.params.racketSpeed;
 
-				racket.velocity.set(0, Pong.params.racketSpeed);
-				racket.y > target.y ? racket.velocity.y *= -1 : 0;
-				moveTimer.cancel();
-				moveTimer.start(duration, stopRacket);
+				racket.velocity.set(0, 0);
 
-				// tween?.cancel();
-				// tween = GAME.aiTweens.tween(racket, {y: target.y}, duration, {ease: FlxEase.linear});
+				if (active) {
+					racket.velocity.set(0, Pong.params.racketSpeed);
+					racket.y > target.y ? racket.velocity.y *= -1 : 0;
+
+					moveTimer.cancel();
+					moveTimer.start(duration, stopRacket);
+				}
 
 				// Flixel.watch.addQuick('$name ty:', '${FlxMath.roundDecimal(target.y, 2)}');
 
@@ -160,10 +162,17 @@ class SimpleAI extends BaseAI {
 
 	function stopRacket(_) {
 		racket.velocity.set(0, 0);
-		// racket.y = target.y;
-		// calcTargetPosition();
 	}
 
+	override function set_active(v:Bool):Bool {
+		moveTimer.manager.active = v;
+		moveTimer.cancel();
+		if (moveTimer.onComplete != null)
+			moveTimer.onComplete(moveTimer);
+		return super.set_active(v);
+	}
+
+	#if debug
 	var topz = 0.0;
 	var btmz = 0.0;
 	var bx = 0.0;
@@ -186,4 +195,5 @@ class SimpleAI extends BaseAI {
 		gfx.drawRect(bx, by, ball.width, ball.height);
 		gfx.endFill();
 	}
+	#end
 }

@@ -30,11 +30,10 @@ typedef SmartAIParams = {
 	// bias for ball serve to be sure that AI never misses the first ball
 	bouncePlaceBiasSafe:Array<Float>,
 
-	returnToMiddleChance:Float,
 	chanceForRealTrajectory:Float,
 
-	?behaviorList:Array<Any>,
-	?behaviorListBias:Array<Any>,
+	?behaviorList:Array<Behavior>,
+	?behaviorListBias:Array<Float>,
 };
 
 /**
@@ -48,8 +47,23 @@ typedef SmartAIParams = {
 **/
 class SmartAI extends BaseAI {
 
+	public static function buildMediumAI(racket, name) {
+		var ai = new SmartAI(racket, name);
+		ai.SETTINGS.angleVariance = 0.75;
+		ai.SETTINGS.angleVarianceMinFactor = 0.3;
+		ai.SETTINGS.bouncePlaceBias = [1.75, 2, 3, 2, 3, 2, 1.75];
+		ai.SETTINGS.bouncePlaceBiasSafe = [0, 0, 2, 1, 2, 0, 0];
+		ai.SETTINGS.behaviorList = [DO_NOTHING, GO_TO_MIDDLE, FOLLOW_BALL];
+		ai.SETTINGS.behaviorListBias = [6, 2, 3];
+		return ai;
+	}
+
 	public static function buildHardAI(racket, name) {
-		return new SmartAI(racket, name);
+		var ai = new SmartAI(racket, name);
+		ai.SETTINGS.behaviorList = [DO_NOTHING, GO_TO_MIDDLE, FOLLOW_BALL];
+		ai.SETTINGS.behaviorListBias = [2, 5, 3];
+		ai.SETTINGS.chanceForRealTrajectory = 0.2;
+		return ai;
 	}
 
 	public static function buildHardestAI(racket, name) {
@@ -57,24 +71,15 @@ class SmartAI extends BaseAI {
 		ai.SETTINGS.angleVariance = 0.35;
 		ai.SETTINGS.angleVarianceMinFactor = 0.1;
 		ai.SETTINGS.bouncePlaceBias = [5, 10, 7, 0.25, 7, 10, 5];
+		ai.SETTINGS.bouncePlaceBiasSafe = [0, 1, 0, 0, 0, 1, 0];
+		ai.SETTINGS.chanceForRealTrajectory = 0.5;
+		ai.SETTINGS.behaviorList = [DO_NOTHING, GO_TO_MIDDLE, FOLLOW_BALL];
+		ai.SETTINGS.behaviorListBias = [1, 9, 2];
+
 		// bias below to test how AI behaves trying to hit
 		// ball with only racket corners
 		// ai.SETTINGS.bouncePlaceBias = [1, 0, 0, 0, 0, 0, 1];
-		ai.SETTINGS.bouncePlaceBiasSafe = [0, 1, 0, 0, 0, 1, 0];
-		ai.SETTINGS.returnToMiddleChance = 0.75;
-		ai.SETTINGS.chanceForRealTrajectory = 0.4;
-		return ai;
-	}
 
-	public static function buildMediumAI(racket, name) {
-		var ai = new SmartAI(racket, name);
-		ai.SETTINGS.angleVariance = 0.75;
-		ai.SETTINGS.angleVarianceMinFactor = 0.3;
-		ai.SETTINGS.returnToMiddleChance *= 0.5;
-		ai.SETTINGS.bouncePlaceBias = [1.75, 2, 3, 2, 3, 2, 1.75];
-		ai.SETTINGS.bouncePlaceBiasSafe = [0, 0, 2, 1, 2, 0, 0];
-		ai.SETTINGS.behaviorList = [DO_NOTHING, GO_TO_MIDDLE, FOLLOW_BALL];
-		ai.SETTINGS.behaviorListBias = [3, 1, 6];
 		return ai;
 	}
 
@@ -88,9 +93,12 @@ class SmartAI extends BaseAI {
 		angleVarianceMinFactor: 0.2,
 		bouncePlaceBias: [5, 8, 7, 1, 7, 8, 5],
 		bouncePlaceBiasSafe: [0, 2, 3, 0, 3, 1, 0],
-		returnToMiddleChance: 0.25,
-		chanceForRealTrajectory: 0.1,
+		chanceForRealTrajectory: 1 / 11,
+		behaviorList: [DO_NOTHING, GO_TO_MIDDLE, FOLLOW_BALL],
+		behaviorListBias: [1, 1, 1],
 	};
+
+	var followBallAI:SimpleAI;
 
 	public function new(racket, name) {
 		super(racket, name);
@@ -112,6 +120,11 @@ class SmartAI extends BaseAI {
 		rayCast.trajectoryColor = tjColor;
 		rayCast2.trajectoryColor = tjRealColor;
 		target = point();
+
+		// TODO change FOLLOW BALL behavior to something simpiler
+		// than SimpleAI,
+		followBallAI = new SimpleAI(racket, name);
+		followBallAI.active = false;
 	}
 
 	var rayCast:RayCast;
@@ -135,6 +148,8 @@ class SmartAI extends BaseAI {
 		model = null;
 
 		target.put();
+
+		followBallAI.destroy();
 	}
 
 	function buildRoomModel() {
@@ -177,11 +192,22 @@ class SmartAI extends BaseAI {
 	override function onBallCollision(object:FlxObject, ball:Ball) {
 
 		if (object == racket) {
-			// ball is bounced by this ai, lets return to the middle (sometime)
-			if (Math.random() <= SETTINGS.returnToMiddleChance) {
-				target.y = Flixel.height * 0.5 - racket.height * 0.5;
-				moveRacketTo(target);
-				// trace('$name: return to middle');
+			// ball is bounced by this ai or a wall, lets decide some behavior
+
+			if (SETTINGS.behaviorList != null) {
+				var behavior = Flixel.random.getObject(SETTINGS.behaviorList, SETTINGS.behaviorListBias);
+				switch behavior {
+					case DO_NOTHING:
+						0;
+						trace('$name: NOP');
+					case GO_TO_MIDDLE:
+						target.y = Flixel.height * 0.5 - racket.height * 0.5;
+						moveRacketTo(target);
+						trace('$name: TO MIDDLE');
+					case FOLLOW_BALL:
+						followBallAI.active = true;
+						trace('$name: FOLLOW BALL');
+				}
 			}
 
 			return;
@@ -193,6 +219,8 @@ class SmartAI extends BaseAI {
 		// - when ball is hit by other racket
 		if (!(ballServe || (object is Racket && object != racket)))
 			return;
+
+		followBallAI.active = false;
 
 		var ballPos = ball.getWorldPos();
 		var ray1 = ball.velocity.clone(wp());
@@ -312,6 +340,8 @@ class SmartAI extends BaseAI {
 
 	override function update(dt:Float) {
 		// I dont want any update code from the superclass
+		if (followBallAI.active)
+			followBallAI.update(dt);
 	}
 
 	override function draw() {
