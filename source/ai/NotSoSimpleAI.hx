@@ -17,8 +17,8 @@ import flixel.tweens.FlxEase;
 class NotSoSimpleAI extends SimpleAI {
 
 	public static final SETTINGS_DEFAULT = {
-		timeToThink: 0.09,
-		timeToThinkMax: 0.25,
+		timeToThink: 0.08,
+		timeToThinkMax: 0.2,
 		distractedChance: 0.2,
 		misscalcChance: 0.2,
 		calcError: 0.15,
@@ -34,12 +34,12 @@ class NotSoSimpleAI extends SimpleAI {
 	public static function buildMediumAI(racket, ?name:String) {
 		var ai = new NotSoSimpleAI(racket, name ?? 'NotSoSimpleAI med AI');
 		ai.SETTINGS = {
-			timeToThink: 0.08,
-			timeToThinkMax: 0.20,
-			distractedChance: 0.125,
+			timeToThink: 0.06,
+			timeToThinkMax: 0.15,
+			distractedChance: 0.1,
 			misscalcChance: 0.1,
-			calcError: 0.1,
-			calcErrorBig: 0.25,
+			calcError: 0.075,
+			calcErrorBig: 0.225,
 		};
 		return ai;
 	}
@@ -100,8 +100,9 @@ class NotSoSimpleAI extends SimpleAI {
 
 			switch (racket.position) {
 				case LEFT, RIGHT:
+					var HZ = racketBounds.height + ballBounds.height;
 					var targetCenterY = (ballBounds.y + ballBounds.bottom) / 2;
-					var targetRacketY = targetCenterY - racketBounds.height / 2;
+					var targetRacketY = targetCenterY - HZ / 2;
 
 					if (tween != null)
 						tween.cancel();
@@ -117,7 +118,7 @@ class NotSoSimpleAI extends SimpleAI {
 					else {
 						Math.random() < SETTINGS.misscalcChance ? SETTINGS.calcErrorBig : SETTINGS.calcError;
 					}
-					final variance = racket.height * 0.5 * error;
+					final variance = HZ * 0.5 * error;
 					targetRacketY = Flixel.random.float(targetRacketY - variance, targetRacketY + variance);
 
 					var path = Math.abs(targetRacketY - racketBounds.y);
