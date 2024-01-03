@@ -49,12 +49,12 @@ class SmartAI extends BaseAI {
 
 	public static function buildMediumAI(racket, name) {
 		var ai = new SmartAI(racket, name);
-		ai.SETTINGS.angleVariance = 0.75;
+		ai.SETTINGS.angleVariance = 0.8;
 		ai.SETTINGS.angleVarianceMinFactor = 0.3;
 		ai.SETTINGS.bouncePlaceBias = [1.75, 2, 3, 2, 3, 2, 1.75];
 		ai.SETTINGS.bouncePlaceBiasSafe = [0, 0, 2, 1, 2, 0, 0];
 		ai.SETTINGS.behaviorList = [DO_NOTHING, GO_TO_MIDDLE, FOLLOW_BALL];
-		ai.SETTINGS.behaviorListBias = [6, 2, 3];
+		ai.SETTINGS.behaviorListBias = [6, 1, 3];
 		return ai;
 	}
 
