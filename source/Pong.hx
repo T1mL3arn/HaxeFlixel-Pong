@@ -6,6 +6,7 @@ import flixel.FlxState;
 import flixel.FlxSubState;
 import flixel.tweens.FlxTween.FlxTweenManager;
 import flixel.util.FlxSignal;
+import openfl.display.StageQuality;
 import openfl.events.MouseEvent;
 import openfl.filters.ShaderFilter;
 import room.RoomModel;
@@ -107,6 +108,9 @@ class Pong extends FlxGame {
 				Flixel.camera.filtersEnabled = !Flixel.camera.filtersEnabled;
 		});
 		FLixel.signals.preGameStart.add(preGameStart);
+		FLixel.signals.preGameStart.add(() -> {
+			Flixel.game.stage.quality = StageQuality.LOW;
+		});
 
 		// Crutch to redispatch substate-opened events.
 		// Flixel thiks I dont need such event in global scope,
