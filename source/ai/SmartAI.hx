@@ -274,7 +274,7 @@ class SmartAI extends BaseAI {
 					(HZ can be simplified to Rh + Bh)
 				**/
 
-				// TODO store and read this from racket?
+				// Store and read this from racket?
 				final segmentCount = 7;
 				var HZ = racket.height + ball.height - 2; // -2 to be sure the ball will be hit
 				var SS = HZ / segmentCount;

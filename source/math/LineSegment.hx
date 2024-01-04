@@ -182,7 +182,6 @@ class LineSegment {
 	**/
 	public function rotate(rad:Float, ?origin:FlxPoint):LineSegment {
 		if (origin != null)
-			// TODO
 			throw 'Not implemented';
 
 		start.rotateByRadians(rad);

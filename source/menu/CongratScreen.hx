@@ -151,8 +151,9 @@ class WinnerSprite extends FlxSpriteGroup {
 		var dy = -findMinY();
 		// due to this shit https://github.com/HaxeFoundation/haxe/issues/10635
 		// I cant call multiTransformChildren()
+		// NOTE reported that is fixed in haxe > 4.3.3
+		// https://discord.com/channels/162395145352904705/165234904815239168/1183250656774078534
 		// multiTransformChildren([xTransform, yTransform], [dx, dy]);
-		// TODO ask on Haxe gitbug about it?
 		transformChildren(xTransform, dx);
 		transformChildren(yTransform, dy);
 
@@ -161,8 +162,7 @@ class WinnerSprite extends FlxSpriteGroup {
 	}
 
 	public function setWinnerName(name:String) {
-		// TODO make `maxlen` into top-level const
-		var maxlen = 15;
+		final maxlen = 15;
 		winnerLabel.text = 'winner: ${name.substr(0, maxlen)}';
 		winnerLabel.screenCenter(X);
 	}

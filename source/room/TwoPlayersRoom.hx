@@ -161,7 +161,7 @@ class TwoPlayersRoom extends BaseState {
 				GAME.aiTweens.cancelTweensOf(player.racket);
 			}
 			// TODO if one of the players is human and other one is ai
-			// set screen_type FOR_LOOSER if human is lost
+			// set screen_type FOR_LOOSER if human is lost the game
 			showCongratScreen(winner, FOR_WINNER);
 		}
 		else if (ballServer != null) {
