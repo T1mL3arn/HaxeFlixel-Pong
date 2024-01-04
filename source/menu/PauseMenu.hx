@@ -13,7 +13,7 @@ class PauseMenu extends FlxSubState {
 	var stateJustOpenned:Bool = false;
 
 	public function new() {
-		super();
+		super(0xBB000000);
 	}
 
 	override function create() {

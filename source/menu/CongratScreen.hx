@@ -31,7 +31,7 @@ class CongratScreen extends FlxSubState {
 	public var openMainMenuAction:Void->Void;
 
 	public function new(?playAgainMenuAction:CongratScreen->Void) {
-		super(0xEE000000);
+		super(0xBB000000);
 		this.playAgainMenuAction = playAgainMenuAction;
 
 		var bottomPadding = -Flixel.height * #if !html5 0.05 #else 0.1 #end;
