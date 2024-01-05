@@ -152,14 +152,21 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 		Flixel.switchState(new TwoPlayersRoom(leftOptions, rightOptions, network, currentPlayerUid));
 	}
 
+	var ballPayload:BallDataPayload = {
+		x: 0,
+		y: 0,
+		vx: 0,
+		vy: 0,
+		hitBy: 'unknown',
+	};
+
 	function getBallPayload():BallDataPayload {
-		return {
-			x: ball.x,
-			y: ball.y,
-			vx: ball.velocity.x,
-			vy: ball.velocity.y,
-			hitBy: 'unknown',
-		};
+		ballPayload.x = ball.x;
+		ballPayload.y = ball.y;
+		ballPayload.vx = ball.velocity.x;
+		ballPayload.vy = ball.velocity.y;
+		ballPayload.hitBy = 'unknown';
+		return ballPayload;
 	}
 
 	override function serveBall(byPlayer:Player, ball:Ball, ?delay:Float) {
