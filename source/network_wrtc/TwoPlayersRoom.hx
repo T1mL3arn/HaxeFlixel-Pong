@@ -169,14 +169,14 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 		return ballPayload;
 	}
 
-	override function serveBall(byPlayer:Player, ball:Ball, ?delay:Float) {
+	override function serveBall(byPlayer:Player, ball:Ball, delay:Float) {
 		if (network.initiator) {
 			super.serveBall(byPlayer, ball, delay);
 			// ball serve has delay, so for correct sync
 			// I have to sync 2 times: right now and after delay
 			network.send(BallData, getBallPayload());
 
-			// TODO probably better use haxe Timer here in netplay
+			// TODO probably better use haxe Timer here in netplay?
 			new FlxTimer().start(delay, _ -> network.send(BallData, getBallPayload()));
 		}
 	}

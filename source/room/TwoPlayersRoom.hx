@@ -93,7 +93,7 @@ class TwoPlayersRoom extends BaseState {
 		if (players[0].active && players[1].active) {
 			if (ball.velocity.lengthSquared == 0 && firstServe) {
 				var player = Flixel.random.getObject(players);
-				serveBall(player, ball);
+				serveBall(player, ball, Pong.params.ballServeDelay);
 				firstServe = false;
 			}
 		}
@@ -102,7 +102,7 @@ class TwoPlayersRoom extends BaseState {
 	function ballOutWorldBounds() {
 		if (!ball.inWorldBounds()) {
 			resetBall();
-			serveBall(Flixel.random.getObject(players), ball);
+			serveBall(Flixel.random.getObject(players), ball, Pong.params.ballServeDelay);
 		}
 	}
 
@@ -166,7 +166,7 @@ class TwoPlayersRoom extends BaseState {
 		}
 		else if (ballServer != null) {
 			resetBall();
-			serveBall(ballServer, ball);
+			serveBall(ballServer, ball, Pong.params.ballServeDelay);
 		}
 	}
 
@@ -179,8 +179,7 @@ class TwoPlayersRoom extends BaseState {
 		openSubState(new CongratScreen(playAgainAction).setWinner(player.name, screenType));
 	}
 
-	function serveBall(byPlayer:Player, ball:Ball, ?delay:Float) {
-		delay = delay ?? Pong.params.ballServeDelay;
+	function serveBall(byPlayer:Player, ball:Ball, delay:Float) {
 
 		var p = byPlayer;
 		ball.y = p.racket.y + p.racket.height * 0.5 - ball.height * 0.5;
