@@ -199,6 +199,10 @@ class TwoPlayersRoom extends BaseState {
 			GAME.signals.ballServed.dispatch();
 		});
 
+		ballPreServe(ball, delay);
+	}
+
+	function ballPreServe(ball:Ball, delay:Float) {
 		twinkle(ball, FlxColor.ORANGE, delay, 0.1);
 
 		// scale-out effect for the ball

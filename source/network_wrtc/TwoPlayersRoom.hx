@@ -107,6 +107,8 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 				messageCongratScreenData(msg.data);
 			case ResetRoom:
 				messageResetRoom();
+			case BallPreServe:
+				messageBallPreServe(msg.data);
 			default:
 				0;
 		}
@@ -152,6 +154,11 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 		Flixel.switchState(new TwoPlayersRoom(leftOptions, rightOptions, network, currentPlayerUid));
 	}
 
+	function messageBallPreServe(data:{delay:Float}) {
+		if (!network.initiator)
+			ballPreServe(GAME.room.ball, data.delay);
+	}
+
 	var ballPayload:BallDataPayload = {
 		x: 0,
 		y: 0,
@@ -175,6 +182,7 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 			// ball serve has delay, so for correct sync
 			// I have to sync 2 times: right now and after delay
 			network.send(BallData, getBallPayload());
+			network.send(BallPreServe, {delay: delay});
 
 			// TODO probably better use haxe Timer here in netplay?
 			new FlxTimer().start(delay, _ -> network.send(BallData, getBallPayload()));
