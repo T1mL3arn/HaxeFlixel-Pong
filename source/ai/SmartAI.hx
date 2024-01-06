@@ -184,6 +184,7 @@ class SmartAI extends BaseAI {
 			box.bottom += bhw;
 
 			model.push(box);
+			// trace('$name: ROOM model is built');
 		}
 
 		rayCast.model = rayCast2.model = model;

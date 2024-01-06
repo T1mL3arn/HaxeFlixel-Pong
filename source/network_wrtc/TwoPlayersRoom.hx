@@ -86,11 +86,19 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 	override function create() {
 		super.create();
 		network.onMessage.add(onMessage);
+		Flixel.vcr.pauseChanged.add(onPauseChange);
+		// Pong.params.ballSpeed = 500;
+		Pong.params.scoreToWin = 3;
+	}
+
+	function onPauseChange(paused:Bool) {
+		network.send(DebugPause, {paused: paused});
 	}
 
 	override function destroy() {
 		super.destroy();
 		network?.onMessage?.remove(onMessage);
+		Flixel.vcr.pauseChanged.remove(onPauseChange);
 	}
 
 	function onMessage(msg:NetworkMessage) {
@@ -109,6 +117,8 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 				messageResetRoom();
 			case BallPreServe:
 				messageBallPreServe(msg.data);
+			case DebugPause:
+				messageDebugPause(msg.data);
 			default:
 				0;
 		}
@@ -121,6 +131,7 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 
 		var player = players.find(p -> p.uid == paddleName);
 		player.racket.velocity.set(0, 0);
+		// trace('reset VELOCITY for $paddleName');
 
 		// do not update paddle when both movement actions are active
 		if (!(actionUp && actionDown)) {
@@ -157,6 +168,17 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 	function messageBallPreServe(data:{delay:Float}) {
 		if (!network.initiator)
 			ballPreServe(GAME.room.ball, data.delay);
+	}
+
+	function messageDebugPause(data:{paused:Bool}) {
+		#if debug
+		if (!network.initiator) {
+			if (data.paused)
+				Flixel.vcr.pause();
+			else
+				Flixel.vcr.resume();
+		}
+		#end
 	}
 
 	var ballPayload:BallDataPayload = {

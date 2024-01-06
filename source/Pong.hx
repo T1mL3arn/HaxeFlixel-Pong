@@ -68,6 +68,7 @@ class Pong extends FlxGame {
 		ballServed:FlxSignal,
 		substateOpened:FlxTypedSignal<(FlxSubState, FlxState)->Void>,
 		ballCollision:FlxTypedSignal<(FlxObject, Ball)->Void>,
+		pauseChange:FlxTypedSignal<Bool->Void>,
 	};
 
 	public function new() {
@@ -82,7 +83,8 @@ class Pong extends FlxGame {
 			ballServed: new FlxTypedSignal(),
 			substateOpened: new FlxTypedSignal(),
 			ballCollision: new FlxTypedSignal(),
-		}
+			pauseChange: new FlxTypedSignal(),
+		};
 
 		var crtShader = new CrtShader();
 		var filters = [new ShaderFilter(crtShader)];
