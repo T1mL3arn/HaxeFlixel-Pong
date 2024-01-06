@@ -28,6 +28,8 @@ class BaseAI extends RacketController {
 	override function destroy() {
 		super.destroy();
 
+		// NOTE: racket can already be destroyed by something else
+		racket?.velocity?.set(0, 0);
 		GAME.signals.ballCollision.remove(onBallCollision);
 		GAME.signals.ballServed.remove(onBallServe);
 	}

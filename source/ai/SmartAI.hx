@@ -6,8 +6,10 @@ import flixel.math.FlxPoint;
 import flixel.math.FlxRect;
 import flixel.tweens.FlxEase;
 import flixel.util.FlxColor;
+import math.MathUtils.round;
 import math.MathUtils.wp;
 import math.RayCast;
+import utils.Velocity;
 
 enum abstract Behavior(Int) to Int {
 	var DO_NOTHING;
@@ -99,6 +101,7 @@ class SmartAI extends BaseAI {
 	};
 
 	var followBallAI:SimpleAI;
+	var velocityControler:Velocity;
 
 	public function new(racket, name) {
 		super(racket, name);
@@ -125,6 +128,8 @@ class SmartAI extends BaseAI {
 		// than SimpleAI,
 		followBallAI = new SimpleAI(racket, name);
 		followBallAI.active = false;
+
+		velocityControler = new Velocity();
 	}
 
 	var rayCast:RayCast;
@@ -329,14 +334,7 @@ class SmartAI extends BaseAI {
 		if (tween != null)
 			tween.cancel();
 
-		// don't move the racket if target point is the same
-		// as current position
-		if (p.equals(wp(racket.x, racket.y)))
-			return;
-
-		var path = p.distanceTo(wp(racket.x, racket.y));
-		var duration = path / Pong.params.racketSpeed;
-		tween = GAME.aiTweens.tween(racket, {y: p.y, x: p.x}, duration, {ease: FlxEase.linear});
+		velocityControler.moveObjectTo(racket, p, Pong.params.racketSpeed);
 	}
 
 	override function update(dt:Float) {

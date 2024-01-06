@@ -7,6 +7,7 @@ import flixel.util.FlxTimer;
 import math.MathUtils.p;
 import math.MathUtils.point;
 import math.MathUtils.wp;
+import utils.Velocity;
 
 /**
 	Simple AI does not mean dumb AI. 
@@ -34,12 +35,16 @@ class SimpleAI extends BaseAI {
 	var moveTimer:FlxTimer;
 
 	var previousShift:Int = 0;
+	var velocityContoller:Velocity;
 
 	public function new(racket, name) {
 		super(racket, name ?? 'BaseAIv2');
 
 		moveTimer = new FlxTimer(new FlxTimerManager());
 		target = point();
+
+		velocityContoller = new Velocity();
+		velocityContoller.timer = moveTimer;
 	}
 
 	override function onBallCollision(obj:FlxObject, ball:Ball) {
@@ -133,23 +138,15 @@ class SimpleAI extends BaseAI {
 				top = FlxMath.bound(b.y + 1 - racket.height, moveBounds.top, moveBounds.bottom - racket.height);
 				bottom = FlxMath.bound(b.y + ball.height - 1, moveBounds.top, moveBounds.bottom - racket.height);
 
+				target.x = racket.x;
 				target.y = FlxMath.lerp(top, bottom, positionVariance);
 				topz = top;
 				btmz = bottom;
 				bx = b.x;
 				by = b.y;
 
-				var path = Math.abs(target.y - racket.y);
-				var duration = path / Pong.params.racketSpeed;
-
-				racket.velocity.set(0, 0);
-
 				if (active) {
-					racket.velocity.set(0, Pong.params.racketSpeed);
-					racket.y > target.y ? racket.velocity.y *= -1 : 0;
-
-					moveTimer.cancel();
-					moveTimer.start(duration, stopRacket);
+					velocityContoller.moveObjectTo(racket, target, Pong.params.racketSpeed);
 				}
 
 				// Flixel.watch.addQuick('$name ty:', '${FlxMath.roundDecimal(target.y, 2)}');
