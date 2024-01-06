@@ -49,6 +49,16 @@ inline function point(x = 0.0, y = 0.0):FlxPoint {
 overload extern inline function lerp(a:FlxPoint, b:FlxPoint, r:Float = 0.5, ?p:FlxPoint):FlxPoint {
 	return (p ?? point(0, 0)).set(FlxMath.lerp(a.x, b.x, r), FlxMath.lerp(a.y, b.y, r));
 }
+
+/**
+	Rounds a decimal value with given precission
+	@param val 
+	@param precision 
+	@return Float
+**/
+inline function round(val:Float, precision:Int = 2):Float {
+	return FlxMath.roundDecimal(val, precision);
+}
 #end
 
 function xor(a:Bool, b:Bool) {
