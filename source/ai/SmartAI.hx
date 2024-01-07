@@ -198,21 +198,21 @@ class SmartAI extends BaseAI {
 	override function onBallCollision(object:FlxObject, ball:Ball) {
 
 		if (object == racket) {
-			// ball is bounced by this ai or a wall, lets decide some behavior
+			// ball is bounced by other racket, lets decide some behavior
 
 			if (SETTINGS.behaviorList != null) {
 				var behavior = Flixel.random.getObject(SETTINGS.behaviorList, SETTINGS.behaviorListBias);
 				switch behavior {
 					case DO_NOTHING:
 						0;
-						trace('$name: NOP');
+					// trace('$name: NOP');
 					case GO_TO_MIDDLE:
 						target.y = Flixel.height * 0.5 - racket.height * 0.5;
 						moveRacketTo(target);
-						trace('$name: TO MIDDLE');
+					// trace('$name: TO MIDDLE');
 					case FOLLOW_BALL:
 						followBallAI.active = true;
-						trace('$name: FOLLOW BALL');
+						// trace('$name: FOLLOW BALL');
 				}
 			}
 
