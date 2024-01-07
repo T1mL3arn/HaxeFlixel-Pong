@@ -43,13 +43,17 @@ class Velocity {
 		var angle = FlxAngle.angleFromOrigin(target.x - object.x, target.y - object.y);
 		object.velocity.set(Math.cos(angle) * speed, Math.sin(angle) * speed);
 		timer.cancel();
-		timer.start(time, stopMovement);
+		timer.start(time, stopMovement_internal);
 		target.putWeak();
 		// trace('move to: ${target} for ${round(time)} secs; vel: ${object.velocity}; path: ${round(path)} ');
 	}
 
-	function stopMovement(?_) {
+	function stopMovement_internal(?_) {
 		lastObj.velocity.set(0, 0);
 		// trace('movement stopped');
+	}
+
+	public function stopMovement() {
+		stopMovement_internal();
 	}
 }
