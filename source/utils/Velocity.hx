@@ -16,6 +16,17 @@ class Velocity {
 
 	public function new() {
 		//
+		// replacing trace (for tests)
+		// var oldTrace = haxe.Log.trace;
+		// haxe.Log.trace = function(v, ?infos) {
+		// 	// handle trace
+		// 	if (infos != null) {
+		// 		infos.fileName = '';
+		// 		infos.lineNumber = 1;
+		// 	}
+		// 	oldTrace(v, infos);
+		// }
+
 		timer = new FlxTimer();
 	}
 
@@ -34,7 +45,7 @@ class Velocity {
 		timer.cancel();
 		timer.start(time, stopMovement);
 		target.putWeak();
-		// trace('timer: time: ${round(time)} path: ${round(path)} vel: ${obj.velocity}');
+		// trace('move to: ${target} for ${round(time)} secs; vel: ${object.velocity}; path: ${round(path)} ');
 	}
 
 	function stopMovement(?_) {

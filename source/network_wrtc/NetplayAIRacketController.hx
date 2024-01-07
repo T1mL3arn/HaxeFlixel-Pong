@@ -14,15 +14,6 @@ class NetplayAIRacketController extends RacketController {
 	var data:PaddleActionPayload;
 
 	public function new(ai:BaseAI) {
-		var oldTrace = haxe.Log.trace;
-		haxe.Log.trace = function(v, ?infos) {
-			// handle trace
-			if (infos != null) {
-				infos.fileName = '';
-				infos.lineNumber = 1;
-			}
-			oldTrace(v, infos);
-		}
 
 		super(ai.racket);
 
@@ -33,8 +24,6 @@ class NetplayAIRacketController extends RacketController {
 			actionMoveDown: false,
 			actionMoveUp: false,
 		}
-
-		trace('same racket: ${this.racket == ai.racket}');
 	}
 
 	override function destroy() {
@@ -53,12 +42,10 @@ class NetplayAIRacketController extends RacketController {
 				var moveUp = racket.velocity.y < 0;
 				var sendData = xor(moveDown, data.actionMoveDown) || xor(moveUp, data.actionMoveUp);
 
-				trace('D: $moveDown, U: $moveUp, send: $sendData');
 				if (sendData) {
 					data.actionMoveUp = moveUp;
 					data.actionMoveDown = moveDown;
 					Network.network.send(PaddleAction, data);
-					trace('ai data, UP: ${data.actionMoveUp} DOWN: ${data.actionMoveDown}');
 				}
 			case _:
 				0;
