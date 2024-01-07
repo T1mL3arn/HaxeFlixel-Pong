@@ -53,7 +53,7 @@ class Network {
 	}
 
 	public function destroy() {
-		peer.destroy();
+		peer?.destroy();
 		onMessage.destroy();
 		peer = null;
 		onMessage = null;

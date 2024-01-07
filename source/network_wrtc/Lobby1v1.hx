@@ -137,7 +137,7 @@ class Lobby1v1 extends FlxState {
 
 				case [it_fire, SWITCH_TO_MAIN_MENU]:
 					if (localPeer != null)
-						localPeer.destroy();
+						localPeer?.destroy();
 					Flixel.switchState(new MainMenu());
 
 				default:
