@@ -2,7 +2,6 @@ package network_wrtc;
 
 import ai.BaseAI;
 import math.MathUtils.xor;
-import openfl.utils.Function;
 import network_wrtc.NetplayRacketController.PaddleActionPayload;
 
 /**
