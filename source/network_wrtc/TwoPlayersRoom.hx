@@ -275,6 +275,9 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 		}
 
 		canOpenPauseMenu = false;
+		canPause = true;
+		persistentDraw = true;
+
 		openSubState(congrats.setWinner(player.name, player.uid == currentPlayerUid ? FOR_WINNER : FOR_LOOSER));
 
 		if (network.initiator)
