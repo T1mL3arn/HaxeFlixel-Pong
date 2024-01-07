@@ -231,18 +231,18 @@ class Lobby1v1 extends FlxState {
 
 			// allows AI to play network game (for tests)
 			//
-			// var leftController = if (options.initiator) {
-			// 	racket -> new NetplayRacketController(racket, leftUid);
-			// }
-			// else {
-			// 	r -> null;
-			// }
+			var leftController = if (options.initiator) {
+				racket -> new NetplayAIRacketController(SmartAI.buildHardAI(racket, leftUid));
+			}
+			else {
+				r -> null;
+			}
 
 			var rightController = if (options.initiator) {
 				r -> null;
 			}
 			else {
-				racket -> new NetplayAIRacketController(SmartAI.buildMediumAI(racket, rightUid));
+				racket -> new NetplayAIRacketController(SmartAI.buildHardAI(racket, rightUid));
 			}
 			// -----
 
