@@ -106,8 +106,6 @@ class SmartAI extends BaseAI {
 	public function new(racket, name) {
 		super(racket, name);
 
-		// how does this AI work?
-
 		// NOTE: buildRoomModel() can be called twice
 		GAME.signals.substateOpened.addOnce((_, _) -> buildRoomModel());
 		Flixel.signals.postStateSwitch.addOnce(buildRoomModel);
@@ -189,10 +187,10 @@ class SmartAI extends BaseAI {
 			box.bottom += bhw;
 
 			model.push(box);
-			// trace('$name: ROOM model is built');
 		}
 
 		rayCast.model = rayCast2.model = model;
+		// trace('$name: ROOM model s built');
 	}
 
 	override function onBallCollision(object:FlxObject, ball:Ball) {
