@@ -93,7 +93,7 @@ class TwoPlayersRoom extends BaseState {
 		if (players[0].active && players[1].active) {
 			if (ball.velocity.lengthSquared == 0 && firstServe) {
 				var player = Flixel.random.getObject(players);
-				serveBall(player, ball);
+				serveBall(player, ball, Pong.params.ballServeDelay);
 				firstServe = false;
 			}
 		}
@@ -102,7 +102,7 @@ class TwoPlayersRoom extends BaseState {
 	function ballOutWorldBounds() {
 		if (!ball.inWorldBounds()) {
 			resetBall();
-			serveBall(Flixel.random.getObject(players), ball);
+			serveBall(Flixel.random.getObject(players), ball, Pong.params.ballServeDelay);
 		}
 	}
 
@@ -128,7 +128,7 @@ class TwoPlayersRoom extends BaseState {
 			colorizeBall(cast wall, ball);
 		}
 		ball.collision(wall);
-		GAME.ballCollision.dispatch(wall, ball);
+		GAME.signals.ballCollision.dispatch(wall, ball);
 	}
 
 	function goal(hitArea:FlxBasic, ball:Ball) {
@@ -151,8 +151,7 @@ class TwoPlayersRoom extends BaseState {
 
 			// place ball out of goals to fix rare bug
 			// with two immediate win events
-			ball.x = 100;
-			ball.y = -100;
+			ball.x -= Flixel.width * 2;
 
 			canPause = true;
 			canOpenPauseMenu = false;
@@ -161,11 +160,13 @@ class TwoPlayersRoom extends BaseState {
 				// AI moves its racket with FlxTween, so such tweens must be canceled.
 				GAME.aiTweens.cancelTweensOf(player.racket);
 			}
+			// TODO if one of the players is human and other one is ai
+			// set screen_type FOR_LOOSER if human is lost the game
 			showCongratScreen(winner, FOR_WINNER);
 		}
 		else if (ballServer != null) {
 			resetBall();
-			serveBall(ballServer, ball);
+			serveBall(ballServer, ball, Pong.params.ballServeDelay);
 		}
 	}
 
@@ -178,8 +179,7 @@ class TwoPlayersRoom extends BaseState {
 		openSubState(new CongratScreen(playAgainAction).setWinner(player.name, screenType));
 	}
 
-	function serveBall(byPlayer:Player, ball:Ball, ?delay:Float) {
-		delay = delay ?? Pong.params.ballServeDelay;
+	function serveBall(byPlayer:Player, ball:Ball, delay:Float) {
 
 		var p = byPlayer;
 		ball.y = p.racket.y + p.racket.height * 0.5 - ball.height * 0.5;
@@ -199,6 +199,10 @@ class TwoPlayersRoom extends BaseState {
 			GAME.signals.ballServed.dispatch();
 		});
 
+		ballPreServe(ball, delay);
+	}
+
+	function ballPreServe(ball:Ball, delay:Float) {
 		twinkle(ball, FlxColor.ORANGE, delay, 0.1);
 
 		// scale-out effect for the ball

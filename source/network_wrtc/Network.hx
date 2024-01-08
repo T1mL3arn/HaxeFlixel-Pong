@@ -1,7 +1,7 @@
 package network_wrtc;
 
-import flixel.util.FlxSignal.FlxTypedSignal;
 import haxe.Json;
+import flixel.util.FlxSignal.FlxTypedSignal;
 import peer.Peer;
 
 var network:Network = null;
@@ -13,6 +13,8 @@ enum abstract NetworkMessageType(String) {
 	var ScoreData;
 	var CongratScreenData;
 	var ResetRoom;
+	var BallPreServe;
+	var DebugPause;
 }
 
 typedef NetworkMessage = {
@@ -51,7 +53,7 @@ class Network {
 	}
 
 	public function destroy() {
-		peer.destroy();
+		peer?.destroy();
 		onMessage.destroy();
 		peer = null;
 		onMessage = null;

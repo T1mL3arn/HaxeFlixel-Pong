@@ -83,14 +83,26 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 		// TODO show "user disconnected" info if user disconnects during the game
 	}
 
+	function findPlayerById(id) {
+		return players.find(p -> p.uid == id);
+	}
+
 	override function create() {
 		super.create();
 		network.onMessage.add(onMessage);
+		Flixel.vcr.pauseChanged.add(onPauseChange);
+		// Pong.params.ballSpeed = 500;
+		Pong.params.scoreToWin = 3;
+	}
+
+	function onPauseChange(paused:Bool) {
+		network.send(DebugPause, {paused: paused});
 	}
 
 	override function destroy() {
 		super.destroy();
 		network?.onMessage?.remove(onMessage);
+		Flixel.vcr.pauseChanged.remove(onPauseChange);
 	}
 
 	function onMessage(msg:NetworkMessage) {
@@ -107,6 +119,10 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 				messageCongratScreenData(msg.data);
 			case ResetRoom:
 				messageResetRoom();
+			case BallPreServe:
+				messageBallPreServe(msg.data);
+			case DebugPause:
+				messageDebugPause(msg.data);
 			default:
 				0;
 		}
@@ -119,6 +135,7 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 
 		var player = players.find(p -> p.uid == paddleName);
 		player.racket.velocity.set(0, 0);
+		// trace('reset VELOCITY for $paddleName');
 
 		// do not update paddle when both movement actions are active
 		if (!(actionUp && actionDown)) {
@@ -129,9 +146,33 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 		}
 	}
 
+	var tmpObject = new FlxObject();
+
 	function messageBallData(data:BallDataPayload) {
 		ball.setPosition(data.x, data.y);
 		ball.velocity.set(data.vx, data.vy);
+
+		if (!network.initiator) {
+
+			switch (data.hitBy) {
+				case null:
+					// trace('before BALL SERVED dispatch');
+					GAME.signals.ballServed.dispatch();
+				case 'wall':
+					// just fake the object
+					GAME.signals.ballCollision.dispatch(tmpObject, GAME.room.ball);
+				case 'racket_ours':
+					// fon non server "ours" turns to "theirs"
+					var racket = players.find(p -> p.uid != currentPlayerUid)?.racket;
+					GAME.signals.ballCollision.dispatch(racket, GAME.room.ball);
+				// trace('theirs racket: ${racket == null ? 'null' : 'yes'}');
+				case 'racket_theirs':
+					// fon non server "theirs" turns to "ours"
+					var racket = findPlayerById(currentPlayerUid)?.racket;
+					GAME.signals.ballCollision.dispatch(racket, GAME.room.ball);
+					// trace('ours racket: ${racket == null ? 'null' : 'yes'}');
+			}
+		}
 	}
 
 	function messageScoreData(data:ScoreDataPayload) {
@@ -152,25 +193,49 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 		Flixel.switchState(new TwoPlayersRoom(leftOptions, rightOptions, network, currentPlayerUid));
 	}
 
-	function getBallPayload():BallDataPayload {
-		return {
-			x: ball.x,
-			y: ball.y,
-			vx: ball.velocity.x,
-			vy: ball.velocity.y,
-			hitBy: 'unknown',
-		};
+	function messageBallPreServe(data:{delay:Float}) {
+		if (!network.initiator) {
+			ballPreServe(GAME.room.ball, data.delay);
+		}
 	}
 
-	override function serveBall(byPlayer:Player, ball:Ball, ?delay:Float) {
+	function messageDebugPause(data:{paused:Bool}) {
+		#if debug
+		if (!network.initiator) {
+			if (data.paused)
+				Flixel.vcr.pause();
+			else
+				Flixel.vcr.resume();
+		}
+		#end
+	}
+
+	var ballPayload:BallDataPayload = {
+		x: 0,
+		y: 0,
+		vx: 0,
+		vy: 0,
+		hitBy: 'unknown',
+	};
+
+	function getBallPayload(hitby:String = null):BallDataPayload {
+		ballPayload.x = ball.x;
+		ballPayload.y = ball.y;
+		ballPayload.vx = ball.velocity.x;
+		ballPayload.vy = ball.velocity.y;
+		ballPayload.hitBy = hitby;
+		return ballPayload;
+	}
+
+	override function serveBall(byPlayer:Player, ball:Ball, delay:Float) {
 		if (network.initiator) {
 			super.serveBall(byPlayer, ball, delay);
 			// ball serve has delay, so for correct sync
 			// I have to sync 2 times: right now and after delay
-			network.send(BallData, getBallPayload());
+			network.send(BallData, getBallPayload(''));
+			network.send(BallPreServe, {delay: delay});
 
-			// TODO probably better use haxe Timer here in netplay
-			new FlxTimer().start(delay, _ -> network.send(BallData, getBallPayload()));
+			new FlxTimer().start(delay, _ -> network.send(BallData, getBallPayload(null)));
 		}
 	}
 
@@ -210,6 +275,9 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 		}
 
 		canOpenPauseMenu = false;
+		canPause = true;
+		persistentDraw = true;
+
 		openSubState(congrats.setWinner(player.name, player.uid == currentPlayerUid ? FOR_WINNER : FOR_LOOSER));
 
 		if (network.initiator)
@@ -219,8 +287,18 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 	override function ballCollision(wall:FlxObject, ball:Ball) {
 		super.ballCollision(wall, ball);
 
-		if (network.initiator)
-			network.send(BallData, getBallPayload());
+		if (network.initiator) {
+			// trace('send BallData');
+
+			// hitBy data is for SmartAI
+			// it uses "type" of wall for decision, it does not read info like
+			// dimension, pos, etc.
+			var hitBy = wall is Racket ? 'racket' : 'wall';
+			trace('current player uid: $currentPlayerUid');
+			hitBy = hitBy != 'racket' ? hitBy : (findPlayerById(currentPlayerUid)?.racket == wall ? 'racket_ours' : 'racket_theirs');
+
+			network.send(BallData, getBallPayload(hitBy));
+		}
 	}
 }
 

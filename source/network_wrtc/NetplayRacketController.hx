@@ -14,12 +14,20 @@ class NetplayRacketController extends RacketController {
 	public var keyDown:FlxKey;
 	public var name:String;
 
+	var data:PaddleActionPayload;
+
 	public function new(racket:Racket, ?name:String, ?up:FlxKey = FlxKey.UP, ?down:FlxKey = FlxKey.DOWN) {
 		super(racket);
 
 		keyUp = up;
 		keyDown = down;
 		this.name = name;
+
+		data = {
+			paddleName: name,
+			actionMoveDown: false,
+			actionMoveUp: false,
+		};
 	}
 
 	override function update(dt:Float) {
@@ -39,11 +47,9 @@ class NetplayRacketController extends RacketController {
 			return;
 		// trace('send data${upJustReleased || downJustReleased ? ' ONCE' : ''}');
 
-		var data:PaddleActionPayload = {
-			paddleName: name,
-			actionMoveUp: actionMoveUp,
-			actionMoveDown: actionMoveDown,
-		}
+		data.paddleName = name;
+		data.actionMoveUp = actionMoveUp;
+		data.actionMoveDown = actionMoveDown;
 
 		var net = Network.network;
 

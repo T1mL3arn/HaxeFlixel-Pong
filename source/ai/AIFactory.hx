@@ -13,9 +13,9 @@ inline function getRandomAI(?list:Array<String>) {
 
 function setAIPlayer(opts:PlayerOptions, aiType:String) {
 	switch (aiType.toLowerCase()) {
-		case 'medium':
+		case 'medium' | 'normal':
 			opts.name = 'medium AI (${opts.position})';
-			opts.getController = racket -> NotSoSimpleAI.buildMediumAI(racket, opts.name);
+			opts.getController = racket -> SmartAI.buildMediumAI(racket, opts.name);
 		case 'hard':
 			opts.name = 'hard AI (${opts.position})';
 			opts.getController = racket -> SmartAI.buildHardAI(racket, opts.name);
@@ -24,7 +24,7 @@ function setAIPlayer(opts:PlayerOptions, aiType:String) {
 			opts.getController = racket -> SmartAI.buildHardestAI(racket, opts.name);
 		default:
 			opts.name = 'easy AI (${opts.position})';
-			opts.getController = racket -> NotSoSimpleAI.buildEasyAI(racket, opts.name);
+			opts.getController = racket -> new SimpleAI(racket, opts.name);
 	}
 	return opts;
 }

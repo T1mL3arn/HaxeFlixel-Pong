@@ -4,8 +4,11 @@ import flixel.FlxGame;
 import flixel.FlxObject;
 import flixel.FlxState;
 import flixel.FlxSubState;
+import flixel.sound.FlxSoundGroup;
 import flixel.tweens.FlxTween.FlxTweenManager;
 import flixel.util.FlxSignal;
+import openfl.display.StageQuality;
+import openfl.events.MouseEvent;
 import openfl.filters.ShaderFilter;
 import room.RoomModel;
 import shader.CrtShader;
@@ -50,8 +53,6 @@ class Pong extends FlxGame {
 		params = Reflect.copy(defaultParams);
 	}
 
-	public var ballCollision:FlxTypedSignal<(FlxObject, Ball)->Void> = new FlxTypedSignal();
-
 	/**
 		Current room
 	**/
@@ -67,18 +68,11 @@ class Pong extends FlxGame {
 		keyPress:FlxSignal,
 		ballServed:FlxSignal,
 		substateOpened:FlxTypedSignal<(FlxSubState, FlxState)->Void>,
+		ballCollision:FlxTypedSignal<(FlxObject, Ball)->Void>,
+		pauseChange:FlxTypedSignal<Bool->Void>,
 	};
 
-	/**
-		Current room
-	**/
-	public var room:{ball:Null<Ball>};
-
-	/**
-		Manages all tweens with gameplay object.
-		When game is paused such tweens are also paused.
-	**/
-	public var gameTweens(default, null):FlxTweenManager;
+	public var gameSoundGroup(default, null):FlxSoundGroup;
 
 	public function new() {
 		// Until https://github.com/HaxeFlixel/flixel/pull/2819 is fixed
@@ -91,7 +85,11 @@ class Pong extends FlxGame {
 			keyPress: Flixel.signals.postUpdate,
 			ballServed: new FlxTypedSignal(),
 			substateOpened: new FlxTypedSignal(),
-		}
+			ballCollision: new FlxTypedSignal(),
+			pauseChange: new FlxTypedSignal(),
+		};
+
+		gameSoundGroup = new FlxSoundGroup();
 
 		var crtShader = new CrtShader();
 		var filters = [new ShaderFilter(crtShader)];
@@ -117,16 +115,46 @@ class Pong extends FlxGame {
 				Flixel.camera.filtersEnabled = !Flixel.camera.filtersEnabled;
 		});
 		FLixel.signals.preGameStart.add(preGameStart);
+		FLixel.signals.preGameStart.add(() -> {
+			Flixel.game.stage.quality = StageQuality.LOW;
+		});
 
 		// Crutch to redispatch substate-opened events.
 		// Flixel thiks I dont need such event in global scope,
 		// and it is wrong.
 		Flixel.signals.postStateSwitch.add(() -> {
 			Flixel.state.subStateOpened.add(sub -> {
-				trace('re-dispatch SUBSTATE-OPEN event to global scope');
+				// trace('re-dispatch SUBSTATE-OPEN event to global scope');
 				signals.substateOpened.dispatch(sub, @:privateAccess sub._parentState);
 			});
 		});
+
+		Flixel.signals.preStateCreate.add(_ -> {
+			gameSoundGroup.sounds = [];
+			gameSoundGroup.volume = 1;
+		});
+
+		#if debug
+		Flixel.signals.postGameStart.addOnce(() -> {
+
+			var wasPaused = false;
+			var step = Flixel.game.debugger.getChildByName('stepbtn');
+			step.addEventListener(MouseEvent.MOUSE_DOWN, e -> {
+				//
+				if (Flixel.vcr.paused) {
+					Flixel.vcr.resume();
+					wasPaused = true;
+				}
+				FLixel.timeScale = 0.2;
+			});
+			step.addEventListener(MouseEvent.MOUSE_UP, e -> {
+				//
+				if (!wasPaused)
+					Flixel.vcr.resume();
+				Flixel.timeScale = 1.0;
+			});
+		});
+		#end
 	}
 
 	function preGameStart() {

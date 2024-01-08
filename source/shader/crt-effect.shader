@@ -55,7 +55,7 @@ void main()
 	float stripesSpeed = 30.0;
 	// bigger factor - more stripes
 	float stripesCountFactor = 400.0;
-	float s_am = 0.075;
+	float s_am = 0.050;
 	float s_m = 1.0 - s_am;
   col *= s_m + s_am*sin(stripesSpeed * iTime + uv.y * stripesCountFactor);
 
@@ -66,7 +66,7 @@ void main()
 
 	// add screen flickering
 	float freq = 100.0*PI;			// PI is used to make it "per second"
-	float f_am = 0.025;					// amplitude modulation
+	float f_am = 0.020;					// amplitude modulation
 	float f_m = 1.0 - f_am;	
 	col *= f_m + f_am*sin(freq*iTime);
 

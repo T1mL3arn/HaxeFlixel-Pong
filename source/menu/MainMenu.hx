@@ -5,7 +5,6 @@ import RacketController.KeyboardMovementController;
 import Utils.swap;
 import ai.AIFactory.ais;
 import ai.AIFactory.setAIPlayer;
-import ai.SimpleAI;
 import flixel.FlxBasic;
 import flixel.FlxObject;
 import flixel.FlxSprite;
@@ -28,6 +27,7 @@ class MainMenu extends FlxState {
 
 	static final TRAINING_ROOM_MENU_ID = 'load_training_room';
 	static final SELF_ROOM_MENU_ID = 'load_self_room';
+	static final VS_AI_SETTINGS_MENU_ID = 'player-vs-ai-settings';
 
 	var players:Array<PlayerOptions>;
 	var backGame:AIRoom;
@@ -36,8 +36,8 @@ class MainMenu extends FlxState {
 		super();
 
 		players = [Reflect.copy(Player.defaultOptions), Reflect.copy(Player.defaultOptions)];
-		players[1].getController = racket -> new SimpleAI(racket);
-		players[1].name = 'simple AI';
+		players[0].name = 'YOU';
+		players[0].position = LEFT;
 		players[1].position = RIGHT;
 	}
 
@@ -59,7 +59,7 @@ class MainMenu extends FlxState {
 
 		menu.createPage('1_player')
 			.add(wrapMenuPage('Single Player', '
-				-| vs AI | link | @ai_settings
+				-| vs AI | link | @${VS_AI_SETTINGS_MENU_ID}
 				-| vs self | link | ${SELF_ROOM_MENU_ID}
 				-| training room | link | ${TRAINING_ROOM_MENU_ID}
 		'))
@@ -67,8 +67,8 @@ class MainMenu extends FlxState {
 				pos: 'screen,c,c'
 			});
 
-		menu.createPage('ai_settings')
-			.add(wrapMenuPage('Settngs', '
+		menu.createPage(VS_AI_SETTINGS_MENU_ID)
+			.add(wrapMenuPage('Settings', '
 				-| your position | list | player_pos | left,right
 				-| AI difficulty | list | ai_smarteness | ${ais.join(',')}
 				-| * START * | link | load_ai_room
@@ -104,8 +104,24 @@ class MainMenu extends FlxState {
 					}));
 
 				case [it_fire, 'load_ai_room']:
-					if (players[0].position == RIGHT)
+					var settings = menu.pages[VS_AI_SETTINGS_MENU_ID];
+					var playerPos:String = settings.get('player_pos').get();
+					var aiType:String = settings.get('ai_smarteness').get();
+
+					// update player options
+					// swap if player chose RIGHT pos
+					if (playerPos.toLowerCase() == 'left') {
+						players[0].position = LEFT;
+						players[1].position = RIGHT;
+						setAIPlayer(players[1], aiType);
+					}
+					else {
+						players[0].position = RIGHT;
+						players[1].position = LEFT;
+						setAIPlayer(players[1], aiType);
 						swap(players, 0, 1);
+					}
+
 					Flixel.switchState(new TwoPlayersRoom(players[0], players[1]));
 
 				case [it_fire, 'internet']:
@@ -130,39 +146,23 @@ class MainMenu extends FlxState {
 			}
 		});
 
-		menu.itemEvent.add((event, item) -> {
-			switch ([event, item.ID]) {
-				case [change, 'player_pos']:
-					var pos = item.P.list[item.P.c];
-					if (pos == 'left') {
-						players[0].position = LEFT;
-						players[1].position = RIGHT;
-					}
-					else if (pos == 'right') {
-						players[0].position = RIGHT;
-						players[1].position = LEFT;
-					}
-
-				case [change, 'ai_smarteness']:
-					var aiSmarteness = item.P.list[item.P.c];
-					setAIPlayer(players[1], aiSmarteness);
-
-				default:
-					0;
-			}
-		});
-
 		add(menu);
 
 		// actually center main page on the screen
 		menu.mpActive.forEach(s -> s.screenCenter(X));
 		// TODO update menu class for better alignment?
 
-		insert(0, backGame = new AIRoom('hardest', 'hard', true));
+		// menu.menuEvent.dispatch(it_fire, SELF_ROOM_MENU_ID);
+		// menu.menuEvent.dispatch(it_fire, 'split_screen');
+		// menu.menuEvent.dispatch(it_fire, 'internet');
+		// return;
+
+		insert(0, backGame = new AIRoom('medium', 'easy', true));
 		backGame.create();
 		backGame.canOpenPauseMenu = false;
 		iterSpriteDeep(backGame.members, s -> s.alpha = 0.5);
 		GAME.signals.substateOpened.dispatch(backGame, this);
+		GAME.gameSoundGroup.volume = 0.2;
 	}
 
 	function iterSpriteDeep(list:Array<FlxBasic>, f:FlxSprite->Void) {

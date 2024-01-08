@@ -36,6 +36,8 @@ class TrainingRoom extends BaseState {
 			resetBall();
 			player.score += 1;
 		}
+
+		GAME.gameSoundGroup.volume = 1;
 	}
 
 	override function destroy() {
@@ -72,6 +74,6 @@ class TrainingRoom extends BaseState {
 			(cast wall : Racket).ballCollision(ball);
 
 		ball.collision(wall);
-		GAME.ballCollision.dispatch(wall, ball);
+		GAME.signals.ballCollision.dispatch(wall, ball);
 	}
 }

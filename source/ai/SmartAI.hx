@@ -6,8 +6,16 @@ import flixel.math.FlxPoint;
 import flixel.math.FlxRect;
 import flixel.tweens.FlxEase;
 import flixel.util.FlxColor;
+import math.MathUtils.round;
 import math.MathUtils.wp;
 import math.RayCast;
+import utils.Velocity;
+
+enum abstract Behavior(Int) to Int {
+	var DO_NOTHING;
+	var FOLLOW_BALL;
+	var GO_TO_MIDDLE;
+}
 
 typedef SmartAIParams = {
 
@@ -24,8 +32,10 @@ typedef SmartAIParams = {
 	// bias for ball serve to be sure that AI never misses the first ball
 	bouncePlaceBiasSafe:Array<Float>,
 
-	returnToMiddleChance:Float,
 	chanceForRealTrajectory:Float,
+
+	?behaviorList:Array<Behavior>,
+	?behaviorListBias:Array<Float>,
 };
 
 /**
@@ -37,10 +47,25 @@ typedef SmartAIParams = {
 	- on these signals calcs possible ball trajectory
 	- if trajectory is towards this AI - find the best spot to hit the ball
 **/
-class SmartAI extends SimpleAI {
+class SmartAI extends BaseAI {
+
+	public static function buildMediumAI(racket, name) {
+		var ai = new SmartAI(racket, name);
+		ai.SETTINGS.angleVariance = 0.8;
+		ai.SETTINGS.angleVarianceMinFactor = 0.3;
+		ai.SETTINGS.bouncePlaceBias = [1.75, 2, 3, 2, 3, 2, 1.75];
+		ai.SETTINGS.bouncePlaceBiasSafe = [0, 0, 2, 1, 2, 0, 0];
+		ai.SETTINGS.behaviorList = [DO_NOTHING, GO_TO_MIDDLE, FOLLOW_BALL];
+		ai.SETTINGS.behaviorListBias = [6, 1, 3];
+		return ai;
+	}
 
 	public static function buildHardAI(racket, name) {
-		return new SmartAI(racket, name);
+		var ai = new SmartAI(racket, name);
+		ai.SETTINGS.behaviorList = [DO_NOTHING, GO_TO_MIDDLE, FOLLOW_BALL];
+		ai.SETTINGS.behaviorListBias = [2, 5, 3];
+		ai.SETTINGS.chanceForRealTrajectory = 0.2;
+		return ai;
 	}
 
 	public static function buildHardestAI(racket, name) {
@@ -48,18 +73,21 @@ class SmartAI extends SimpleAI {
 		ai.SETTINGS.angleVariance = 0.35;
 		ai.SETTINGS.angleVarianceMinFactor = 0.1;
 		ai.SETTINGS.bouncePlaceBias = [5, 10, 7, 0.25, 7, 10, 5];
+		ai.SETTINGS.bouncePlaceBiasSafe = [0, 1, 0, 0, 0, 1, 0];
+		ai.SETTINGS.chanceForRealTrajectory = 0.5;
+		ai.SETTINGS.behaviorList = [DO_NOTHING, GO_TO_MIDDLE, FOLLOW_BALL];
+		ai.SETTINGS.behaviorListBias = [1, 9, 2];
+
 		// bias below to test how AI behaves trying to hit
 		// ball with only racket corners
 		// ai.SETTINGS.bouncePlaceBias = [1, 0, 0, 0, 0, 0, 1];
-		ai.SETTINGS.bouncePlaceBiasSafe = [0, 1, 0, 0, 0, 1, 0];
-		ai.SETTINGS.returnToMiddleChance = 0.75;
-		ai.SETTINGS.chanceForRealTrajectory = 0.4;
+
 		return ai;
 	}
 
 	public var drawTrajectory:Bool = false;
 
-	var target:FlxPoint;
+	var model:Array<FlxRect>;
 
 	// some resonable defaults
 	var SETTINGS:SmartAIParams = {
@@ -67,18 +95,20 @@ class SmartAI extends SimpleAI {
 		angleVarianceMinFactor: 0.2,
 		bouncePlaceBias: [5, 8, 7, 1, 7, 8, 5],
 		bouncePlaceBiasSafe: [0, 2, 3, 0, 3, 1, 0],
-		returnToMiddleChance: 0.25,
-		chanceForRealTrajectory: 0.1,
+		chanceForRealTrajectory: 1 / 11,
+		behaviorList: [DO_NOTHING, GO_TO_MIDDLE, FOLLOW_BALL],
+		behaviorListBias: [1, 1, 1],
 	};
+
+	var followBallAI:SimpleAI;
+	var velocityControler:Velocity;
 
 	public function new(racket, name) {
 		super(racket, name);
 
-		// how does this AI work?
-
-		GAME.ballCollision.add(calcTrajectory);
-		GAME.signals.ballServed.add(onBallServed);
+		// NOTE: buildRoomModel() can be called twice
 		GAME.signals.substateOpened.addOnce((_, _) -> buildRoomModel());
+		Flixel.signals.postStateSwitch.addOnce(buildRoomModel);
 
 		rayCast = new RayCast();
 		rayCast2 = new RayCast();
@@ -91,6 +121,13 @@ class SmartAI extends SimpleAI {
 		rayCast.trajectoryColor = tjColor;
 		rayCast2.trajectoryColor = tjRealColor;
 		target = point();
+
+		// TODO change FOLLOW BALL behavior to something simpiler
+		// than SimpleAI,
+		followBallAI = new SimpleAI(racket, name);
+		followBallAI.active = false;
+
+		velocityControler = new Velocity();
 	}
 
 	var rayCast:RayCast;
@@ -102,22 +139,29 @@ class SmartAI extends SimpleAI {
 	override function destroy() {
 		super.destroy();
 
-		GAME.ballCollision.remove(calcTrajectory);
-		GAME.signals.ballServed.remove(onBallServed);
+		Flixel.signals.postStateSwitch.remove(buildRoomModel);
 
 		rayCast.destroy();
 		rayCast2.destroy();
 
-		target.put();
-	}
+		for (rect in model) {
+			if (@:privateAccess !rect._inPool)
+				rect.put();
+		}
+		model = null;
 
-	function onBallServed() {
-		calcTrajectory(null, GAME.room.ball);
+		target.put();
+
+		followBallAI.destroy();
 	}
 
 	function buildRoomModel() {
 
-		var roomModel = [];
+		// dont build the model more than once
+		if (model != null)
+			return;
+
+		model = [];
 
 		final bhw = GAME.room.ball.width * 0.5;
 
@@ -142,20 +186,32 @@ class SmartAI extends SimpleAI {
 			box.right += bhw;
 			box.bottom += bhw;
 
-			roomModel.push(box);
+			model.push(box);
 		}
 
-		rayCast.model = rayCast2.model = roomModel;
+		rayCast.model = rayCast2.model = model;
+		// trace('$name: ROOM model s built');
 	}
 
-	function calcTrajectory(object:FlxObject, ball:Ball) {
+	override function onBallCollision(object:FlxObject, ball:Ball) {
 
 		if (object == racket) {
-			// ball is bounced by this ai, lets return to the middle (sometime)
-			if (Math.random() <= SETTINGS.returnToMiddleChance) {
-				target.y = Flixel.height * 0.5 - racket.height * 0.5;
-				moveRacketTo(target);
-				// trace('$name: return to middle');
+			// ball is bounced by other racket, lets decide some behavior
+
+			if (SETTINGS.behaviorList != null) {
+				var behavior = Flixel.random.getObject(SETTINGS.behaviorList, SETTINGS.behaviorListBias);
+				switch behavior {
+					case DO_NOTHING:
+						0;
+					// trace('$name: NOP');
+					case GO_TO_MIDDLE:
+						target.y = Flixel.height * 0.5 - racket.height * 0.5;
+						moveRacketTo(target);
+					// trace('$name: TO MIDDLE');
+					case FOLLOW_BALL:
+						followBallAI.active = true;
+						// trace('$name: FOLLOW BALL');
+				}
 			}
 
 			return;
@@ -167,6 +223,8 @@ class SmartAI extends SimpleAI {
 		// - when ball is hit by other racket
 		if (!(ballServe || (object is Racket && object != racket)))
 			return;
+
+		followBallAI.active = false;
 
 		var ballPos = ball.getWorldPos();
 		var ray1 = ball.velocity.clone(wp());
@@ -220,7 +278,7 @@ class SmartAI extends SimpleAI {
 					(HZ can be simplified to Rh + Bh)
 				**/
 
-				// TODO store and read this from racket?
+				// Store and read this from racket?
 				final segmentCount = 7;
 				var HZ = racket.height + ball.height - 2; // -2 to be sure the ball will be hit
 				var SS = HZ / segmentCount;
@@ -274,18 +332,13 @@ class SmartAI extends SimpleAI {
 		if (tween != null)
 			tween.cancel();
 
-		// don't move the racket if target point is the same
-		// as current position
-		if (p.equals(wp(racket.x, racket.y)))
-			return;
-
-		var path = p.distanceTo(wp(racket.x, racket.y));
-		var duration = path / Pong.params.racketSpeed;
-		tween = GAME.aiTweens.tween(racket, {y: p.y, x: p.x}, duration, {ease: FlxEase.linear});
+		velocityControler.moveObjectTo(racket, p, Pong.params.racketSpeed);
 	}
 
 	override function update(dt:Float) {
 		// I dont want any update code from the superclass
+		if (followBallAI.active)
+			followBallAI.update(dt);
 	}
 
 	override function draw() {

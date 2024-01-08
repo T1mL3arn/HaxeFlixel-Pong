@@ -3,6 +3,7 @@ package network_wrtc;
 import haxe.Exception;
 import haxe.Json;
 import Utils.merge;
+import ai.SmartAI;
 import flixel.FlxState;
 import flixel.input.mouse.FlxMouseEvent;
 import flixel.text.FlxText;
@@ -136,7 +137,7 @@ class Lobby1v1 extends FlxState {
 
 				case [it_fire, SWITCH_TO_MAIN_MENU]:
 					if (localPeer != null)
-						localPeer.destroy();
+						localPeer?.destroy();
 					Flixel.switchState(new MainMenu());
 
 				default:
@@ -227,6 +228,23 @@ class Lobby1v1 extends FlxState {
 			var rightName = 'right';
 			var rightUid = '$rightName#${FlxDirection.RIGHT}';
 			var rightController = options.initiator ? r -> null : racket -> new NetplayRacketController(racket, rightUid);
+
+			// allows AI to play network game (for tests)
+			//
+			var leftController = if (options.initiator) {
+				racket -> new NetplayAIRacketController(SmartAI.buildHardAI(racket, leftUid));
+			}
+			else {
+				r -> null;
+			}
+
+			var rightController = if (options.initiator) {
+				r -> null;
+			}
+			else {
+				racket -> new NetplayAIRacketController(SmartAI.buildHardAI(racket, rightUid));
+			}
+			// -----
 
 			Flixel.switchState(new network_wrtc.TwoPlayersRoom({
 				name: leftName,

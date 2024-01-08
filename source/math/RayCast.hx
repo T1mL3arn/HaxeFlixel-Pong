@@ -237,10 +237,6 @@ class RayCast {
 	}
 
 	public function destroy() {
-		for (rect in model) {
-			if (@:privateAccess !rect._inPool)
-				rect.put();
-		}
 		model = null;
 
 		for (point in path) {
