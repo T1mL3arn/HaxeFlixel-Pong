@@ -35,7 +35,7 @@
 
 	<!-- _______________________________ Libraries ______________________________ -->
 
-	<haxelib name="flixel" version="5.4.1" />
+	<haxelib name="flixel" version="5.6.0" />
 	<haxelib 
 		name="djFlixel" 
 		comment="use version: 0.5.8, since it is GIT lib I cannot use Lime attribute
