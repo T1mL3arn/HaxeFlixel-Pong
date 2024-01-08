@@ -4,6 +4,7 @@ import flixel.FlxGame;
 import flixel.FlxObject;
 import flixel.FlxState;
 import flixel.FlxSubState;
+import flixel.sound.FlxSoundGroup;
 import flixel.tweens.FlxTween.FlxTweenManager;
 import flixel.util.FlxSignal;
 import openfl.display.StageQuality;
@@ -71,6 +72,8 @@ class Pong extends FlxGame {
 		pauseChange:FlxTypedSignal<Bool->Void>,
 	};
 
+	public var gameSoundGroup(default, null):FlxSoundGroup;
+
 	public function new() {
 		// Until https://github.com/HaxeFlixel/flixel/pull/2819 is fixed
 		// I have to skip splash.
@@ -85,6 +88,8 @@ class Pong extends FlxGame {
 			ballCollision: new FlxTypedSignal(),
 			pauseChange: new FlxTypedSignal(),
 		};
+
+		gameSoundGroup = new FlxSoundGroup();
 
 		var crtShader = new CrtShader();
 		var filters = [new ShaderFilter(crtShader)];

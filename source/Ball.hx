@@ -9,6 +9,7 @@ import math.MathUtils.point;
 
 using Utils;
 
+@:build(utils.BuildMacro.addField_GAME())
 class Ball extends FlxSprite {
 
 	public var hitBy:FlxObject;
@@ -27,13 +28,14 @@ class Ball extends FlxSprite {
 
 		// TODO the faster ball moves, the higher the pitch should be
 		sounds = [
-			new FlxSound().loadEmbedded(AssetPaths.sfx_ball_collision_1__ogg),
-			new FlxSound().loadEmbedded(AssetPaths.sfx_ball_collision_2__ogg),
-			new FlxSound().loadEmbedded(AssetPaths.sfx_ball_collision_3__ogg),
-			new FlxSound().loadEmbedded(AssetPaths.sfx_ball_collision_4__ogg),
+			Flixel.sound.load(AssetPaths.sfx_ball_collision_1__ogg, 0.75),
+			Flixel.sound.load(AssetPaths.sfx_ball_collision_2__ogg, 0.75),
+			Flixel.sound.load(AssetPaths.sfx_ball_collision_3__ogg, 0.75),
+			Flixel.sound.load(AssetPaths.sfx_ball_collision_4__ogg, 0.75),
 		];
-		for (sound in sounds)
-			sound.volume = 0.75;
+		for (sound in sounds) {
+			sound.group = GAME.gameSoundGroup;
+		}
 	}
 
 	/**

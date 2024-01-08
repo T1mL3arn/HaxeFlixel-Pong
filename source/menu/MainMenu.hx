@@ -152,11 +152,17 @@ class MainMenu extends FlxState {
 		menu.mpActive.forEach(s -> s.screenCenter(X));
 		// TODO update menu class for better alignment?
 
-		insert(0, backGame = new AIRoom('hardest', 'hard', true));
+		// menu.menuEvent.dispatch(it_fire, SELF_ROOM_MENU_ID);
+		// menu.menuEvent.dispatch(it_fire, 'split_screen');
+		// menu.menuEvent.dispatch(it_fire, 'internet');
+		// return;
+
+		insert(0, backGame = new AIRoom('medium', 'easy', true));
 		backGame.create();
 		backGame.canOpenPauseMenu = false;
 		iterSpriteDeep(backGame.members, s -> s.alpha = 0.5);
 		GAME.signals.substateOpened.dispatch(backGame, this);
+		GAME.gameSoundGroup.volume = 0.2;
 	}
 
 	function iterSpriteDeep(list:Array<FlxBasic>, f:FlxSprite->Void) {

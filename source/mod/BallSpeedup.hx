@@ -10,6 +10,7 @@ import flixel.sound.FlxSound;
 	every goal and after series of a paddle collision. 
 	Thus, making gameplay more spicy.
 **/
+@:build(utils.BuildMacro.addField_GAME())
 class BallSpeedup {
 
 	var ballSpeedMaxFactor:Float = 1.55;
@@ -30,8 +31,8 @@ class BallSpeedup {
 	public function new() {
 		init();
 
-		speedUpSound = new FlxSound().loadEmbedded(AssetPaths.sfx_speedup__ogg);
-		speedUpSound.volume = 0.5;
+		speedUpSound = Flixel.sound.load(AssetPaths.sfx_speedup__ogg, 0.45);
+		speedUpSound.group = GAME.gameSoundGroup;
 	}
 
 	public function init() {

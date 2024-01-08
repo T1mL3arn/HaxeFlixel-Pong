@@ -36,6 +36,8 @@ class TrainingRoom extends BaseState {
 			resetBall();
 			player.score += 1;
 		}
+
+		GAME.gameSoundGroup.volume = 1;
 	}
 
 	override function destroy() {
