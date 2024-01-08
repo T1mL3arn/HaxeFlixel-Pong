@@ -159,5 +159,8 @@ class Pong extends FlxGame {
 
 	function preGameStart() {
 		Flixel.plugins.add(new FlxDragManager());
+		#if debug
+		Flixel.debugger.visible = true;
+		#end
 	}
 }
