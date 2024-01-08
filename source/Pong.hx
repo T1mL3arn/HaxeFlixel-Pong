@@ -129,6 +129,11 @@ class Pong extends FlxGame {
 			});
 		});
 
+		Flixel.signals.preStateCreate.add(_ -> {
+			gameSoundGroup.sounds = [];
+			gameSoundGroup.volume = 1;
+		});
+
 		#if debug
 		Flixel.signals.postGameStart.addOnce(() -> {
 
