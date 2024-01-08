@@ -124,7 +124,7 @@ class Pong extends FlxGame {
 		// and it is wrong.
 		Flixel.signals.postStateSwitch.add(() -> {
 			Flixel.state.subStateOpened.add(sub -> {
-				trace('re-dispatch SUBSTATE-OPEN event to global scope');
+				// trace('re-dispatch SUBSTATE-OPEN event to global scope');
 				signals.substateOpened.dispatch(sub, @:privateAccess sub._parentState);
 			});
 		});
