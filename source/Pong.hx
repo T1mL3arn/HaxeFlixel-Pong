@@ -79,6 +79,8 @@ class Pong extends FlxGame {
 		// I have to skip splash.
 		super(0, 0, null, true);
 
+		filtersEnabled = #if debug false #else true #end;
+
 		aiTweens = Flixel.plugins.addPlugin(new FlxTweenManager());
 
 		signals = {
@@ -94,7 +96,10 @@ class Pong extends FlxGame {
 		var crtShader = new CrtShader();
 		var filters = [new ShaderFilter(crtShader)];
 		Flixel.signals.preUpdate.add(()->crtShader.update(Flixel.elapsed));
-		Flixel.signals.postStateSwitch.add(() -> Flixel.camera.filters = cast filters);
+		Flixel.signals.postStateSwitch.add(() -> {
+			Flixel.camera.filters = cast filters;
+			Flixel.camera.filtersEnabled = filtersEnabled;
+		});
 		Flixel.signals.gameResized.add((_, _) -> {
 
 			// NOTE: shader distortion problem
@@ -105,14 +110,17 @@ class Pong extends FlxGame {
 
 			Flixel.cameras.reset();
 			Flixel.camera.filters = cast filters;
+			Flixel.camera.filtersEnabled = filtersEnabled;
 		});
 
 		Flixel.signals.postGameReset.add(() -> aiTweens.active = true);
 
 		// disable/enable camera filters
 		signals.keyPress.add(() -> {
-			if (Flixel.keys.justPressed.T)
-				Flixel.camera.filtersEnabled = !Flixel.camera.filtersEnabled;
+			if (Flixel.keys.justPressed.T) {
+				filtersEnabled = !filtersEnabled;
+				Flixel.camera.filtersEnabled = filtersEnabled;
+			}
 		});
 		FLixel.signals.preGameStart.add(preGameStart);
 		FLixel.signals.preGameStart.add(() -> {
