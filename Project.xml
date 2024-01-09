@@ -30,6 +30,7 @@
 	<!-- _____________________________ Path Settings ____________________________ -->
 
 	<set name="BUILD_DIR" value="export" />
+	<set name="BUILD_DIR" value="gh-pages" if="html5 release"/>
 	<source path="source" />
 	<assets path="assets" include="*.ogg|*.png"/>
 
