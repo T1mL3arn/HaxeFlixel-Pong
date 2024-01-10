@@ -122,9 +122,14 @@ class Pong extends FlxGame {
 				Flixel.camera.filtersEnabled = filtersEnabled;
 			}
 		});
-		FLixel.signals.preGameStart.add(preGameStart);
+
 		FLixel.signals.preGameStart.add(() -> {
+			Flixel.mouse.useSystemCursor = false;
 			Flixel.game.stage.quality = StageQuality.LOW;
+			Flixel.plugins.add(new FlxDragManager());
+			#if debug
+			Flixel.debugger.visible = true;
+			#end
 		});
 
 		// Crutch to redispatch substate-opened events.
@@ -162,13 +167,6 @@ class Pong extends FlxGame {
 				Flixel.timeScale = 1.0;
 			});
 		});
-		#end
-	}
-
-	function preGameStart() {
-		Flixel.plugins.add(new FlxDragManager());
-		#if debug
-		Flixel.debugger.visible = true;
 		#end
 	}
 }

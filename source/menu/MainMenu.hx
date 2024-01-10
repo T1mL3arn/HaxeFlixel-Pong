@@ -11,7 +11,11 @@ import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.group.FlxGroup;
 import flixel.sound.FlxSoundGroup;
+import flixel.ui.FlxButton;
+import flixel.ui.FlxSpriteButton;
 import flixel.util.FlxColor;
+import lime.system.System;
+import math.MathUtils.p;
 import network_wrtc.Lobby1v1;
 import room.AIRoom;
 import room.SplitscreenRoom;
@@ -155,7 +159,23 @@ class MainMenu extends FlxState {
 		// menu.menuEvent.dispatch(it_fire, SELF_ROOM_MENU_ID);
 		// menu.menuEvent.dispatch(it_fire, 'split_screen');
 		// menu.menuEvent.dispatch(it_fire, 'internet');
-		// return;
+
+		// github button
+		var octocat = new FlxSprite();
+		octocat.loadGraphic(AssetPaths.gh_icon_final__png, false, 128, 128);
+		octocat.scale.set(0.25, 0.25);
+		octocat.updateHitbox();
+		var githubButton = new FlxSpriteButton(0, 0, octocat, () -> System.openURL('https://github.com/T1mL3arn/HaxeFlixel-Pong'));
+		githubButton.labelOffsets = [p(), p(), p()];
+		githubButton.makeGraphic(32, 32, FlxColor.TRANSPARENT);
+		githubButton.updateHitbox();
+		githubButton.x = Flixel.width - 20 - githubButton.width;
+		githubButton.y = Flixel.height - 20 - githubButton.height;
+		githubButton.status = FlxButton.NORMAL;
+		githubButton.onOver.callback = ()->Flixel.mouse.load(AssetPaths.pointer_cursor__png, 1, -3, -1);
+		githubButton.onOut.callback = () -> Flixel.mouse.unload();
+		add(githubButton);
+		// --------
 
 		insert(0, backGame = new AIRoom('medium', 'easy', true));
 		backGame.create();

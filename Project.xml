@@ -93,6 +93,7 @@
 
 	<!--Place custom nodes like icons here (higher priority to override the HaxeFlixel icon)-->
 
+	<!-- to shut down deprecation warnings (there are too many of them) -->
 	<haxeflag name="-w -WDeprecated" />
 
 	<haxeflag name="--no-traces" unless="debug" />
