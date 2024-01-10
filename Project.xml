@@ -95,6 +95,8 @@
 
 	<haxeflag name="-w -WDeprecated" />
 
+	<haxeflag name="--no-traces" unless="debug" />
+
 	<haxeflag name="--macro haxe.macro.Compiler.addMetadata('@:analyzer(no_optimize)', 'lime.text.Font')" if="HL_PATH"/>
 
 	<haxeflag name="-D analyzer-optimize" if="release || final" />
