@@ -261,7 +261,9 @@ class Lobby1v1 extends FlxState {
 				options.initiator ? leftUid : rightUid));
 		});
 
+		#if debug
 		peer.on('close', () -> trace('connection is CLOSED'));
+		#end
 
 		return peer;
 	}
