@@ -229,6 +229,7 @@ class Lobby1v1 extends FlxState {
 			var rightUid = '$rightName#${FlxDirection.RIGHT}';
 			var rightController = options.initiator ? r -> null : racket -> new NetplayRacketController(racket, rightUid);
 
+			#if debug
 			// allows AI to play network game (for tests)
 			//
 			var leftController = if (options.initiator) {
@@ -245,6 +246,7 @@ class Lobby1v1 extends FlxState {
 				racket -> new NetplayAIRacketController(SmartAI.buildHardAI(racket, rightUid));
 			}
 			// -----
+			#end
 
 			Flixel.switchState(new network_wrtc.TwoPlayersRoom({
 				name: leftName,
