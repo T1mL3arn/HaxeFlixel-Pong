@@ -170,3 +170,9 @@ class Pong extends FlxGame {
 		#end
 	}
 }
+
+/**
+	Crutch to allow the same type of plugin to be used twice 
+	in PluginFrontEnd
+**/
+class GameTweenManager extends FlxTweenManager {}
