@@ -344,17 +344,20 @@ class SmartAI extends BaseAI {
 	override function draw() {
 		super.draw();
 
+		#if debug
 		if (drawTrajectory)
 			debugDraw();
+		#end
 	}
 
+	#if debug
 	function debugDraw() {
-		rayCast.draw(Flixel.camera.debugLayer.graphics);
-		rayCast2.draw(Flixel.camera.debugLayer.graphics);
+		var gfx = Flixel.camera.debugLayer.graphics;
+		rayCast.draw(gfx);
+		rayCast2.draw(gfx);
 
 		return;
 
-		var gfx = Flixel.camera.debugLayer.graphics;
 		// draw ball velocity
 		var ball = GAME.room.ball;
 		gfx.lineStyle(1.5, 0x00FF55, 0.5);
@@ -362,4 +365,5 @@ class SmartAI extends BaseAI {
 		gfx.lineTo(ball.velocity.x + ball.x, ball.velocity.y + ball.y - 15);
 		gfx.endFill();
 	}
+	#end
 }

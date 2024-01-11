@@ -48,10 +48,12 @@ class AIRoom extends TwoPlayersRoom {
 		like ball speed or scores to win.
 	**/
 	function setGameParams() {
-		// return;
+
 		Pong.resetParams();
-		Pong.params.scoreToWin = 3;
+		#if debug
+		Pong.params.scoreToWin = 2;
 		Pong.params.ballSpeed *= 1.15;
+		#end
 
 		Flixel.watch.addQuick('P ${players[0].options.position}', players[0].name);
 		Flixel.watch.addQuick('P ${players[1].options.position}', players[1].name);

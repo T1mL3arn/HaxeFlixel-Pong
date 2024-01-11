@@ -30,6 +30,7 @@
 	<!-- _____________________________ Path Settings ____________________________ -->
 
 	<set name="BUILD_DIR" value="export" />
+	<set name="BUILD_DIR" value="gh-pages" if="html5 release"/>
 	<source path="source" />
 	<assets path="assets" include="*.ogg|*.png"/>
 
@@ -91,6 +92,17 @@
 	<!-- _________________________________ Custom _______________________________ -->
 
 	<!--Place custom nodes like icons here (higher priority to override the HaxeFlixel icon)-->
+
+	<!-- to shut down deprecation warnings (there are too many of them) -->
+	<haxeflag name="-w -WDeprecated" />
+
+	<haxeflag name="--no-traces" unless="debug" />
+
+	<!-- Fix "Don't know how to cast array" error for HL build, 
+		see https://github.com/openfl/lime/pull/1742 for details -->
+	<haxeflag name="--macro haxe.macro.Compiler.addMetadata('@:analyzer(no_optimize)', 'lime.text.Font')" if="HL_PATH"/>
+
+	<haxeflag name="-D analyzer-optimize" if="release || final" />
 
 
 	<!-- makes source maps work in Firefox -->

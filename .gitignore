@@ -18,3 +18,5 @@ lib/*.js
 # ignore unused (for now) assets
 _bongo_4*
 _Mouth_Sound_*
+gh-pages/*
+assets-wip/*

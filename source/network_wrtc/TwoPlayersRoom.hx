@@ -91,8 +91,10 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 		super.create();
 		network.onMessage.add(onMessage);
 		Flixel.vcr.pauseChanged.add(onPauseChange);
+		#if debug
 		// Pong.params.ballSpeed = 500;
 		Pong.params.scoreToWin = 3;
+		#end
 	}
 
 	function onPauseChange(paused:Bool) {

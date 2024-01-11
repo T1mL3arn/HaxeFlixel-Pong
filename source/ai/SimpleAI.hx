@@ -140,10 +140,13 @@ class SimpleAI extends BaseAI {
 
 				target.x = racket.x;
 				target.y = FlxMath.lerp(top, bottom, positionVariance);
+
+				#if debug
 				topz = top;
 				btmz = bottom;
 				bx = b.x;
 				by = b.y;
+				#end
 
 				if (active) {
 					velocityContoller.moveObjectTo(racket, target, Pong.params.racketSpeed);

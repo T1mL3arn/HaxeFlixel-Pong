@@ -46,14 +46,6 @@ class Ball extends FlxSprite {
 		return (p ?? point()).set(x + width * 0.5, y + height * 0.5);
 	}
 
-	/**
-		Returns ball's center coord in world.
-		@param p 
-	**/
-	public inline function getWorldPos(?p:FlxPoint):FlxPoint {
-		return (p ?? point()).set(x + width * 0.5, y + height * 0.5);
-	}
-
 	override function destroy() {
 		super.destroy();
 
