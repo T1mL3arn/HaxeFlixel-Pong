@@ -2,10 +2,11 @@ package room;
 
 import flixel.FlxObject;
 import flixel.group.FlxGroup.FlxTypedGroup;
+import state.BaseGameState;
 
 using Lambda;
 
-class TrainingRoom extends BaseState {
+class TrainingRoom extends BaseGameState {
 
 	public var walls:FlxTypedGroup<FlxObject>;
 	public var ball:Ball;
@@ -29,8 +30,8 @@ class TrainingRoom extends BaseState {
 		room.walls.iter(wall -> add(this.walls.add(wall)));
 		// racket is also a wall - to handle collision
 		walls.add(player.racket);
-		add(player);
-		add(ball);
+		gameObjects.add(player);
+		gameObjects.add(ball);
 
 		onGoal = (_, _) -> {
 			resetBall();

@@ -20,4 +20,6 @@ typedef RoomModel = {
 	public var ball:Ball;
 
 	public var players:Array<Player>;
+
+	public function updateScore(player:Player, newScore:Int):Void;
 };

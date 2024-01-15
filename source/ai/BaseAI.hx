@@ -20,7 +20,6 @@ class BaseAI extends RacketController {
 	public function new(racket:Racket, ?name:String) {
 		super(racket);
 		this.name = name ?? 'base AI';
-		GAME.aiTweens.active = true;
 		GAME.signals.ballCollision.add(onBallCollision);
 		GAME.signals.ballServed.add(onBallServe);
 	}

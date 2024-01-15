@@ -51,6 +51,7 @@ class BallSpeedup {
 	}
 
 	public function onRacketHit() {
+		// NOTE this must be called BEFORE racket bouncer!
 		racketHitsCount += 1;
 		if (racketHitsCount % racketHitsBeforeSpeedup == 0) {
 			var speedAddon = initialParams.ballSpeed * racketHitsSpeedMod;

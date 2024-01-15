@@ -26,4 +26,5 @@ lime test hl -release
 ## License
 
 Code: WTFPL
-Assets: See assets folder
+
+Assets: The same as code unless stated otherwise, see assets folder

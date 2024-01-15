@@ -12,6 +12,7 @@ import lime.system.Clipboard as LimeClipboard;
 import menu.BaseMenu;
 import menu.MainMenu;
 import openfl.desktop.Clipboard;
+import state.BaseState;
 #if html5
 import js.Browser;
 import js.html.Console;
@@ -28,7 +29,7 @@ enum abstract ConnectionState(String) {
 	var Connected;
 }
 
-class Lobby1v1 extends FlxState {
+class Lobby1v1 extends BaseState {
 
 	var signalData:String;
 	var menu:BaseMenu;
@@ -43,7 +44,9 @@ class Lobby1v1 extends FlxState {
 	override function create() {
 		super.create();
 
-		add(infobox = buildInfoBox());
+		canPause = false;
+
+		uiObjects.add(infobox = buildInfoBox());
 
 		if (!Peer.WEBRTC_SUPPORT) {
 			var msg = 'WebRTC is not supported!';
@@ -89,7 +92,7 @@ class Lobby1v1 extends FlxState {
 			});
 
 		menu.goto('main');
-		add(menu);
+		uiObjects.add(menu);
 
 		var iceCompleteTimeout = 2 * 60 * 1000;
 

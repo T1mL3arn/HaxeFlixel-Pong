@@ -1,22 +1,22 @@
 package menu;
 
-import flixel.FlxSubState;
-import flixel.tweens.FlxTween;
-import lime.app.Application;
+import state.BaseState;
 import menu.BaseMenu.MenuCommand;
 
 using menu.MenuUtils;
 
-@:build(utils.BuildMacro.addField_GAME())
-class PauseMenu extends FlxSubState {
+class PauseMenu extends BaseState {
 
 	var stateJustOpenned:Bool = false;
 
 	public function new() {
-		super(0xBB000000);
+		super();
 	}
 
 	override function create() {
+		super.create();
+
+		bgColor = 0xBB000000;
 
 		var menu = new BaseMenu(0, 0, 0);
 
@@ -45,13 +45,12 @@ class PauseMenu extends FlxSubState {
 			}
 		});
 
-		add(menu);
+		uiObjects.add(menu);
 
 		openCallback = () -> {
 			stateJustOpenned = true;
-			GAME.aiTweens.active = false;
 		};
-		closeCallback = () -> GAME.aiTweens.active = true;
+		closeCallback = () -> 0;
 	}
 
 	override function update(elapsed:Float) {

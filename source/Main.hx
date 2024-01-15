@@ -19,7 +19,5 @@ class Main extends Sprite {
 		// Flixel.switchState(new room.AIRoom('medium'));
 		// Flixel.switchState(new menu.CongratScreen().setWinner('not You', false));
 		// Flixel.switchState(new network_wrtc.Lobby1v1());
-
-
 	}
 }

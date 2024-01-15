@@ -1,13 +1,11 @@
 package menu;
 
 import flixel.FlxSprite;
-import flixel.FlxSubState;
-import flixel.group.FlxGroup;
 import flixel.group.FlxSpriteGroup;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
-import flixel.util.FlxGradient;
 import flixel.util.FlxSpriteUtil;
+import state.BaseState;
 import menu.BaseMenu.MenuCommand;
 
 using menu.MenuUtils;
@@ -17,7 +15,7 @@ enum abstract CongratScreenType(Bool) to Bool {
 	var FOR_LOOSER = false;
 }
 
-class CongratScreen extends FlxSubState {
+class CongratScreen extends BaseState {
 
 	var menu:BaseMenu;
 	var winnerName:String = 'Unknown';
@@ -31,7 +29,8 @@ class CongratScreen extends FlxSubState {
 	public var openMainMenuAction:Void->Void;
 
 	public function new(?playAgainMenuAction:CongratScreen->Void) {
-		super(0xBB000000);
+		super();
+
 		this.playAgainMenuAction = playAgainMenuAction;
 
 		var bottomPadding = -Flixel.height * #if !html5 0.05 #else 0.1 #end;
@@ -59,6 +58,8 @@ class CongratScreen extends FlxSubState {
 	override function create() {
 		super.create();
 
+		bgColor = 0xBB000000;
+
 		winnerSprite = new WinnerSprite();
 		looserSprite = new WinnerSprite(false);
 
@@ -72,7 +73,7 @@ class CongratScreen extends FlxSubState {
 			.par(menuParams);
 
 		menu.goto('main');
-		add(menu);
+		uiObjects.add(menu);
 
 		menu.menuEvent.add((e, pageId) -> {
 			switch ([e, pageId]) {
@@ -86,15 +87,18 @@ class CongratScreen extends FlxSubState {
 		});
 
 		openCallback = () -> {
-			remove(winnerSprite);
-			remove(looserSprite);
+			uiObjects.remove(winnerSprite);
+			uiObjects.remove(looserSprite);
 
 			var sprite = switch (screenType) {
 				case FOR_WINNER: winnerSprite;
 				case FOR_LOOSER: looserSprite;
 			}
 			sprite.setWinnerName(winnerName);
-			add(sprite);
+			uiObjects.add(sprite);
+
+			if (screenType == FOR_WINNER)
+				Flixel.sound.play(AssetPaths.win_crowd_applause__ogg, 1.0, false, GAME.gameSoundGroup);
 		}
 
 		openCallback();
@@ -154,6 +158,7 @@ class WinnerSprite extends FlxSpriteGroup {
 		// NOTE reported that is fixed in haxe > 4.3.3
 		// https://discord.com/channels/162395145352904705/165234904815239168/1183250656774078534
 		// multiTransformChildren([xTransform, yTransform], [dx, dy]);
+		// see also https://github.com/HaxeFoundation/haxe/issues/11486
 		transformChildren(xTransform, dx);
 		transformChildren(yTransform, dy);
 

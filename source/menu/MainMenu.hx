@@ -16,6 +16,7 @@ import flixel.ui.FlxSpriteButton;
 import flixel.util.FlxColor;
 import lime.system.System;
 import math.MathUtils.p;
+import mouse.SpriteAsMouse;
 import network_wrtc.Lobby1v1;
 import room.AIRoom;
 import room.SplitscreenRoom;
@@ -26,28 +27,23 @@ import menu.MenuUtils.wrapMenuPage;
 
 using menu.MenuUtils;
 
-@:build(utils.BuildMacro.addField_GAME())
-class MainMenu extends FlxState {
+class MainMenu extends state.BaseState {
 
 	static final TRAINING_ROOM_MENU_ID = 'load_training_room';
 	static final SELF_ROOM_MENU_ID = 'load_self_room';
 	static final VS_AI_SETTINGS_MENU_ID = 'player-vs-ai-settings';
 
-	var players:Array<PlayerOptions>;
 	var backGame:AIRoom;
 
 	public function new() {
 		super();
 
-		players = [Reflect.copy(Player.defaultOptions), Reflect.copy(Player.defaultOptions)];
-		players[0].name = 'YOU';
-		players[0].position = LEFT;
-		players[1].position = RIGHT;
+		canPause = false;
 	}
 
 	override function create() {
 
-		bgColor = 0xFF222222;
+		super.create();
 
 		var menu = new BaseMenu(0, 0, 0, 10);
 
@@ -108,6 +104,11 @@ class MainMenu extends FlxState {
 					}));
 
 				case [it_fire, 'load_ai_room']:
+					var players = [Reflect.copy(Player.defaultOptions), Reflect.copy(Player.defaultOptions)];
+					players[0].name = 'YOU';
+					players[0].position = LEFT;
+					players[1].position = RIGHT;
+
 					var settings = menu.pages[VS_AI_SETTINGS_MENU_ID];
 					var playerPos:String = settings.get('player_pos').get();
 					var aiType:String = settings.get('ai_smarteness').get();
@@ -150,7 +151,7 @@ class MainMenu extends FlxState {
 			}
 		});
 
-		add(menu);
+		uiObjects.add(menu);
 
 		// actually center main page on the screen
 		menu.mpActive.forEach(s -> s.screenCenter(X));
@@ -172,12 +173,13 @@ class MainMenu extends FlxState {
 		githubButton.x = Flixel.width - 20 - githubButton.width;
 		githubButton.y = Flixel.height - 20 - githubButton.height;
 		githubButton.status = FlxButton.NORMAL;
-		githubButton.onOver.callback = ()->Flixel.mouse.load(AssetPaths.pointer_cursor__png, 1, -3, -1);
-		githubButton.onOut.callback = () -> Flixel.mouse.unload();
-		add(githubButton);
+		var mouse = Flixel.plugins.get(SpriteAsMouse);
+		githubButton.onOver.callback = ()->mouse.setCursor(mouse.pointerCursor, -5);
+		githubButton.onOut.callback = ()->mouse.setCursor(mouse.arrowCursor, 0, 0);
+		uiObjects.add(githubButton);
 		// --------
 
-		insert(0, backGame = new AIRoom('medium', 'easy', true));
+		gameObjects.add(backGame = new AIRoom('medium', 'easy', true));
 		backGame.create();
 		backGame.canOpenPauseMenu = false;
 		iterSpriteDeep(backGame.members, s -> s.alpha = 0.5);

@@ -1,26 +1,26 @@
 package room;
 
-import haxe.Timer;
 import Player.PlayerOptions;
 import Pong.PongParams;
-import Utils.merge;
+import ai.BaseAI;
 import flixel.FlxBasic;
 import flixel.FlxObject;
 import flixel.group.FlxGroup.FlxTypedGroup;
-import flixel.sound.FlxSound;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import menu.CongratScreen;
 import mod.BallSpeedup;
+import mod.CornerGoalWatch;
+import state.BaseGameState;
 import utils.FlxSpriteDraw.twinkle;
 
 using Lambda;
 using StringTools;
 using Utils;
 
-class TwoPlayersRoom extends BaseState {
+class TwoPlayersRoom extends BaseGameState {
 
 	var walls:FlxTypedGroup<FlxObject>;
 	var players:Array<Player>;
@@ -43,13 +43,16 @@ class TwoPlayersRoom extends BaseState {
 		super.create();
 
 		Pong.resetParams();
+		#if debug
+		Pong.params.scoreToWin = 2;
+		#end
 
 		var room = LevelBuilder.inst.buildTwoPlayersRoom(leftOptions, rightOptions);
 
-		add(room.middleLine);
+		gameObjects.add(room.middleLine);
 
 		ball = room.ball;
-		add(ball);
+		gameObjects.add(ball);
 
 		walls = new FlxTypedGroup();
 		room.walls.iter(wall -> walls.add(cast add(wall)));
@@ -57,12 +60,14 @@ class TwoPlayersRoom extends BaseState {
 		playerGoals = new FlxTypedGroup();
 		players = room.players;
 		players.iter(player -> {
-			add(player);
+			gameObjects.add(player);
 			walls.add(player.racket);
 			playerGoals.add(player.hitArea);
 		});
 
 		ballSpeedup = new BallSpeedup();
+
+		gameObjects.add(new CornerGoalWatch(players.map(p -> p.racket)));
 
 		GAME.room = cast this;
 	}
@@ -140,11 +145,12 @@ class TwoPlayersRoom extends BaseState {
 		var ballServer = winner ?? looser;
 
 		if (winner != null) {
+			GAME.signals.goal.dispatch(winner);
 			updateScore(winner, winner.score + 1);
 			ballSpeedup.onGoal();
 		}
 
-		// checking the winner
+		// checking the winner of the game
 		winner = players.find(p -> p.score >= Pong.params.scoreToWin);
 		if (winner != null) {
 			trace('Winner: ${winner.name} !');
@@ -157,12 +163,17 @@ class TwoPlayersRoom extends BaseState {
 			canOpenPauseMenu = false;
 			for (player in players) {
 				player.active = false;
-				// AI moves its racket with FlxTween, so such tweens must be canceled.
-				GAME.aiTweens.cancelTweensOf(player.racket);
 			}
-			// TODO if one of the players is human and other one is ai
-			// set screen_type FOR_LOOSER if human is lost the game
-			showCongratScreen(winner, FOR_WINNER);
+
+			var screenType = if (winner.racketController is BaseAI && !(looser.racketController is BaseAI)) {
+				// show LOOSER if human lost  to AI
+				FOR_LOOSER;
+			}
+			else {
+				FOR_WINNER;
+			}
+
+			showCongratScreen(winner, screenType);
 		}
 		else if (ballServer != null) {
 			resetBall();
@@ -170,8 +181,8 @@ class TwoPlayersRoom extends BaseState {
 		}
 	}
 
-	function updateScore(player:Player, score) {
-		player.score = score;
+	public function updateScore(player:Player, newScore) {
+		player.score = newScore;
 	}
 
 	function showCongratScreen(player:Player, screenType:CongratScreenType) {
@@ -194,7 +205,7 @@ class TwoPlayersRoom extends BaseState {
 		}
 
 		// ball starts moving after some delay
-		new FlxTimer().start(delay, _ -> {
+		new FlxTimer(timerManager).start(delay, _ -> {
 			ball.velocity.set(velX, 0);
 			GAME.signals.ballServed.dispatch();
 		});
@@ -203,14 +214,14 @@ class TwoPlayersRoom extends BaseState {
 	}
 
 	function ballPreServe(ball:Ball, delay:Float) {
-		twinkle(ball, FlxColor.ORANGE, delay, 0.1);
+		twinkle(ball, FlxColor.ORANGE, delay, 0.1, timerManager);
 
 		// scale-out effect for the ball
 		final scale = 5.0;
 		var tb = ball.clone();
 		tb.setPosition(ball.x, ball.y);
-		FlxTween.tween(tb.scale, {x: scale, y: scale}, delay * 0.5, {ease: FlxEase.linear});
-		FlxTween.tween(tb, {alpha: 0.0}, delay * 0.5, {
+		tweenManager.tween(tb.scale, {x: scale, y: scale}, delay * 0.5, {ease: FlxEase.linear});
+		tweenManager.tween(tb, {alpha: 0.0}, delay * 0.5, {
 			ease: FlxEase.linear,
 			// remove and destroy temp ball after tween is complete
 			onComplete: _ -> remove(tb).destroy()

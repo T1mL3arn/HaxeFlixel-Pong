@@ -5,6 +5,8 @@ import flixel.effects.FlxFlicker;
 import flixel.math.FlxMath;
 import flixel.math.FlxPoint;
 import flixel.util.FlxSpriteUtil;
+import flixel.util.FlxTimer.FlxTimerManager;
+import flixel.util.FlxTimer;
 
 typedef DashedLineStyle = {
 	> flixel.util.FlxSpriteUtil.LineStyle,
@@ -131,12 +133,31 @@ inline function clampPoint(p:FlxPoint, ?min:FlxPoint, ?max:FlxPoint) {
 	@param interval how long before changing the color, in seconds
 	@return `FlxFlicker` object
 **/
-function twinkle(sprite:FlxSprite, color:Int, duration:Float, interval:Float):FlxFlicker {
-	final initialColor = sprite.color;
-	return FlxFlicker.flicker(sprite, duration, interval, true, true, _ -> {
+@:access(flixel.effects.FlxFlicker)
+function twinkle(sprite:FlxSprite, color:Int, duration:Float, interval:Float, ?timerManager:FlxTimerManager, ?onComplete:Void->Void):FlxFlicker {
+
+	FlxFlicker.stopFlickering(sprite);
+
+	var initialColor = sprite.color;
+	var flicker = FlxFlicker._pool.get();
+
+	// NOTE to be able to set timerManager
+	// I have to manually re-implement how flicker starts
+	flicker.object = sprite;
+	flicker.duration = duration;
+	flicker.interval = interval;
+	flicker.completionCallback = _ -> {
+		sprite.visible = true;
 		sprite.color = initialColor;
-	}, f -> {
+		if (onComplete != null)
+			onComplete();
+	};
+	flicker.progressCallback = f -> {
 		sprite.visible = true;
 		sprite.color = f.timer.loopsLeft % 2 == 0 ? color : initialColor;
-	});
+	};
+	flicker.endVisibility = true;
+	flicker.timer = new FlxTimer(timerManager).start(interval, flicker.flickerProgress, Std.int(duration / interval));
+
+	return FlxFlicker._boundObjects[sprite] = flicker;
 }

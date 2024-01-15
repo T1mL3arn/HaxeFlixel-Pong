@@ -7,11 +7,15 @@ import flixel.FlxSubState;
 import flixel.sound.FlxSoundGroup;
 import flixel.tweens.FlxTween.FlxTweenManager;
 import flixel.util.FlxSignal;
+import mouse.MouseHider;
+import mouse.SpriteAsMouse;
 import openfl.display.StageQuality;
 import openfl.events.MouseEvent;
 import openfl.filters.ShaderFilter;
 import room.RoomModel;
+import shader.BloomShader;
 import shader.CrtShader;
+import shader.PixelateShader;
 import utils.FlxDragManager;
 
 typedef PongParams = {
@@ -33,7 +37,7 @@ class Pong extends FlxGame {
 	public static final defaultParams:PongParams = {
 		ballSize: 12,
 		ballSpeed: 310,
-		ballServeDelay: 1.5,
+		ballServeDelay: 2.0,
 		racketLength: 80,
 		racketThickness: 12,
 		racketSpeed: 225.0,
@@ -58,18 +62,19 @@ class Pong extends FlxGame {
 	**/
 	public var room:RoomModel;
 
-	/**
-		Manages all ai tweens with object.
-		When game is paused such tweens are also paused.
-	**/
-	public var aiTweens(default, null):FlxTweenManager;
-
-	public var signals:{
-		keyPress:FlxSignal,
-		ballServed:FlxSignal,
-		substateOpened:FlxTypedSignal<(FlxSubState, FlxState)->Void>,
-		ballCollision:FlxTypedSignal<(FlxObject, Ball)->Void>,
-		pauseChange:FlxTypedSignal<Bool->Void>,
+	public var signals = {
+		keyPress: Flixel.signals.postUpdate,
+		ballServed: new FlxSignal(),
+		substateOpened: new FlxTypedSignal<(FlxSubState, FlxState)->Void>(),
+		substateClosed: new FlxTypedSignal<(FlxSubState, FlxState)->Void>(),
+		ballCollision: new FlxTypedSignal<(FlxObject, Ball)->Void>(),
+		pauseChange: new FlxTypedSignal<Bool->Void>(),
+		/**
+			Dispatched when on goal but before
+			any goal related actions (like score update etc.).
+			Sends `Player` that scored the goal.
+		**/
+		goal: new FlxTypedSignal<Player->Void>(),
 	};
 
 	public var gameSoundGroup(default, null):FlxSoundGroup;
@@ -79,27 +84,27 @@ class Pong extends FlxGame {
 		// I have to skip splash.
 		super(0, 0, null, true);
 
-		filtersEnabled = #if debug false #else true #end;
-
-		aiTweens = Flixel.plugins.addPlugin(new FlxTweenManager());
-
-		signals = {
-			keyPress: Flixel.signals.postUpdate,
-			ballServed: new FlxTypedSignal(),
-			substateOpened: new FlxTypedSignal(),
-			ballCollision: new FlxTypedSignal(),
-			pauseChange: new FlxTypedSignal(),
-		};
+		// filtersEnabled = #if debug false #else true #end;
+		filtersEnabled = #if debug true #else true #end;
 
 		gameSoundGroup = new FlxSoundGroup();
 
 		var crtShader = new CrtShader();
-		var filters = [new ShaderFilter(crtShader)];
-		Flixel.signals.preUpdate.add(()->crtShader.update(Flixel.elapsed));
+		var pixelateShader = new PixelateShader();
+		var filters = [
+			new ShaderFilter(pixelateShader),
+			new ShaderFilter(new BloomShader()),
+			new ShaderFilter(crtShader),
+		];
+		Flixel.signals.preUpdate.add(() -> {
+			crtShader.update(Flixel.elapsed);
+			pixelateShader.update(Flixel.elapsed);
+		});
 		Flixel.signals.postStateSwitch.add(() -> {
 			Flixel.camera.filters = cast filters;
 			Flixel.camera.filtersEnabled = filtersEnabled;
 		});
+
 		Flixel.signals.gameResized.add((_, _) -> {
 
 			// NOTE: shader distortion problem
@@ -113,8 +118,6 @@ class Pong extends FlxGame {
 			Flixel.camera.filtersEnabled = filtersEnabled;
 		});
 
-		Flixel.signals.postGameReset.add(() -> aiTweens.active = true);
-
 		// disable/enable camera filters
 		signals.keyPress.add(() -> {
 			if (Flixel.keys.justPressed.T) {
@@ -124,9 +127,17 @@ class Pong extends FlxGame {
 		});
 
 		FLixel.signals.preGameStart.add(() -> {
-			Flixel.mouse.useSystemCursor = false;
+			#if html5
 			Flixel.game.stage.quality = StageQuality.LOW;
+			#end
+
+			Flixel.mouse.useSystemCursor = false;
+			Flixel.mouse.visible = false;
+
+			Flixel.plugins.add(new SpriteAsMouse());
 			Flixel.plugins.add(new FlxDragManager());
+			Flixel.plugins.add(new MouseHider());
+
 			#if debug
 			Flixel.debugger.visible = true;
 			#end
@@ -139,6 +150,9 @@ class Pong extends FlxGame {
 			Flixel.state.subStateOpened.add(sub -> {
 				// trace('re-dispatch SUBSTATE-OPEN event to global scope');
 				signals.substateOpened.dispatch(sub, @:privateAccess sub._parentState);
+			});
+			Flixel.state.subStateClosed.add(sub -> {
+				signals.substateClosed.dispatch(sub, Flixel.state);
 			});
 		});
 
@@ -170,9 +184,3 @@ class Pong extends FlxGame {
 		#end
 	}
 }
-
-/**
-	Crutch to allow the same type of plugin to be used twice 
-	in PluginFrontEnd
-**/
-class GameTweenManager extends FlxTweenManager {}
