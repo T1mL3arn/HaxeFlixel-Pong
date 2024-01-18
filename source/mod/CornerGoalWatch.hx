@@ -7,6 +7,7 @@ import flixel.math.FlxRect;
 import flixel.sound.FlxSound;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
+import racket.Racket;
 import state.BaseGameState;
 import utils.FlxSpriteDraw.twinkle;
 
@@ -52,19 +53,21 @@ class CornerGoalWatch extends FlxBasic {
 			switch (racket.position) {
 				case LEFT | RIGHT:
 					var bounds = racket.movementBounds;
-					var cornerBoxWidth = racket.width + Pong.params.racketPadding;
-					var cornerBoxWidth = Pong.params.racketThickness;
+					var cornerBoxWidth = Pong.params.racketThickness * 1.1;
 					var c1 = new FlxObject();
 					var c2 = new FlxObject();
 					c1.setSize(cornerBoxWidth, bounds.top - Pong.params.ballSize * 0.75);
 					c2.setSize(cornerBoxWidth, bounds.top - Pong.params.ballSize * 0.75);
 					c1.moves = c2.moves = false;
 
-					// var dx = racket.position == LEFT ?
-					var mod = racket.position == LEFT ? -1 : 0;
-					c1.x = c2.x = racket.x + racket.width * 0.5 + mod * c1.width;
+					var offset = 0.1;
+					c1.x = c2.x = racket.x + racket.width * (1 - offset) - c1.width;
 					c1.y = 0;
 					c2.y = Flixel.height - c2.height;
+
+					if (racket.position == RIGHT) {
+						c1.x = c2.x = racket.x + racket.width * offset;
+					}
 
 					// trace(racket.position.toString(), c1.x, c1.y, c2.x, c2.y);
 
@@ -77,6 +80,7 @@ class CornerGoalWatch extends FlxBasic {
 
 					corners.add(c1);
 					corners.add(c2);
+
 				case _:
 			}
 		}

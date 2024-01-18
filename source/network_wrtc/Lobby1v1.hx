@@ -1,64 +1,84 @@
 package network_wrtc;
 
-import haxe.Exception;
 import haxe.Json;
 import Utils.merge;
 import ai.SmartAI;
+import flixel.FlxBasic;
 import flixel.FlxState;
 import flixel.input.mouse.FlxMouseEvent;
 import flixel.text.FlxText;
+import flixel.util.FlxArrayUtil;
 import flixel.util.FlxDirection;
+import flixel.util.FlxTimer;
 import lime.system.Clipboard as LimeClipboard;
 import menu.BaseMenu;
 import menu.MainMenu;
+import mod.Updater;
 import openfl.desktop.Clipboard;
 import state.BaseState;
+import network_wrtc.Network.INetplayPeer;
 #if html5
-import js.Browser;
-import js.html.Console;
-import js.lib.Error;
 import peer.Peer;
-import peer.PeerOptions;
+import network_wrtc.PeerWebRTC;
 #end
+#if hl
+import network_direct.PeerIP;
+#end
+
+typedef Error = #if html5 js.lib.Error #else haxe.Exception #end;
 
 enum abstract ConnectionState(String) {
 	var Initial;
 	var CreatingLobby;
 	var LobbyCreated;
 	var ConnectingToLobby;
+	var ConnectingToPeer;
 	var Connected;
+}
+
+enum abstract LobbyMenuPage(String) to String {
+	var Initial;
+	var CreatingLobby;
+	var JoiningToLobby;
+	var AcceptConnection;
+	var Connecting;
 }
 
 class Lobby1v1 extends BaseState {
 
-	var signalData:String;
+	var connectionState:ConnectionState = Initial;
 	var menu:BaseMenu;
 	var infobox:FlxText;
-	var connectionState:ConnectionState = Initial;
-	var timer:haxe.Timer;
-	var switchToMainDelay:Int = 4000;
+	var peer:INetplayPeer;
 
-	#if html5
-	var localPeer:Peer;
+	var timer:haxe.Timer;
 
 	override function create() {
 		super.create();
 
 		canPause = false;
 
+		var updatable = new Updater();
+		plugins.add(updatable);
+
 		uiObjects.add(infobox = buildInfoBox());
 
+		#if html5
+		// To test it in Firefox set `media.peerconnection.enabled=false`
+		// on about:config page
 		if (!Peer.WEBRTC_SUPPORT) {
 			var msg = 'WebRTC is not supported!';
 			trace(msg);
 			infobox.alignment = CENTER;
 			infobox.text = '$msg\nGoing back to Main menu...';
-			haxe.Timer.delay(() -> Flixel.switchState(new MainMenu()), switchToMainDelay);
+			final switchToMainDelay:Int = 4000;
+			timer = haxe.Timer.delay(() -> Flixel.switchState(new MainMenu()), switchToMainDelay);
 			return;
 		}
+		#end
 
 		menu = new BaseMenu(0, 0, 0, 5);
-		menu.createPage('main')
+		menu.createPage(LobbyMenuPage.Initial)
 			.add('
 				-| create  | link | create_lobby
 				-| join | link | connect_to_lobby
@@ -69,18 +89,7 @@ class Lobby1v1 extends BaseState {
 				pos: 'screen,c,c'
 			});
 
-		menu.createPage('accept connection')
-			.add('
-				-| create | link | create_lobby | D | U |
-				-| accept connection | link | accept_connection
-				-| __________ | label | 3 | U
-				-| main menu | link | $SWITCH_TO_MAIN_MENU
-				')
-			.par({
-				pos: 'screen,c,c'
-			});
-
-		menu.createPage('connecting')
+		menu.createPage(LobbyMenuPage.Connecting)
 			.add('
 				-| create | link | create_lobby | D | U |
 				-| connecting | link | wait_connection | D | U |
@@ -91,62 +100,76 @@ class Lobby1v1 extends BaseState {
 				pos: 'screen,c,c'
 			});
 
-		menu.goto('main');
+		menu.createPage(LobbyMenuPage.CreatingLobby)
+			.add('
+				-| creating | link | create_lobby | D | U |
+				-| join | link | wait_connection | D | U |
+				-| __________ | label | 3 | U
+				-| main menu | link | $SWITCH_TO_MAIN_MENU
+				')
+			.par({
+				pos: 'screen,c,c'
+			});
+
+		menu.createPage(LobbyMenuPage.JoiningToLobby)
+			.add('
+				-| create | link | create_lobby | D | U |
+				-| joining | link | wait_connection | D | U |
+				-| __________ | label | 3 | U
+				-| main menu | link | $SWITCH_TO_MAIN_MENU
+				')
+			.par({
+				pos: 'screen,c,c'
+			});
+
+		menu.goto(cast LobbyMenuPage.Initial);
 		uiObjects.add(menu);
-
-		var iceCompleteTimeout = 2 * 60 * 1000;
-
-		var peerOptions = {
-			initiator: false,
-			trickle: false,
-			stream: false,
-			iceCompleteTimeout: iceCompleteTimeout,
-			// config: {
-			// 	// NOTE: iceServers from PeerJS library
-			// 	// https://github.com/peers/peerjs/blob/f52cb0c661d1cbaac78a64a5253b3eef03d4dd81/lib/util.ts#L36
-			// 	iceServers: untyped [
-			// 		{urls: ["stun:stun.l.google.com:19302", "stun:global.stun.twilio.com:3478"]},
-			// 		{
-			// 			urls: ["turn:eu-0.turn.peerjs.com:3478", "turn:us-0.turn.peerjs.com:3478"],
-			// 			username: "peerjs",
-			// 			credential: "peerjsp",
-			// 		},
-			// 	],
-			// },
-		};
 
 		menu.menuEvent.add((e, id) -> {
 			switch ([e, id]) {
 				case [it_fire, 'create_lobby']:
-					if (localPeer == null) {
-						infobox.text = 'Creating lobby...';
-						connectionState = CreatingLobby;
-						localPeer = connect(cast merge(peerOptions, {initiator: true}));
-					}
+					//
+					updatable.clear();
 
-					menu.goto('accept connection');
+					peer = getPeer();
+					peer.create();
+
+					updatable.add(peer.loop);
 
 				case [it_fire, 'connect_to_lobby']:
-					if (localPeer == null) {
-						connectionState = ConnectingToLobby;
-						infobox.text = 'Trying to join...';
-						localPeer = connect(cast merge(peerOptions, {initiator: false}));
-					}
+					//
+					updatable.clear();
 
-					promptLobbyKey('connecting');
+					peer = getPeer();
+					// NOTE: temporary pass bullshit to join
+					peer.join('', 0);
 
-				case [it_fire, 'accept_connection']:
-					promptLobbyKey();
+					updatable.add(peer.loop);
 
 				case [it_fire, SWITCH_TO_MAIN_MENU]:
-					if (localPeer != null)
-						localPeer?.destroy();
+					peer?.destroy();
 					Flixel.switchState(new MainMenu());
 
 				default:
-					0;
 			}
 		});
+	}
+
+	function getPeer():INetplayPeer {
+		peer?.destroy();
+		peer = null;
+
+		#if hl
+		peer = new PeerIP();
+		#elseif html5
+		peer = new PeerWebRTC();
+		#end
+
+		peer.onConnect.addOnce(onPeerConnected);
+		peer.onError.addOnce(onPeerError);
+		peer.onDisconnect.addOnce(onPeerDisconnect);
+
+		return peer;
 	}
 
 	function buildInfoBox() {
@@ -157,7 +180,7 @@ class Lobby1v1 extends BaseState {
 		var y = Flixel.height - h - margin;
 		var text = 'Create a lobby or join to one!';
 		var infobox = new FlxText(x, y, w, text, 18);
-		infobox.height = h;
+		infobox.fieldHeight = h;
 		infobox.color = 0x111111;
 		infobox.alignment = LEFT;
 		infobox.textField.background = true;
@@ -171,134 +194,71 @@ class Lobby1v1 extends BaseState {
 		return infobox;
 	}
 
-	function copyToCLipboard(text:String) {
-		Clipboard.generalClipboard.setData(TEXT_FORMAT, text);
-		LimeClipboard.text = text;
+	function onPeerError(e:Dynamic) {
+		peer.destroy();
+
+		connectionState = Initial;
+		infobox.text = 'Error: ${e.message ?? e}';
+		menu.goto(cast LobbyMenuPage.Initial);
 	}
 
-	function connect(?options:PeerOptions) {
-		var peer = new Peer(options);
+	function onPeerDisconnect() {
+		connectionState = Initial;
+		infobox.text = 'Disconnected';
+		menu.goto(cast LobbyMenuPage.Initial);
+	}
 
-		peer.on('error', (err:Error) -> {
-			Console.error(err);
+	function onPeerConnected() {
+		connectionState = Connected;
+		infobox.alignment = CENTER;
+		infobox.text = "Connected!";
 
-			localPeer?.destroy();
-			infobox.text = 'Error: ${err.message}\nGoing back to Main menu...';
-			timer = haxe.Timer.delay(() -> Flixel.switchState(new MainMenu()), switchToMainDelay);
-		});
+		// TODO: delay before game starts
+		// tweenManager.tween(this, {}, 1.0).then()
 
-		peer.on('signal', data -> {
-			signalData = Json.stringify(data);
-			trace('\nsignal data:\n$signalData');
-
-			// copy data to clipboard when it is necessary
-			switch ([connectionState, options.initiator]) {
-				case [CreatingLobby, true] | [ConnectingToLobby, false]:
-					copyToCLipboard(signalData);
-					FlxMouseEvent.add(infobox, _ -> copyToCLipboard(signalData));
-				case _: 0;
-			}
-
-			switch ([connectionState, options.initiator]) {
-				case [CreatingLobby, true]:
-					infobox.text = 'Connection ID is copied into clipboard. Share it with another player, then press "accept connection" and paste the player\'s response. Click here to copy ID again.';
-					connectionState = LobbyCreated;
-
-				case [ConnectingToLobby, false]:
-					infobox.text = 'Connection ID is copied into clipboard. Share it with another player and wait a little. Click here to copy ID again.';
-
-				default:
-			}
-		});
-
-		peer.on('connect', () -> {
-			trace('Connected!');
-			connectionState = Connected;
-			infobox.alignment = CENTER;
-			infobox.text = "Connected!";
-
-			// peer is an instance of EventEmitter
-			// but the extern does not provide its methods,
-			// so I use `untyped`
-			untyped peer.removeAllListeners('error');
-			untyped peer.removeAllListeners('signal');
-			untyped peer.removeAllListeners('connect');
-			untyped peer.removeAllListeners('close');
-
-			var leftName = 'left';
-			var leftUid = '$leftName#${FlxDirection.LEFT}';
-			var leftController = options.initiator ? racket -> new NetplayRacketController(racket, leftUid) : r -> null;
-			var rightName = 'right';
-			var rightUid = '$rightName#${FlxDirection.RIGHT}';
-			var rightController = options.initiator ? r -> null : racket -> new NetplayRacketController(racket, rightUid);
-
-			#if debug
-			// allows AI to play network game (for tests)
-			//
-			var leftController = if (options.initiator) {
-				racket -> new NetplayAIRacketController(SmartAI.buildHardAI(racket, leftUid));
-			}
-			else {
-				r -> null;
-			}
-
-			var rightController = if (options.initiator) {
-				r -> null;
-			}
-			else {
-				racket -> new NetplayAIRacketController(SmartAI.buildHardAI(racket, rightUid));
-			}
-			// -----
-			#end
-
-			Flixel.switchState(new network_wrtc.TwoPlayersRoom({
-				name: leftName,
-				uid: leftUid,
-				position: LEFT,
-				getController: leftController
-			}, {
-				name: rightName,
-				uid: rightUid,
-				position: RIGHT,
-				getController: rightController,
-			}, Network.network = new Network(peer),
-				// NOTE at this moment `server` is LEFT player.
-				options.initiator ? leftUid : rightUid));
-		});
+		var leftName = 'left';
+		var leftUid = '$leftName#${FlxDirection.LEFT}';
+		var leftController = peer.isServer ? racket -> new NetplayRacketController(racket, leftUid) : r -> null;
+		var rightName = 'right';
+		var rightUid = '$rightName#${FlxDirection.RIGHT}';
+		var rightController = peer.isServer ? r -> null : racket -> new NetplayRacketController(racket, rightUid);
 
 		#if debug
-		peer.on('close', () -> trace('connection is CLOSED'));
-		#end
-
-		return peer;
-	}
-
-	function promptLobbyKey(?menuPage:String) {
-		var pastedData = Browser.window.prompt('Paste lobby key');
-		if (pastedData == null || pastedData == '') {
-			Browser.window.alert('You paste nothing, try again.');
-		}
-		else if (pastedData == signalData) {
-			Browser.window.alert('You are pasting the same data, try again.');
+		// allows AI to play network game (for tests)
+		//
+		var leftController = if (peer.isServer) {
+			racket -> new NetplayAIRacketController(SmartAI.buildHardAI(racket, leftUid));
 		}
 		else {
-			try {
-				var parsedData = Json.parse(pastedData);
-				localPeer.signal(parsedData);
-				if (menuPage != null)
-					menu.goto(menuPage);
-			}
-			catch (err:String) {
-				infobox.text = 'Error: $err';
-				Console.error(err);
-			}
-			catch (err:Exception) {
-				infobox.text = 'Error: ${err.message}';
-				Console.error(err.message);
-			}
+			r -> null;
 		}
+
+		var rightController = if (peer.isServer) {
+			r -> null;
+		}
+		else {
+			racket -> new NetplayAIRacketController(SmartAI.buildHardAI(racket, rightUid));
+		}
+		// -----
+		#end
+
+		Network.network = peer;
+
+		Flixel.switchState(new network_wrtc.TwoPlayersRoom({
+			name: leftName,
+			uid: leftUid,
+			position: LEFT,
+			getController: leftController
+		}, {
+			name: rightName,
+			uid: rightUid,
+			position: RIGHT,
+			getController: rightController,
+		}, // ---
+			// NOTE at this moment `server` is LEFT player.
+			peer.isServer ? leftUid : rightUid));
+		//
 	}
-	#end
 
 	override function update(elapsed:Float) {
 		super.update(elapsed);

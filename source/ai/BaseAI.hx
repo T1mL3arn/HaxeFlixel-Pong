@@ -3,6 +3,8 @@ package ai;
 import flixel.FlxObject;
 import flixel.math.FlxPoint;
 import flixel.tweens.misc.VarTween;
+import racket.Racket;
+import racket.RacketController;
 
 class BaseAI extends RacketController {
 

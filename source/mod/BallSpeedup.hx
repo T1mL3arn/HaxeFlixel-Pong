@@ -26,28 +26,28 @@ class BallSpeedup {
 	var initialParams:PongParams;
 	var currentParams:PongParams;
 
-	var speedUpSound:FlxSound;
-
 	public function new() {
 		init();
-
-		speedUpSound = Flixel.sound.load(AssetPaths.sfx_speedup__ogg, 0.45);
-		speedUpSound.group = GAME.gameSoundGroup;
 	}
 
 	public function init() {
 		initialParams = merge({}, Pong.params);
 		currentParams = Pong.params;
+		racketHitsCount = 0;
+		goalsCount = 0;
 
 		// Speed mod is calculated to fit the max ball speed.
 		// Math.max() is to prevent devision by ZERO (it happened during tests)
 		afterGoalSpeedMod = (ballSpeedMaxFactor - 1) / Math.max(1, (initialParams.scoreToWin - 1) * 2);
+		// trace('MOD speed: $afterGoalSpeedMod');
+		// trace('INIT speed: ${currentParams.ballSpeed}');
 	}
 
 	public function onGoal() {
 		goalsCount += 1;
 		racketHitsCount = 0;
 		currentParams.ballSpeed = limitBallSpeed(initialParams.ballSpeed * (1 + goalsCount * afterGoalSpeedMod));
+		// trace('GOAL speed: ${currentParams.ballSpeed}');
 	}
 
 	public function onRacketHit() {
@@ -58,7 +58,8 @@ class BallSpeedup {
 			currentParams.ballSpeed += speedAddon;
 			// let's not limit such speed
 			// currentParams.ballSpeed = limitBallSpeed(currentParams.ballSpeed);
-			speedUpSound.play();
+			Flixel.sound.play(AssetPaths.sfx_speedup__ogg, 0.4, GAME.gameSoundGroup);
+			// trace('RACKETHIT speed: ${currentParams.ballSpeed}');
 		}
 	}
 

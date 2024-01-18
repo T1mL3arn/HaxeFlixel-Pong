@@ -1,27 +1,21 @@
 package menu;
 
 import Player.PlayerOptions;
-import RacketController.KeyboardMovementController;
 import Utils.swap;
 import ai.AIFactory.ais;
 import ai.AIFactory.setAIPlayer;
 import flixel.FlxBasic;
-import flixel.FlxObject;
 import flixel.FlxSprite;
-import flixel.FlxState;
 import flixel.group.FlxGroup;
-import flixel.sound.FlxSoundGroup;
-import flixel.ui.FlxButton;
-import flixel.ui.FlxSpriteButton;
 import flixel.util.FlxColor;
-import lime.system.System;
-import math.MathUtils.p;
 import mouse.SpriteAsMouse;
 import network_wrtc.Lobby1v1;
+import racket.KeyboardMovementController;
 import room.AIRoom;
 import room.SplitscreenRoom;
 import room.TrainingRoom;
 import room.TwoPlayersRoom;
+import ui.GithubRepoLink;
 import menu.BaseMenu.MenuCommand;
 import menu.MenuUtils.wrapMenuPage;
 
@@ -32,6 +26,8 @@ class MainMenu extends state.BaseState {
 	static final TRAINING_ROOM_MENU_ID = 'load_training_room';
 	static final SELF_ROOM_MENU_ID = 'load_self_room';
 	static final VS_AI_SETTINGS_MENU_ID = 'player-vs-ai-settings';
+	static final NETPLAY_MENU_ID = 'netplay';
+	static final NETPLAY_MENU_LABEL = #if html5 'internet' #elseif hl 'local net' #else '' #end;
 
 	var backGame:AIRoom;
 
@@ -50,7 +46,7 @@ class MainMenu extends state.BaseState {
 		menu.createPage('main')
 			.add(wrapMenuPage('PONG', '
 				-| 1 player | link | @1_player
-				-| multiplayer | link | @multiplayer_menu_page
+				-| 2 players | link | @multiplayer_menu_page
 		', ''))
 			.addExitGameItem()
 			.par({
@@ -78,9 +74,9 @@ class MainMenu extends state.BaseState {
 			});
 
 		menu.createPage('multiplayer_menu_page')
-			.add(wrapMenuPage('multiplayer', '
+			.add(wrapMenuPage('2 players', '
 				-| split screen | link | split_screen
-				-| internet | link | internet
+				-| ${NETPLAY_MENU_LABEL} | link | ${NETPLAY_MENU_ID}
 		'))
 			.par({
 				pos: 'screen,c,c'
@@ -129,11 +125,12 @@ class MainMenu extends state.BaseState {
 
 					Flixel.switchState(new TwoPlayersRoom(players[0], players[1]));
 
-				case [it_fire, 'internet']:
-					#if html5
+				case [it_fire, NETPLAY_MENU_ID]:
+					#if (html5 || hl)
 					Flixel.switchState(new Lobby1v1());
+					#else
+					trace('not implemented');
 					#end
-					0;
 
 				case [it_fire, 'split_screen']:
 					Flixel.switchState(new SplitscreenRoom({
@@ -162,22 +159,10 @@ class MainMenu extends state.BaseState {
 		// menu.menuEvent.dispatch(it_fire, 'internet');
 
 		// github button
-		var octocat = new FlxSprite();
-		octocat.loadGraphic(AssetPaths.gh_icon_final__png, false, 128, 128);
-		octocat.scale.set(0.25, 0.25);
-		octocat.updateHitbox();
-		var githubButton = new FlxSpriteButton(0, 0, octocat, () -> System.openURL('https://github.com/T1mL3arn/HaxeFlixel-Pong'));
-		githubButton.labelOffsets = [p(), p(), p()];
-		githubButton.makeGraphic(32, 32, FlxColor.TRANSPARENT);
-		githubButton.updateHitbox();
-		githubButton.x = Flixel.width - 20 - githubButton.width;
-		githubButton.y = Flixel.height - 20 - githubButton.height;
-		githubButton.status = FlxButton.NORMAL;
-		var mouse = Flixel.plugins.get(SpriteAsMouse);
-		githubButton.onOver.callback = ()->mouse.setCursor(mouse.pointerCursor, -5);
-		githubButton.onOut.callback = ()->mouse.setCursor(mouse.arrowCursor, 0, 0);
-		uiObjects.add(githubButton);
-		// --------
+		var repoLink = new GithubRepoLink();
+		repoLink.x = Flixel.width - 16 - repoLink.width;
+		repoLink.y = Flixel.height - 16 - repoLink.height;
+		uiObjects.add(repoLink);
 
 		gameObjects.add(backGame = new AIRoom('medium', 'easy', true));
 		backGame.create();

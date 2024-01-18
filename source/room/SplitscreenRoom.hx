@@ -6,6 +6,7 @@ import flixel.group.FlxGroup;
 import flixel.input.keyboard.FlxKey;
 import flixel.text.FlxText;
 import flixel.util.FlxTimer;
+import state.BaseGameState;
 
 /**
 	Room for two human players meant to play on the same PC.
@@ -81,6 +82,7 @@ class SplitscreenRoomGuide extends FlxSubState {
 /**
 	Help info for a human player
 **/
+@:build(utils.BuildMacro.addField_GAME())
 class PlayerGuideUI extends FlxGroup {
 
 	/**
@@ -136,7 +138,7 @@ class PlayerGuideUI extends FlxGroup {
 	function showReadyLabel() {
 		add(readyLabel);
 
-		new FlxTimer().start(0.75, _ -> {
+		new FlxTimer((cast GAME.room : BaseGameState).timerManager).start(0.75, _ -> {
 			var f = FlxFlicker.flicker(readyLabel, 0.66, 0.066, false);
 			@:privateAccess
 			f.completionCallback = _ -> {

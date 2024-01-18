@@ -84,8 +84,8 @@ class Pong extends FlxGame {
 		// I have to skip splash.
 		super(0, 0, null, true);
 
-		// filtersEnabled = #if debug false #else true #end;
-		filtersEnabled = #if debug true #else true #end;
+		filtersEnabled = #if debug false #else true #end;
+		// filtersEnabled = #if debug true #else true #end;
 
 		gameSoundGroup = new FlxSoundGroup();
 

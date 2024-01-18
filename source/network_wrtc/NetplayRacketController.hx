@@ -1,6 +1,8 @@
 package network_wrtc;
 
 import flixel.input.keyboard.FlxKey;
+import racket.Racket;
+import racket.RacketController;
 
 typedef PaddleActionPayload = {
 	paddleName:String,

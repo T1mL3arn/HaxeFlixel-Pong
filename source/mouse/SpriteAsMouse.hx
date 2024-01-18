@@ -49,10 +49,14 @@ class SpriteAsMouse extends FlxBasic {
 
 		Flixel.signals.postStateSwitch.add(addCursor);
 		Flixel.signals.preStateSwitch.add(removeCursor);
-		// TODO extract callbacks to class fields and remove them in destroy()
-		GAME.signals.substateOpened.add((_, _) -> if (Flixel.state.subState is BaseState) addToSubstate(cast Flixel.state.subState));
-		GAME.signals.substateClosed.add((_, _) -> if (Flixel.state.subState is BaseState) removeFromSubstate(cast Flixel.state.subState));
+		substateOpenCB = (_, _) -> if (Flixel.state.subState is BaseState) addToSubstate(cast Flixel.state.subState);
+		substateCloseCB = (_, _) -> if (Flixel.state.subState is BaseState) removeFromSubstate(cast Flixel.state.subState);
+		GAME.signals.substateOpened.add(substateOpenCB);
+		GAME.signals.substateClosed.add(substateCloseCB);
 	}
+
+	var substateCloseCB:(Any, Any)->Void;
+	var substateOpenCB:(Any, Any)->Void;
 
 	function addToSubstate(state:BaseState) {
 		state.topLayer.add(cursor);
@@ -113,5 +117,7 @@ class SpriteAsMouse extends FlxBasic {
 
 		Flixel.signals.postStateSwitch.remove(addCursor);
 		Flixel.signals.preStateSwitch.remove(removeCursor);
+		GAME.signals.substateOpened.remove(substateOpenCB);
+		GAME.signals.substateClosed.remove(substateCloseCB);
 	}
 }

@@ -64,3 +64,7 @@ inline function round(val:Float, precision:Int = 2):Float {
 function xor(a:Bool, b:Bool) {
 	return (a && !b) || (!a && b);
 }
+
+inline function invLerp(a:Float, b:Float, v:Float):Float {
+	return (v - a) / (b - a);
+}

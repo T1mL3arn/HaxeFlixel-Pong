@@ -1,11 +1,13 @@
 package;
 
-import RacketController.KeyboardMovementController;
 import flixel.FlxObject;
 import flixel.group.FlxGroup;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import flixel.util.FlxDirection;
+import racket.KeyboardMovementController;
+import racket.Racket;
+import racket.RacketController;
 
 typedef PlayerOptions = {
 	// visible name

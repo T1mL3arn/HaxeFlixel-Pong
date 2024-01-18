@@ -1,12 +1,12 @@
 package math;
 
-import Utils.invLerp;
 import flixel.math.FlxAngle;
 import flixel.math.FlxMath;
 import flixel.math.FlxPoint;
 import flixel.math.FlxRect;
 import flixel.util.FlxColor;
 import utils.FlxSpriteDraw.lerpPoint;
+import math.MathUtils.invLerp;
 import math.MathUtils.point;
 
 /**

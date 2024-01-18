@@ -6,6 +6,7 @@ import flixel.math.FlxPoint;
 import flixel.sound.FlxSound;
 import flixel.util.FlxColor;
 import math.MathUtils.point;
+import racket.Racket;
 
 using Utils;
 

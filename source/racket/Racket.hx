@@ -1,12 +1,12 @@
-package;
+package racket;
 
-import Utils.invLerp;
 import flixel.FlxSprite;
 import flixel.math.FlxMath;
 import flixel.math.FlxRect;
 import flixel.util.FlxColor;
 import flixel.util.FlxDirection;
 import flixel.util.FlxSpriteUtil;
+import math.MathUtils.invLerp;
 
 typedef MovementBounds = {
 	left:Float,
@@ -140,6 +140,7 @@ class Racket extends FlxSprite {
 				final speedModPerStep = Pong.params.ballSpeed / 7;
 				final magnitude = Pong.params.ballSpeed + Math.abs(speedScale * speedModPerStep);
 				final angle = angleStep * speedScale;
+				// trace('RACKETBOUNCE: base: ${Pong.params.ballSpeed} new: $magnitude');
 				ball.velocity.setPolarDegrees(magnitude, angle);
 				if (position == RIGHT)
 					ball.velocity.x *= -1;

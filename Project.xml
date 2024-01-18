@@ -42,7 +42,8 @@
 		comment="use version: 0.5.8, since it is GIT lib I cannot use Lime attribute
 		'version' directly cause haxelib won't see the library" 
 	/>
-	<haxelib name="simple-peer" />
+	<haxelib name="simple-peer" if="html5"/>
+	<haxelib name="anette" if="hl"/>
 
 	<dependency name="https://unpkg.com/simple-peer@9.11.1/simplepeer.min.js" path="https://unpkg.com/simple-peer@9.11.1/simplepeer.min.js"/>
 	<!-- in the case if want to distribute the game altogether with simple-peer library -->

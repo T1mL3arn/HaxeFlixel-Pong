@@ -2,6 +2,7 @@ package room;
 
 import flixel.FlxObject;
 import flixel.group.FlxGroup.FlxTypedGroup;
+import racket.Racket;
 import state.BaseGameState;
 
 using Lambda;

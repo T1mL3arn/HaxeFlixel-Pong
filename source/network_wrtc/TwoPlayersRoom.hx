@@ -6,7 +6,10 @@ import menu.BaseMenu.MenuCommand;
 import menu.CongratScreen.CongratScreenType;
 import menu.CongratScreen;
 import menu.PauseMenu;
+import mod.Updater;
+import racket.Racket;
 import network_wrtc.NetplayRacketController.PaddleActionPayload;
+import network_wrtc.Network.INetplayPeer;
 import network_wrtc.Network.NetworkMessage;
 
 using Lambda;
@@ -57,10 +60,10 @@ typedef CongratScreenDataPayload = {
 
 class TwoPlayersRoom extends room.TwoPlayersRoom {
 
-	var network:Network;
+	var network:INetplayPeer;
 	var currentPlayerUid:String;
 
-	public function new(left, right, network:Network, currentPlayerUid:String) {
+	public function new(left, right, currentPlayerUid:String) {
 		super(left, right);
 
 		this.currentPlayerUid = currentPlayerUid;
@@ -77,7 +80,8 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 				players.find(p -> p.uid == this.currentPlayerUid).active = true;
 		});
 
-		this.network = network;
+		this.network = network_wrtc.Network.network;
+
 		// NOTE: never add() handlers during FlxSignal.dispatch()
 		// this.network.onMessage.add(onMessage);
 		// TODO show "user disconnected" info if user disconnects during the game
@@ -89,6 +93,7 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 
 	override function create() {
 		super.create();
+		plugins.add(new Updater().add(network.loop));
 		network.onMessage.add(onMessage);
 		Flixel.vcr.pauseChanged.add(onPauseChange);
 		#if debug
@@ -108,12 +113,13 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 	}
 
 	function onMessage(msg:NetworkMessage) {
-		// trace('(${untyped network.peer.initiator ? 'server' : 'player'}): on message');
+		// trace('(${untyped network.isServer ? 'server' : 'player'}): on message');
 
 		switch (msg.type) {
 			case PaddleAction:
 				messagePaddleAction(msg.data);
 			case BallData:
+				trace('${network.peerType}: GOT ${msg.type}');
 				messageBallData(msg.data);
 			case ScoreData:
 				messageScoreData(msg.data);
@@ -122,6 +128,7 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 			case ResetRoom:
 				messageResetRoom();
 			case BallPreServe:
+				trace('${network.peerType}: GOT ${msg.type}');
 				messageBallPreServe(msg.data);
 			case DebugPause:
 				messageDebugPause(msg.data);
@@ -154,7 +161,7 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 		ball.setPosition(data.x, data.y);
 		ball.velocity.set(data.vx, data.vy);
 
-		if (!network.initiator) {
+		if (!network.isServer) {
 
 			switch (data.hitBy) {
 				case null:
@@ -185,25 +192,26 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 	function messageCongratScreenData(data:CongratScreenDataPayload) {
 		// since a server(initiator) already switched to CongratScreen
 		// I don't need it to react on this message.
-		if (network.initiator)
+		if (network.isServer)
 			return;
 		var player = players.find(p -> p.uid == data.winnerUid);
 		showCongratScreen(player, data.winnerUid == currentPlayerUid ? FOR_WINNER : FOR_LOOSER);
 	}
 
 	function messageResetRoom() {
-		Flixel.switchState(new TwoPlayersRoom(leftOptions, rightOptions, network, currentPlayerUid));
+		Flixel.switchState(new TwoPlayersRoom(leftOptions, rightOptions, currentPlayerUid));
 	}
 
 	function messageBallPreServe(data:{delay:Float}) {
-		if (!network.initiator) {
+		if (!network.isServer) {
 			ballPreServe(GAME.room.ball, data.delay);
+			trace('${network.peerType} ball preserve executed');
 		}
 	}
 
 	function messageDebugPause(data:{paused:Bool}) {
 		#if debug
-		if (!network.initiator) {
+		if (!network.isServer) {
 			if (data.paused)
 				Flixel.vcr.pause();
 			else
@@ -230,29 +238,29 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 	}
 
 	override function serveBall(byPlayer:Player, ball:Ball, delay:Float) {
-		if (network.initiator) {
+		if (network.isServer) {
 			super.serveBall(byPlayer, ball, delay);
 			// ball serve has delay, so for correct sync
 			// I have to sync 2 times: right now and after delay
 			network.send(BallData, getBallPayload(''));
 			network.send(BallPreServe, {delay: delay});
 
-			new FlxTimer().start(delay, _ -> network.send(BallData, getBallPayload(null)));
+			new FlxTimer(timerManager).start(delay, _ -> network.send(BallData, getBallPayload(null)));
 		}
 	}
 
 	override function fisrtBallServe() {
-		if (network.initiator)
+		if (network.isServer)
 			super.fisrtBallServe();
 	}
 
 	override function ballOutWorldBounds() {
-		if (network.initiator)
+		if (network.isServer)
 			super.ballOutWorldBounds();
 	}
 
 	override function goal(hitArea, ball) {
-		if (network.initiator) {
+		if (network.isServer) {
 			super.goal(hitArea, ball);
 		}
 	}
@@ -270,7 +278,7 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 			network.send(ResetRoom);
 		});
 		congrats.network = Network.network;
-		congrats.isServer = network.initiator;
+		congrats.isServer = network.isServer;
 		congrats.openMainMenuAction = () -> {
 			network.destroy();
 			Network.network = null;
@@ -282,21 +290,21 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 
 		openSubState(congrats.setWinner(player.name, player.uid == currentPlayerUid ? FOR_WINNER : FOR_LOOSER));
 
-		if (network.initiator)
+		if (network.isServer)
 			network.send(CongratScreenData, {winnerName: player.name, winnerUid: player.uid});
 	}
 
 	override function ballCollision(wall:FlxObject, ball:Ball) {
 		super.ballCollision(wall, ball);
 
-		if (network.initiator) {
+		if (network.isServer) {
 			// trace('send BallData');
 
 			// hitBy data is for SmartAI
 			// it uses "type" of wall for decision, it does not read info like
 			// dimension, pos, etc.
 			var hitBy = wall is Racket ? 'racket' : 'wall';
-			trace('current player uid: $currentPlayerUid');
+			// trace('current player uid: $currentPlayerUid');
 			hitBy = hitBy != 'racket' ? hitBy : (findPlayerById(currentPlayerUid)?.racket == wall ? 'racket_ours' : 'racket_theirs');
 
 			network.send(BallData, getBallPayload(hitBy));
@@ -312,7 +320,7 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 class NetplayCongratScreen extends CongratScreen {
 
 	public var isServer:Bool = false;
-	public var network:Network;
+	public var network:INetplayPeer;
 
 	override function create() {
 		super.create();
@@ -326,8 +334,13 @@ class NetplayCongratScreen extends CongratScreen {
 			menu.mpActive.item_focus(MenuCommand.SWITCH_TO_MAIN_MENU);
 		}
 
-		network.peer.on('close', onDisconnect);
-		network.peer.on('error', onDisconnect);
+		// TODO review how simple-peer CLOSE event relates to anette lib
+		#if html5
+		// network.peer.on('close', onDisconnect);
+		// network.peer.on('error', onDisconnect);
+		#end
+		network.onError.addOnce(_ -> onDisconnect());
+		network.onDisconnect.add(onDisconnect);
 	}
 
 	function onDisconnect() {

@@ -13,6 +13,7 @@ import flixel.util.FlxTimer;
 import menu.CongratScreen;
 import mod.BallSpeedup;
 import mod.CornerGoalWatch;
+import racket.Racket;
 import state.BaseGameState;
 import utils.FlxSpriteDraw.twinkle;
 

@@ -1,7 +1,6 @@
 package;
 
 import Player.PlayerOptions;
-import RacketController.KeyboardMovementController;
 import Utils.merge;
 import flixel.FlxObject;
 import flixel.FlxSprite;
@@ -9,6 +8,7 @@ import flixel.math.FlxPoint;
 import flixel.util.FlxColor;
 import flixel.util.FlxDirection;
 import math.MathUtils.wp;
+import racket.Racket;
 import utils.FlxSpriteDraw.DashedLineStyle;
 import utils.FlxSpriteDraw.drawDashedLine;
 
