@@ -34,7 +34,6 @@ class PeerIP extends NetplayPeerBase<NetworkMessageType> {
 	override function create() {
 		isServer = true;
 
-		// TODO: get real Lobby instance
 		var lobby:Lobby1v1 = cast Flixel.state;
 
 		lobby.connectionState = CreatingLobby;
