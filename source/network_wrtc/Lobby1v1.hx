@@ -140,8 +140,7 @@ class Lobby1v1 extends BaseState {
 				case [it_fire, 'connect_to_lobby']:
 					//
 					peer = getPeer();
-					// NOTE: temporary pass bullshit to join
-					peer.join('', 0);
+					peer.join();
 
 				case [it_fire, SWITCH_TO_MAIN_MENU]:
 					Flixel.switchState(new MainMenu());
@@ -155,7 +154,7 @@ class Lobby1v1 extends BaseState {
 			var isClient = Sys.args().contains('--client');
 			if (isClient) {
 				peer = getPeer();
-				peer.join('', 0);
+				peer.join();
 			}
 			else {
 				peer = getPeer();
@@ -194,17 +193,25 @@ class Lobby1v1 extends BaseState {
 		var text = 'Create a lobby or join to one!';
 		var infobox = new FlxText(x, y, w, text, 18);
 		infobox.fieldHeight = h;
-		infobox.color = 0x111111;
-		infobox.alignment = LEFT;
-		infobox.textField.background = true;
-		infobox.textField.backgroundColor = 0xEEEEEE;
 
-		@:privateAccess
-		var format = infobox._defaultFormat;
-		format.leftMargin = format.rightMargin = margin;
-		@:privateAccess infobox.updateDefaultFormat();
+		styleText(infobox);
 
 		return infobox;
+	}
+
+	function styleText<T:FlxText>(text:T):T {
+		var margin = 12;
+		var fontSize = 18;
+		text.size = fontSize;
+		text.color = 0x111111;
+		text.alignment = LEFT;
+		text.textField.background = true;
+		text.textField.backgroundColor = 0xEEEEEE;
+		@:privateAccess
+		var format = text._defaultFormat;
+		format.leftMargin = format.rightMargin = margin;
+		@:privateAccess text.updateDefaultFormat();
+		return text;
 	}
 
 	function onPeerError(e:Dynamic) {
