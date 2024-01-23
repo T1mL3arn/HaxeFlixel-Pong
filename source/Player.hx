@@ -93,4 +93,8 @@ class Player extends FlxGroup {
 
 		return racketController = v;
 	}
+
+	override function toString():String {
+		return '$name#$uid';
+	}
 }

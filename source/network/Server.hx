@@ -111,10 +111,25 @@ class Server implements ISocket extends BaseHandler {
 	}
 
 	/**
-		Has no sense in Server
+		Disconnect and close all associated sockets.
+		Also closes this server's socket.
 	**/
 	public function disconnect() {
-		// TODO: actually I  can disconnect all sockets
-		throw 'You cannot disconnect a server';
+		for (socket => connection in connections) {
+			try {
+				socket.close();
+				sockets.remove(socket);
+				connections.remove(socket);
+				connection.disconnect();
+			}
+			catch (e) {
+				trace('Server.disconnect() callstack START ---');
+				trace('error (caught):');
+				trace(e);
+				trace(haxe.CallStack.toString(haxe.CallStack.exceptionStack()));
+				trace('Server.disconnect() callstack END -----');
+			}
+		}
+		serverSocket.close();
 	}
 }

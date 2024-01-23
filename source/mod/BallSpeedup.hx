@@ -14,7 +14,7 @@ import flixel.sound.FlxSound;
 class BallSpeedup {
 
 	var ballSpeedMaxFactor:Float = 1.55;
-	var afterGoalSpeedMod:Float;
+	var afterGoalSpeedMod:Float = 0;
 	// speed mod after N racket hits
 	var racketHitsSpeedMod:Float = 0.0325;
 	// number of racket hits (let it be ODD number)
@@ -28,6 +28,8 @@ class BallSpeedup {
 
 	public function new() {
 		init();
+
+		GAME.signals.goal.add(onGoal);
 	}
 
 	public function init() {
@@ -43,14 +45,17 @@ class BallSpeedup {
 		// trace('INIT speed: ${currentParams.ballSpeed}');
 	}
 
-	public function onGoal() {
+	public function onGoal(?_) {
 		goalsCount += 1;
 		racketHitsCount = 0;
 		currentParams.ballSpeed = limitBallSpeed(initialParams.ballSpeed * (1 + goalsCount * afterGoalSpeedMod));
 		// trace('GOAL speed: ${currentParams.ballSpeed}');
 	}
 
-	public function onRacketHit() {
+	/**
+		@return `true` if ball's speed is modified
+	**/
+	public function onRacketHit():Bool {
 		// NOTE this must be called BEFORE racket bouncer!
 		racketHitsCount += 1;
 		if (racketHitsCount % racketHitsBeforeSpeedup == 0) {
@@ -58,12 +63,22 @@ class BallSpeedup {
 			currentParams.ballSpeed += speedAddon;
 			// let's not limit such speed
 			// currentParams.ballSpeed = limitBallSpeed(currentParams.ballSpeed);
-			Flixel.sound.play(AssetPaths.sfx_speedup__ogg, 0.4, GAME.gameSoundGroup);
+			playSpeedupSound();
 			// trace('RACKETHIT speed: ${currentParams.ballSpeed}');
+			return true;
 		}
+		return false;
+	}
+
+	public function playSpeedupSound() {
+		Flixel.sound.play(AssetPaths.sfx_speedup__ogg, 0.4, GAME.gameSoundGroup);
 	}
 
 	inline function limitBallSpeed(speed):Float {
 		return Math.min(speed, initialParams.ballSpeed * ballSpeedMaxFactor);
+	}
+
+	public function destroy() {
+		GAME.signals.goal.remove(onGoal);
 	}
 }

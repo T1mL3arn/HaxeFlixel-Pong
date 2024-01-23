@@ -43,6 +43,8 @@ class TwoPlayersRoom extends BaseGameState {
 	override function create() {
 		super.create();
 
+		firstServe = true;
+
 		Pong.resetParams();
 		#if debug
 		Pong.params.scoreToWin = 2;
@@ -76,6 +78,7 @@ class TwoPlayersRoom extends BaseGameState {
 	override function destroy() {
 		super.destroy();
 
+		ballSpeedup.destroy();
 		walls.destroy();
 		players.iter(p -> p.destroy());
 		playerGoals.destroy();
@@ -84,9 +87,13 @@ class TwoPlayersRoom extends BaseGameState {
 	}
 
 	override function update(dt:Float) {
+		// super update updates std flixel objects movement
 		super.update(dt);
+		roomUpdate(dt);
+	}
 
-		fisrtBallServe();
+	function roomUpdate(dt:Float) {
+		firstBallServe();
 
 		Flixel.collide(walls, ball, ballCollision);
 		Flixel.overlap(playerGoals, ball, goal);
@@ -94,8 +101,7 @@ class TwoPlayersRoom extends BaseGameState {
 		ballOutWorldBounds();
 	}
 
-	function fisrtBallServe() {
-		// NOTE vscode cannot find "firstServe" id to do rename-rafactoring
+	function firstBallServe() {
 		if (players[0].active && players[1].active) {
 			if (ball.velocity.lengthSquared == 0 && firstServe) {
 				var player = Flixel.random.getObject(players);
@@ -219,7 +225,7 @@ class TwoPlayersRoom extends BaseGameState {
 
 		// scale-out effect for the ball
 		final scale = 5.0;
-		var tb = ball.clone();
+		var tb = new Ball();
 		tb.setPosition(ball.x, ball.y);
 		tweenManager.tween(tb.scale, {x: scale, y: scale}, delay * 0.5, {ease: FlxEase.linear});
 		tweenManager.tween(tb, {alpha: 0.0}, delay * 0.5, {
@@ -228,5 +234,16 @@ class TwoPlayersRoom extends BaseGameState {
 			onComplete: _ -> remove(tb).destroy()
 		});
 		add(tb);
+	}
+
+	function findPlayerById(id) {
+		return players.find(p -> p.uid == id);
+	}
+
+	function findObjectById(uid:Int):FlxObject {
+		// check gameObjects
+		// check walls
+		var finder = o -> o?.netplayUid == uid;
+		return cast gameObjects.members.find(finder) ?? walls.members.find(finder);
 	}
 }

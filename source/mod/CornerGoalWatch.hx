@@ -3,7 +3,6 @@ package mod;
 import flixel.FlxBasic;
 import flixel.FlxObject;
 import flixel.group.FlxGroup;
-import flixel.math.FlxRect;
 import flixel.sound.FlxSound;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
@@ -35,9 +34,14 @@ using Lambda;
 class CornerGoalWatch extends FlxBasic {
 
 	public var bonusPoints:Int = 1;
+	public var labelIsShown(default, null):Bool = false;
+
+	/**
+		Sets after corner goal. Resets on ball serve
+	**/
+	public var isCornerGoal(default, null) = false;
 
 	var corners:FlxGroup;
-
 	var waitForGoal:Bool;
 	var rewardPlayer:Player;
 	var yeahSound:FlxSound;
@@ -73,7 +77,7 @@ class CornerGoalWatch extends FlxBasic {
 
 					// Since corner objects dont belong to any state
 					// (means they are not updated)
-					// I have manually set its last position
+					// I have to manually set its last position
 					// to make collision work.
 					c1.last.set(c1.x, c1.y);
 					c2.last.set(c2.x, c2.y);
@@ -117,11 +121,12 @@ class CornerGoalWatch extends FlxBasic {
 	function onGoal(player) {
 		if (waitForGoal) {
 			waitForGoal = false;
+			isCornerGoal = true;
+
 			if (rewardPlayer == null || player != rewardPlayer) {
 				throw 'ERROR: Corner goal from the wrong player detected!\n\nWhant ${rewardPlayer}\nGet ${player}';
 			}
 
-			yeahSound.play();
 			GAME.room.updateScore(rewardPlayer, rewardPlayer.score + bonusPoints);
 			showLabel(rewardPlayer);
 			// trace('CORNER GOAL! Bonus for ${rewardPlayer.name}');
@@ -141,6 +146,7 @@ class CornerGoalWatch extends FlxBasic {
 	public function reset() {
 		waitForGoal = false;
 		rewardPlayer = null;
+		isCornerGoal = false;
 	}
 
 	/**
@@ -148,6 +154,13 @@ class CornerGoalWatch extends FlxBasic {
 		@param forPlayer 
 	**/
 	public function showLabel(player:Player, label = 'CORNER !!!') {
+		if (GAME.peer != null && labelIsShown)
+			return;
+
+		labelIsShown = true;
+
+		yeahSound.play();
+
 		var twinkleTime = Pong.params.ballServeDelay;
 		var state:BaseGameState = cast GAME.room;
 
@@ -165,7 +178,10 @@ class CornerGoalWatch extends FlxBasic {
 				0;
 		}
 
-		var removeText = ()->state.uiObjects.remove(text).destroy();
+		var removeText = () -> {
+			state.uiObjects.remove(text).destroy();
+			labelIsShown = false;
+		};
 		var twinkleComplete = () -> {
 			state.tweenManager.tween(text, {alpha: 0}, 0.25, {onComplete: _ -> removeText()});
 		};

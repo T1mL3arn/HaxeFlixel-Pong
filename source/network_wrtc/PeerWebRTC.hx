@@ -6,16 +6,16 @@ import js.html.Console;
 import js.lib.Error;
 import flixel.input.mouse.FlxMouseEvent;
 import menu.BaseMenu;
+import netplay.TwoPlayersNetplayData.NetworkMessage;
+import netplay.TwoPlayersNetplayData.NetworkMessageType;
 import peer.Peer;
 import peer.PeerEvent;
 import network_wrtc.Lobby1v1.ConnectionState;
 import network_wrtc.Lobby1v1.LobbyMenuPage;
 import network_wrtc.Network.NetplayPeerBase;
-import network_wrtc.Network.NetworkMessage;
-import network_wrtc.Network.NetworkMessageType;
 
 @:access(network_wrtc.Lobby1v1)
-class PeerWebRTC extends NetplayPeerBase {
+class PeerWebRTC extends NetplayPeerBase<NetworkMessageType> {
 
 	var peer:Peer;
 	var signalData:String;

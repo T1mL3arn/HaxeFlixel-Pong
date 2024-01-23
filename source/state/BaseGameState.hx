@@ -24,5 +24,11 @@ class BaseGameState extends BaseState {
 		if (canOpenPauseMenu && Flixel.keys.anyJustPressed([ESCAPE, P])) {
 			openSubState(pauseMenu);
 		}
+
+		/**
+			NOTE: consider using separate update method (gameUpdate() or something)
+			which is called after super.update(). This will allow to override
+			gameUpdate() completely but preserve state.update().
+		**/
 	}
 }

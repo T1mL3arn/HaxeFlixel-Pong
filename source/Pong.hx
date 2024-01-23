@@ -7,8 +7,10 @@ import flixel.FlxSubState;
 import flixel.sound.FlxSoundGroup;
 import flixel.tweens.FlxTween.FlxTweenManager;
 import flixel.util.FlxSignal;
+import mod.Updater;
 import mouse.MouseHider;
 import mouse.SpriteAsMouse;
+import network_wrtc.Network.INetplayPeer;
 import openfl.display.StageQuality;
 import openfl.events.MouseEvent;
 import openfl.filters.ShaderFilter;
@@ -62,6 +64,8 @@ class Pong extends FlxGame {
 	**/
 	public var room:RoomModel;
 
+	public var peer:INetplayPeer<Any>;
+
 	public var signals = {
 		keyPress: Flixel.signals.postUpdate,
 		ballServed: new FlxSignal(),
@@ -70,7 +74,7 @@ class Pong extends FlxGame {
 		ballCollision: new FlxTypedSignal<(FlxObject, Ball)->Void>(),
 		pauseChange: new FlxTypedSignal<Bool->Void>(),
 		/**
-			Dispatched when on goal but before
+			Dispatched on goal but before
 			any goal related actions (like score update etc.).
 			Sends `Player` that scored the goal.
 		**/
@@ -134,6 +138,7 @@ class Pong extends FlxGame {
 			Flixel.mouse.useSystemCursor = false;
 			Flixel.mouse.visible = false;
 
+			Flixel.plugins.add(new Updater());
 			Flixel.plugins.add(new SpriteAsMouse());
 			Flixel.plugins.add(new FlxDragManager());
 			Flixel.plugins.add(new MouseHider());

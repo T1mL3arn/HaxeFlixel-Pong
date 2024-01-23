@@ -50,4 +50,24 @@ function addField_GAME():Array<Field> {
 	// Return the updated class fields
 	return fields;
 }
+
+function netplayUID():Array<Field> {
+	var fields = Context.getBuildFields();
+
+	// do nothing if it's already there
+	if (Lambda.find(fields, f -> f.name == 'netplayUid') != null)
+		return fields;
+
+	fields.push({
+		name: 'netplayUid',
+		doc: 'docString',
+		access: [Access.APublic],
+		// kind: FieldType.FProp('default', 'null', macro :Int, macro network_wrtc.Network.uidMap['netplayUid']++),
+		// kind: FieldType.FProp('default', 'default', macro :Int, macro network_wrtc.Network.netplayUid++),
+		kind: FieldType.FProp('default', 'default', macro :Int, macro 0),
+		pos: Context.currentPos(),
+	});
+
+	return fields;
+}
 #end

@@ -4,7 +4,6 @@ import flixel.FlxObject;
 import flixel.math.FlxPoint.get as point;
 import flixel.math.FlxPoint;
 import flixel.math.FlxRect;
-import flixel.tweens.FlxEase;
 import flixel.util.FlxColor;
 import math.MathUtils.wp;
 import math.RayCast;
@@ -38,16 +37,8 @@ typedef SmartAIParams = {
 	?behaviorListBias:Array<Float>,
 };
 
-/**
-	This AI calculates ball trajectory to find the best
-	spot to bounce the ball. Potentially can be made to never
-	miss the ball.
-
-	- listens ball_serve and ball_collision
-	- on these signals calcs possible ball trajectory
-	- if trajectory is towards this AI - find the best spot to hit the ball
-**/
-class SmartAI extends BaseAI {
+@:access(ai.SmartAI)
+class SmartAIFactory {
 
 	public static function buildMediumAI(racket, name) {
 		var ai = new SmartAI(racket, name);
@@ -84,8 +75,23 @@ class SmartAI extends BaseAI {
 
 		return ai;
 	}
+}
 
+/**
+	This AI calculates ball trajectory to find the best
+	spot to bounce the ball. Potentially can be made to never
+	miss the ball.
+
+	- listens ball_serve and ball_collision
+	- on these signals calcs possible ball trajectory
+	- if trajectory is towards this AI - find the best spot to hit the ball
+**/
+class SmartAI extends BaseAI {
+
+	#if debug
 	public var drawTrajectory:Bool = false;
+	public var targetPointColor:Int = 0x00FF55;
+	#end
 
 	var model:Array<FlxRect>;
 
@@ -126,6 +132,7 @@ class SmartAI extends BaseAI {
 		// than SimpleAI,
 		followBallAI = new SimpleAI(racket, name);
 		followBallAI.active = false;
+		// followBallAI.drawDebugInfo = true;
 
 		velocityControler = new Velocity();
 	}
@@ -272,7 +279,7 @@ class SmartAI extends BaseAI {
 					Ry, Rh - racket Y and Height
 					Racket can hit the ball in segment of (By + Bh, By - Rh) => hit-zone (HZ)
 					but ONLY when Ry0 = By + Bh.
-					So I can chose any value from HZ and
+					I can chose any value from HZ
 					So target Ry must be:
 					Ry = Ry0 + rnd(0, HZ)
 					(HZ can be simplified to Rh + Bh)
@@ -329,10 +336,8 @@ class SmartAI extends BaseAI {
 	}
 
 	function moveRacketTo(p:FlxPoint) {
-		if (tween != null)
-			tween.cancel();
-
-		velocityControler.moveObjectTo(racket, p, Pong.params.racketSpeed);
+		// velocityControler.moveObjectTo(racket, p, Pong.params.racketSpeed);
+		velocityControler.moveUntilReached(racket, p, Pong.params.racketSpeed);
 	}
 
 	override function update(dt:Float) {
@@ -341,20 +346,43 @@ class SmartAI extends BaseAI {
 			followBallAI.update(dt);
 	}
 
-	override function draw() {
-		super.draw();
-
-		#if debug
-		if (drawTrajectory)
-			debugDraw();
-		#end
-	}
-
 	#if debug
-	function debugDraw() {
+	override function drawDebug() {
 		var gfx = Flixel.camera.debugLayer.graphics;
-		rayCast.draw(gfx);
-		rayCast2.draw(gfx);
+
+		// this AI target
+		gfx.endFill();
+		gfx.beginFill(targetPointColor);
+		gfx.drawCircle(target.x, target.y, 2);
+		gfx.endFill();
+		gfx.lineStyle(1, targetPointColor);
+		gfx.moveTo(target.x - 6, target.y);
+		gfx.lineTo(target.x + 6, target.y);
+		gfx.moveTo(target.x, target.y - 6);
+		gfx.lineTo(target.x, target.y + 6);
+		gfx.endFill();
+
+		// this AI velocity
+		var d = -10;
+		gfx.lineStyle(1, 0xFF0000);
+		gfx.moveTo(racket.x + d, racket.y);
+		var vel = racket.velocity.clone();
+		vel.length = 50;
+		gfx.lineTo(racket.x + vel.x + d, racket.y + vel.y);
+		gfx.endFill();
+		vel.put();
+
+		// racket XY
+		// gfx.beginFill(0x00FFFF);
+		// gfx.drawCircle(racket.x, racket.y, 5);
+		// gfx.endFill();
+
+		followBallAI.draw();
+
+		if (drawTrajectory) {
+			rayCast.draw(gfx);
+			rayCast2.draw(gfx);
+		}
 
 		return;
 

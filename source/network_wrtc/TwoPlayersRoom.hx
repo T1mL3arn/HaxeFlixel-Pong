@@ -1,32 +1,24 @@
 package network_wrtc;
 
 import flixel.FlxObject;
+import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import menu.BaseMenu.MenuCommand;
 import menu.CongratScreen.CongratScreenType;
 import menu.CongratScreen;
 import menu.PauseMenu;
-import mod.Updater;
+import netplay.TwoPlayersNetplayData.NetworkMessage;
+import netplay.TwoPlayersNetplayData.NetworkMessageType;
 import racket.Racket;
 import network_wrtc.NetplayRacketController.PaddleActionPayload;
 import network_wrtc.Network.INetplayPeer;
-import network_wrtc.Network.NetworkMessage;
 
 using Lambda;
 
 typedef TwoPlayersGameState = {
-	rackets:Array<{
-		?id:String,
-		x:Float,
-		y:Float,
-		vx:Float,
-		vy:Float,
-	}>,
-	names:Array<String>,
-	score:Array<Int>,
-	// OR
 	ball:{x:Float, y:Float, vx:Float, vy:Float},
 	players:Array<{
+		uid:String,
 		name:String,
 		racket:{
 			x:Float,
@@ -37,7 +29,6 @@ typedef TwoPlayersGameState = {
 		},
 		score:Int,
 	}>,
-	?winner:Any,
 };
 
 typedef BallDataPayload = {
@@ -46,6 +37,7 @@ typedef BallDataPayload = {
 	vx:Float,
 	vy:Float,
 	?hitBy:String,
+	?color:FlxColor,
 }
 
 typedef ScoreDataPayload = {
@@ -58,15 +50,17 @@ typedef CongratScreenDataPayload = {
 	winnerUid:String,
 }
 
+@:deprecated('Use `TwoPlayerNew` instead')
 class TwoPlayersRoom extends room.TwoPlayersRoom {
 
-	var network:INetplayPeer;
+	var network:INetplayPeer<Any>;
 	var currentPlayerUid:String;
 
-	public function new(left, right, currentPlayerUid:String) {
+	public function new(left, right) {
 		super(left, right);
 
-		this.currentPlayerUid = currentPlayerUid;
+		// NOTE at this moment `server` is LEFT player.
+		this.currentPlayerUid = GAME.peer.isServer ? left.uid : right.uid;
 
 		canPause = false;
 
@@ -80,20 +74,15 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 				players.find(p -> p.uid == this.currentPlayerUid).active = true;
 		});
 
-		this.network = network_wrtc.Network.network;
+		network = GAME.peer;
 
 		// NOTE: never add() handlers during FlxSignal.dispatch()
 		// this.network.onMessage.add(onMessage);
-		// TODO show "user disconnected" info if user disconnects during the game
-	}
-
-	function findPlayerById(id) {
-		return players.find(p -> p.uid == id);
 	}
 
 	override function create() {
 		super.create();
-		plugins.add(new Updater().add(network.loop));
+
 		network.onMessage.add(onMessage);
 		Flixel.vcr.pauseChanged.add(onPauseChange);
 		#if debug
@@ -119,7 +108,7 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 			case PaddleAction:
 				messagePaddleAction(msg.data);
 			case BallData:
-				trace('${network.peerType}: GOT ${msg.type}');
+				// trace('${network.peerType}: GOT ${msg.type}');
 				messageBallData(msg.data);
 			case ScoreData:
 				messageScoreData(msg.data);
@@ -128,7 +117,7 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 			case ResetRoom:
 				messageResetRoom();
 			case BallPreServe:
-				trace('${network.peerType}: GOT ${msg.type}');
+				// trace('${network.peerType}: GOT ${msg.type}');
 				messageBallPreServe(msg.data);
 			case DebugPause:
 				messageDebugPause(msg.data);
@@ -199,7 +188,7 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 	}
 
 	function messageResetRoom() {
-		Flixel.switchState(new TwoPlayersRoom(leftOptions, rightOptions, currentPlayerUid));
+		Flixel.switchState(new TwoPlayersRoom(leftOptions, rightOptions));
 	}
 
 	function messageBallPreServe(data:{delay:Float}) {
@@ -249,9 +238,9 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 		}
 	}
 
-	override function fisrtBallServe() {
+	override function firstBallServe() {
 		if (network.isServer)
-			super.fisrtBallServe();
+			super.firstBallServe();
 	}
 
 	override function ballOutWorldBounds() {
@@ -277,11 +266,10 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 		var congrats = new NetplayCongratScreen(_ -> {
 			network.send(ResetRoom);
 		});
-		congrats.network = Network.network;
+		congrats.network = GAME.peer;
 		congrats.isServer = network.isServer;
-		congrats.openMainMenuAction = () -> {
-			network.destroy();
-			Network.network = null;
+		congrats.openMainMenuAction = ()->{
+			// network.destroy();
 		}
 
 		canOpenPauseMenu = false;
@@ -320,7 +308,7 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 class NetplayCongratScreen extends CongratScreen {
 
 	public var isServer:Bool = false;
-	public var network:INetplayPeer;
+	public var network:INetplayPeer<Any>;
 
 	override function create() {
 		super.create();
@@ -335,26 +323,39 @@ class NetplayCongratScreen extends CongratScreen {
 		}
 
 		// TODO review how simple-peer CLOSE event relates to anette lib
-		#if html5
-		// network.peer.on('close', onDisconnect);
-		// network.peer.on('error', onDisconnect);
-		#end
-		network.onError.addOnce(_ -> onDisconnect());
-		network.onDisconnect.add(onDisconnect);
+
+		errorHandler = _ -> onDisconnect('error');
+		disconnectHandler = () -> onDisconnect('disconnected');
+		network.onError.addOnce(errorHandler);
+		network.onDisconnect.addOnce(disconnectHandler);
 	}
 
-	function onDisconnect() {
-		network.destroy();
+	var disconnectHandler:()->Void;
+	var errorHandler:Any->Void;
+
+	function onDisconnect(?reason = 'disconnected') {
+
+
+		network.onError.remove(errorHandler);
+		network.onDisconnect.remove(disconnectHandler);
 
 		// disable "play again" if second user disconnected during CongratScreen
 		// show "user disconnected" info if user disconnects during CongratScreen
 		var itemData = menu.pages['main'].get('again');
 		itemData.disabled = true;
 		itemData.selectable = false;
-		itemData.label = 'disconnected';
+		itemData.label = reason;
 		menu.mpActive.item_update(itemData);
 		menu.mpActive.item_focus(MenuCommand.SWITCH_TO_MAIN_MENU);
 		// re-align menu items
 		menu.mpActive.setDataSource(menu.mpActive.page.items);
+	}
+
+	override function destroy() {
+		super.destroy();
+
+		network.onError.remove(errorHandler);
+		network.onDisconnect.remove(disconnectHandler);
+		network = null;
 	}
 }

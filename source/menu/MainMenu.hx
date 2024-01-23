@@ -27,7 +27,7 @@ class MainMenu extends state.BaseState {
 	static final SELF_ROOM_MENU_ID = 'load_self_room';
 	static final VS_AI_SETTINGS_MENU_ID = 'player-vs-ai-settings';
 	static final NETPLAY_MENU_ID = 'netplay';
-	static final NETPLAY_MENU_LABEL = #if html5 'internet' #elseif hl 'local net' #else '' #end;
+	static final NETPLAY_MENU_LABEL = #if html5 'internet' #elseif desktop 'local net' #else '' #end;
 
 	var backGame:AIRoom;
 
@@ -38,6 +38,9 @@ class MainMenu extends state.BaseState {
 	}
 
 	override function create() {
+
+		GAME.peer?.destroy();
+		GAME.peer = null;
 
 		super.create();
 
@@ -126,7 +129,7 @@ class MainMenu extends state.BaseState {
 					Flixel.switchState(new TwoPlayersRoom(players[0], players[1]));
 
 				case [it_fire, NETPLAY_MENU_ID]:
-					#if (html5 || hl)
+					#if (html5 || desktop)
 					Flixel.switchState(new Lobby1v1());
 					#else
 					trace('not implemented');

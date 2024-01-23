@@ -4,39 +4,24 @@ import haxe.Json;
 import flixel.util.FlxSignal.FlxTypedSignal;
 import flixel.util.FlxSignal;
 
-var network:INetplayPeer = null;
+var netplayUid:Int = 0;
 
-enum abstract NetworkMessageType(String) {
-	var PaddleAction;
-	var PaddleData;
-	var BallData;
-	var ScoreData;
-	var CongratScreenData;
-	var ResetRoom;
-	var BallPreServe;
-	var DebugPause;
-}
+inline function nextUid():Int
+	return netplayUid++;
 
-typedef NetworkMessage = {
-	type:NetworkMessageType,
-	data:Any,
-};
-
-typedef NetworkMessageSignal = FlxTypedSignal<NetworkMessage->Void>;
-
-interface INetplayPeer {
+interface INetplayPeer<T> {
 	@:deprecated("Use `isServer` instead")
 	public var initiator(default, null):Bool;
 	public var isServer(default, null):Bool;
 	public var peerType(get, never):String;
 
-	public var onMessage:NetworkMessageSignal;
+	public var onMessage:FlxTypedSignal<({type:T, data:Any})->Void>;
 	public var onConnect:FlxSignal;
 	public var onDisconnect:FlxSignal;
 	public var onError:FlxTypedSignal<Dynamic->Void>;
 
 	public function onData(data:Any):Void;
-	public function send(msgType:NetworkMessageType, ?data:Any = null):Void;
+	public function send(msgType:T, ?data:Any = null):Void;
 	public function destroy():Void;
 
 	/** to implement event loop (if applicable) **/
@@ -46,7 +31,7 @@ interface INetplayPeer {
 	public function join(host:String, port:Int):Void;
 }
 
-class NetplayPeerBase implements INetplayPeer {
+class NetplayPeerBase<T> implements INetplayPeer<T> {
 
 	@:deprecated("Use `isServer` instead")
 	public var initiator(default, null):Bool = false;
@@ -58,7 +43,7 @@ class NetplayPeerBase implements INetplayPeer {
 		return isServer ? 'SERVER' : 'CLIENT';
 	}
 
-	public var onMessage:NetworkMessageSignal = new NetworkMessageSignal();
+	public var onMessage:FlxTypedSignal<({type:T, data:Any})->Void> = new FlxTypedSignal();
 	public var onConnect:FlxSignal = new FlxSignal();
 	public var onDisconnect:FlxSignal = new FlxSignal();
 	public var onError:FlxTypedSignal<Dynamic->Void> = new FlxTypedSignal();
@@ -66,6 +51,8 @@ class NetplayPeerBase implements INetplayPeer {
 	public function new() {}
 
 	public function destroy() {
+		loop();
+
 		onMessage.destroy();
 		onMessage = null;
 		onConnect.destroy();
@@ -74,17 +61,21 @@ class NetplayPeerBase implements INetplayPeer {
 		onDisconnect = null;
 		onError.destroy();
 		onError = null;
+
+		#if flixel
+		flixel.FlxG.plugins.get(mod.Updater)?.remove(this.loop, this);
+		#end
 	}
 
-	public function send(msgType:NetworkMessageType, ?data:Any) {}
+	public function send(msgType:T, ?data:Any) {}
 
 	public function onData(data:Any) {
-		var parsed:NetworkMessage = Json.parse(data);
-		trace('$peerType: get raw', data);
+		var parsed:{type:T, data:Any} = Json.parse(data);
+		// trace('$peerType: get raw', data);
 		onMessage.dispatch(parsed);
 	}
 
-	overload extern inline function packMessage(type:NetworkMessageType, data:Any):String {
+	overload extern inline function packMessage(type:T, data:Any):String {
 		return Json.stringify(getMessage(type, data));
 	}
 
@@ -92,7 +83,7 @@ class NetplayPeerBase implements INetplayPeer {
 		return Json.stringify(msg);
 	}
 
-	inline function getMessage(type:NetworkMessageType, data:Any) {
+	inline function getMessage(type:T, data:Any) {
 		return {
 			type: type,
 			data: data

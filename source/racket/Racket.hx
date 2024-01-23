@@ -34,7 +34,7 @@ class Racket extends FlxSprite {
 	public var movementBounds:MovementBounds = null;
 	public var movementController:Racket->Void = null;
 
-	var updatesCounter:Int;
+	var updatesCounter:Int = 0;
 
 	public function new(options:RacketOptions) {
 		super();

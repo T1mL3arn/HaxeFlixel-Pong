@@ -1,6 +1,7 @@
 package ai;
 
 import Player.PlayerOptions;
+import ai.SmartAI.SmartAIFactory;
 
 final ais = ['easy', 'medium', 'hard', 'hardest'];
 
@@ -15,13 +16,13 @@ function setAIPlayer(opts:PlayerOptions, aiType:String) {
 	switch (aiType.toLowerCase()) {
 		case 'medium' | 'normal':
 			opts.name = 'medium AI (${opts.position})';
-			opts.getController = racket -> SmartAI.buildMediumAI(racket, opts.name);
+			opts.getController = racket -> SmartAIFactory.buildMediumAI(racket, opts.name);
 		case 'hard':
 			opts.name = 'hard AI (${opts.position})';
-			opts.getController = racket -> SmartAI.buildHardAI(racket, opts.name);
+			opts.getController = racket -> SmartAIFactory.buildHardAI(racket, opts.name);
 		case 'hardest':
 			opts.name = 'hardest AI (${opts.position})';
-			opts.getController = racket -> SmartAI.buildHardestAI(racket, opts.name);
+			opts.getController = racket -> SmartAIFactory.buildHardestAI(racket, opts.name);
 		default:
 			opts.name = 'easy AI (${opts.position})';
 			opts.getController = racket -> new SimpleAI(racket, opts.name);

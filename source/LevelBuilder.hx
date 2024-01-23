@@ -8,6 +8,7 @@ import flixel.math.FlxPoint;
 import flixel.util.FlxColor;
 import flixel.util.FlxDirection;
 import math.MathUtils.wp;
+import network_wrtc.Network.nextUid;
 import racket.Racket;
 import utils.FlxSpriteDraw.DashedLineStyle;
 import utils.FlxSpriteDraw.drawDashedLine;
@@ -43,6 +44,7 @@ class LevelBuilder {
 		var padding = options.padding == null ? defaultWallParams.padding : options.padding;
 
 		var wall = new FlxSprite();
+		wall.netplayUid = nextUid();
 		wall.elasticity = 1;
 		wall.immovable = true;
 
@@ -116,6 +118,7 @@ class LevelBuilder {
 			size: Pong.params.racketLength,
 			color: options.color
 		});
+		racket.netplayUid = nextUid();
 		racket.screenCenter();
 		racket.x = switch (options.position) {
 			case LEFT:
@@ -127,6 +130,7 @@ class LevelBuilder {
 		}
 
 		var player = new Player(racket);
+		player.netplayUid = nextUid();
 		player.options = options;
 		player.name = options.name;
 		player.uid = options.uid ?? Std.string(haxe.Timer.stamp());
@@ -190,8 +194,11 @@ class LevelBuilder {
 		label.y = Flixel.height * 0.0675;
 		label.x += scoreLabelPadding;
 
+		var ball = new Ball();
+		ball.netplayUid = nextUid();
+
 		return {
-			ball: new Ball(),
+			ball: ball,
 			walls: walls,
 			players: players,
 			middleLine: middleLine,

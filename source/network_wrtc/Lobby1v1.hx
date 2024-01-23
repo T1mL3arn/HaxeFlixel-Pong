@@ -13,15 +13,15 @@ import flixel.util.FlxTimer;
 import lime.system.Clipboard as LimeClipboard;
 import menu.BaseMenu;
 import menu.MainMenu;
-import mod.Updater;
 import openfl.desktop.Clipboard;
 import state.BaseState;
 import network_wrtc.Network.INetplayPeer;
+import network_wrtc.TwoPlayerNew.TwoPlayerRoomNew;
 #if html5
 import peer.Peer;
 import network_wrtc.PeerWebRTC;
 #end
-#if hl
+#if (hl || neko)
 import network_direct.PeerIP;
 #end
 
@@ -49,17 +49,22 @@ class Lobby1v1 extends BaseState {
 	var connectionState:ConnectionState = Initial;
 	var menu:BaseMenu;
 	var infobox:FlxText;
-	var peer:INetplayPeer;
+	var peer:INetplayPeer<Any>;
 
 	var timer:haxe.Timer;
 
+	public function new() {
+		super();
+	}
+
 	override function create() {
+
+		GAME.peer?.destroy();
+		GAME.peer = null;
+
 		super.create();
 
 		canPause = false;
-
-		var updatable = new Updater();
-		plugins.add(updatable);
 
 		uiObjects.add(infobox = buildInfoBox());
 
@@ -129,37 +134,42 @@ class Lobby1v1 extends BaseState {
 			switch ([e, id]) {
 				case [it_fire, 'create_lobby']:
 					//
-					updatable.clear();
-
 					peer = getPeer();
 					peer.create();
 
-					updatable.add(peer.loop);
-
 				case [it_fire, 'connect_to_lobby']:
 					//
-					updatable.clear();
-
 					peer = getPeer();
 					// NOTE: temporary pass bullshit to join
 					peer.join('', 0);
 
-					updatable.add(peer.loop);
-
 				case [it_fire, SWITCH_TO_MAIN_MENU]:
-					peer?.destroy();
 					Flixel.switchState(new MainMenu());
 
 				default:
 			}
 		});
+
+		#if (debug && desktop)
+		new FlxTimer().start(0.1, t -> {
+			var isClient = Sys.args().contains('--client');
+			if (isClient) {
+				peer = getPeer();
+				peer.join('', 0);
+			}
+			else {
+				peer = getPeer();
+				peer.create();
+			}
+		});
+		#end
 	}
 
-	function getPeer():INetplayPeer {
+	function getPeer():INetplayPeer<Any> {
 		peer?.destroy();
 		peer = null;
 
-		#if hl
+		#if (hl || neko)
 		peer = new PeerIP();
 		#elseif html5
 		peer = new PeerWebRTC();
@@ -168,6 +178,9 @@ class Lobby1v1 extends BaseState {
 		peer.onConnect.addOnce(onPeerConnected);
 		peer.onError.addOnce(onPeerError);
 		peer.onDisconnect.addOnce(onPeerDisconnect);
+
+		// set it to GAME just when it is created
+		GAME.peer = peer;
 
 		return peer;
 	}
@@ -195,10 +208,19 @@ class Lobby1v1 extends BaseState {
 	}
 
 	function onPeerError(e:Dynamic) {
-		peer.destroy();
+
+		var msg:Any = '';
+		try {
+			msg = e.message ?? e;
+		}
+		catch (_) {
+			trace('error getting another error message ~_~');
+			trace(_);
+			msg = e;
+		}
 
 		connectionState = Initial;
-		infobox.text = 'Error: ${e.message ?? e}';
+		infobox.text = 'Error: ${msg}';
 		menu.goto(cast LobbyMenuPage.Initial);
 	}
 
@@ -225,9 +247,11 @@ class Lobby1v1 extends BaseState {
 
 		#if debug
 		// allows AI to play network game (for tests)
-		//
+		// NOTE: due to how netplay is done (very badly)
+		// client-ai don't get all neccesary info (server-ai is fine)
+		// thus in netplay it sometimes behaves not adequately.
 		var leftController = if (peer.isServer) {
-			racket -> new NetplayAIRacketController(SmartAI.buildHardAI(racket, leftUid));
+			racket -> new NetplayAIRacketController(SmartAIFactory.buildHardestAI(racket, leftUid));
 		}
 		else {
 			r -> null;
@@ -237,14 +261,12 @@ class Lobby1v1 extends BaseState {
 			r -> null;
 		}
 		else {
-			racket -> new NetplayAIRacketController(SmartAI.buildHardAI(racket, rightUid));
+			racket -> new NetplayAIRacketController(SmartAIFactory.buildMediumAI(racket, rightUid));
 		}
 		// -----
 		#end
 
-		Network.network = peer;
-
-		Flixel.switchState(new network_wrtc.TwoPlayersRoom({
+		Flixel.switchState(new TwoPlayerRoomNew({
 			name: leftName,
 			uid: leftUid,
 			position: LEFT,
@@ -254,10 +276,7 @@ class Lobby1v1 extends BaseState {
 			uid: rightUid,
 			position: RIGHT,
 			getController: rightController,
-		}, // ---
-			// NOTE at this moment `server` is LEFT player.
-			peer.isServer ? leftUid : rightUid));
-		//
+		}));
 	}
 
 	override function update(elapsed:Float) {
@@ -268,6 +287,11 @@ class Lobby1v1 extends BaseState {
 		FlxMouseEvent.remove(infobox);
 
 		super.destroy();
+		// since peer can be used in other state
+		// I cannot destroy it here but have to remove listenrs
+		peer?.onConnect.removeAll();
+		peer?.onError.removeAll();
+		peer?.onDisconnect.removeAll();
 		timer?.stop();
 	}
 }

@@ -1,27 +1,34 @@
 package network_direct;
 
 import haxe.Json;
+import haxe.Timer;
 import anette.BaseHandler;
 import anette.Connection;
 import anette.Protocol.Line;
+import netplay.TwoPlayersNetplayData.NetworkMessage;
+import netplay.TwoPlayersNetplayData.NetworkMessageType;
 import network.Client;
 import network.ISocket;
 import network.Server;
 import network_wrtc.Lobby1v1;
 import network_wrtc.Network.NetplayPeerBase;
-import network_wrtc.Network.NetworkMessage;
-import network_wrtc.Network.NetworkMessageType;
 
 @:access(network_wrtc.Lobby1v1)
-class PeerIP extends NetplayPeerBase {
+class PeerIP extends NetplayPeerBase<NetworkMessageType> {
 
 	var connection:Connection;
 	var socket:ISocket;
+	var peer:BaseHandler;
+	var timer:Timer;
 
 	public function new(isServer:Bool = false) {
 		super();
 
 		this.isServer = isServer;
+
+		// setting up loop indepently from flixel
+		timer = new Timer(Math.floor(1000 / 61));
+		timer.run = loop;
 	}
 
 	override function create() {
@@ -40,13 +47,13 @@ class PeerIP extends NetplayPeerBase {
 		addHandlers(peer);
 
 		socket = peer;
+		this.peer = peer;
 	}
 
 	override function join(host:String, port:Int) {
 		//
 		isServer = false;
 
-		// TODO: get real Lobby instance
 		var lobby:Lobby1v1 = cast Flixel.state;
 
 		lobby.connectionState = ConnectingToLobby;
@@ -58,29 +65,41 @@ class PeerIP extends NetplayPeerBase {
 		peer.timeout = 0;
 		addHandlers(peer);
 		socket = peer;
+		this.peer = peer;
 		peer.connect('localhost', 12345);
 	}
 
 	function addHandlers(peer:BaseHandler) {
 		peer.onConnection = c -> {
-			final target = !isServer ? 'SERVER' : 'CLIENT';
-			trace('$peerType: connected to $target');
+			// final target = !isServer ? 'SERVER' : 'CLIENT';
+			// trace('$peerType: connected to $target');
 			connection = c;
-			dontloop = true;
 			onConnect.dispatch();
 		}
 		peer.onData = c -> {
-			trace('$peerType: onData');
-			var msg = c.input.readLine();
 			connection = c;
-			this.onData(msg);
+			var msg:String;
+			var list:Array<String> = [];
+			while (true) {
+				try {
+					msg = c.input.readLine();
+				}
+				catch (eof) {
+					// trace(eof);
+					break;
+				}
+				list.push(msg);
+			}
+			for (msg in list) {
+				this.onData(msg);
+			}
 		}
 		peer.onDisconnection = c -> {
-			trace('$peerType: disconnect');
+			// trace('$peerType: disconnect');
 			onDisconnect.dispatch();
 		}
 		peer.onConnectionError = e -> {
-			trace('$peerType: error');
+			// trace('$peerType: error');
 			onError.dispatch(e);
 		}
 	}
@@ -93,20 +112,18 @@ class PeerIP extends NetplayPeerBase {
 	}
 
 	override function send(msgType:NetworkMessageType, ?data:Any) {
-		// var msg = getMessage(msgType, data);
+		// trace('$peerType: sending $msgType');
 		var msg = {
 			type: msgType,
 			data: data,
 		}
-		// adding '\n' to be sure our string properly terminates
+		// NOTE: '\n' is mandatory, so on the other end
+		// it could be read with `readLine()`
 		var str = Json.stringify(msg) + '\n';
-		trace('$peerType: send raw: $str');
+		// trace('$peerType: send raw: $str');
 		connection.output.writeString(str);
 		onMessage.dispatch(msg);
-		// pumpFlush();
 	}
-
-	var dontloop = false;
 
 	override function loop() {
 		if (isServer || socket.connected) {
@@ -122,14 +139,24 @@ class PeerIP extends NetplayPeerBase {
 	override function destroy() {
 		super.destroy();
 
-		if (isServer) {
-			//
-			// TODO: disconnect all clients associated with the server
-		}
-		else {
+		timer.stop();
+		timer = null;
+
+		peer.onConnection = _ -> {};
+		peer.onConnectionError = _ -> {};
+		peer.onDisconnection = _ -> {};
+		peer.onData = _ -> {};
+
+		try {
 			socket.disconnect();
 		}
+		catch (e) {
+			// wtf ?
+			trace('disconnected with error:');
+			trace(e);
+		}
 
+		peer = null;
 		connection = null;
 		socket = null;
 	}

@@ -1,6 +1,8 @@
 package network_wrtc;
 
 import flixel.input.keyboard.FlxKey;
+import netplay.TwoPlayersNetplayData.NetworkMessage;
+import netplay.TwoPlayersNetplayData.NetworkMessageType;
 import racket.Racket;
 import racket.RacketController;
 
@@ -53,8 +55,6 @@ class NetplayRacketController extends RacketController {
 		data.actionMoveUp = actionMoveUp;
 		data.actionMoveDown = actionMoveDown;
 
-		var net = Network.network;
-
-		net.send(PaddleAction, data);
+		GAME.peer.send(PaddleAction, data);
 	}
 }

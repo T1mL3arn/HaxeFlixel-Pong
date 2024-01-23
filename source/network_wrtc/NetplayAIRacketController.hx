@@ -2,6 +2,8 @@ package network_wrtc;
 
 import ai.BaseAI;
 import math.MathUtils.xor;
+import netplay.TwoPlayersNetplayData.NetworkMessage;
+import netplay.TwoPlayersNetplayData.NetworkMessageType;
 import racket.RacketController;
 import network_wrtc.NetplayRacketController.PaddleActionPayload;
 
@@ -45,10 +47,15 @@ class NetplayAIRacketController extends RacketController {
 				if (sendData) {
 					data.actionMoveUp = moveUp;
 					data.actionMoveDown = moveDown;
-					Network.network.send(PaddleAction, data);
+					GAME.peer.send(PaddleAction, data);
 				}
 			case _:
 				0;
 		}
+	}
+
+	override function draw() {
+		super.draw();
+		ai.draw();
 	}
 }

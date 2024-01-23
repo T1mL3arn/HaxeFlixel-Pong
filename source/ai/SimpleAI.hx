@@ -26,7 +26,12 @@ class SimpleAI extends BaseAI {
 	**/
 	public var positionVariance:Float = 0.5;
 
-	var timer:Float;
+	/**
+		Dancing racket will "dance" when ball moves horizontally.
+	**/
+	public var dancingChance:Float = 0.25;
+
+	var timer:Float = 0;
 
 	/**
 		Used instead of tween objects to "tween" racket
@@ -149,7 +154,13 @@ class SimpleAI extends BaseAI {
 				#end
 
 				if (active) {
-					velocityContoller.moveObjectTo(racket, target, Pong.params.racketSpeed);
+					if (Flixel.random.float() < dancingChance) {
+						// dancing
+						velocityContoller.moveUntilReached(racket, target, Pong.params.racketSpeed);
+					}
+					else {
+						velocityContoller.moveObjectTo(racket, target, Pong.params.racketSpeed);
+					}
 				}
 
 				// Flixel.watch.addQuick('$name ty:', '${FlxMath.roundDecimal(target.y, 2)}');
@@ -158,10 +169,6 @@ class SimpleAI extends BaseAI {
 			case _:
 				0;
 		}
-	}
-
-	function stopRacket(_) {
-		racket.velocity.set(0, 0);
 	}
 
 	override function set_active(v:Bool):Bool {
