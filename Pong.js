@@ -907,7 +907,7 @@ ApplicationMain.main = function() {
 ApplicationMain.create = function(config) {
 	var app = new openfl_display_Application();
 	ManifestResources.init(config);
-	app.meta.h["build"] = "457";
+	app.meta.h["build"] = "458";
 	app.meta.h["company"] = "HaxeFlixel";
 	app.meta.h["file"] = "Pong";
 	app.meta.h["name"] = "Pong";
@@ -3482,6 +3482,7 @@ flixel_util_IFlxDestroyable.prototype = {
 	,__class__: flixel_util_IFlxDestroyable
 };
 var flixel_FlxBasic = function() {
+	this.netplayUid = 0;
 	this.flixelType = 0;
 	this.exists = true;
 	this.alive = true;
@@ -3572,6 +3573,7 @@ flixel_FlxBasic.prototype = {
 	,set_cameras: function(Value) {
 		return this._cameras = Value;
 	}
+	,netplayUid: null
 	,__class__: flixel_FlxBasic
 	,__properties__: {set_cameras:"set_cameras",get_cameras:"get_cameras",set_camera:"set_camera",get_camera:"get_camera",set_exists:"set_exists",set_alive:"set_alive",set_visible:"set_visible",set_active:"set_active"}
 };
@@ -6747,6 +6749,17 @@ Lambda.find = function(it,f) {
 	}
 	return null;
 };
+Lambda.findIndex = function(it,f) {
+	var i = 0;
+	var v = $getIterator(it);
+	while(v.hasNext()) {
+		if(f(v.next())) {
+			return i;
+		}
+		++i;
+	}
+	return -1;
+};
 var LevelBuilder = function() {
 };
 $hxClasses["LevelBuilder"] = LevelBuilder;
@@ -6761,6 +6774,7 @@ LevelBuilder.prototype = {
 		var size = options.size == null ? LevelBuilder_defaultWallParams.size : options.size;
 		var padding = options.padding == null ? LevelBuilder_defaultWallParams.padding : options.padding;
 		var wall = new flixel_FlxSprite();
+		wall.netplayUid = network_$wrtc_Network_netplayUid++;
 		wall.elasticity = 1;
 		wall.set_immovable(true);
 		switch(pos) {
@@ -6805,6 +6819,7 @@ LevelBuilder.prototype = {
 	}
 	,getPlayer: function(options) {
 		var racket = new racket_Racket({ direction : options.position, thickness : Pong.params.racketThickness, size : Pong.params.racketLength, color : options.color});
+		racket.netplayUid = network_$wrtc_Network_netplayUid++;
 		racket.set_x((flixel_FlxG.width - racket.get_width()) / 2);
 		racket.set_y((flixel_FlxG.height - racket.get_height()) / 2);
 		var _g = options.position;
@@ -6825,6 +6840,7 @@ LevelBuilder.prototype = {
 		}
 		racket.set_x(tmp);
 		var player = new Player(racket);
+		player.netplayUid = network_$wrtc_Network_netplayUid++;
 		player.options = options;
 		player.name = options.name;
 		var tmp = options.uid;
@@ -6901,7 +6917,9 @@ LevelBuilder.prototype = {
 		label.set_x((flixel_FlxG.width - label.get_width()) / 2);
 		label.set_y(flixel_FlxG.height * 0.0675);
 		label.set_x(label.x + 60.0);
-		return { ball : new Ball(), walls : walls, players : players, middleLine : middleLine};
+		var ball = new Ball();
+		ball.netplayUid = network_$wrtc_Network_netplayUid++;
+		return { ball : ball, walls : walls, players : players, middleLine : middleLine};
 	}
 	,__class__: LevelBuilder
 };
@@ -8496,6 +8514,7 @@ var Pong = function() {
 		flixel_FlxG.game.stage.set_quality(2);
 		flixel_FlxG.mouse.set_useSystemCursor(false);
 		flixel_FlxG.mouse.set_visible(false);
+		flixel_FlxG.plugins.addIfUniqueType(new mod_Updater());
 		flixel_FlxG.plugins.addIfUniqueType(new mouse_SpriteAsMouse());
 		flixel_FlxG.plugins.addIfUniqueType(new utils_FlxDragManager());
 		flixel_FlxG.plugins.addIfUniqueType(new mouse_MouseHider());
@@ -8521,6 +8540,7 @@ Pong.resetParams = function() {
 Pong.__super__ = flixel_FlxGame;
 Pong.prototype = $extend(flixel_FlxGame.prototype,{
 	room: null
+	,peer: null
 	,signals: null
 	,gameSoundGroup: null
 	,__class__: Pong
@@ -8581,6 +8601,9 @@ Player.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 			this.add(v);
 		}
 		return this.racketController = v;
+	}
+	,toString: function() {
+		return "" + this.name + "#" + this.uid;
 	}
 	,__class__: Player
 	,__properties__: $extend(flixel_group_FlxTypedGroup.prototype.__properties__,{set_score:"set_score",set_racketController:"set_racketController"})
@@ -9191,19 +9214,19 @@ function ai_AIFactory_setAIPlayer(opts,aiType) {
 	case "hard":
 		opts.name = "hard AI (" + (opts.position == null ? "null" : flixel_util_FlxDirection.toString(opts.position)) + ")";
 		opts.getController = function(racket) {
-			return ai_SmartAI.buildHardAI(racket,opts.name);
+			return ai_SmartAIFactory.buildHardAI(racket,opts.name);
 		};
 		break;
 	case "hardest":
 		opts.name = "hardest AI (" + (opts.position == null ? "null" : flixel_util_FlxDirection.toString(opts.position)) + ")";
 		opts.getController = function(racket) {
-			return ai_SmartAI.buildHardestAI(racket,opts.name);
+			return ai_SmartAIFactory.buildHardestAI(racket,opts.name);
 		};
 		break;
 	case "medium":case "normal":
 		opts.name = "medium AI (" + (opts.position == null ? "null" : flixel_util_FlxDirection.toString(opts.position)) + ")";
 		opts.getController = function(racket) {
-			return ai_SmartAI.buildMediumAI(racket,opts.name);
+			return ai_SmartAIFactory.buildMediumAI(racket,opts.name);
 		};
 		break;
 	default:
@@ -9253,6 +9276,8 @@ ai_BaseAI.prototype = $extend(racket_RacketController.prototype,{
 });
 var ai_SimpleAI = function(racket,name) {
 	this.previousShift = 0;
+	this.timer = 0;
+	this.dancingChance = 0.25;
 	this.positionVariance = 0.5;
 	this.timeToThink = 0.15;
 	ai_BaseAI.call(this,racket,name != null ? name : "BaseAIv2");
@@ -9269,6 +9294,7 @@ ai_SimpleAI.__super__ = ai_BaseAI;
 ai_SimpleAI.prototype = $extend(ai_BaseAI.prototype,{
 	timeToThink: null
 	,positionVariance: null
+	,dancingChance: null
 	,timer: null
 	,moveTimer: null
 	,previousShift: null
@@ -9468,17 +9494,16 @@ ai_SimpleAI.prototype = $extend(ai_BaseAI.prototype,{
 			this.target.set_x(this.racket.x);
 			this.target.set_y(top + this.positionVariance * (bottom - top));
 			if(this.active) {
-				this.velocityContoller.moveObjectTo(this.racket,this.target,Pong.params.racketSpeed);
+				if(flixel_FlxG.random.float() < this.dancingChance) {
+					this.velocityContoller.moveUntilReached(this.racket,this.target,Pong.params.racketSpeed);
+				} else {
+					this.velocityContoller.moveObjectTo(this.racket,this.target,Pong.params.racketSpeed);
+				}
 			}
 			b.put();
 			break;
 		default:
 		}
-	}
-	,stopRacket: function(_) {
-		var this1 = this.racket.velocity;
-		this1.set_x(0);
-		this1.set_y(0);
 	}
 	,set_active: function(v) {
 		this.moveTimer.manager.set_active(v);
@@ -9490,6 +9515,37 @@ ai_SimpleAI.prototype = $extend(ai_BaseAI.prototype,{
 	}
 	,__class__: ai_SimpleAI
 });
+var ai_SmartAIFactory = function() { };
+$hxClasses["ai.SmartAIFactory"] = ai_SmartAIFactory;
+ai_SmartAIFactory.__name__ = "ai.SmartAIFactory";
+ai_SmartAIFactory.buildMediumAI = function(racket,name) {
+	var ai = new ai_SmartAI(racket,name);
+	ai.SETTINGS.angleVariance = 0.8;
+	ai.SETTINGS.angleVarianceMinFactor = 0.3;
+	ai.SETTINGS.bouncePlaceBias = [1.75,2,3,2,3,2,1.75];
+	ai.SETTINGS.bouncePlaceBiasSafe = [0,0,2,1,2,0,0];
+	ai.SETTINGS.behaviorList = [0,2,1];
+	ai.SETTINGS.behaviorListBias = [6,1,3];
+	return ai;
+};
+ai_SmartAIFactory.buildHardAI = function(racket,name) {
+	var ai = new ai_SmartAI(racket,name);
+	ai.SETTINGS.behaviorList = [0,2,1];
+	ai.SETTINGS.behaviorListBias = [2,5,3];
+	ai.SETTINGS.chanceForRealTrajectory = 0.2;
+	return ai;
+};
+ai_SmartAIFactory.buildHardestAI = function(racket,name) {
+	var ai = new ai_SmartAI(racket,name);
+	ai.SETTINGS.angleVariance = 0.35;
+	ai.SETTINGS.angleVarianceMinFactor = 0.1;
+	ai.SETTINGS.bouncePlaceBias = [5,10,7,0.25,7,10,5];
+	ai.SETTINGS.bouncePlaceBiasSafe = [0,1,0,0,0,1,0];
+	ai.SETTINGS.chanceForRealTrajectory = 0.5;
+	ai.SETTINGS.behaviorList = [0,2,1];
+	ai.SETTINGS.behaviorListBias = [1,9,2];
+	return ai;
+};
 var ai_SmartAI = function(racket,name) {
 	var _this = [-3,-2,-1,0,1,2,3];
 	var result = new Array(_this.length);
@@ -9501,7 +9557,6 @@ var ai_SmartAI = function(racket,name) {
 	}
 	this.bouncePlace = result;
 	this.SETTINGS = { angleVariance : 0.6, angleVarianceMinFactor : 0.2, bouncePlaceBias : [5,8,7,1,7,8,5], bouncePlaceBiasSafe : [0,2,3,0,3,1,0], chanceForRealTrajectory : 0.090909090909090912, behaviorList : [0,2,1], behaviorListBias : [1,1,1]};
-	this.drawTrajectory = false;
 	var _gthis = this;
 	ai_BaseAI.call(this,racket,name);
 	flixel_FlxG.game.signals.substateOpened.addOnce(function(_,_1) {
@@ -9522,38 +9577,9 @@ var ai_SmartAI = function(racket,name) {
 };
 $hxClasses["ai.SmartAI"] = ai_SmartAI;
 ai_SmartAI.__name__ = "ai.SmartAI";
-ai_SmartAI.buildMediumAI = function(racket,name) {
-	var ai = new ai_SmartAI(racket,name);
-	ai.SETTINGS.angleVariance = 0.8;
-	ai.SETTINGS.angleVarianceMinFactor = 0.3;
-	ai.SETTINGS.bouncePlaceBias = [1.75,2,3,2,3,2,1.75];
-	ai.SETTINGS.bouncePlaceBiasSafe = [0,0,2,1,2,0,0];
-	ai.SETTINGS.behaviorList = [0,2,1];
-	ai.SETTINGS.behaviorListBias = [6,1,3];
-	return ai;
-};
-ai_SmartAI.buildHardAI = function(racket,name) {
-	var ai = new ai_SmartAI(racket,name);
-	ai.SETTINGS.behaviorList = [0,2,1];
-	ai.SETTINGS.behaviorListBias = [2,5,3];
-	ai.SETTINGS.chanceForRealTrajectory = 0.2;
-	return ai;
-};
-ai_SmartAI.buildHardestAI = function(racket,name) {
-	var ai = new ai_SmartAI(racket,name);
-	ai.SETTINGS.angleVariance = 0.35;
-	ai.SETTINGS.angleVarianceMinFactor = 0.1;
-	ai.SETTINGS.bouncePlaceBias = [5,10,7,0.25,7,10,5];
-	ai.SETTINGS.bouncePlaceBiasSafe = [0,1,0,0,0,1,0];
-	ai.SETTINGS.chanceForRealTrajectory = 0.5;
-	ai.SETTINGS.behaviorList = [0,2,1];
-	ai.SETTINGS.behaviorListBias = [1,9,2];
-	return ai;
-};
 ai_SmartAI.__super__ = ai_BaseAI;
 ai_SmartAI.prototype = $extend(ai_BaseAI.prototype,{
-	drawTrajectory: null
-	,model: null
+	model: null
 	,SETTINGS: null
 	,followBallAI: null
 	,velocityControler: null
@@ -9767,18 +9793,12 @@ ai_SmartAI.prototype = $extend(ai_BaseAI.prototype,{
 		}
 	}
 	,moveRacketTo: function(p) {
-		if(this.tween != null) {
-			this.tween.cancel();
-		}
-		this.velocityControler.moveObjectTo(this.racket,p,Pong.params.racketSpeed);
+		this.velocityControler.moveUntilReached(this.racket,p,Pong.params.racketSpeed);
 	}
 	,update: function(dt) {
 		if(this.followBallAI.active) {
 			this.followBallAI.update(dt);
 		}
-	}
-	,draw: function() {
-		ai_BaseAI.prototype.draw.call(this);
 	}
 	,__class__: ai_SmartAI
 });
@@ -45768,6 +45788,9 @@ flixel_system_frontEnds_PluginFrontEnd.prototype = {
 	,add_mouse_SpriteAsMouse: function(plugin) {
 		return this.addIfUniqueType(plugin);
 	}
+	,add_mod_Updater: function(plugin) {
+		return this.addIfUniqueType(plugin);
+	}
 	,list: null
 	,addPlugin: function(plugin) {
 		this.list.push(plugin);
@@ -77314,7 +77337,7 @@ var lime_utils_AssetCache = function() {
 	this.audio = new haxe_ds_StringMap();
 	this.font = new haxe_ds_StringMap();
 	this.image = new haxe_ds_StringMap();
-	this.version = 93730;
+	this.version = 474957;
 };
 $hxClasses["lime.utils.AssetCache"] = lime_utils_AssetCache;
 lime_utils_AssetCache.__name__ = "lime.utils.AssetCache";
@@ -80756,6 +80779,11 @@ menu_MainMenu.__super__ = state_BaseState;
 menu_MainMenu.prototype = $extend(state_BaseState.prototype,{
 	backGame: null
 	,create: function() {
+		var tmp = flixel_FlxG.game.peer;
+		if(tmp != null) {
+			tmp.destroy();
+		}
+		flixel_FlxG.game.peer = null;
 		state_BaseState.prototype.create.call(this);
 		var menu = new menu__$BaseMenu_BaseMenuImpl(0,0,0,10);
 		menu_MenuUtils_addExitGameItem(menu.createPage("main").add(menu_MenuUtils_wrapMenuPage("PONG","\r\n\t\t\t\t-| 1 player | link | @1_player\r\n\t\t\t\t-| 2 players | link | @multiplayer_menu_page\r\n\t\t",""))).par({ pos : "screen,c,c"});
@@ -80766,6 +80794,32 @@ menu_MainMenu.prototype = $extend(state_BaseState.prototype,{
 		menu.menuEvent.add(function(e,id) {
 			if(e._hx_index == 10) {
 				switch(id) {
+				case menu_MainMenu.NETPLAY_MENU_ID:
+					var nextState = flixel_util_typeLimit_NextState.fromState(new network_$wrtc_Lobby1v1());
+					var stateOnCall = flixel_FlxG.game._state;
+					if(!((nextState) instanceof flixel_FlxState) || flixel_FlxG.canSwitchTo(nextState)) {
+						flixel_FlxG.game._state.startOutro(function() {
+							if(flixel_FlxG.game._state == stateOnCall) {
+								flixel_FlxG.game._nextState = nextState;
+							} else {
+								flixel_FlxG.log.advanced("`onOutroComplete` was called after the state was switched. This will be ignored",flixel_system_debug_log_LogStyle.WARNING,true);
+							}
+						});
+					}
+					break;
+				case menu_MainMenu.SELF_ROOM_MENU_ID:
+					var nextState1 = flixel_util_typeLimit_NextState.fromState(new room_TwoPlayersRoom({ name : "you", color : -1, position : 1},{ name : "also you", color : -1, position : 16}));
+					var stateOnCall1 = flixel_FlxG.game._state;
+					if(!((nextState1) instanceof flixel_FlxState) || flixel_FlxG.canSwitchTo(nextState1)) {
+						flixel_FlxG.game._state.startOutro(function() {
+							if(flixel_FlxG.game._state == stateOnCall1) {
+								flixel_FlxG.game._nextState = nextState1;
+							} else {
+								flixel_FlxG.log.advanced("`onOutroComplete` was called after the state was switched. This will be ignored",flixel_system_debug_log_LogStyle.WARNING,true);
+							}
+						});
+					}
+					break;
 				case "load_ai_room":
 					var players_0 = Reflect.copy(Player.defaultOptions);
 					var players_1 = Reflect.copy(Player.defaultOptions);
@@ -80787,37 +80841,7 @@ menu_MainMenu.prototype = $extend(state_BaseState.prototype,{
 						players_0 = players_1;
 						players_1 = tmp;
 					}
-					var nextState = flixel_util_typeLimit_NextState.fromState(new room_TwoPlayersRoom(players_0,players_1));
-					var stateOnCall = flixel_FlxG.game._state;
-					if(!((nextState) instanceof flixel_FlxState) || flixel_FlxG.canSwitchTo(nextState)) {
-						flixel_FlxG.game._state.startOutro(function() {
-							if(flixel_FlxG.game._state == stateOnCall) {
-								flixel_FlxG.game._nextState = nextState;
-							} else {
-								flixel_FlxG.log.advanced("`onOutroComplete` was called after the state was switched. This will be ignored",flixel_system_debug_log_LogStyle.WARNING,true);
-							}
-						});
-					}
-					break;
-				case "split_screen":
-					var nextState1 = flixel_util_typeLimit_NextState.fromState(new room_SplitscreenRoom({ name : "left", position : 1, getController : function(racket) {
-						return new racket_KeyboardMovementController(racket,87,83);
-					}},{ name : "right", position : 16, getController : function(racket) {
-						return new racket_KeyboardMovementController(racket,38,40);
-					}}));
-					var stateOnCall1 = flixel_FlxG.game._state;
-					if(!((nextState1) instanceof flixel_FlxState) || flixel_FlxG.canSwitchTo(nextState1)) {
-						flixel_FlxG.game._state.startOutro(function() {
-							if(flixel_FlxG.game._state == stateOnCall1) {
-								flixel_FlxG.game._nextState = nextState1;
-							} else {
-								flixel_FlxG.log.advanced("`onOutroComplete` was called after the state was switched. This will be ignored",flixel_system_debug_log_LogStyle.WARNING,true);
-							}
-						});
-					}
-					break;
-				case menu_MainMenu.NETPLAY_MENU_ID:
-					var nextState2 = flixel_util_typeLimit_NextState.fromState(new network_$wrtc_Lobby1v1());
+					var nextState2 = flixel_util_typeLimit_NextState.fromState(new room_TwoPlayersRoom(players_0,players_1));
 					var stateOnCall2 = flixel_FlxG.game._state;
 					if(!((nextState2) instanceof flixel_FlxState) || flixel_FlxG.canSwitchTo(nextState2)) {
 						flixel_FlxG.game._state.startOutro(function() {
@@ -80829,8 +80853,12 @@ menu_MainMenu.prototype = $extend(state_BaseState.prototype,{
 						});
 					}
 					break;
-				case menu_MainMenu.SELF_ROOM_MENU_ID:
-					var nextState3 = flixel_util_typeLimit_NextState.fromState(new room_TwoPlayersRoom({ name : "you", color : -1, position : 1},{ name : "also you", color : -1, position : 16}));
+				case "split_screen":
+					var nextState3 = flixel_util_typeLimit_NextState.fromState(new room_SplitscreenRoom({ name : "left", position : 1, getController : function(racket) {
+						return new racket_KeyboardMovementController(racket,87,83);
+					}},{ name : "right", position : 16, getController : function(racket) {
+						return new racket_KeyboardMovementController(racket,38,40);
+					}}));
 					var stateOnCall3 = flixel_FlxG.game._state;
 					if(!((nextState3) instanceof flixel_FlxState) || flixel_FlxG.canSwitchTo(nextState3)) {
 						flixel_FlxG.game._state.startOutro(function() {
@@ -80911,6 +80939,57 @@ function menu_MenuUtils_addExitGameItem(menuPage,at) {
 	}
 	return menuPage.add("",at);
 }
+var menu_NetplayErrorMenu = {};
+menu_NetplayErrorMenu._new = function(title) {
+	var this1 = new menu__$BaseMenu_BaseMenuImpl(0,0,0,10);
+	menu_MenuUtils_addExitGameItem(this1.createPage("main").add(menu_MenuUtils_wrapMenuPage(title,"\r\n\t\t\t-| go to menu | link | go_to_menu\r\n\t\t\t",""))).par({ pos : "screen,c,c"});
+	this1.goto("main");
+	return this1;
+};
+var menu_NetplayDisconnectedScreen = function(reason,details) {
+	var _gthis = this;
+	state_BaseState.call(this);
+	this.reason = reason;
+	this.details = details;
+	this.openCallback = function() {
+		_gthis._parentState.persistentUpdate = false;
+	};
+};
+$hxClasses["menu.NetplayDisconnectedScreen"] = menu_NetplayDisconnectedScreen;
+menu_NetplayDisconnectedScreen.__name__ = "menu.NetplayDisconnectedScreen";
+menu_NetplayDisconnectedScreen.__super__ = state_BaseState;
+menu_NetplayDisconnectedScreen.prototype = $extend(state_BaseState.prototype,{
+	reason: null
+	,details: null
+	,create: function() {
+		state_BaseState.prototype.create.call(this);
+		this.set_bgColor(-1157627904);
+		var title = this.reason;
+		var this1 = new menu__$BaseMenu_BaseMenuImpl(0,0,0,10);
+		menu_MenuUtils_addExitGameItem(this1.createPage("main").add(menu_MenuUtils_wrapMenuPage(title,"\r\n\t\t\t-| go to menu | link | go_to_menu\r\n\t\t\t",""))).par({ pos : "screen,c,c"});
+		this1.goto("main");
+		var menu = this1;
+		menu.itemEvent.add(function(e,data) {
+			if(e._hx_index == 1) {
+				if(data.ID == "go_to_menu") {
+					var nextState = flixel_util_typeLimit_NextState.fromState(new network_$wrtc_Lobby1v1());
+					var stateOnCall = flixel_FlxG.game._state;
+					if(!((nextState) instanceof flixel_FlxState) || flixel_FlxG.canSwitchTo(nextState)) {
+						flixel_FlxG.game._state.startOutro(function() {
+							if(flixel_FlxG.game._state == stateOnCall) {
+								flixel_FlxG.game._nextState = nextState;
+							} else {
+								flixel_FlxG.log.advanced("`onOutroComplete` was called after the state was switched. This will be ignored",flixel_system_debug_log_LogStyle.WARNING,true);
+							}
+						});
+					}
+				}
+			}
+		});
+		this.uiObjects.add(menu);
+	}
+	,__class__: menu_NetplayDisconnectedScreen
+});
 var menu_PauseMenu = function() {
 	this.stateJustOpenned = false;
 	state_BaseState.call(this);
@@ -80971,8 +81050,10 @@ var mod_BallSpeedup = function() {
 	this.racketHitsCount = 0;
 	this.racketHitsBeforeSpeedup = 5;
 	this.racketHitsSpeedMod = 0.0325;
+	this.afterGoalSpeedMod = 0;
 	this.ballSpeedMaxFactor = 1.55;
 	this.init();
+	flixel_FlxG.game.signals.goal.add($bind(this,this.onGoal));
 };
 $hxClasses["mod.BallSpeedup"] = mod_BallSpeedup;
 mod_BallSpeedup.__name__ = "mod.BallSpeedup";
@@ -80992,7 +81073,7 @@ mod_BallSpeedup.prototype = {
 		this.goalsCount = 0;
 		this.afterGoalSpeedMod = (this.ballSpeedMaxFactor - 1) / Math.max(1,(this.initialParams.scoreToWin - 1) * 2);
 	}
-	,onGoal: function() {
+	,onGoal: function(_) {
 		this.goalsCount += 1;
 		this.racketHitsCount = 0;
 		this.currentParams.ballSpeed = Math.min(this.initialParams.ballSpeed * (1 + this.goalsCount * this.afterGoalSpeedMod),this.initialParams.ballSpeed * this.ballSpeedMaxFactor);
@@ -81001,11 +81082,19 @@ mod_BallSpeedup.prototype = {
 		this.racketHitsCount += 1;
 		if(this.racketHitsCount % this.racketHitsBeforeSpeedup == 0) {
 			this.currentParams.ballSpeed += this.initialParams.ballSpeed * this.racketHitsSpeedMod;
-			flixel_FlxG.sound.play("assets/sounds/sfx_speedup.ogg",0.4,null,flixel_FlxG.game.gameSoundGroup);
+			this.playSpeedupSound();
+			return true;
 		}
+		return false;
+	}
+	,playSpeedupSound: function() {
+		flixel_FlxG.sound.play("assets/sounds/sfx_speedup.ogg",0.4,null,flixel_FlxG.game.gameSoundGroup);
 	}
 	,limitBallSpeed: function(speed) {
 		return Math.min(speed,this.initialParams.ballSpeed * this.ballSpeedMaxFactor);
+	}
+	,destroy: function() {
+		flixel_FlxG.game.signals.goal.remove($bind(this,this.onGoal));
 	}
 	,get_GAME: function() {
 		return flixel_FlxG.game;
@@ -81014,6 +81103,8 @@ mod_BallSpeedup.prototype = {
 	,__properties__: {get_GAME:"get_GAME"}
 };
 var mod_CornerGoalWatch = function(rackets) {
+	this.isCornerGoal = false;
+	this.labelIsShown = false;
 	this.bonusPoints = 1;
 	flixel_FlxBasic.call(this);
 	this.corners = new flixel_group_FlxTypedGroup();
@@ -81074,6 +81165,8 @@ mod_CornerGoalWatch.__name__ = "mod.CornerGoalWatch";
 mod_CornerGoalWatch.__super__ = flixel_FlxBasic;
 mod_CornerGoalWatch.prototype = $extend(flixel_FlxBasic.prototype,{
 	bonusPoints: null
+	,labelIsShown: null
+	,isCornerGoal: null
 	,corners: null
 	,waitForGoal: null
 	,rewardPlayer: null
@@ -81099,10 +81192,10 @@ mod_CornerGoalWatch.prototype = $extend(flixel_FlxBasic.prototype,{
 	,onGoal: function(player) {
 		if(this.waitForGoal) {
 			this.waitForGoal = false;
+			this.isCornerGoal = true;
 			if(this.rewardPlayer == null || player != this.rewardPlayer) {
 				throw haxe_Exception.thrown("ERROR: Corner goal from the wrong player detected!\n\nWhant " + Std.string(this.rewardPlayer) + "\nGet " + Std.string(player));
 			}
-			this.yeahSound.play();
 			flixel_FlxG.game.room.updateScore(this.rewardPlayer,this.rewardPlayer.score + this.bonusPoints);
 			this.showLabel(this.rewardPlayer);
 		}
@@ -81119,11 +81212,18 @@ mod_CornerGoalWatch.prototype = $extend(flixel_FlxBasic.prototype,{
 	,reset: function() {
 		this.waitForGoal = false;
 		this.rewardPlayer = null;
+		this.isCornerGoal = false;
 	}
 	,showLabel: function(player,label) {
 		if(label == null) {
 			label = "CORNER !!!";
 		}
+		var _gthis = this;
+		if(flixel_FlxG.game.peer != null && this.labelIsShown) {
+			return;
+		}
+		this.labelIsShown = true;
+		this.yeahSound.play();
 		var twinkleTime = Pong.params.ballServeDelay;
 		var state = flixel_FlxG.game.room;
 		var text = new flixel_text_FlxText(0,0,0,label,24);
@@ -81141,6 +81241,7 @@ mod_CornerGoalWatch.prototype = $extend(flixel_FlxBasic.prototype,{
 		}
 		var removeText = function() {
 			state.uiObjects.remove(text).destroy();
+			return _gthis.labelIsShown = false;
 		};
 		var twinkleComplete = function() {
 			return state.tweenManager.tween(text,{ alpha : 0},0.25,{ onComplete : function(_) {
@@ -81158,21 +81259,35 @@ mod_CornerGoalWatch.prototype = $extend(flixel_FlxBasic.prototype,{
 var mod_Updater = function() {
 	this.funcs = [];
 	flixel_FlxBasic.call(this);
+	this.objectMap = new haxe_ds_ObjectMap();
 };
 $hxClasses["mod.Updater"] = mod_Updater;
 mod_Updater.__name__ = "mod.Updater";
 mod_Updater.__super__ = flixel_FlxBasic;
 mod_Updater.prototype = $extend(flixel_FlxBasic.prototype,{
 	funcs: null
-	,add: function(func) {
+	,objectMap: null
+	,add: function(func,obj) {
 		this.funcs.push(func);
+		if(obj != null) {
+			this.objectMap.set(obj,func);
+		}
 		return this;
 	}
-	,remove: function(func) {
-		throw haxe_Exception.thrown("not implemented");
+	,remove: function(func,obj) {
+		var ind = Lambda.findIndex(this.funcs,function(f) {
+			return f == func;
+		});
+		if(ind != -1) {
+			this.funcs.splice(ind,1);
+		}
+		if(obj != null) {
+			this.objectMap.remove(obj);
+		}
 	}
 	,clear: function() {
 		this.funcs = [];
+		this.objectMap = new haxe_ds_ObjectMap();
 	}
 	,update: function(elapsed) {
 		flixel_FlxBasic.prototype.update.call(this,elapsed);
@@ -81331,6 +81446,19 @@ mouse_SpriteAsMouse.prototype = $extend(flixel_FlxBasic.prototype,{
 	,__class__: mouse_SpriteAsMouse
 	,__properties__: $extend(flixel_FlxBasic.prototype.__properties__,{get_GAME:"get_GAME",set_cursor:"set_cursor"})
 });
+var netplay_TwoPlayersNetplayData = function() { };
+$hxClasses["netplay.TwoPlayersNetplayData"] = netplay_TwoPlayersNetplayData;
+netplay_TwoPlayersNetplayData.__name__ = "netplay.TwoPlayersNetplayData";
+function netplay_TwoPlayersNetplayData_getBallCollisionData(wall,ball) {
+	var tmp = wall != null ? wall.netplayUid : null;
+	netplay_TwoPlayersNetplayData_ballCollisionData.wallUid = tmp != null ? tmp : -1;
+	netplay_TwoPlayersNetplayData_ballCollisionData.ball.uid = ball.netplayUid;
+	netplay_TwoPlayersNetplayData_ballCollisionData.ball.x = ball.x;
+	netplay_TwoPlayersNetplayData_ballCollisionData.ball.y = ball.y;
+	netplay_TwoPlayersNetplayData_ballCollisionData.ball.vx = ball.velocity.x;
+	netplay_TwoPlayersNetplayData_ballCollisionData.ball.vy = ball.velocity.y;
+	return netplay_TwoPlayersNetplayData_ballCollisionData;
+}
 var network_$wrtc_Lobby1v1 = function() {
 	this.connectionState = "Initial";
 	state_BaseState.call(this);
@@ -81346,10 +81474,13 @@ network_$wrtc_Lobby1v1.prototype = $extend(state_BaseState.prototype,{
 	,timer: null
 	,create: function() {
 		var _gthis = this;
+		var tmp = flixel_FlxG.game.peer;
+		if(tmp != null) {
+			tmp.destroy();
+		}
+		flixel_FlxG.game.peer = null;
 		state_BaseState.prototype.create.call(this);
 		this.set_canPause(false);
-		var updatable = new mod_Updater();
-		this.plugins.add(updatable);
 		this.uiObjects.add(this.infobox = this.buildInfoBox());
 		if(!SimplePeer.WEBRTC_SUPPORT) {
 			this.infobox.set_alignment("center");
@@ -81380,10 +81511,6 @@ network_$wrtc_Lobby1v1.prototype = $extend(state_BaseState.prototype,{
 			if(e._hx_index == 10) {
 				switch(id) {
 				case "SWITCH_TO_MAIN_MENU":
-					var tmp = _gthis.peer;
-					if(tmp != null) {
-						tmp.destroy();
-					}
 					var nextState = flixel_util_typeLimit_NextState.fromState(new menu_MainMenu());
 					var stateOnCall = flixel_FlxG.game._state;
 					if(!((nextState) instanceof flixel_FlxState) || flixel_FlxG.canSwitchTo(nextState)) {
@@ -81397,16 +81524,12 @@ network_$wrtc_Lobby1v1.prototype = $extend(state_BaseState.prototype,{
 					}
 					break;
 				case "connect_to_lobby":
-					updatable.clear();
 					_gthis.peer = _gthis.getPeer();
 					_gthis.peer.join("",0);
-					updatable.add(($_=_gthis.peer,$bind($_,$_.loop)));
 					break;
 				case "create_lobby":
-					updatable.clear();
 					_gthis.peer = _gthis.getPeer();
 					_gthis.peer.create();
-					updatable.add(($_=_gthis.peer,$bind($_,$_.loop)));
 					break;
 				default:
 				}
@@ -81423,6 +81546,7 @@ network_$wrtc_Lobby1v1.prototype = $extend(state_BaseState.prototype,{
 		this.peer.onConnect.addOnce($bind(this,this.onPeerConnected));
 		this.peer.onError.addOnce($bind(this,this.onPeerError));
 		this.peer.onDisconnect.addOnce($bind(this,this.onPeerDisconnect));
+		flixel_FlxG.game.peer = this.peer;
 		return this.peer;
 	}
 	,buildInfoBox: function() {
@@ -81442,10 +81566,15 @@ network_$wrtc_Lobby1v1.prototype = $extend(state_BaseState.prototype,{
 		return infobox;
 	}
 	,onPeerError: function(e) {
-		this.peer.destroy();
+		var msg = "";
+		try {
+			var tmp = e.message;
+			msg = tmp != null ? tmp : e;
+		} catch( _g ) {
+			msg = e;
+		}
 		this.connectionState = "Initial";
-		var tmp = e.message;
-		this.infobox.set_text("Error: " + (tmp != null ? tmp : e));
+		this.infobox.set_text("Error: " + (msg == null ? "null" : Std.string(msg)));
 		this.menu.goto("Initial");
 	}
 	,onPeerDisconnect: function() {
@@ -81458,19 +81587,16 @@ network_$wrtc_Lobby1v1.prototype = $extend(state_BaseState.prototype,{
 		this.infobox.set_alignment("center");
 		this.infobox.set_text("Connected!");
 		var leftUid = "left" + "#" + flixel_util_FlxDirection.toString(1);
-		var leftController = this.peer.isServer ? function(racket) {
+		var rightUid = "right" + "#" + flixel_util_FlxDirection.toString(16);
+		var nextState = flixel_util_typeLimit_NextState.fromState(new network_$wrtc_TwoPlayerRoomNew({ name : "left", uid : leftUid, position : 1, getController : this.peer.isServer ? function(racket) {
 			return new network_$wrtc_NetplayRacketController(racket,leftUid);
 		} : function(r) {
 			return null;
-		};
-		var rightUid = "right" + "#" + flixel_util_FlxDirection.toString(16);
-		var rightController = this.peer.isServer ? function(r) {
+		}},{ name : "right", uid : rightUid, position : 16, getController : this.peer.isServer ? function(r) {
 			return null;
 		} : function(racket) {
 			return new network_$wrtc_NetplayRacketController(racket,rightUid);
-		};
-		network_$wrtc_Network_network = this.peer;
-		var nextState = flixel_util_typeLimit_NextState.fromState(new network_$wrtc_TwoPlayersRoom({ name : "left", uid : leftUid, position : 1, getController : leftController},{ name : "right", uid : rightUid, position : 16, getController : rightController},this.peer.isServer ? leftUid : rightUid));
+		}}));
 		var stateOnCall = flixel_FlxG.game._state;
 		if(!((nextState) instanceof flixel_FlxState) || flixel_FlxG.canSwitchTo(nextState)) {
 			flixel_FlxG.game._state.startOutro(function() {
@@ -81488,6 +81614,18 @@ network_$wrtc_Lobby1v1.prototype = $extend(state_BaseState.prototype,{
 	,destroy: function() {
 		flixel_input_mouse_FlxMouseEvent.globalManager.remove(this.infobox);
 		state_BaseState.prototype.destroy.call(this);
+		var tmp = this.peer;
+		if(tmp != null) {
+			flixel_util_FlxDestroyUtil.destroyArray(tmp.onConnect.handlers);
+		}
+		var tmp = this.peer;
+		if(tmp != null) {
+			flixel_util_FlxDestroyUtil.destroyArray(tmp.onError.handlers);
+		}
+		var tmp = this.peer;
+		if(tmp != null) {
+			flixel_util_FlxDestroyUtil.destroyArray(tmp.onDisconnect.handlers);
+		}
 		var tmp = this.timer;
 		if(tmp != null) {
 			tmp.stop();
@@ -81530,7 +81668,7 @@ network_$wrtc_NetplayRacketController.prototype = $extend(racket_RacketControlle
 		this.data.paddleName = this.name;
 		this.data.actionMoveUp = actionMoveUp;
 		this.data.actionMoveDown = actionMoveDown;
-		network_$wrtc_Network_network.send("PaddleAction",this.data);
+		flixel_FlxG.game.peer.send("PaddleAction",this.data);
 	}
 	,__class__: network_$wrtc_NetplayRacketController
 });
@@ -81581,6 +81719,7 @@ network_$wrtc_NetplayPeerBase.prototype = {
 	,onDisconnect: null
 	,onError: null
 	,destroy: function() {
+		this.loop();
 		this.onMessage.destroy();
 		this.onMessage = null;
 		this.onConnect.destroy();
@@ -81589,6 +81728,10 @@ network_$wrtc_NetplayPeerBase.prototype = {
 		this.onDisconnect = null;
 		this.onError.destroy();
 		this.onError = null;
+		var tmp = flixel_FlxG.plugins.get(mod_Updater);
+		if(tmp != null) {
+			tmp.remove($bind(this,this.loop),this);
+		}
 	}
 	,send: function(msgType,data) {
 	}
@@ -81608,6 +81751,9 @@ network_$wrtc_NetplayPeerBase.prototype = {
 	,__class__: network_$wrtc_NetplayPeerBase
 	,__properties__: {get_peerType:"get_peerType"}
 };
+function network_$wrtc_Network_nextUid() {
+	return network_$wrtc_Network_netplayUid++;
+}
 var network_$wrtc_PeerWebRTC = function() {
 	this.peerOptions = { initiator : false, trickle : false, stream : false, iceCompleteTimeout : 120000};
 	network_$wrtc_NetplayPeerBase.call(this);
@@ -81827,6 +81973,7 @@ room_TwoPlayersRoom.prototype = $extend(state_BaseGameState.prototype,{
 	,create: function() {
 		var _gthis = this;
 		state_BaseGameState.prototype.create.call(this);
+		this.firstServe = true;
 		Pong.params = Reflect.copy(Pong.defaultParams);
 		var room = LevelBuilder.inst.buildTwoPlayersRoom(this.leftOptions,this.rightOptions);
 		this.gameObjects.add(room.middleLine);
@@ -81858,6 +82005,7 @@ room_TwoPlayersRoom.prototype = $extend(state_BaseGameState.prototype,{
 	}
 	,destroy: function() {
 		state_BaseGameState.prototype.destroy.call(this);
+		this.ballSpeedup.destroy();
 		this.walls.destroy();
 		Lambda.iter(this.players,function(p) {
 			p.destroy();
@@ -81868,12 +82016,15 @@ room_TwoPlayersRoom.prototype = $extend(state_BaseGameState.prototype,{
 	}
 	,update: function(dt) {
 		state_BaseGameState.prototype.update.call(this,dt);
-		this.fisrtBallServe();
+		this.roomUpdate(dt);
+	}
+	,roomUpdate: function(dt) {
+		this.firstBallServe();
 		flixel_FlxG.overlap(this.walls,this.ball,$bind(this,this.ballCollision),flixel_FlxObject.separate);
 		flixel_FlxG.overlap(this.playerGoals,this.ball,$bind(this,this.goal));
 		this.ballOutWorldBounds();
 	}
-	,fisrtBallServe: function() {
+	,firstBallServe: function() {
 		if(this.players[0].active && this.players[1].active) {
 			var this1 = this.ball.velocity;
 			if(this1.x * this1.x + this1.y * this1.y == 0 && this.firstServe) {
@@ -82252,7 +82403,7 @@ room_TwoPlayersRoom.prototype = $extend(state_BaseGameState.prototype,{
 	,ballPreServe: function(ball,delay) {
 		var _gthis = this;
 		utils_FlxSpriteDraw_twinkle(ball,-23296,delay,0.1,this.timerManager);
-		var tb = ball.clone();
+		var tb = new Ball();
 		tb.setPosition(ball.x,ball.y);
 		this.tweenManager.tween(tb.scale,{ x : 5.0, y : 5.0},delay * 0.5,{ ease : flixel_tweens_FlxEase.linear});
 		this.tweenManager.tween(tb,{ alpha : 0.0},delay * 0.5,{ ease : flixel_tweens_FlxEase.linear, onComplete : function(_) {
@@ -82260,14 +82411,30 @@ room_TwoPlayersRoom.prototype = $extend(state_BaseGameState.prototype,{
 		}});
 		this.add(tb);
 	}
+	,findPlayerById: function(id) {
+		return Lambda.find(this.players,function(p) {
+			return p.uid == id;
+		});
+	}
+	,findObjectById: function(uid) {
+		var finder = function(o) {
+			return (o != null ? o.netplayUid : null) == uid;
+		};
+		var tmp = Lambda.find(this.gameObjects.members,finder);
+		return tmp != null ? tmp : Lambda.find(this.walls.members,finder);
+	}
 	,__class__: room_TwoPlayersRoom
 });
-var network_$wrtc_TwoPlayersRoom = function(left,right,currentPlayerUid) {
+var network_$wrtc_TwoPlayerRoomNew = function(left,right) {
 	this.ballPayload = { x : 0, y : 0, vx : 0, vy : 0, hitBy : "unknown"};
+	this.interpTweenOpts = { ease : flixel_tweens_FlxEase.cubeOut};
+	this.paddleData = { uid : "", x : 0, y : 0, vx : 0, vy : 0};
 	this.tmpObject = new flixel_FlxObject();
+	this.interpolationTweens = new haxe_ds_IntMap();
+	this.gameFinished = false;
 	var _gthis = this;
 	room_TwoPlayersRoom.call(this,left,right);
-	this.currentPlayerUid = currentPlayerUid;
+	this.currentPlayerUid = flixel_FlxG.game.peer.isServer ? left.uid : right.uid;
 	this.set_canPause(false);
 	this.get_subStateOpened().add(function(state) {
 		if(((state) instanceof menu_PauseMenu)) {
@@ -82283,7 +82450,473 @@ var network_$wrtc_TwoPlayersRoom = function(left,right,currentPlayerUid) {
 			}).set_active(true);
 		}
 	});
-	this.network = network_$wrtc_Network_network;
+	haxe_Log.trace = utils_TraceUtils_trace;
+};
+$hxClasses["network_wrtc.TwoPlayerRoomNew"] = network_$wrtc_TwoPlayerRoomNew;
+network_$wrtc_TwoPlayerRoomNew.__name__ = "network_wrtc.TwoPlayerRoomNew";
+network_$wrtc_TwoPlayerRoomNew.__super__ = room_TwoPlayersRoom;
+network_$wrtc_TwoPlayerRoomNew.prototype = $extend(room_TwoPlayersRoom.prototype,{
+	currentPlayerUid: null
+	,gameFinished: null
+	,interpolationTweens: null
+	,create: function() {
+		var _gthis = this;
+		network_$wrtc_Network_netplayUid = 11;
+		room_TwoPlayersRoom.prototype.create.call(this);
+		flixel_FlxG.game.peer.onMessage.add($bind(this,this.onMessage));
+		flixel_FlxG.game.peer.onDisconnect.addOnce(function() {
+			_gthis.openSubState(new menu_NetplayDisconnectedScreen("DISCONNECTED"));
+			haxe_Timer.delay(function() {
+				var tmp = flixel_FlxG.game.peer;
+				if(tmp != null) {
+					tmp.destroy();
+				}
+				flixel_FlxG.game.peer = null;
+			},1);
+		});
+		flixel_FlxG.game.peer.onError.addOnce(function(e) {
+			_gthis.openSubState(new menu_NetplayDisconnectedScreen("NETWORK ERROR",Std.string(e)));
+			haxe_Timer.delay(function() {
+				var tmp = flixel_FlxG.game.peer;
+				if(tmp != null) {
+					tmp.destroy();
+				}
+				flixel_FlxG.game.peer = null;
+			},1);
+		});
+		flixel_FlxG.vcr.pauseChanged.add($bind(this,this.onPauseChange));
+		flixel_FlxG.signals.postUpdate.add($bind(this,this.flushPeerData));
+		if(flixel_FlxG.game.peer.isServer) {
+			this.onBallServedCB = function() {
+				flixel_FlxG.game.peer.send("BallData",_gthis.getBallPayload());
+			};
+			this.onBallCollisionCB = function(w,b) {
+				flixel_FlxG.game.peer.send("BallCollision",netplay_TwoPlayersNetplayData_getBallCollisionData(w,b));
+			};
+			flixel_FlxG.game.signals.ballServed.add(this.onBallServedCB);
+			flixel_FlxG.game.signals.ballCollision.add(this.onBallCollisionCB);
+		}
+	}
+	,flushPeerData: function() {
+		var tmp = flixel_FlxG.game.peer;
+		if(tmp != null) {
+			tmp.loop();
+		}
+	}
+	,onBallServedCB: null
+	,onBallCollisionCB: null
+	,onPauseChange: function(paused) {
+		flixel_FlxG.vcr.paused = !paused;
+		flixel_FlxG.game.peer.send("DebugPauseRequest",{ paused : paused});
+	}
+	,logmsg: function(msg) {
+	}
+	,onMessage: function(msg) {
+		if(flixel_FlxG.game.peer.isServer) {
+			switch(msg.type) {
+			case "BallPreServe":
+				this.messageBallPreserve(msg.data);
+				break;
+			case "DebugPause":
+				this.messageDebugPause(msg.data);
+				break;
+			case "DebugPauseRequest":
+				this.messageDebugPause(msg.data,true);
+				break;
+			case "PaddleAction":
+				this.messagePaddleAction(msg.data);
+				break;
+			case "ResetRoom":
+				this.messageResetRoom();
+				break;
+			case "ShowCongratScreen":
+				this.messageShowCongratScreen(msg.data);
+				break;
+			default:
+			}
+		} else {
+			switch(msg.type) {
+			case "BallCollision":
+				this.messageBallCollision(msg.data);
+				break;
+			case "BallData":
+				this.messageBallData(msg.data);
+				break;
+			case "BallPreServe":
+				this.messageBallPreserve(msg.data);
+				break;
+			case "BallSpeedup":
+				this.ballSpeedup.playSpeedupSound();
+				break;
+			case "DebugPause":
+				this.messageDebugPause(msg.data);
+				break;
+			case "Goal":
+				this.messageGoal(msg.data);
+				break;
+			case "PaddleData":
+				this.messagePaddleData(msg.data);
+				break;
+			case "ResetRoom":
+				this.messageResetRoom();
+				break;
+			case "ShowCongratScreen":
+				this.messageShowCongratScreen(msg.data);
+				break;
+			default:
+			}
+		}
+	}
+	,messageResetRoom: function() {
+		var nextState = flixel_util_typeLimit_NextState.fromState(new network_$wrtc_TwoPlayerRoomNew(this.leftOptions,this.rightOptions));
+		var stateOnCall = flixel_FlxG.game._state;
+		if(!((nextState) instanceof flixel_FlxState) || flixel_FlxG.canSwitchTo(nextState)) {
+			flixel_FlxG.game._state.startOutro(function() {
+				if(flixel_FlxG.game._state == stateOnCall) {
+					flixel_FlxG.game._nextState = nextState;
+				} else {
+					flixel_FlxG.log.advanced("`onOutroComplete` was called after the state was switched. This will be ignored",flixel_system_debug_log_LogStyle.WARNING,true);
+				}
+			});
+		}
+	}
+	,messageDebugPause: function(data,isRequest) {
+		if(isRequest == null) {
+			isRequest = false;
+		}
+	}
+	,messageBallPreserve: function(data) {
+		this.ballPreServe(flixel_FlxG.game.room.ball,data.delay);
+	}
+	,messageShowCongratScreen: function(data) {
+		this.showCongratScreen(this.findPlayerById(data.winnerUid),data.screenType);
+	}
+	,messageGoal: function(data) {
+		var player = this.findPlayerById(data.playerUid);
+		if(data.cornerGoal) {
+			var cgw = Lambda.find(this.gameObjects.members,function(x) {
+				return ((x) instanceof mod_CornerGoalWatch);
+			});
+			if(cgw != null) {
+				cgw.showLabel(player);
+			}
+		}
+		this.updateScore(player,data.newScore);
+	}
+	,tmpObject: null
+	,messageBallData: function(data) {
+		this.ball.setPosition(data.x,data.y);
+		var this1 = this.ball.velocity;
+		var x = data.vx;
+		var y = data.vy;
+		if(y == null) {
+			y = 0;
+		}
+		if(x == null) {
+			x = 0;
+		}
+		this1.set_x(x);
+		this1.set_y(y);
+		var tmp = data.color;
+		this.ball.set_color(tmp != null ? tmp : this.ball.color);
+	}
+	,messageBallCollision: function(data) {
+		var bdata = data.ball;
+		this.ball.setPosition(bdata.x,bdata.y);
+		var this1 = this.ball.velocity;
+		var x = bdata.vx;
+		var y = bdata.vy;
+		if(y == null) {
+			y = 0;
+		}
+		if(x == null) {
+			x = 0;
+		}
+		this1.set_x(x);
+		this1.set_y(y);
+		if(data.wallUid == -1) {
+			flixel_FlxG.game.signals.ballServed.dispatch();
+			return;
+		}
+		var wall = this.findObjectById(data.wallUid);
+		if(wall == null) {
+			throw haxe_Exception.thrown("Wall with uid:" + data.wallUid + " is not found, UID corrupted");
+		}
+		this.ballCollision(wall,this.ball);
+	}
+	,paddleData: null
+	,messagePaddleAction: function(data) {
+		var tmp = data.actionMoveUp;
+		var actionUp = tmp != null && tmp;
+		var tmp = data.actionMoveDown;
+		var actionDown = tmp != null && tmp;
+		var paddleName = data.paddleName;
+		var player = Lambda.find(this.players,function(p) {
+			return p.uid == paddleName;
+		});
+		var this1 = player.racket.velocity;
+		this1.set_x(0);
+		this1.set_y(0);
+		if(!(actionUp && actionDown)) {
+			if(actionUp) {
+				var this1 = player.racket.velocity;
+				var y = -Pong.params.racketSpeed;
+				if(y == null) {
+					y = 0;
+				}
+				this1.set_x(0);
+				this1.set_y(y);
+			}
+			if(actionDown) {
+				var this1 = player.racket.velocity;
+				var y = Pong.params.racketSpeed;
+				if(y == null) {
+					y = 0;
+				}
+				this1.set_x(0);
+				this1.set_y(y);
+			}
+		}
+		this.paddleData.uid = player.uid;
+		this.paddleData.x = player.racket.x;
+		this.paddleData.y = player.racket.y;
+		this.paddleData.vx = player.racket.velocity.x;
+		this.paddleData.vy = player.racket.velocity.y;
+		flixel_FlxG.game.peer.send("PaddleData",this.paddleData);
+	}
+	,messagePaddleData: function(data) {
+		var racket = this.findPlayerById(data.uid).racket;
+		var this1 = racket.velocity;
+		var x = data.vx;
+		var y = data.vy;
+		if(y == null) {
+			y = 0;
+		}
+		if(x == null) {
+			x = 0;
+		}
+		this1.set_x(x);
+		this1.set_y(y);
+		var this1 = racket.velocity;
+		if(Math.abs(this1.x) < 0.0000001 && Math.abs(this1.y) < 0.0000001) {
+			this.interpolatePos(racket,data.x,data.y);
+		}
+	}
+	,interpTweenOpts: null
+	,interpolatePos: function(obj,x,y,frames) {
+		if(frames == null) {
+			frames = 6;
+		}
+		var uid = obj.netplayUid;
+		var tmp = this.interpolationTweens.h[uid];
+		if(tmp != null) {
+			tmp.cancel();
+		}
+		var this1 = this.interpolationTweens;
+		var v = this.tweenManager.tween(obj,{ x : x, y : y},frames / 60,this.interpTweenOpts);
+		this1.h[uid] = v;
+	}
+	,roomUpdate: function(dt) {
+		if(flixel_FlxG.game.peer.isServer) {
+			room_TwoPlayersRoom.prototype.roomUpdate.call(this,dt);
+		} else {
+			flixel_FlxG.overlap(this.walls,this.ball,$bind(this,this.stopBall));
+		}
+	}
+	,stopBall: function(_,ball) {
+		var this1 = ball.velocity;
+		this1.set_x(0);
+		this1.set_y(0);
+	}
+	,ballPayload: null
+	,getBallPayload: function(hitby) {
+		this.ballPayload.x = this.ball.x;
+		this.ballPayload.y = this.ball.y;
+		this.ballPayload.vx = this.ball.velocity.x;
+		this.ballPayload.vy = this.ball.velocity.y;
+		this.ballPayload.hitBy = hitby;
+		return this.ballPayload;
+	}
+	,serveBall: function(byPlayer,ball,delay) {
+		if(!flixel_FlxG.game.peer.isServer) {
+			return;
+		}
+		ball.set_y(byPlayer.racket.y + byPlayer.racket.get_height() * 0.5 - ball.get_height() * 0.5);
+		var velX;
+		var _g = byPlayer.options.position;
+		if(_g == null) {
+			velX = 0;
+		} else {
+			switch(_g) {
+			case 1:
+				velX = -Pong.params.ballSpeed;
+				break;
+			case 16:
+				velX = Pong.params.ballSpeed;
+				break;
+			default:
+				velX = 0;
+			}
+		}
+		new flixel_util_FlxTimer(this.timerManager).start(delay,function(_) {
+			var this1 = ball.velocity;
+			var x = velX;
+			if(x == null) {
+				x = 0;
+			}
+			this1.set_x(x);
+			this1.set_y(0);
+			flixel_FlxG.game.signals.ballServed.dispatch();
+		});
+		flixel_FlxG.game.peer.send("BallData",this.getBallPayload());
+		flixel_FlxG.game.peer.send("BallPreServe",{ delay : delay});
+	}
+	,ballCollision: function(wall,ball) {
+		if(flixel_FlxG.game.peer.isServer) {
+			var speedup = false;
+			if(((wall) instanceof racket_Racket)) {
+				speedup = this.ballSpeedup.onRacketHit();
+				wall.ballCollision(ball);
+				this.colorizeBall(wall,ball);
+			}
+			ball.collision(wall);
+			flixel_FlxG.game.signals.ballCollision.dispatch(wall,ball);
+			if(speedup) {
+				flixel_FlxG.game.peer.send("BallSpeedup");
+			}
+		} else {
+			if(((wall) instanceof racket_Racket)) {
+				this.colorizeBall(wall,ball);
+			}
+			ball.collision(wall);
+			flixel_FlxG.game.signals.ballCollision.dispatch(wall,ball);
+		}
+	}
+	,goal: function(hitArea,ball) {
+		if(!flixel_FlxG.game.peer.isServer) {
+			return;
+		}
+		var looser = Lambda.find(this.players,function(p) {
+			return p.hitArea == hitArea;
+		});
+		var winner = Lambda.find(this.players,function(p) {
+			return p.racket == ball.hitBy;
+		});
+		var tmp = winner;
+		var ballServer = tmp != null ? tmp : looser;
+		if(winner != null) {
+			this.updateScore(winner,winner.score + 1);
+			flixel_FlxG.game.signals.goal.dispatch(winner);
+			var cgw = Lambda.find(this.gameObjects.members,function(x) {
+				return ((x) instanceof mod_CornerGoalWatch);
+			});
+			var tmp = cgw != null ? cgw.isCornerGoal : null;
+			flixel_FlxG.game.peer.send("Goal",{ playerUid : winner.uid, newScore : winner.score, cornerGoal : tmp != null && tmp});
+		}
+		winner = Lambda.find(this.players,function(p) {
+			return p.score >= Pong.params.scoreToWin;
+		});
+		if(winner != null) {
+			ball.set_x(ball.x - flixel_FlxG.width * 2);
+			var screenType = ((winner.racketController) instanceof ai_BaseAI) && !((looser.racketController) instanceof ai_BaseAI);
+			this.gameFinished = true;
+			flixel_FlxG.game.peer.send("ShowCongratScreen",{ winnerUid : winner.uid, screenType : screenType ? false : true});
+		} else if(ballServer != null) {
+			this.resetBall();
+			this.serveBall(ballServer,ball,Pong.params.ballServeDelay);
+		}
+	}
+	,showCongratScreen: function(player,screenType) {
+		var congrats = new network_$wrtc_NetplayCongratScreen(function(_) {
+			flixel_FlxG.game.peer.send("ResetRoom");
+		});
+		flixel_util_FlxDestroyUtil.destroyArray(flixel_FlxG.game.peer.onError.handlers);
+		flixel_util_FlxDestroyUtil.destroyArray(flixel_FlxG.game.peer.onDisconnect.handlers);
+		congrats.network = flixel_FlxG.game.peer;
+		congrats.isServer = flixel_FlxG.game.peer.isServer;
+		this.canOpenPauseMenu = false;
+		this.set_canPause(true);
+		this.persistentDraw = true;
+		var _g = 0;
+		var _g1 = this.players;
+		while(_g < _g1.length) _g1[_g++].set_active(false);
+		this.openSubState(congrats.setWinner(player.name,player.uid == this.currentPlayerUid && true));
+	}
+	,ballOutWorldBounds: function() {
+		if(!flixel_FlxG.game.peer.isServer) {
+			var _this = this.ball;
+			var tmp;
+			var tmp1;
+			if(_this.x + _this.get_width() > flixel_FlxG.worldBounds.x) {
+				var _this1 = flixel_FlxG.worldBounds;
+				tmp1 = _this.x < _this1.x + _this1.width;
+			} else {
+				tmp1 = false;
+			}
+			if(tmp1 && _this.y + _this.get_height() > flixel_FlxG.worldBounds.y) {
+				var _this1 = flixel_FlxG.worldBounds;
+				tmp = _this.y < _this1.y + _this1.height;
+			} else {
+				tmp = false;
+			}
+			if(!tmp) {
+				var this1 = this.ball.velocity;
+				this1.set_x(0);
+				this1.set_y(0);
+			}
+		}
+		if(flixel_FlxG.game.peer.isServer && !this.gameFinished) {
+			room_TwoPlayersRoom.prototype.ballOutWorldBounds.call(this);
+		}
+	}
+	,firstBallServe: function() {
+		if(flixel_FlxG.game.peer.isServer) {
+			room_TwoPlayersRoom.prototype.firstBallServe.call(this);
+		}
+	}
+	,destroy: function() {
+		room_TwoPlayersRoom.prototype.destroy.call(this);
+		var tmp = flixel_FlxG.game.peer;
+		if(tmp != null) {
+			tmp.onMessage.remove($bind(this,this.onMessage));
+		}
+		var tmp = flixel_FlxG.game.peer;
+		if(tmp != null) {
+			flixel_util_FlxDestroyUtil.destroyArray(tmp.onError.handlers);
+		}
+		var tmp = flixel_FlxG.game.peer;
+		if(tmp != null) {
+			flixel_util_FlxDestroyUtil.destroyArray(tmp.onDisconnect.handlers);
+		}
+		flixel_FlxG.vcr.pauseChanged.remove($bind(this,this.onPauseChange));
+		flixel_FlxG.signals.postUpdate.remove($bind(this,this.flushPeerData));
+		flixel_FlxG.game.signals.ballServed.remove(this.onBallServedCB);
+		flixel_FlxG.game.signals.ballCollision.remove(this.onBallCollisionCB);
+	}
+	,__class__: network_$wrtc_TwoPlayerRoomNew
+});
+var network_$wrtc_TwoPlayersRoom = function(left,right) {
+	this.ballPayload = { x : 0, y : 0, vx : 0, vy : 0, hitBy : "unknown"};
+	this.tmpObject = new flixel_FlxObject();
+	var _gthis = this;
+	room_TwoPlayersRoom.call(this,left,right);
+	this.currentPlayerUid = flixel_FlxG.game.peer.isServer ? left.uid : right.uid;
+	this.set_canPause(false);
+	this.get_subStateOpened().add(function(state) {
+		if(((state) instanceof menu_PauseMenu)) {
+			Lambda.find(_gthis.players,function(p) {
+				return p.uid == _gthis.currentPlayerUid;
+			}).set_active(false);
+		}
+	});
+	this.get_subStateClosed().add(function(state) {
+		if(((state) instanceof menu_PauseMenu)) {
+			Lambda.find(_gthis.players,function(p) {
+				return p.uid == _gthis.currentPlayerUid;
+			}).set_active(true);
+		}
+	});
+	this.network = flixel_FlxG.game.peer;
 };
 $hxClasses["network_wrtc.TwoPlayersRoom"] = network_$wrtc_TwoPlayersRoom;
 network_$wrtc_TwoPlayersRoom.__name__ = "network_wrtc.TwoPlayersRoom";
@@ -82291,14 +82924,8 @@ network_$wrtc_TwoPlayersRoom.__super__ = room_TwoPlayersRoom;
 network_$wrtc_TwoPlayersRoom.prototype = $extend(room_TwoPlayersRoom.prototype,{
 	network: null
 	,currentPlayerUid: null
-	,findPlayerById: function(id) {
-		return Lambda.find(this.players,function(p) {
-			return p.uid == id;
-		});
-	}
 	,create: function() {
 		room_TwoPlayersRoom.prototype.create.call(this);
-		this.plugins.add(new mod_Updater().add(($_=this.network,$bind($_,$_.loop))));
 		this.network.onMessage.add($bind(this,this.onMessage));
 		flixel_FlxG.vcr.pauseChanged.add($bind(this,this.onPauseChange));
 	}
@@ -82424,7 +83051,7 @@ network_$wrtc_TwoPlayersRoom.prototype = $extend(room_TwoPlayersRoom.prototype,{
 		}),data.winnerUid == this.currentPlayerUid && true);
 	}
 	,messageResetRoom: function() {
-		var nextState = flixel_util_typeLimit_NextState.fromState(new network_$wrtc_TwoPlayersRoom(this.leftOptions,this.rightOptions,this.currentPlayerUid));
+		var nextState = flixel_util_typeLimit_NextState.fromState(new network_$wrtc_TwoPlayersRoom(this.leftOptions,this.rightOptions));
 		var stateOnCall = flixel_FlxG.game._state;
 		if(!((nextState) instanceof flixel_FlxState) || flixel_FlxG.canSwitchTo(nextState)) {
 			flixel_FlxG.game._state.startOutro(function() {
@@ -82463,9 +83090,9 @@ network_$wrtc_TwoPlayersRoom.prototype = $extend(room_TwoPlayersRoom.prototype,{
 			});
 		}
 	}
-	,fisrtBallServe: function() {
+	,firstBallServe: function() {
 		if(this.network.isServer) {
-			room_TwoPlayersRoom.prototype.fisrtBallServe.call(this);
+			room_TwoPlayersRoom.prototype.firstBallServe.call(this);
 		}
 	}
 	,ballOutWorldBounds: function() {
@@ -82487,11 +83114,9 @@ network_$wrtc_TwoPlayersRoom.prototype = $extend(room_TwoPlayersRoom.prototype,{
 		var congrats = new network_$wrtc_NetplayCongratScreen(function(_) {
 			_gthis.network.send("ResetRoom");
 		});
-		congrats.network = network_$wrtc_Network_network;
+		congrats.network = flixel_FlxG.game.peer;
 		congrats.isServer = this.network.isServer;
 		congrats.openMainMenuAction = function() {
-			_gthis.network.destroy();
-			network_$wrtc_Network_network = null;
 		};
 		this.canOpenPauseMenu = false;
 		this.set_canPause(true);
@@ -82534,20 +83159,36 @@ network_$wrtc_NetplayCongratScreen.prototype = $extend(menu_CongratScreen.protot
 			this.menu.mpActive.item_update(itemData);
 			this.menu.mpActive.item_focus("SWITCH_TO_MAIN_MENU");
 		}
-		this.network.onError.addOnce(function(_) {
-			_gthis.onDisconnect();
-		});
-		this.network.onDisconnect.add($bind(this,this.onDisconnect));
+		this.errorHandler = function(_) {
+			_gthis.onDisconnect("error");
+		};
+		this.disconnectHandler = function() {
+			_gthis.onDisconnect("disconnected");
+		};
+		this.network.onError.addOnce(this.errorHandler);
+		this.network.onDisconnect.addOnce(this.disconnectHandler);
 	}
-	,onDisconnect: function() {
-		this.network.destroy();
+	,disconnectHandler: null
+	,errorHandler: null
+	,onDisconnect: function(reason) {
+		if(reason == null) {
+			reason = "disconnected";
+		}
+		this.network.onError.remove(this.errorHandler);
+		this.network.onDisconnect.remove(this.disconnectHandler);
 		var itemData = this.menu.pages.h["main"].get("again");
 		itemData.disabled = true;
 		itemData.selectable = false;
-		itemData.label = "disconnected";
+		itemData.label = reason;
 		this.menu.mpActive.item_update(itemData);
 		this.menu.mpActive.item_focus("SWITCH_TO_MAIN_MENU");
 		this.menu.mpActive.setDataSource(this.menu.mpActive.page.items);
+	}
+	,destroy: function() {
+		menu_CongratScreen.prototype.destroy.call(this);
+		this.network.onError.remove(this.errorHandler);
+		this.network.onDisconnect.remove(this.disconnectHandler);
+		this.network = null;
 	}
 	,__class__: network_$wrtc_NetplayCongratScreen
 });
@@ -127610,6 +128251,7 @@ var racket_Racket = function(options) {
 	_this.height = 0;
 	_this._inPool = false;
 	this.r1 = _this;
+	this.updatesCounter = 0;
 	this.movementController = null;
 	this.movementBounds = null;
 	flixel_FlxSprite.call(this);
@@ -127749,6 +128391,7 @@ room_AIRoom.prototype = $extend(room_TwoPlayersRoom.prototype,{
 			this.tryReplaceAI(this.players[1],rightAI);
 			this.setGameParams();
 			this.ballSpeedup.init();
+			this.firstServe = true;
 			flixel_FlxG.game.signals.substateOpened.dispatch(this,null);
 			return;
 		}
@@ -128353,7 +128996,29 @@ function utils_FlxSpriteDraw_twinkle(sprite,color,duration,interval,timerManager
 	flixel_effects_FlxFlicker._boundObjects.set(sprite,flicker);
 	return flicker;
 }
+function utils_TraceUtils_getClassName(infos) {
+	return infos.className.substring(infos.className.lastIndexOf(".") + 1);
+}
+function utils_TraceUtils_formatExtra(infos,separator) {
+	if(separator == null) {
+		separator = ", ";
+	}
+	var tmp = infos.customParams;
+	var tmp1 = tmp != null ? tmp.join(separator) : null;
+	if(tmp1 != null) {
+		return tmp1;
+	} else {
+		return "";
+	}
+}
+function utils_TraceUtils_trace(v,infos) {
+	var extra = utils_TraceUtils_formatExtra(infos);
+	console.log("" + utils_TraceUtils_getClassName(infos) + ":" + infos.lineNumber + " " + (v == null ? "null" : Std.string(v)) + (extra == "" ? "" : ", " + extra));
+}
 var utils_Velocity = function() {
+	var point = flixel_math_FlxBasePoint.pool.get().set(0,0);
+	point._inPool = false;
+	this.target = point;
 	this.timer = new flixel_util_FlxTimer();
 };
 $hxClasses["utils.Velocity"] = utils_Velocity;
@@ -128362,6 +129027,7 @@ utils_Velocity.prototype = {
 	timer: null
 	,lastObj: null
 	,moveObjectTo: function(object,target,speed) {
+		this.timer.cancel();
 		this.lastObj = object;
 		var x = object.x;
 		var y = object.y;
@@ -128405,6 +129071,18 @@ utils_Velocity.prototype = {
 		if(result) {
 			return;
 		}
+		var angle = Math.atan2(target.y - object.y,target.x - object.x);
+		var this1 = object.velocity;
+		var x = Math.cos(angle) * speed;
+		var y = Math.sin(angle) * speed;
+		if(y == null) {
+			y = 0;
+		}
+		if(x == null) {
+			x = 0;
+		}
+		this1.set_x(x);
+		this1.set_y(y);
 		var x = object.x;
 		var y = object.y;
 		if(y == null) {
@@ -128441,19 +129119,6 @@ utils_Velocity.prototype = {
 		point._inPool = false;
 		point._weak = true;
 		var time = flixel_math_FlxPoint.distanceTo(target,point) / speed;
-		var angle = Math.atan2(target.y - object.y,target.x - object.x);
-		var this1 = object.velocity;
-		var x = Math.cos(angle) * speed;
-		var y = Math.sin(angle) * speed;
-		if(y == null) {
-			y = 0;
-		}
-		if(x == null) {
-			x = 0;
-		}
-		this1.set_x(x);
-		this1.set_y(y);
-		this.timer.cancel();
 		this.timer.start(time,$bind(this,this.stopMovement_internal));
 		if(target._weak) {
 			target.put();
@@ -128466,6 +129131,122 @@ utils_Velocity.prototype = {
 	}
 	,stopMovement: function() {
 		this.stopMovement_internal();
+	}
+	,target: null
+	,moveUntilReached: function(object,target,speed) {
+		this.timer.cancel();
+		this.lastObj = object;
+		var x = object.x;
+		var y = object.y;
+		if(y == null) {
+			y = 0;
+		}
+		if(x == null) {
+			x = 0;
+		}
+		var x1 = x;
+		var y1 = y;
+		if(y1 == null) {
+			y1 = 0;
+		}
+		if(x1 == null) {
+			x1 = 0;
+		}
+		var x = x1;
+		var y = y1;
+		if(y == null) {
+			y = 0;
+		}
+		if(x == null) {
+			x = 0;
+		}
+		var x1 = x;
+		var y1 = y;
+		if(y1 == null) {
+			y1 = 0;
+		}
+		if(x1 == null) {
+			x1 = 0;
+		}
+		var point = flixel_math_FlxBasePoint.pool.get().set(x1,y1);
+		point._inPool = false;
+		point._weak = true;
+		var result = Math.abs(target.x - point.x) <= 0.0000001 && Math.abs(target.y - point.y) <= 0.0000001;
+		if(point._weak) {
+			point.put();
+		}
+		if(result) {
+			return;
+		}
+		var angle = Math.atan2(target.y - object.y,target.x - object.x);
+		var this1 = object.velocity;
+		var x = Math.cos(angle) * speed;
+		var y = Math.sin(angle) * speed;
+		if(y == null) {
+			y = 0;
+		}
+		if(x == null) {
+			x = 0;
+		}
+		this1.set_x(x);
+		this1.set_y(y);
+		var this1 = this.target;
+		var x = target.x;
+		var y = target.y;
+		if(y == null) {
+			y = 0;
+		}
+		if(x == null) {
+			x = 0;
+		}
+		this1.set_x(x);
+		this1.set_y(y);
+		if(target._weak) {
+			target.put();
+		}
+		if(target._weak) {
+			target.put();
+		}
+		this.timer.start(1 / (flixel_FlxG.updateFramerate + 1),$bind(this,this.checkObjectReachedTarget),0);
+	}
+	,checkObjectReachedTarget: function(t) {
+		var point = flixel_math_FlxBasePoint.pool.get().set(0.0,0.0);
+		point._inPool = false;
+		var p = this.target;
+		var x = p.x;
+		var y = p.y;
+		if(y == null) {
+			y = 0;
+		}
+		if(x == null) {
+			x = 0;
+		}
+		point.set_x(x);
+		point.set_y(y);
+		if(p._weak) {
+			p.put();
+		}
+		var x = this.lastObj.x;
+		var y = this.lastObj.y;
+		if(y == null) {
+			y = 0;
+		}
+		if(x == null) {
+			x = 0;
+		}
+		point.set_x(point.x - x);
+		point.set_y(point.y - y);
+		var diff = point;
+		var this1 = this.lastObj.velocity;
+		diff._weak = true;
+		var dp = this1.x * diff.x + this1.y * diff.y;
+		if(diff._weak) {
+			diff.put();
+		}
+		if(dp < 0) {
+			t.cancel();
+			this.stopMovement();
+		}
 	}
 	,__class__: utils_Velocity
 };
@@ -131041,7 +131822,8 @@ menu_MainMenu.SELF_ROOM_MENU_ID = "load_self_room";
 menu_MainMenu.VS_AI_SETTINGS_MENU_ID = "player-vs-ai-settings";
 menu_MainMenu.NETPLAY_MENU_ID = "netplay";
 menu_MainMenu.NETPLAY_MENU_LABEL = "internet";
-var network_$wrtc_Network_network = null;
+var netplay_TwoPlayersNetplayData_ballCollisionData = { wallUid : -1, ball : { uid : -1, x : 0.0, y : 0.0, vx : 0.0, vy : 0.0}};
+var network_$wrtc_Network_netplayUid = 0;
 openfl_Lib.__lastTimerID = 0;
 openfl_Lib.__sentWarnings = new haxe_ds_StringMap();
 openfl_Lib.__timers = new haxe_ds_IntMap();
@@ -131929,6 +132711,7 @@ peer_PeerEvent.REMOVE_TRACK = "removetrack";
 peer_PeerEvent.CLOSE = "close";
 peer_PeerEvent.ERROR = "error";
 peer_PeerEvent.ICE_STATE_CHANGE = "iceStateChange";
+var utils_TraceUtils_originalTrace = haxe_Log.trace;
 ApplicationMain.main();
 })(typeof exports != "undefined" ? exports : typeof window != "undefined" ? window : typeof self != "undefined" ? self : this, typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this);
 
