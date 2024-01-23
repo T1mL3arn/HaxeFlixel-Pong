@@ -31,7 +31,10 @@ class PeerIP extends NetplayPeerBase<NetworkMessageType> {
 		timer.run = loop;
 	}
 
-	override function create() {
+	override function create(?host:String, ?port:Int) {
+		host = host ?? 'localhost';
+		port = port ?? 12345;
+
 		isServer = true;
 
 		var lobby:Lobby1v1 = cast Flixel.state;
@@ -40,7 +43,7 @@ class PeerIP extends NetplayPeerBase<NetworkMessageType> {
 		lobby.infobox.text = 'Creating lobby...';
 		lobby.menu.goto(cast LobbyMenuPage.CreatingLobby);
 
-		var peer = new Server('localhost', 12345);
+		var peer = new Server(host, port);
 		peer.protocol = new Line();
 		peer.timeout = 0;
 		addHandlers(peer);
@@ -49,8 +52,10 @@ class PeerIP extends NetplayPeerBase<NetworkMessageType> {
 		this.peer = peer;
 	}
 
-	override function join(host:String, port:Int) {
-		//
+	override function join(?host:String, ?port:Int) {
+		host = host ?? 'localhost';
+		port = port ?? 12345;
+
 		isServer = false;
 
 		var lobby:Lobby1v1 = cast Flixel.state;
@@ -65,7 +70,7 @@ class PeerIP extends NetplayPeerBase<NetworkMessageType> {
 		addHandlers(peer);
 		socket = peer;
 		this.peer = peer;
-		peer.connect('localhost', 12345);
+		peer.connect(host, port);
 	}
 
 	function addHandlers(peer:BaseHandler) {

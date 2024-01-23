@@ -48,7 +48,7 @@ class PeerWebRTC extends NetplayPeerBase<NetworkMessageType> {
 		// },
 	};
 
-	override function create() {
+	override function create(?host:String, ?port:Int) {
 		isServer = true;
 
 		lobby.infobox.text = 'Creating lobby...';
@@ -82,7 +82,7 @@ class PeerWebRTC extends NetplayPeerBase<NetworkMessageType> {
 		createPeer();
 	}
 
-	override function join(host:String, port:Int) {
+	override function join(?host:String, ?port:Int) {
 		isServer = false;
 
 		lobby.connectionState = ConnectingToLobby;

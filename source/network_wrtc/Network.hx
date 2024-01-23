@@ -27,8 +27,8 @@ interface INetplayPeer<T> {
 	/** to implement event loop (if applicable) **/
 	public function loop():Void;
 
-	public function create():Void;
-	public function join(host:String, port:Int):Void;
+	public function create(?host:String, ?port:Int):Void;
+	public function join(?host:String, ?port:Int):Void;
 }
 
 class NetplayPeerBase<T> implements INetplayPeer<T> {
@@ -92,7 +92,7 @@ class NetplayPeerBase<T> implements INetplayPeer<T> {
 
 	public function loop() {}
 
-	public function create() {}
+	public function create(?host:String, ?port:Int) {}
 
-	public function join(host:String, port:Int) {}
+	public function join(?host:String, ?port:Int) {}
 }
