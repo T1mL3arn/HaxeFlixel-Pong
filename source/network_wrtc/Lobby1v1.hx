@@ -71,6 +71,10 @@ class Lobby1v1 extends BaseState {
 		uiObjects.add(infobox = buildInfoBox());
 
 		uiObjects.add(hostInput = new HostInput().setPos(infobox.x, infobox.y));
+		#if !desktop
+		hostInput.visible = false;
+		hostInput.active = false;
+		#end
 
 		#if html5
 		// To test it in Firefox set `media.peerconnection.enabled=false`
@@ -136,31 +140,19 @@ class Lobby1v1 extends BaseState {
 
 		menu.menuEvent.add((e, id) -> {
 			switch ([e, id]) {
-				#if desktop
 				case [it_fire, 'create_lobby']:
 					//
 					hostInput.active = false;
-					connectionState = CreatingLobby;
-					infobox.text = 'Creating lobby...';
-					menu.goto(cast LobbyMenuPage.CreatingLobby);
 
-					// 1 frame delay to redraw
-					haxe.Timer.delay(() -> {
-						peer = getPeer();
-						peer.create(hostInput.lastHost.address, Std.parseInt(hostInput.lastHost.port));
-					}, Std.int(1000 / 60));
-					//
-				#else
-				case [it_fire, 'create_lobby']:
-					//
 					peer = getPeer();
-					peer.create();
+					peer.create(GAME.host.address, Std.parseInt(GAME.host.port));
 
 				case [it_fire, 'connect_to_lobby']:
 					//
+					hostInput.active = false;
+
 					peer = getPeer();
-					peer.join();
-				#end
+					peer.join(GAME.host.address, Std.parseInt(GAME.host.port));
 
 				case [it_fire, SWITCH_TO_MAIN_MENU]:
 					Flixel.switchState(new MainMenu());
@@ -265,12 +257,12 @@ class Lobby1v1 extends BaseState {
 	}
 
 	function onPeerConnected() {
+		#if desktop
+		hostInput.alpha = 0.5;
+		#end
 		connectionState = Connected;
 		infobox.alignment = CENTER;
 		infobox.text = "Connected!";
-
-		// TODO: delay before game starts
-		// tweenManager.tween(this, {}, 1.0).then()
 
 		var leftName = 'left';
 		var leftUid = '$leftName#${FlxDirection.LEFT}';
@@ -299,6 +291,9 @@ class Lobby1v1 extends BaseState {
 		}
 		// -----
 		#end
+
+		// TODO: delay before game starts
+		// tweenManager.tween(this, {}, 1.0).then()
 
 		Flixel.switchState(new TwoPlayerRoomNew({
 			name: leftName,

@@ -50,6 +50,9 @@ class PeerIP extends NetplayPeerBase<NetworkMessageType> {
 		haxe.Timer.delay(() -> {
 			try {
 				createPeer().connect(host, port);
+				// server is binded to the host/port
+				lobby.connectionState = LobbyCreated;
+				lobby.infobox.text = 'Game is ready. Waiting for second player';
 			}
 			catch (err) {
 				onError.dispatch(err);
