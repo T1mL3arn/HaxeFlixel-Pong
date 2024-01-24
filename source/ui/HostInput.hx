@@ -17,10 +17,11 @@ class HostInput extends FlxTypedSpriteGroup<FlxSprite> {
 	public function new() {
 		super();
 
-		var gap = 2;
+		final gap = 2;
+		final labelColor = 0xFF8000;
 
 		var label = styleText(new FlxText('IP:'));
-		label.textField.backgroundColor = 0xDADADA;
+		label.textField.backgroundColor = labelColor;
 		add(label);
 
 		address = styleText(new FlxTextInput());
@@ -33,7 +34,7 @@ class HostInput extends FlxTypedSpriteGroup<FlxSprite> {
 		add(address);
 
 		label = styleText(new FlxText('port:'));
-		label.textField.backgroundColor = 0xDADADA;
+		label.textField.backgroundColor = labelColor;
 		label.x = x + width + gap;
 		add(label);
 
