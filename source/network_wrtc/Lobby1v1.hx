@@ -174,8 +174,8 @@ class Lobby1v1 extends BaseState {
 				peer.join(GAME.host.address, Std.parseInt(GAME.host.port));
 			}
 			else {
-				// peer = getPeer();
-				// peer.create(GAME.host.address, Std.parseInt(GAME.host.port));
+				peer = getPeer();
+				peer.create(GAME.host.address, Std.parseInt(GAME.host.port));
 			}
 		});
 		#end
@@ -292,10 +292,7 @@ class Lobby1v1 extends BaseState {
 		// -----
 		#end
 
-		// TODO: delay before game starts
-		// tweenManager.tween(this, {}, 1.0).then()
-
-		Flixel.switchState(new TwoPlayerRoomNew({
+		var room = new TwoPlayerRoomNew({
 			name: leftName,
 			uid: leftUid,
 			position: LEFT,
@@ -305,7 +302,23 @@ class Lobby1v1 extends BaseState {
 			uid: rightUid,
 			position: RIGHT,
 			getController: rightController,
-		}));
+		});
+
+		var countdownDelay = 2;
+		var countdown = 3;
+		// delay countdown
+		haxe.Timer.delay(() -> {
+			// start countdown
+			infobox.text = 'Game starts in ${countdown}';
+			new FlxTimer(timerManager).start(1, t -> {
+				var left:Dynamic = t.loopsLeft <= 1 ? 'GO' : countdown - t.elapsedLoops;
+				infobox.text = 'Game starts in ${left}';
+				if (t.elapsedLoops == t.loops) {
+					// start game when countdown ends
+					Flixel.switchState(room);
+				}
+			}, countdown + 1);
+		}, Std.int(countdownDelay * 1000));
 	}
 
 	override function update(elapsed:Float) {
