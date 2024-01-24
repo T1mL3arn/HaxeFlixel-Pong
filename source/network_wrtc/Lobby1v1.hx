@@ -15,6 +15,7 @@ import menu.BaseMenu;
 import menu.MainMenu;
 import openfl.desktop.Clipboard;
 import state.BaseState;
+import ui.HostInput;
 import network_wrtc.Network.INetplayPeer;
 import network_wrtc.TwoPlayerNew.TwoPlayerRoomNew;
 #if html5
@@ -52,6 +53,7 @@ class Lobby1v1 extends BaseState {
 	var peer:INetplayPeer<Any>;
 
 	var timer:haxe.Timer;
+	var hostInput:HostInput;
 
 	public function new() {
 		super();
@@ -67,6 +69,8 @@ class Lobby1v1 extends BaseState {
 		canPause = false;
 
 		uiObjects.add(infobox = buildInfoBox());
+
+		uiObjects.add(hostInput = new HostInput().setPos(infobox.x, infobox.y));
 
 		#if html5
 		// To test it in Firefox set `media.peerconnection.enabled=false`
@@ -132,6 +136,21 @@ class Lobby1v1 extends BaseState {
 
 		menu.menuEvent.add((e, id) -> {
 			switch ([e, id]) {
+				#if desktop
+				case [it_fire, 'create_lobby']:
+					//
+					hostInput.active = false;
+					connectionState = CreatingLobby;
+					infobox.text = 'Creating lobby...';
+					menu.goto(cast LobbyMenuPage.CreatingLobby);
+
+					// 1 frame delay to redraw
+					haxe.Timer.delay(() -> {
+						peer = getPeer();
+						peer.create(hostInput.lastHost.address, Std.parseInt(hostInput.lastHost.port));
+					}, Std.int(1000 / 60));
+					//
+				#else
 				case [it_fire, 'create_lobby']:
 					//
 					peer = getPeer();
@@ -141,6 +160,7 @@ class Lobby1v1 extends BaseState {
 					//
 					peer = getPeer();
 					peer.join();
+				#end
 
 				case [it_fire, SWITCH_TO_MAIN_MENU]:
 					Flixel.switchState(new MainMenu());
@@ -148,6 +168,11 @@ class Lobby1v1 extends BaseState {
 				default:
 			}
 		});
+
+		// placing host input at the right coords
+		var menuTop = menu.mpActive.findMinY();
+		hostInput.screenCenter(X);
+		hostInput.y = menuTop - hostInput.height - 10;
 
 		#if (debug && desktop)
 		new FlxTimer().start(0.1, t -> {
@@ -229,12 +254,14 @@ class Lobby1v1 extends BaseState {
 		connectionState = Initial;
 		infobox.text = 'Error: ${msg}';
 		menu.goto(cast LobbyMenuPage.Initial);
+		hostInput.active = true;
 	}
 
 	function onPeerDisconnect() {
 		connectionState = Initial;
 		infobox.text = 'Disconnected';
 		menu.goto(cast LobbyMenuPage.Initial);
+		hostInput.active = true;
 	}
 
 	function onPeerConnected() {
