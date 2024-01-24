@@ -46,21 +46,15 @@ class PeerIP extends NetplayPeerBase<NetworkMessageType> {
 		lobby.infobox.text = 'Creating lobby...';
 		lobby.menu.goto(cast LobbyMenuPage.CreatingLobby);
 
-		var peer:Server = null;
-
-		try {
-			peer = new Server(host, port);
-		}
-		catch (err) {
-			onError.dispatch(err);
-			return;
-		}
-		peer.protocol = new Line();
-		peer.timeout = 0;
-		addHandlers(peer);
-
-		socket = peer;
-		this.peer = peer;
+		// 1 frame delay to redraw
+		haxe.Timer.delay(() -> {
+			try {
+				createPeer().connect(host, port);
+			}
+			catch (err) {
+				onError.dispatch(err);
+			}
+		}, Std.int(1000 / Flixel.drawFramerate));
 	}
 
 	override function join(?host:String, ?port:Int) {
@@ -78,13 +72,32 @@ class PeerIP extends NetplayPeerBase<NetworkMessageType> {
 		lobby.infobox.text = 'Connecting to lobby...';
 		lobby.menu.goto(cast LobbyMenuPage.JoiningToLobby);
 
-		var peer = new Client();
+		// 1 frame delay to redraw
+		haxe.Timer.delay(() -> {
+			try {
+				createPeer().connect(host, port);
+			}
+			catch (err) {
+				onError.dispatch(err);
+			}
+		}, Std.int(1000 / Flixel.drawFramerate));
+	}
+
+	function createPeer():ISocket {
+		var peer:BaseHandler = null;
+		if (isServer) {
+			peer = new Server();
+		}
+		else {
+			peer = new Client();
+		}
 		peer.protocol = new Line();
 		peer.timeout = 0;
 		addHandlers(peer);
-		socket = peer;
+
+		socket = cast peer;
 		this.peer = peer;
-		peer.connect(host, port);
+		return cast peer;
 	}
 
 	function addHandlers(peer:BaseHandler) {
@@ -144,7 +157,7 @@ class PeerIP extends NetplayPeerBase<NetworkMessageType> {
 	}
 
 	override function loop() {
-		if (socket != null && (isServer || socket.connected)) {
+		if (socket != null && socket.connected) {
 			pumpFlush();
 		}
 	}
