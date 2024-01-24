@@ -11,7 +11,6 @@ interface ISocket {
 	function pump():Void;
 	function flush():Void;
 	function send(connectionSocket:Socket, bytes:haxe.io.Bytes, offset:Int, length:Int):Void;
-	@:isVar var connected(get, null):Bool;
-	function get_connected():Bool;
+	var connected(default, null):Bool;
 	function disconnect():Void;
 }

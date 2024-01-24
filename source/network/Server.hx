@@ -6,10 +6,7 @@ import anette.Connection;
 
 class Server implements ISocket extends BaseHandler {
 
-	/**
-		For server it is alwasy `false`
-	**/
-	@:isVar public var connected(get, null):Bool;
+	public var connected(default, null):Bool = false;
 
 	@:noCompletion
 	public function get_connected():Bool {
@@ -22,20 +19,20 @@ class Server implements ISocket extends BaseHandler {
 	var sockets:Array<sys.net.Socket>;
 	var buffer:Bytes = Bytes.alloc(8192);
 
-	public function new(address:String, port:Int) {
+	public function new() {
 		super();
 		serverSocket = new sys.net.Socket();
+	}
+
+	public function connect(address:String, port:Int) {
 		serverSocket.bind(new sys.net.Host(address), port);
 		serverSocket.input.bigEndian = true;
 		serverSocket.listen(1);
 		serverSocket.setBlocking(false);
 		serverSocket.setFastSend(false);
 		sockets = [serverSocket];
+		connected = true;
 		trace("server " + address + " / " + port);
-	}
-
-	public function connect(ip:String, port:Int) {
-		throw("Anette : You can't connect as a server");
 	}
 
 	public function pump() {

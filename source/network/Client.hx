@@ -6,7 +6,7 @@ import anette.Connection;
 
 class Client implements ISocket extends BaseHandler {
 
-	@:isVar public var connected(get, null):Bool;
+	public var connected(default, null):Bool = false;
 	public var connection:Connection;
 
 	var socket:sys.net.Socket;
@@ -91,9 +91,5 @@ class Client implements ISocket extends BaseHandler {
 			trace("Anette : Send error " + error);
 			disconnect();
 		}
-	}
-
-	public function get_connected() {
-		return connected;
 	}
 }
