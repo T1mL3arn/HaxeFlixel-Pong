@@ -44,9 +44,9 @@ class MainMenu extends state.BaseState {
 
 		super.create();
 
-		var menu = new BaseMenu(0, 0, 0, 10);
+		var mainMenu = new BaseMenu(0, 0, 0, 10);
 
-		menu.createPage('main')
+		mainMenu.createPage('main')
 			.add(wrapMenuPage('PONG', '
 				-| 1 player | link | @1_player
 				-| 2 players | link | @multiplayer_menu_page
@@ -56,7 +56,7 @@ class MainMenu extends state.BaseState {
 				pos: 'screen,c,c'
 			});
 
-		menu.createPage('1_player')
+		mainMenu.createPage('1_player')
 			.add(wrapMenuPage('Single Player', '
 				-| vs AI | link | @${VS_AI_SETTINGS_MENU_ID}
 				-| vs self | link | ${SELF_ROOM_MENU_ID}
@@ -66,7 +66,7 @@ class MainMenu extends state.BaseState {
 				pos: 'screen,c,c'
 			});
 
-		menu.createPage(VS_AI_SETTINGS_MENU_ID)
+		mainMenu.createPage(VS_AI_SETTINGS_MENU_ID)
 			.add(wrapMenuPage('Settings', '
 				-| your position | list | player_pos | left,right
 				-| AI difficulty | list | ai_smarteness | ${ais.join(',')}
@@ -76,7 +76,7 @@ class MainMenu extends state.BaseState {
 				pos: 'screen,c,c'
 			});
 
-		menu.createPage('multiplayer_menu_page')
+		mainMenu.createPage('multiplayer_menu_page')
 			.add(wrapMenuPage('2 players', '
 				-| split screen | link | split_screen
 				-| ${NETPLAY_MENU_LABEL} | link | ${NETPLAY_MENU_ID}
@@ -85,8 +85,10 @@ class MainMenu extends state.BaseState {
 				pos: 'screen,c,c'
 			});
 
-		menu.goto('main');
-		menu.menuEvent.add((e, id) -> {
+		mainMenu.goto('main');
+
+
+		mainMenu.menuEvent.add((e, id) -> {
 			switch ([e, id]) {
 				case [it_fire, TRAINING_ROOM_MENU_ID]:
 					Flixel.switchState(new TrainingRoom());
@@ -108,7 +110,7 @@ class MainMenu extends state.BaseState {
 					players[0].position = LEFT;
 					players[1].position = RIGHT;
 
-					var settings = menu.pages[VS_AI_SETTINGS_MENU_ID];
+					var settings = mainMenu.pages[VS_AI_SETTINGS_MENU_ID];
 					var playerPos:String = settings.get('player_pos').get();
 					var aiType:String = settings.get('ai_smarteness').get();
 
@@ -151,10 +153,10 @@ class MainMenu extends state.BaseState {
 			}
 		});
 
-		uiObjects.add(menu);
+		uiObjects.add(mainMenu);
 
 		// actually center main page on the screen
-		menu.mpActive.forEach(s -> s.screenCenter(X));
+		mainMenu.mpActive?.forEach(s -> s.screenCenter(X));
 		// TODO update menu class for better alignment?
 
 		// menu.menuEvent.dispatch(it_fire, SELF_ROOM_MENU_ID);
