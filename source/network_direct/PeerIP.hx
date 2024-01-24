@@ -130,7 +130,7 @@ class PeerIP extends NetplayPeerBase<NetworkMessageType> {
 	}
 
 	override function loop() {
-		if (isServer || socket.connected) {
+		if (socket != null && (isServer || socket.connected)) {
 			pumpFlush();
 		}
 	}
@@ -146,13 +146,15 @@ class PeerIP extends NetplayPeerBase<NetworkMessageType> {
 		timer.stop();
 		timer = null;
 
-		peer.onConnection = _ -> {};
-		peer.onConnectionError = _ -> {};
-		peer.onDisconnection = _ -> {};
-		peer.onData = _ -> {};
+		if (peer != null) {
+			peer.onConnection = _ -> {};
+			peer.onConnectionError = _ -> {};
+			peer.onDisconnection = _ -> {};
+			peer.onData = _ -> {};
+		}
 
 		try {
-			socket.disconnect();
+			socket?.disconnect();
 		}
 		catch (e) {
 			// wtf ?
