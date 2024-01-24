@@ -32,6 +32,9 @@ class PeerIP extends NetplayPeerBase<NetworkMessageType> {
 	}
 
 	override function create(?host:String, ?port:Int) {
+		if (peer != null)
+			onError.dispatch('Error: Already created');
+
 		host = host ?? 'localhost';
 		port = port ?? 12345;
 
@@ -43,7 +46,15 @@ class PeerIP extends NetplayPeerBase<NetworkMessageType> {
 		lobby.infobox.text = 'Creating lobby...';
 		lobby.menu.goto(cast LobbyMenuPage.CreatingLobby);
 
-		var peer = new Server(host, port);
+		var peer:Server = null;
+
+		try {
+			peer = new Server(host, port);
+		}
+		catch (err) {
+			onError.dispatch(err);
+			return;
+		}
 		peer.protocol = new Line();
 		peer.timeout = 0;
 		addHandlers(peer);
@@ -53,6 +64,9 @@ class PeerIP extends NetplayPeerBase<NetworkMessageType> {
 	}
 
 	override function join(?host:String, ?port:Int) {
+		if (peer != null)
+			onError.dispatch('Error: Already joined');
+
 		host = host ?? 'localhost';
 		port = port ?? 12345;
 
