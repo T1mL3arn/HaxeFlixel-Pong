@@ -66,6 +66,14 @@ class Pong extends FlxGame {
 
 	public var peer:INetplayPeer<Any>;
 
+	/**
+		Last known host for desktop netplay.
+	**/
+	public var host(default, null) = {
+		address: 'localhost',
+		port: '12345',
+	}
+
 	public var signals = {
 		keyPress: Flixel.signals.postUpdate,
 		ballServed: new FlxSignal(),

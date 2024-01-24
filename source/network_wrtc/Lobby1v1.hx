@@ -179,11 +179,11 @@ class Lobby1v1 extends BaseState {
 			var isClient = Sys.args().contains('--client');
 			if (isClient) {
 				peer = getPeer();
-				peer.join();
+				peer.join(GAME.host.address, Std.parseInt(GAME.host.port));
 			}
 			else {
-				peer = getPeer();
-				peer.create();
+				// peer = getPeer();
+				// peer.create(GAME.host.address, Std.parseInt(GAME.host.port));
 			}
 		});
 		#end

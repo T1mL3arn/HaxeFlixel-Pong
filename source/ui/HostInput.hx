@@ -8,15 +8,11 @@ import flixel.util.FlxColor;
 
 using Math;
 
+@:build(utils.BuildMacro.addField_GAME())
 class HostInput extends FlxTypedSpriteGroup<FlxSprite> {
 
 	public var address(default, null):FlxTextInput;
 	public var port(default, null):FlxTextInput;
-
-	public var lastHost(default, null) = {
-		address: 'localhost',
-		port: '12345',
-	}
 
 	public function new() {
 		super();
@@ -30,7 +26,7 @@ class HostInput extends FlxTypedSpriteGroup<FlxSprite> {
 		address = styleText(new FlxTextInput());
 		address.multiline = false;
 		address.maxChars = 15; // 255.255.255.255
-		address.text = lastHost.address;
+		address.text = GAME.host.address;
 		address.x = x + width + gap;
 		address.fieldWidth = 200;
 		address.fieldHeight = address.height;
@@ -44,7 +40,7 @@ class HostInput extends FlxTypedSpriteGroup<FlxSprite> {
 		port = styleText(new FlxTextInput());
 		port.multiline = false;
 		port.maxChars = 5;
-		port.text = '${lastHost.port}';
+		port.text = '${GAME.host.port}';
 		port.fieldWidth = 100;
 		port.fieldHeight = address.fieldHeight;
 		port.x = x + width + gap;
@@ -52,19 +48,13 @@ class HostInput extends FlxTypedSpriteGroup<FlxSprite> {
 
 		address.onChange.add(() -> updateLastHost(address, 'address'));
 		address.onInput.add(() -> updateLastHost(address, 'address'));
-		// address.onEnter.add(()->hostChanged(lastHost.address, lastHost.port));
 		port.onChange.add(() -> updateLastHost(port, 'port'));
 		port.onInput.add(() -> updateLastHost(port, 'port'));
-		// port.onEnter.add(()->hostChanged(lastHost.address, lastHost.port));
 	}
-
-	// public dynamic function hostChanged(address:String, port:String) {
-	// 	trace('do it yourself');
-	// }
 
 	function updateLastHost(field:FlxText, propName:String) {
 		field.text = StringTools.trim(field.text);
-		Reflect.setField(lastHost, propName, field.text);
+		Reflect.setField(GAME.host, propName, field.text);
 	}
 
 	function styleText<T:FlxText>(text:T):T {
