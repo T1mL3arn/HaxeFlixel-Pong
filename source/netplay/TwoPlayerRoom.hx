@@ -120,10 +120,8 @@ class TwoPlayerRoom extends room.TwoPlayersRoom {
 		text.y = Flixel.height - text.height;
 		uiObjects.add(text);
 
-		// disable/mute sound for client for debug tests
-		// so no same sounds are played when testing on local machine
-		if (!GAME.peer.isServer)
-			Flixel.sound.muted = true;
+		// disable/mute sound for debug tests
+		Flixel.sound.muted = GAME.peer.isServer;
 		#end
 	}
 
