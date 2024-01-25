@@ -1,4 +1,4 @@
-package network_wrtc;
+package netplay;
 
 import ai.SmartAI;
 import flixel.input.mouse.FlxMouseEvent;
@@ -9,14 +9,14 @@ import menu.BaseMenu;
 import menu.MainMenu;
 import state.BaseState;
 import ui.HostInput;
-import network_wrtc.NetplayPeer.INetplayPeer;
-import network_wrtc.TwoPlayerRoom.TwoPlayerRoom;
+import netplay.NetplayPeer.INetplayPeer;
+import netplay.TwoPlayerRoom.TwoPlayerRoom;
 #if html5
 import peer.Peer;
-import network_wrtc.PeerWebRTC;
+import netplay.PeerWebRTC;
 #end
 #if (hl || neko)
-import network_direct.PeerIP;
+import netplay.PeerIP;
 #end
 
 typedef Error = #if html5 js.lib.Error #else haxe.Exception #end;

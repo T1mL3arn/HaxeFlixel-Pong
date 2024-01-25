@@ -19,7 +19,7 @@ class Main extends Sprite {
 		#if debug
 		// Flixel.switchState(new room.AIRoom('medium'));
 		// Flixel.switchState(new menu.CongratScreen().setWinner('not You', false));
-		Flixel.switchState(new network_wrtc.Lobby1v1());
+		Flixel.switchState(new netplay.Lobby1v1());
 		#else
 		Flixel.switchState(new menu.MainMenu());
 		#end

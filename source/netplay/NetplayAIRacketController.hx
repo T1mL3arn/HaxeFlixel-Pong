@@ -1,11 +1,11 @@
-package network_wrtc;
+package netplay;
 
 import ai.BaseAI;
 import math.MathUtils.xor;
+import racket.RacketController;
 import netplay.Netplay.NetplayMessage;
 import netplay.Netplay.NetplayMessageKind;
-import racket.RacketController;
-import network_wrtc.NetplayRacketController.PaddleActionPayload;
+import netplay.NetplayRacketController.PaddleActionPayload;
 
 /**
 	Wrapper that allows AI to play as a network player.

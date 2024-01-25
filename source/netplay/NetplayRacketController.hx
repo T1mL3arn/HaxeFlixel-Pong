@@ -1,10 +1,10 @@
-package network_wrtc;
+package netplay;
 
 import flixel.input.keyboard.FlxKey;
-import netplay.Netplay.NetplayMessage;
-import netplay.Netplay.NetplayMessageKind;
 import racket.Racket;
 import racket.RacketController;
+import netplay.Netplay.NetplayMessage;
+import netplay.Netplay.NetplayMessageKind;
 
 typedef PaddleActionPayload = {
 	paddleName:String,

@@ -1,4 +1,4 @@
-package network_wrtc;
+package netplay;
 
 import flixel.FlxObject;
 import flixel.util.FlxColor;
@@ -7,11 +7,11 @@ import menu.BaseMenu.MenuCommand;
 import menu.CongratScreen.CongratScreenType;
 import menu.CongratScreen;
 import menu.PauseMenu;
+import racket.Racket;
 import netplay.Netplay.NetplayMessage;
 import netplay.Netplay.NetplayMessageKind;
-import racket.Racket;
-import network_wrtc.NetplayPeer.INetplayPeer;
-import network_wrtc.NetplayRacketController.PaddleActionPayload;
+import netplay.NetplayPeer.INetplayPeer;
+import netplay.NetplayRacketController.PaddleActionPayload;
 
 using Lambda;
 

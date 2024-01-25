@@ -1,4 +1,4 @@
-package network_wrtc;
+package netplay;
 
 import Player.PlayerOptions;
 import ai.BaseAI;
@@ -14,14 +14,14 @@ import menu.NetplayDisconnectedScreen;
 import menu.PauseMenu;
 import mod.CornerGoalWatch;
 import mod.Updater;
+import racket.Racket;
 import netplay.Netplay.BallDataPayload;
 import netplay.Netplay.NetplayMessage;
 import netplay.Netplay.NetplayMessageKind;
 import netplay.Netplay.ObjectMotionData;
 import netplay.Netplay.getBallCollisionData;
-import racket.Racket;
-import network_wrtc.NetplayCongratScreen;
-import network_wrtc.NetplayRacketController.PaddleActionPayload;
+import netplay.NetplayCongratScreen;
+import netplay.NetplayRacketController.PaddleActionPayload;
 
 using Lambda;
 

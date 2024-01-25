@@ -1,4 +1,4 @@
-package network_wrtc;
+package netplay;
 
 import haxe.Json;
 import flixel.util.FlxSignal.FlxTypedSignal;

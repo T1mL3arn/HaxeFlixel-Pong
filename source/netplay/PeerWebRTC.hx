@@ -1,4 +1,4 @@
-package network_wrtc;
+package netplay;
 
 import haxe.Json;
 import js.Browser;
@@ -6,15 +6,15 @@ import js.html.Console;
 import js.lib.Error;
 import flixel.input.mouse.FlxMouseEvent;
 import menu.BaseMenu;
-import netplay.Netplay.NetplayMessage;
-import netplay.Netplay.NetplayMessageKind;
 import peer.Peer;
 import peer.PeerEvent;
-import network_wrtc.Lobby1v1.ConnectionState;
-import network_wrtc.Lobby1v1.LobbyMenuPage;
-import network_wrtc.NetplayPeer.NetplayPeerBase;
+import netplay.Lobby1v1.ConnectionState;
+import netplay.Lobby1v1.LobbyMenuPage;
+import netplay.Netplay.NetplayMessage;
+import netplay.Netplay.NetplayMessageKind;
+import netplay.NetplayPeer.NetplayPeerBase;
 
-@:access(network_wrtc.Lobby1v1)
+@:access(netplay.Lobby1v1)
 class PeerWebRTC extends NetplayPeerBase<NetplayMessageKind> {
 
 	var peer:Peer;

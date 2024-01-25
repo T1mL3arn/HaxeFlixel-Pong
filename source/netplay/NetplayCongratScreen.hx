@@ -1,8 +1,8 @@
-package network_wrtc;
+package netplay;
 
 import menu.BaseMenu.MenuCommand;
 import menu.CongratScreen;
-import network_wrtc.NetplayPeer.INetplayPeer;
+import netplay.NetplayPeer.INetplayPeer;
 
 /**
 	This congrat screen disables "play again" menu item

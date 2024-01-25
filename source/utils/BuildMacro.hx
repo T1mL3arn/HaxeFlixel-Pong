@@ -62,8 +62,8 @@ function netplayUID():Array<Field> {
 		name: 'netplayUid',
 		doc: 'docString',
 		access: [Access.APublic],
-		// kind: FieldType.FProp('default', 'null', macro :Int, macro network_wrtc.NetplayPeer.uidMap['netplayUid']++),
-		// kind: FieldType.FProp('default', 'default', macro :Int, macro network_wrtc.NetplayPeer.netplayUid++),
+		// kind: FieldType.FProp('default', 'null', macro :Int, macro netplay.NetplayPeer.uidMap['netplayUid']++),
+		// kind: FieldType.FProp('default', 'default', macro :Int, macro netplay.NetplayPeer.netplayUid++),
 		kind: FieldType.FProp('default', 'default', macro :Int, macro 0),
 		pos: Context.currentPos(),
 	});

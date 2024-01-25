@@ -1,19 +1,19 @@
-package network_direct;
+package netplay;
 
 import haxe.Json;
 import haxe.Timer;
 import anette.BaseHandler;
 import anette.Connection;
 import anette.Protocol.Line;
-import netplay.Netplay.NetplayMessage;
-import netplay.Netplay.NetplayMessageKind;
 import network.Client;
 import network.ISocket;
 import network.Server;
-import network_wrtc.Lobby1v1;
-import network_wrtc.NetplayPeer.NetplayPeerBase;
+import netplay.Lobby1v1;
+import netplay.Netplay.NetplayMessage;
+import netplay.Netplay.NetplayMessageKind;
+import netplay.NetplayPeer.NetplayPeerBase;
 
-@:access(network_wrtc.Lobby1v1)
+@:access(netplay.Lobby1v1)
 class PeerIP extends NetplayPeerBase<NetplayMessageKind> {
 
 	var connection:Connection;

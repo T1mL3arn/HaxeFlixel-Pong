@@ -1,7 +1,7 @@
 package menu;
 
 import djFlixel.ui.FlxMenu;
-import network_wrtc.Lobby1v1;
+import netplay.Lobby1v1;
 import state.BaseState;
 import menu.BaseMenu;
 import menu.MenuUtils.wrapMenuPage;
