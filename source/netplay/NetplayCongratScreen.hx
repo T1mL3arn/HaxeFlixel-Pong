@@ -26,8 +26,6 @@ class NetplayCongratScreen extends CongratScreen {
 			menu.mpActive.item_focus(MenuCommand.SWITCH_TO_MAIN_MENU);
 		}
 
-		// TODO review how simple-peer CLOSE event relates to anette lib
-
 		errorHandler = _ -> onDisconnect('error');
 		disconnectHandler = () -> onDisconnect('disconnected');
 		network.onError.addOnce(errorHandler);
