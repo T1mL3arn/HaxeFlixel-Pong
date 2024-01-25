@@ -5,16 +5,16 @@ import haxe.Timer;
 import anette.BaseHandler;
 import anette.Connection;
 import anette.Protocol.Line;
-import netplay.TwoPlayersNetplayData.NetworkMessage;
-import netplay.TwoPlayersNetplayData.NetworkMessageType;
+import netplay.Netplay.NetplayMessage;
+import netplay.Netplay.NetplayMessageKind;
 import network.Client;
 import network.ISocket;
 import network.Server;
 import network_wrtc.Lobby1v1;
-import network_wrtc.Network.NetplayPeerBase;
+import network_wrtc.NetplayPeer.NetplayPeerBase;
 
 @:access(network_wrtc.Lobby1v1)
-class PeerIP extends NetplayPeerBase<NetworkMessageType> {
+class PeerIP extends NetplayPeerBase<NetplayMessageKind> {
 
 	var connection:Connection;
 	var socket:ISocket;
@@ -141,11 +141,11 @@ class PeerIP extends NetplayPeerBase<NetworkMessageType> {
 	override function onData(data:Any) {
 		// data that read from connection is already a string
 		var str:String = data;
-		var message:NetworkMessage = Json.parse(str);
+		var message:NetplayMessage = Json.parse(str);
 		onMessage.dispatch(message);
 	}
 
-	override function send(msgType:NetworkMessageType, ?data:Any) {
+	override function send(msgType:NetplayMessageKind, ?data:Any) {
 		// trace('$peerType: sending $msgType');
 		var msg = {
 			type: msgType,

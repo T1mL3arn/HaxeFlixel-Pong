@@ -6,16 +6,16 @@ import js.html.Console;
 import js.lib.Error;
 import flixel.input.mouse.FlxMouseEvent;
 import menu.BaseMenu;
-import netplay.TwoPlayersNetplayData.NetworkMessage;
-import netplay.TwoPlayersNetplayData.NetworkMessageType;
+import netplay.Netplay.NetplayMessage;
+import netplay.Netplay.NetplayMessageKind;
 import peer.Peer;
 import peer.PeerEvent;
 import network_wrtc.Lobby1v1.ConnectionState;
 import network_wrtc.Lobby1v1.LobbyMenuPage;
-import network_wrtc.Network.NetplayPeerBase;
+import network_wrtc.NetplayPeer.NetplayPeerBase;
 
 @:access(network_wrtc.Lobby1v1)
-class PeerWebRTC extends NetplayPeerBase<NetworkMessageType> {
+class PeerWebRTC extends NetplayPeerBase<NetplayMessageKind> {
 
 	var peer:Peer;
 	var signalData:String;
@@ -228,7 +228,7 @@ class PeerWebRTC extends NetplayPeerBase<NetworkMessageType> {
 		}
 	}
 
-	override public function send(msgType:NetworkMessageType, ?data:Any = null) {
+	override public function send(msgType:NetplayMessageKind, ?data:Any = null) {
 		var msg = getMessage(msgType, data);
 		peer.send(packMessage(msg));
 		onMessage.dispatch(msg);

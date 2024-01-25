@@ -8,7 +8,7 @@ import flixel.math.FlxPoint;
 import flixel.util.FlxColor;
 import flixel.util.FlxDirection;
 import math.MathUtils.wp;
-import network_wrtc.Network.nextUid;
+import netplay.Netplay.nextUid;
 import racket.Racket;
 import utils.FlxSpriteDraw.DashedLineStyle;
 import utils.FlxSpriteDraw.drawDashedLine;

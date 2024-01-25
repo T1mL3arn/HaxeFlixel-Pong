@@ -10,7 +10,7 @@ import flixel.util.FlxSignal;
 import mod.Updater;
 import mouse.MouseHider;
 import mouse.SpriteAsMouse;
-import network_wrtc.Network.INetplayPeer;
+import network_wrtc.NetplayPeer.INetplayPeer;
 import openfl.display.StageQuality;
 import openfl.events.MouseEvent;
 import openfl.filters.ShaderFilter;

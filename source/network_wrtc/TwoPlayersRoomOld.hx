@@ -7,11 +7,11 @@ import menu.BaseMenu.MenuCommand;
 import menu.CongratScreen.CongratScreenType;
 import menu.CongratScreen;
 import menu.PauseMenu;
-import netplay.TwoPlayersNetplayData.NetworkMessage;
-import netplay.TwoPlayersNetplayData.NetworkMessageType;
+import netplay.Netplay.NetplayMessage;
+import netplay.Netplay.NetplayMessageKind;
 import racket.Racket;
+import network_wrtc.NetplayPeer.INetplayPeer;
 import network_wrtc.NetplayRacketController.PaddleActionPayload;
-import network_wrtc.Network.INetplayPeer;
 
 using Lambda;
 
@@ -51,7 +51,7 @@ typedef CongratScreenDataPayload = {
 }
 
 @:deprecated('Use `TwoPlayerNew` instead')
-class TwoPlayersRoom extends room.TwoPlayersRoom {
+class TwoPlayersRoomOld extends room.TwoPlayersRoom {
 
 	var network:INetplayPeer<Any>;
 	var currentPlayerUid:String;
@@ -101,7 +101,7 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 		Flixel.vcr.pauseChanged.remove(onPauseChange);
 	}
 
-	function onMessage(msg:NetworkMessage) {
+	function onMessage(msg:NetplayMessage) {
 		// trace('(${untyped network.isServer ? 'server' : 'player'}): on message');
 
 		switch (msg.type) {
@@ -188,7 +188,7 @@ class TwoPlayersRoom extends room.TwoPlayersRoom {
 	}
 
 	function messageResetRoom() {
-		Flixel.switchState(new TwoPlayersRoom(leftOptions, rightOptions));
+		Flixel.switchState(new TwoPlayerRoom(leftOptions, rightOptions));
 	}
 
 	function messageBallPreServe(data:{delay:Float}) {
@@ -334,7 +334,6 @@ class NetplayCongratScreen extends CongratScreen {
 	var errorHandler:Any->Void;
 
 	function onDisconnect(?reason = 'disconnected') {
-
 
 		network.onError.remove(errorHandler);
 		network.onDisconnect.remove(disconnectHandler);

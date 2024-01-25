@@ -4,11 +4,6 @@ import haxe.Json;
 import flixel.util.FlxSignal.FlxTypedSignal;
 import flixel.util.FlxSignal;
 
-var netplayUid:Int = 0;
-
-inline function nextUid():Int
-	return netplayUid++;
-
 interface INetplayPeer<T> {
 	@:deprecated("Use `isServer` instead")
 	public var initiator(default, null):Bool;

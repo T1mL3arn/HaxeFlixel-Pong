@@ -9,8 +9,8 @@ import menu.BaseMenu;
 import menu.MainMenu;
 import state.BaseState;
 import ui.HostInput;
-import network_wrtc.Network.INetplayPeer;
-import network_wrtc.TwoPlayerNew.TwoPlayerRoomNew;
+import network_wrtc.NetplayPeer.INetplayPeer;
+import network_wrtc.TwoPlayerRoom.TwoPlayerRoom;
 #if html5
 import peer.Peer;
 import network_wrtc.PeerWebRTC;
@@ -284,7 +284,7 @@ class Lobby1v1 extends BaseState {
 		// -----
 		#end
 
-		var room = new TwoPlayerRoomNew({
+		var room = new TwoPlayerRoom({
 			name: leftName,
 			uid: leftUid,
 			position: LEFT,

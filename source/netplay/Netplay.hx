@@ -1,10 +1,14 @@
 package netplay;
 
 import flixel.FlxObject;
+import flixel.util.FlxColor;
 
-class TwoPlayersNetplayData {}
+var netplayUid:Int = 0;
 
-enum abstract NetworkMessageType(String) {
+inline function nextUid():Int
+	return netplayUid++;
+
+enum abstract NetplayMessageKind(String) {
 	var PaddleAction;
 	var PaddleData;
 	var BallData;
@@ -21,8 +25,8 @@ enum abstract NetworkMessageType(String) {
 	var FullSync;
 }
 
-typedef NetworkMessage = {
-	type:NetworkMessageType,
+typedef NetplayMessage = {
+	type:NetplayMessageKind,
 	data:Any,
 }
 
@@ -61,4 +65,39 @@ function getBallCollisionData(wall:FlxObject, ball:Ball) {
 	ballCollisionData.ball.vx = ball.velocity.x;
 	ballCollisionData.ball.vy = ball.velocity.y;
 	return ballCollisionData;
+}
+
+typedef TwoPlayersGameState = {
+	ball:{x:Float, y:Float, vx:Float, vy:Float},
+	players:Array<{
+		uid:String,
+		name:String,
+		racket:{
+			x:Float,
+			y:Float,
+			vx:Float,
+			vy:Float,
+			?id:String,
+		},
+		score:Int,
+	}>,
+};
+
+typedef BallDataPayload = {
+	x:Float,
+	y:Float,
+	vx:Float,
+	vy:Float,
+	?hitBy:String,
+	?color:FlxColor,
+}
+
+typedef ScoreDataPayload = {
+	leftScore:Int,
+	rightScore:Int,
+}
+
+typedef CongratScreenDataPayload = {
+	winnerName:String,
+	winnerUid:String,
 }

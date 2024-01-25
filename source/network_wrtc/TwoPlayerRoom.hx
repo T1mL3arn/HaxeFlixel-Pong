@@ -14,18 +14,18 @@ import menu.NetplayDisconnectedScreen;
 import menu.PauseMenu;
 import mod.CornerGoalWatch;
 import mod.Updater;
-import netplay.TwoPlayersNetplayData.NetworkMessage;
-import netplay.TwoPlayersNetplayData.NetworkMessageType;
-import netplay.TwoPlayersNetplayData.ObjectMotionData;
-import netplay.TwoPlayersNetplayData.getBallCollisionData;
+import netplay.Netplay.BallDataPayload;
+import netplay.Netplay.NetplayMessage;
+import netplay.Netplay.NetplayMessageKind;
+import netplay.Netplay.ObjectMotionData;
+import netplay.Netplay.getBallCollisionData;
 import racket.Racket;
+import network_wrtc.NetplayCongratScreen;
 import network_wrtc.NetplayRacketController.PaddleActionPayload;
-import network_wrtc.TwoPlayersRoom.BallDataPayload;
-import network_wrtc.TwoPlayersRoom.NetplayCongratScreen;
 
 using Lambda;
 
-class TwoPlayerRoomNew extends room.TwoPlayersRoom {
+class TwoPlayerRoom extends room.TwoPlayersRoom {
 
 	var currentPlayerUid:String;
 
@@ -60,7 +60,7 @@ class TwoPlayerRoomNew extends room.TwoPlayersRoom {
 	override function create() {
 		// reset uid to be sure it is the same
 		// for client and server objects
-		network_wrtc.Network.netplayUid = 11;
+		netplay.Netplay.netplayUid = 11;
 
 		super.create();
 
@@ -144,11 +144,11 @@ class TwoPlayerRoomNew extends room.TwoPlayersRoom {
 		GAME.peer.send(DebugPauseRequest, {paused: paused});
 	}
 
-	function logmsg(msg:NetworkMessage) {
+	function logmsg(msg:NetplayMessage) {
 		trace('(${GAME.peer.isServer ? 'server' : 'client'}): msg ${msg.type}');
 	}
 
-	function onMessage(msg:NetworkMessage) {
+	function onMessage(msg:NetplayMessage) {
 
 		#if hl
 		// see this.destroy()
@@ -205,7 +205,7 @@ class TwoPlayerRoomNew extends room.TwoPlayersRoom {
 
 	function messageResetRoom() {
 		//
-		Flixel.switchState(new TwoPlayerRoomNew(leftOptions, rightOptions));
+		Flixel.switchState(new TwoPlayerRoom(leftOptions, rightOptions));
 	}
 
 	function messageDebugPause(data:{paused:Bool}, isRequest:Bool = false) {

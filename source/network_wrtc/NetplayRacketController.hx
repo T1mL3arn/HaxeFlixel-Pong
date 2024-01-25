@@ -1,8 +1,8 @@
 package network_wrtc;
 
 import flixel.input.keyboard.FlxKey;
-import netplay.TwoPlayersNetplayData.NetworkMessage;
-import netplay.TwoPlayersNetplayData.NetworkMessageType;
+import netplay.Netplay.NetplayMessage;
+import netplay.Netplay.NetplayMessageKind;
 import racket.Racket;
 import racket.RacketController;
 

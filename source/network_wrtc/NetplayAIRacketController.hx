@@ -2,8 +2,8 @@ package network_wrtc;
 
 import ai.BaseAI;
 import math.MathUtils.xor;
-import netplay.TwoPlayersNetplayData.NetworkMessage;
-import netplay.TwoPlayersNetplayData.NetworkMessageType;
+import netplay.Netplay.NetplayMessage;
+import netplay.Netplay.NetplayMessageKind;
 import racket.RacketController;
 import network_wrtc.NetplayRacketController.PaddleActionPayload;
 
