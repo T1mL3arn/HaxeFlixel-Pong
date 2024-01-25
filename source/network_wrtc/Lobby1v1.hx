@@ -1,19 +1,12 @@
 package network_wrtc;
 
-import haxe.Json;
-import Utils.merge;
 import ai.SmartAI;
-import flixel.FlxBasic;
-import flixel.FlxState;
 import flixel.input.mouse.FlxMouseEvent;
 import flixel.text.FlxText;
-import flixel.util.FlxArrayUtil;
 import flixel.util.FlxDirection;
 import flixel.util.FlxTimer;
-import lime.system.Clipboard as LimeClipboard;
 import menu.BaseMenu;
 import menu.MainMenu;
-import openfl.desktop.Clipboard;
 import state.BaseState;
 import ui.HostInput;
 import network_wrtc.Network.INetplayPeer;
