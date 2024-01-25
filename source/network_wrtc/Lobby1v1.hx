@@ -161,12 +161,11 @@ class Lobby1v1 extends BaseState {
 
 		#if (debug && desktop)
 		new FlxTimer().start(0.1, t -> {
-			var isClient = Sys.args().contains('--client');
-			if (isClient) {
+			if (Sys.args().contains('--client')) {
 				peer = getPeer();
 				peer.join(GAME.host.address, Std.parseInt(GAME.host.port));
 			}
-			else {
+			else if (Sys.args().contains('--server')) {
 				peer = getPeer();
 				peer.create(GAME.host.address, Std.parseInt(GAME.host.port));
 			}
