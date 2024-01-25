@@ -97,12 +97,24 @@ class CongratScreen extends BaseState {
 			sprite.setWinnerName(winnerName);
 			uiObjects.add(sprite);
 
-			if (screenType == FOR_WINNER)
-				Flixel.sound.play(AssetPaths.win_crowd_applause__ogg, 1.0, false, GAME.gameSoundGroup);
+			if (isCreated) {
+				if (screenType == FOR_WINNER) {
+					Flixel.sound.play(AssetPaths.win_crowd_applause__ogg, 1.0, false, GAME.gameSoundGroup);
+				}
+				else {
+					// TODO: play looser sound
+					trace('playing LOOSER sound');
+				}
+			}
 		}
 
+		// dont remember why I force-call it
 		openCallback();
+
+		isCreated = true;
 	}
+
+	var isCreated = false;
 }
 
 class WinnerSprite extends FlxSpriteGroup {
