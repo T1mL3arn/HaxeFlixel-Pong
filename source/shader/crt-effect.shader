@@ -46,6 +46,7 @@ void main()
 	float chx = 0.003;
 	float chy = 0.00125;
 	vec3 col = chroma(bitmap, uv, chx, chy);
+	// vec3 col = texture2D(bitmap, uv).rgb;
     
 	// drop things beyond curved image
 	col *= step(0.0, uv.x) * step(0.0, uv.y);
