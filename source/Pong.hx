@@ -36,6 +36,10 @@ typedef PongParams = {
 
 class Pong extends FlxGame {
 
+	/**
+		Default params. 
+		If you want to change current params - use `Pong.params`
+	**/
 	public static final defaultParams:PongParams = {
 		ballSize: 12,
 		ballSpeed: 310,
