@@ -275,6 +275,7 @@ class Lobby1v1 extends BaseState {
 			r -> null;
 		}
 
+		// comment this controller to play as human-client
 		var rightController = if (peer.isServer) {
 			r -> null;
 		}
