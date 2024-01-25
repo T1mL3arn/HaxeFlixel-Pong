@@ -9,13 +9,6 @@ class Main extends Sprite {
 	public function new() {
 		super();
 
-		// trace('ARGS: ${Sys.args()}');
-		// return;
-		// trace('ARGS:', Sys.args());
-		// var server = Sys.args()[0] == '--server';
-		// new network_direct.NetworkHashlink(server);
-		// return;
-
 		D.init();
 		D.ui.initIcons([8]);
 
