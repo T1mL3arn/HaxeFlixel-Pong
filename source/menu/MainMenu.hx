@@ -86,7 +86,6 @@ class MainMenu extends state.BaseState {
 
 		mainMenu.goto('main');
 
-
 		mainMenu.menuEvent.add((e, id) -> {
 			switch ([e, id]) {
 				case [it_fire, TRAINING_ROOM_MENU_ID]:
