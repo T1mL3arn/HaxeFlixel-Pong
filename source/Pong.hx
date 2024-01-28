@@ -136,7 +136,7 @@ class Pong extends FlxGame {
 
 		// disable/enable camera filters
 		signals.keyPress.add(() -> {
-			if (Flixel.keys.justPressed.T) {
+			if (Flixel.keys.pressed.SEVEN && Flixel.keys.justPressed.EIGHT) {
 				filtersEnabled = !filtersEnabled;
 				Flixel.camera.filtersEnabled = filtersEnabled;
 			}
@@ -154,6 +154,14 @@ class Pong extends FlxGame {
 			Flixel.plugins.add(new SpriteAsMouse());
 			Flixel.plugins.add(new FlxDragManager());
 			Flixel.plugins.add(new MouseHider());
+
+			#if desktop
+			// load saved host data
+			if (Flixel.save.data.lastHost != null)
+				host.address = Flixel.save.data.lastHost;
+			if (Flixel.save.data.lastPort != null)
+				host.port = Flixel.save.data.lastPort;
+			#end
 
 			#if debug
 			Flixel.debugger.visible = true;

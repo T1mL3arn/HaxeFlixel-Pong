@@ -137,12 +137,20 @@ class Lobby1v1 extends BaseState {
 					//
 					hostInput.active = false;
 
+					// saving last known host
+					Flixel.save.data.lastHost = GAME.host.address;
+					FLixel.save.data.lastPort = GAME.host.port;
+
 					peer = getPeer();
 					peer.create(GAME.host.address, Std.parseInt(GAME.host.port));
 
 				case [it_fire, 'connect_to_lobby']:
 					//
 					hostInput.active = false;
+
+					// saving last known host
+					Flixel.save.data.lastHost = GAME.host.address;
+					FLixel.save.data.lastPort = GAME.host.port;
 
 					peer = getPeer();
 					peer.join(GAME.host.address, Std.parseInt(GAME.host.port));
@@ -305,7 +313,7 @@ class Lobby1v1 extends BaseState {
 			infobox.text = 'Game starts in ${countdown}';
 			new FlxTimer(timerManager).start(1, t -> {
 				var left:Dynamic = t.loopsLeft <= 1 ? 'GO' : countdown - t.elapsedLoops;
-				infobox.text = 'Game starts in ${left}';
+				infobox.text = left == 'GO' ? left : 'Game starts in ${left}';
 				if (t.elapsedLoops == t.loops) {
 					// start game when countdown ends
 					Flixel.switchState(room);

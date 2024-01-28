@@ -77,7 +77,7 @@ void main()
 	// scanline darkness
 	float s_am = 0.0350;
 	float s_b = 1.0 - s_am;
-	col *= s_b + s_am*(sin(scanSpeed * iTime + 
+	col *= s_b + s_am*(sin(-scanSpeed * iTime + 
 										(uv.y*scanlinesNumber*3.14)));
 
 	// // another way to do stripes

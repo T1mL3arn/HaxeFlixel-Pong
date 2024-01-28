@@ -99,6 +99,7 @@
 	<!-- Fix "Don't know how to cast array" error for HL build, 
 		see https://github.com/openfl/lime/pull/1742 for details -->
 	<haxeflag name="--macro haxe.macro.Compiler.addMetadata('@:analyzer(no_optimize)', 'lime.text.Font')" if="HL_PATH"/>
+	<haxeflag name="--macro haxe.macro.Compiler.addMetadata('@:analyzer(no_optimize)', 'openf.text.Font')" if="HL_PATH"/>
 
 	<haxeflag name="--macro addMetadata('@:build(utils.BuildMacro.netplayUID())', 'flixel.FlxBasic')" />
 

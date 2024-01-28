@@ -29,6 +29,8 @@ HaxeFlixel clone of PONG with multiplayer. Open [this link](https://t1ml3arn.git
 
 Debug builds (for desktop target) have fast connection mode for convenience - run the game instances with `pong.exe --server` and `pong.exe --client`.
 
+Enable/disable shaders with `7` + `8` keys.
+
 ## License
 
 Code: WTFPL
