@@ -102,8 +102,7 @@ class CongratScreen extends BaseState {
 					Flixel.sound.play(AssetPaths.win_crowd_applause__ogg, 1.0, false, GAME.gameSoundGroup);
 				}
 				else {
-					// TODO: play looser sound
-					trace('playing LOOSER sound');
+					Flixel.sound.play(AssetPaths.lose_crowd_disappointed__ogg, 1.0, false, GAME.gameSoundGroup);
 				}
 			}
 		}

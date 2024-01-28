@@ -34,7 +34,11 @@ class TwoPlayerRoom extends room.TwoPlayersRoom {
 	**/
 	var gameFinished:Bool = false;
 
+	var gameStarted:Bool = false;
+
 	var interpolationTweens:Map<Int, FlxTween> = [];
+
+	var readyToStartTimer:FlxTimer;
 
 	public function new(?left:PlayerOptions, ?right:PlayerOptions) {
 		super(left, right);
@@ -123,6 +127,32 @@ class TwoPlayerRoom extends room.TwoPlayersRoom {
 		// disable/mute sound for debug tests
 		Flixel.sound.muted = GAME.peer.isServer;
 		#end
+
+		// client periodicaly reports it is ready to start
+		if (!GAME.peer.isServer) {
+			#if (debug && false)
+			// delay "readyness" for test purpose (change false to true)
+			trace('BEFORE DELAY');
+			haxe.Timer.delay(() -> {
+				trace('client: delay before ReadyToStart is complete');
+				GAME.peer.send(ReadyToStart);
+				readyToStartTimer = new FlxTimer(timerManager).start(0.1, t -> {
+					GAME.peer.send(ReadyToStart);
+					// TODO exit netplay after timeout - server/client didnt response.
+				}, 0);
+			}, 5000);
+			#else
+			//
+			//
+			GAME.peer.send(ReadyToStart);
+
+			// after room is created the client is ready to start
+			readyToStartTimer = new FlxTimer(timerManager).start(0.1, t -> {
+				GAME.peer.send(ReadyToStart);
+				// TODO exit netplay after timeout - server/client didnt response.
+			}, 0);
+			#end
+		}
 	}
 
 	function flushPeerData() {
@@ -169,6 +199,8 @@ class TwoPlayerRoom extends room.TwoPlayersRoom {
 					messageBallPreserve(msg.data);
 				case ShowCongratScreen:
 					messageShowCongratScreen(msg.data);
+				case ReadyToStart:
+					messageReadyToStart();
 				case _:
 			}
 		}
@@ -177,6 +209,8 @@ class TwoPlayerRoom extends room.TwoPlayersRoom {
 			// logmsg(msg);
 
 			switch (msg.type) {
+				case StartGame:
+					messageStartGame();
 				case PaddleData:
 					messagePaddleData(msg.data);
 				case BallData:
@@ -199,6 +233,20 @@ class TwoPlayerRoom extends room.TwoPlayersRoom {
 					0;
 			}
 		}
+	}
+
+	function messageReadyToStart() {
+		GAME.peer.send(StartGame);
+		gameStarted = true;
+		// trace('message ReadyToStart');
+	}
+
+	function messageStartGame() {
+		gameStarted = true;
+		readyToStartTimer.cancel();
+		readyToStartTimer.destroy();
+		readyToStartTimer = null;
+		// trace('message StartGame');
 	}
 
 	function messageResetRoom() {
@@ -330,6 +378,9 @@ class TwoPlayerRoom extends room.TwoPlayersRoom {
 	}
 
 	override function roomUpdate(dt:Float) {
+		if (!gameStarted)
+			return;
+
 		if (GAME.peer.isServer) {
 			super.roomUpdate(dt);
 		}

@@ -1,0 +1,7 @@
+--library simple-peer
+--library anette
+--library lime:8.1.1
+--library openfl:git:https://github.com/T1mL3arn/openfl.git#shader-code-from-file
+--library flixel:git:https://github.com/T1mL3arn/flixel.git#pong-branch
+--library flixel-text-input:2.0.2
+--library djFlixel:git:https://github.com/john32b/djFlixel.git#d60d1fbe0e0a3e3ee3f10c23efd74c69e2816bb1

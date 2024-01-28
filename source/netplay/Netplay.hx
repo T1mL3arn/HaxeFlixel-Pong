@@ -9,6 +9,8 @@ inline function nextUid():Int
 	return netplayUid++;
 
 enum abstract NetplayMessageKind(String) {
+	var ReadyToStart;
+	var StartGame;
 	var PaddleAction;
 	var PaddleData;
 	var BallData;

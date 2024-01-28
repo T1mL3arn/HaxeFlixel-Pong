@@ -37,11 +37,7 @@
 	<!-- _______________________________ Libraries ______________________________ -->
 
 	<haxelib name="flixel" version="5.6.0" />
-	<haxelib 
-		name="djFlixel" 
-		comment="use version: 0.5.9, since it is GIT lib I cannot use Lime attribute
-		'version' directly cause haxelib won't see the library" 
-	/>
+	<haxelib name="djFlixel" />
 	<haxelib name="simple-peer" if="html5"/>
 	<haxelib name="anette" if="desktop"/>
 	<haxelib name="flixel-text-input"/>
