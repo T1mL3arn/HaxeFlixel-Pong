@@ -907,7 +907,7 @@ ApplicationMain.main = function() {
 ApplicationMain.create = function(config) {
 	var app = new openfl_display_Application();
 	ManifestResources.init(config);
-	app.meta.h["build"] = "458";
+	app.meta.h["build"] = "493";
 	app.meta.h["company"] = "HaxeFlixel";
 	app.meta.h["file"] = "Pong";
 	app.meta.h["name"] = "Pong";
@@ -3441,7 +3441,7 @@ var Main = function() {
 	djFlixel_D.ui.initIcons([8]);
 	this.addChild(new Pong());
 	flixel_FlxG.autoPause = false;
-	var nextState = flixel_util_typeLimit_NextState.fromState(new network_$wrtc_Lobby1v1());
+	var nextState = flixel_util_typeLimit_NextState.fromState(new menu_MainMenu());
 	var stateOnCall = flixel_FlxG.game._state;
 	if(!((nextState) instanceof flixel_FlxState) || flixel_FlxG.canSwitchTo(nextState)) {
 		flixel_FlxG.game._state.startOutro(function() {
@@ -6774,7 +6774,7 @@ LevelBuilder.prototype = {
 		var size = options.size == null ? LevelBuilder_defaultWallParams.size : options.size;
 		var padding = options.padding == null ? LevelBuilder_defaultWallParams.padding : options.padding;
 		var wall = new flixel_FlxSprite();
-		wall.netplayUid = network_$wrtc_Network_netplayUid++;
+		wall.netplayUid = netplay_Netplay_netplayUid++;
 		wall.elasticity = 1;
 		wall.set_immovable(true);
 		switch(pos) {
@@ -6819,7 +6819,7 @@ LevelBuilder.prototype = {
 	}
 	,getPlayer: function(options) {
 		var racket = new racket_Racket({ direction : options.position, thickness : Pong.params.racketThickness, size : Pong.params.racketLength, color : options.color});
-		racket.netplayUid = network_$wrtc_Network_netplayUid++;
+		racket.netplayUid = netplay_Netplay_netplayUid++;
 		racket.set_x((flixel_FlxG.width - racket.get_width()) / 2);
 		racket.set_y((flixel_FlxG.height - racket.get_height()) / 2);
 		var _g = options.position;
@@ -6840,7 +6840,7 @@ LevelBuilder.prototype = {
 		}
 		racket.set_x(tmp);
 		var player = new Player(racket);
-		player.netplayUid = network_$wrtc_Network_netplayUid++;
+		player.netplayUid = netplay_Netplay_netplayUid++;
 		player.options = options;
 		player.name = options.name;
 		var tmp = options.uid;
@@ -6918,7 +6918,7 @@ LevelBuilder.prototype = {
 		label.set_y(flixel_FlxG.height * 0.0675);
 		label.set_x(label.x + 60.0);
 		var ball = new Ball();
-		ball.netplayUid = network_$wrtc_Network_netplayUid++;
+		ball.netplayUid = netplay_Netplay_netplayUid++;
 		return { ball : ball, walls : walls, players : players, middleLine : middleLine};
 	}
 	,__class__: LevelBuilder
@@ -6944,7 +6944,7 @@ ManifestResources.init = function(config) {
 	}
 	openfl_text_Font.registerFont(_$_$ASSET_$_$OPENFL_$_$flixel_$fonts_$nokiafc22_$ttf);
 	openfl_text_Font.registerFont(_$_$ASSET_$_$OPENFL_$_$flixel_$fonts_$monsterrat_$ttf);
-	var library = lime_utils_AssetLibrary.fromManifest(lime_utils_AssetManifest.parse("{\"name\":null,\"assets\":\"aoy4:pathy41:assets%2Fimages%2Farrow%20cursor%2016.pngy4:sizei165y4:typey5:IMAGEy2:idR1y7:preloadtgoR0y25:assets%2Fimages%2Fcup.pngR2i3047R3R4R5R7R6tgoR0y39:assets%2Fimages%2Fgh%20icon%20final.pngR2i1146R3R4R5R8R6tgoR0y43:assets%2Fimages%2Fpointer%20cursor%2016.pngR2i183R3R4R5R9R6tgoR2i3775R3y5:SOUNDR5y42:assets%2Fsounds%2Fsfx_ball_collision-1.oggy9:pathGroupaR11hR6tgoR2i3902R3R10R5y42:assets%2Fsounds%2Fsfx_ball_collision-2.oggR12aR13hR6tgoR2i3863R3R10R5y42:assets%2Fsounds%2Fsfx_ball_collision-3.oggR12aR14hR6tgoR2i3873R3R10R5y42:assets%2Fsounds%2Fsfx_ball_collision-4.oggR12aR15hR6tgoR2i5722R3R10R5y33:assets%2Fsounds%2Fsfx_speedup.oggR12aR16hR6tgoR2i69426R3R10R5y44:assets%2Fsounds%2Fwin%20crowd%20applause.oggR12aR17hR6tgoR2i16808R3R10R5y40:assets%2Fsounds%2Fyeah%20crowd%20men.oggR12aR18hR6tgoR2i8220R3y5:MUSICR5y26:flixel%2Fsounds%2Fbeep.mp3R12aR20y26:flixel%2Fsounds%2Fbeep.ogghR6tgoR2i39706R3R19R5y28:flixel%2Fsounds%2Fflixel.mp3R12aR22y28:flixel%2Fsounds%2Fflixel.ogghR6tgoR2i6840R3R10R5R21R12aR20R21hgoR2i33629R3R10R5R23R12aR22R23hgoR2i15744R3y4:FONTy9:classNamey35:__ASSET__flixel_fonts_nokiafc22_ttfR5y30:flixel%2Ffonts%2Fnokiafc22.ttfR6tgoR2i29724R3R24R25y36:__ASSET__flixel_fonts_monsterrat_ttfR5y31:flixel%2Ffonts%2Fmonsterrat.ttfR6tgoR0y33:flixel%2Fimages%2Fui%2Fbutton.pngR2i248R3R4R5R30R6tgoR0y36:flixel%2Fimages%2Flogo%2Fdefault.pngR2i505R3R4R5R31R6tgoR0y21:assets%2Fui_atlas.pngR2i4803R3R4R5R32R6tgh\",\"rootPath\":null,\"version\":2,\"libraryArgs\":[],\"libraryType\":null}",ManifestResources.rootPath));
+	var library = lime_utils_AssetLibrary.fromManifest(lime_utils_AssetManifest.parse("{\"name\":null,\"assets\":\"aoy4:pathy41:assets%2Fimages%2Farrow%20cursor%2016.pngy4:sizei165y4:typey5:IMAGEy2:idR1y7:preloadtgoR0y25:assets%2Fimages%2Fcup.pngR2i3047R3R4R5R7R6tgoR0y39:assets%2Fimages%2Fgh%20icon%20final.pngR2i1146R3R4R5R8R6tgoR0y43:assets%2Fimages%2Fpointer%20cursor%2016.pngR2i183R3R4R5R9R6tgoR2i17226R3y5:SOUNDR5y49:assets%2Fsounds%2Flose%20crowd%20disappointed.oggy9:pathGroupaR11hR6tgoR2i3775R3R10R5y42:assets%2Fsounds%2Fsfx_ball_collision-1.oggR12aR13hR6tgoR2i3902R3R10R5y42:assets%2Fsounds%2Fsfx_ball_collision-2.oggR12aR14hR6tgoR2i3863R3R10R5y42:assets%2Fsounds%2Fsfx_ball_collision-3.oggR12aR15hR6tgoR2i3873R3R10R5y42:assets%2Fsounds%2Fsfx_ball_collision-4.oggR12aR16hR6tgoR2i5722R3R10R5y33:assets%2Fsounds%2Fsfx_speedup.oggR12aR17hR6tgoR2i69426R3R10R5y44:assets%2Fsounds%2Fwin%20crowd%20applause.oggR12aR18hR6tgoR2i16808R3R10R5y40:assets%2Fsounds%2Fyeah%20crowd%20men.oggR12aR19hR6tgoR2i8220R3y5:MUSICR5y26:flixel%2Fsounds%2Fbeep.mp3R12aR21y26:flixel%2Fsounds%2Fbeep.ogghR6tgoR2i39706R3R20R5y28:flixel%2Fsounds%2Fflixel.mp3R12aR23y28:flixel%2Fsounds%2Fflixel.ogghR6tgoR2i6840R3R10R5R22R12aR21R22hgoR2i33629R3R10R5R24R12aR23R24hgoR2i15744R3y4:FONTy9:classNamey35:__ASSET__flixel_fonts_nokiafc22_ttfR5y30:flixel%2Ffonts%2Fnokiafc22.ttfR6tgoR2i29724R3R25R26y36:__ASSET__flixel_fonts_monsterrat_ttfR5y31:flixel%2Ffonts%2Fmonsterrat.ttfR6tgoR0y33:flixel%2Fimages%2Fui%2Fbutton.pngR2i248R3R4R5R31R6tgoR0y36:flixel%2Fimages%2Flogo%2Fdefault.pngR2i505R3R4R5R32R6tgoR0y21:assets%2Fui_atlas.pngR2i4803R3R4R5R33R6tgh\",\"rootPath\":null,\"version\":2,\"libraryArgs\":[],\"libraryType\":null}",ManifestResources.rootPath));
 	lime_utils_Assets.registerLibrary("default",library);
 	library = lime_utils_Assets.getLibrary("default");
 	if(library != null) {
@@ -7979,7 +7979,6 @@ var flixel_FlxGame = function(gameWidth,gameHeight,initialState,updateFramerate,
 	}
 	this._resetGame = false;
 	this._skipSplash = false;
-	this._customFocusLostScreen = flixel_system_ui_FlxFocusLostScreen;
 	this._customSoundTray = flixel_system_ui_FlxSoundTray;
 	this._lostFocus = false;
 	this._startTime = 0;
@@ -8026,10 +8025,8 @@ flixel_FlxGame.prototype = $extend(openfl_display_Sprite.prototype,{
 	,_maxAccumulation: null
 	,_lostFocus: null
 	,_filters: null
-	,_focusLostScreen: null
 	,_inputContainer: null
 	,_customSoundTray: null
-	,_customFocusLostScreen: null
 	,_skipSplash: null
 	,_nextState: null
 	,_resetGame: null
@@ -8049,8 +8046,6 @@ flixel_FlxGame.prototype = $extend(openfl_display_Sprite.prototype,{
 		this.addChild(this._inputContainer);
 		this.soundTray = Type.createInstance(this._customSoundTray,[]);
 		this.addChild(this.soundTray);
-		this._focusLostScreen = Type.createInstance(this._customFocusLostScreen,[]);
-		this.addChild(this._focusLostScreen);
 		this.stage.addEventListener("deactivate",$bind(this,this.onFocusLost));
 		this.stage.addEventListener("activate",$bind(this,this.onFocus));
 		var _gthis = this;
@@ -8082,9 +8077,6 @@ flixel_FlxGame.prototype = $extend(openfl_display_Sprite.prototype,{
 		if(!flixel_FlxG.autoPause) {
 			return;
 		}
-		if(this._focusLostScreen != null) {
-			this._focusLostScreen.set_visible(false);
-		}
 		this.stage.set_frameRate(flixel_FlxG.drawFramerate);
 		flixel_FlxG.sound.onFocus();
 		var _g = 0;
@@ -8092,17 +8084,11 @@ flixel_FlxGame.prototype = $extend(openfl_display_Sprite.prototype,{
 		while(_g < _g1.length) _g1[_g++].onFocus();
 	}
 	,onFocusLost: function(event) {
-		if(event != null && openfl_utils_Object.__neq(event.target,openfl_Lib.get_current().stage)) {
-			return;
-		}
 		this._lostFocus = true;
 		flixel_FlxG.signals.focusLost.dispatch();
 		this._state.onFocusLost();
 		if(!flixel_FlxG.autoPause) {
 			return;
-		}
-		if(this._focusLostScreen != null) {
-			this._focusLostScreen.set_visible(true);
 		}
 		this.stage.set_frameRate(this.focusLostFramerate);
 		flixel_FlxG.sound.onFocusLost();
@@ -8123,9 +8109,6 @@ flixel_FlxGame.prototype = $extend(openfl_display_Sprite.prototype,{
 		this._state.onResize(width,height);
 		flixel_FlxG.cameras.resize();
 		flixel_FlxG.signals.gameResized.dispatch(width,height);
-		if(this._focusLostScreen != null) {
-			this._focusLostScreen.draw();
-		}
 		if(this.soundTray != null) {
 			this.soundTray.screenCenter();
 		}
@@ -8483,6 +8466,7 @@ Reflect.makeVarArgs = function(f) {
 };
 var Pong = function() {
 	this.signals = { keyPress : flixel_FlxG.signals.postUpdate, ballServed : new flixel_util__$FlxSignal_FlxSignal0(), substateOpened : new flixel_util__$FlxSignal_FlxSignal2(), substateClosed : new flixel_util__$FlxSignal_FlxSignal2(), ballCollision : new flixel_util__$FlxSignal_FlxSignal2(), pauseChange : new flixel_util__$FlxSignal_FlxSignal1(), goal : new flixel_util__$FlxSignal_FlxSignal1()};
+	this.host = { address : "localhost", port : "12345"};
 	var _gthis = this;
 	flixel_FlxGame.call(this,0,0,null,null,null,true);
 	this.filtersEnabled = true;
@@ -8504,8 +8488,15 @@ var Pong = function() {
 		flixel_FlxG.camera.filtersEnabled = _gthis.filtersEnabled;
 	});
 	this.signals.keyPress.add(function() {
-		var _this = flixel_FlxG.keys.justPressed;
-		if(_this.keyManager.checkStatusUnsafe(84,_this.status)) {
+		var tmp;
+		var _this = flixel_FlxG.keys.pressed;
+		if(_this.keyManager.checkStatusUnsafe(55,_this.status)) {
+			var _this = flixel_FlxG.keys.justPressed;
+			tmp = _this.keyManager.checkStatusUnsafe(56,_this.status);
+		} else {
+			tmp = false;
+		}
+		if(tmp) {
 			_gthis.filtersEnabled = !_gthis.filtersEnabled;
 			flixel_FlxG.camera.filtersEnabled = _gthis.filtersEnabled;
 		}
@@ -8541,6 +8532,7 @@ Pong.__super__ = flixel_FlxGame;
 Pong.prototype = $extend(flixel_FlxGame.prototype,{
 	room: null
 	,peer: null
+	,host: null
 	,signals: null
 	,gameSoundGroup: null
 	,__class__: Pong
@@ -12910,11 +12902,10 @@ var djFlixel_ui_FlxAutoText = function(X,Y,FieldWidth,Lines) {
 	if(X == null) {
 		X = 0;
 	}
-	this._precalcHeight = 0;
 	this.newpageWait = 9;
 	this.sound = { char : null, wait : null, pause : null};
-	this.carrier = null;
-	this.carrierEnabled = false;
+	this.caret = null;
+	this.caretEnabled = false;
 	flixel_group_FlxTypedSpriteGroup.call(this,X,Y);
 	this.linesMax = Lines;
 	if(FieldWidth == -1) {
@@ -12944,11 +12935,11 @@ djFlixel_ui_FlxAutoText.prototype = $extend(flixel_group_FlxTypedSpriteGroup.pro
 	,textStart: null
 	,textIndex: null
 	,newpageFlag: null
-	,carrierEnabled: null
-	,carrier: null
-	,carrierBlinkRate: null
-	,carrierOffsets: null
-	,carrierTimer: null
+	,caretEnabled: null
+	,caret: null
+	,caretBlinkRate: null
+	,caretOffsets: null
+	,caretTimer: null
 	,textObj: null
 	,style: null
 	,isPaused: null
@@ -12958,7 +12949,6 @@ djFlixel_ui_FlxAutoText.prototype = $extend(flixel_group_FlxTypedSpriteGroup.pro
 	,onComplete: null
 	,sound: null
 	,newpageWait: null
-	,_precalcHeight: null
 	,get_width: function() {
 		return this.textObj.get_width();
 	}
@@ -12969,12 +12959,15 @@ djFlixel_ui_FlxAutoText.prototype = $extend(flixel_group_FlxTypedSpriteGroup.pro
 	}
 	,update: function(elapsed) {
 		flixel_group_FlxTypedSpriteGroup.prototype.update.call(this,elapsed);
-		if(this.carrierEnabled && (this.carrierTimer += elapsed) >= this.carrierBlinkRate) {
-			this.carrier.set_visible(!this.carrier.visible);
-			this.carrierTimer = 0;
+		if(this.caretEnabled && (this.caretTimer += elapsed) >= this.caretBlinkRate) {
+			this.caret.set_visible(!this.caret.visible);
+			this.caretTimer = 0;
 		}
 		if(!this.isPaused && (this.timer += elapsed) >= this.tw) {
 			if(this.newpageFlag) {
+				if(this.lineBreaks[0] == this.textIndex) {
+					this.lineBreaks.shift();
+				}
 				if(["\n","\r"].indexOf(this.text.charAt(this.textIndex)) >= 0) {
 					this.textIndex++;
 				}
@@ -13023,7 +13016,7 @@ djFlixel_ui_FlxAutoText.prototype = $extend(flixel_group_FlxTypedSpriteGroup.pro
 			if(this.textIndex >= this.text.length) {
 				this.textIndex = this.text.length;
 				if(this.TAGS.length == 0) {
-					this.carrier_state(false);
+					this.caret_state(false);
 					this.textObj.set_text(HxOverrides.substr(this.text,this.textStart,this.textIndex - this.textStart));
 					this.set_active(false);
 					this.isComplete = true;
@@ -13038,13 +13031,17 @@ djFlixel_ui_FlxAutoText.prototype = $extend(flixel_group_FlxTypedSpriteGroup.pro
 			}
 			this.tags_check_and_apply();
 			this.textObj.set_text(HxOverrides.substr(this.text,this.textStart,this.textIndex - this.textStart));
+			if(this.textObj.text.charAt(this.textObj.text.length - 1) == "\n") {
+				var fh = this.textObj;
+				fh.set_text(fh.text + djFlixel_ui_FlxAutoText.INV_CHAR);
+			}
 			if(this.sound.char != null) {
 				djFlixel_D.snd.playV(this.sound.char);
 			}
-			if(this.carrierEnabled) {
-				this.carrier_update();
-				this.carrierTimer = 0;
-				this.carrier.set_visible(true);
+			if(this.caretEnabled) {
+				this.caret_update();
+				this.caretTimer = 0;
+				this.caret.set_visible(true);
 			}
 		}
 	}
@@ -13054,19 +13051,16 @@ djFlixel_ui_FlxAutoText.prototype = $extend(flixel_group_FlxTypedSpriteGroup.pro
 		}
 		this.text = this.tags_parse(source);
 		this.isPaused = this.isComplete = false;
-		this.textIndex = 0;
+		this.textIndex = this.textStart = 0;
+		this.lineCurrent = 1;
 		this.timer = 0;
 		this.lastTW = 0;
 		this.wordWait = 0;
 		this.wordNextSpace = 0;
-		this.lineCurrent = 1;
-		this.textStart = 0;
-		this.tags_calc_next();
-		this.tags_check_and_apply();
 		this.textObj.set_visible(false);
 		this.textObj.set_text(this.text);
 		this.text = this.getBakedLineBrakes();
-		this.textObj.set_text("‎ ");
+		this.textObj.set_text(djFlixel_ui_FlxAutoText.INV_CHAR);
 		this.textObj.set_visible(true);
 		this.lineBreaks = [];
 		var _g = 0;
@@ -13078,11 +13072,13 @@ djFlixel_ui_FlxAutoText.prototype = $extend(flixel_group_FlxTypedSpriteGroup.pro
 				this.lineBreaks.push(i);
 			}
 		}
+		this.tags_calc_next();
+		this.tags_check_and_apply();
 		if(start) {
 			this.set_active(true);
 		}
 	}
-	,setCarrier: function(symbol,spr,offsets,tick) {
+	,setCaret: function(symbol,spr,offsets,tick) {
 		if(tick == null) {
 			tick = 0.24;
 		}
@@ -13099,12 +13095,21 @@ djFlixel_ui_FlxAutoText.prototype = $extend(flixel_group_FlxTypedSpriteGroup.pro
 		if(offsets == null) {
 			offsets = [0,0];
 		}
-		this.add(this.carrier = C);
-		this.carrierEnabled = true;
-		this.carrierBlinkRate = tick;
-		this.carrierTimer = 0;
-		this.carrier.set_visible(false);
-		this.carrierOffsets = offsets;
+		this.add(this.caret = C);
+		this.caretEnabled = true;
+		this.caretBlinkRate = tick;
+		this.caretTimer = 0;
+		this.caret.set_visible(false);
+		this.caretOffsets = offsets;
+	}
+	,setCarrier: function(a,b,c,d) {
+		if(d == null) {
+			d = 0.24;
+		}
+		if(a == null) {
+			a = "_";
+		}
+		this.setCaret(a,b,c,d);
 	}
 	,setCPS: function(v) {
 		this.cps = v;
@@ -13172,7 +13177,7 @@ djFlixel_ui_FlxAutoText.prototype = $extend(flixel_group_FlxTypedSpriteGroup.pro
 			this.textIndex = this.text.length;
 			this.textObj.set_text(HxOverrides.substr(this.text,this.textStart,this.textIndex - this.textStart));
 		}
-		this.carrier_state(false);
+		this.caret_state(false);
 		this.timer = 0;
 		this.set_active(false);
 	}
@@ -13254,10 +13259,10 @@ djFlixel_ui_FlxAutoText.prototype = $extend(flixel_group_FlxTypedSpriteGroup.pro
 			if(_g != null) {
 				switch(_g) {
 				case 0:
-					this.carrier_state(false);
+					this.caret_state(false);
 					break;
 				case 1:
-					this.carrier_state(true);
+					this.caret_state(true);
 					break;
 				case 100:
 					this.newpageFlag = true;
@@ -13286,21 +13291,19 @@ djFlixel_ui_FlxAutoText.prototype = $extend(flixel_group_FlxTypedSpriteGroup.pro
 			this.nextTagIndex = this.TAGS[0].index;
 		}
 	}
-	,carrier_update: function() {
-		var tm = this.textObj.textField.getLineMetrics(this.textObj.textField.get_numLines() - 1);
-		if(tm.height == 0) {
-			tm.height = this._precalcHeight;
-		}
-		this.carrier.set_y(this.y + 2 + this.carrierOffsets[1] + (this.lineCurrent - 1) * tm.height);
-		this.carrier.set_x(this.x + 2 + tm.width + this.carrierOffsets[0]);
+	,caret_update: function() {
+		var numLines = this.textObj.textField.get_numLines();
+		var tm = this.textObj.textField.getLineMetrics(numLines - 1);
+		this.caret.set_y(this.y + this.caretOffsets[1] + (numLines - 1) * tm.height);
+		this.caret.set_x(this.x + tm.width + this.caretOffsets[0]);
 	}
-	,carrier_state: function(enabled) {
-		if(this.carrier == null) {
+	,caret_state: function(enabled) {
+		if(this.caret == null) {
 			return;
 		}
-		this.carrier.set_visible(enabled);
-		this.carrierEnabled = enabled;
-		this.carrierTimer = 0;
+		this.caret.set_visible(enabled);
+		this.caretEnabled = enabled;
+		this.caretTimer = 0;
 	}
 	,event_c: function(e) {
 		if(this.onEvent != null) {
@@ -13323,10 +13326,10 @@ djFlixel_ui_FlxAutoText.prototype = $extend(flixel_group_FlxTypedSpriteGroup.pro
 					var _g2 = 0;
 					var _g3 = this.TAGS;
 					while(_g2 < _g3.length) {
-						var t1 = _g3[_g2];
+						var tg = _g3[_g2];
 						++_g2;
-						if(t1.index >= ci) {
-							t1.index++;
+						if(tg.index >= ci) {
+							tg.index++;
 						}
 					}
 				}
@@ -13340,9 +13343,6 @@ djFlixel_ui_FlxAutoText.prototype = $extend(flixel_group_FlxTypedSpriteGroup.pro
 	,set_style: function(val) {
 		this.style = val;
 		djFlixel_D.text.applyStyle(this.textObj,this.style);
-		this.textObj.set_text("A\nB");
-		this._precalcHeight = this.textObj.textField.getLineMetrics(1).height;
-		this.textObj.set_text("");
 		return val;
 	}
 	,__class__: djFlixel_ui_FlxAutoText
@@ -14173,16 +14173,22 @@ djFlixel_ui_VList.prototype = $extend(flixel_group_FlxTypedSpriteGroup.prototype
 		while(this.eventQueue.length > 0) (this.eventQueue.shift())();
 	}
 	,focus: function() {
+		if(this.data == null) {
+			return;
+		}
 		if(this.isFocused || this.isScrolling) {
 			return;
 		}
 		this.isFocused = true;
 		this.queue_listEvent("focus");
-		if(this.inputMode == 2) {
-			this.slot_focus(this.indexLastSlot);
-		}
 		if(this.scind != null) {
 			this.scind.visible();
+		}
+		if(this.inputMode == 2) {
+			if(this.indexLastSlot == -1) {
+				return;
+			}
+			this.slot_focus(this.indexLastSlot);
 		}
 	}
 	,unfocus: function() {
@@ -14310,7 +14316,12 @@ djFlixel_ui_VList.prototype = $extend(flixel_group_FlxTypedSpriteGroup.prototype
 			}
 		}
 		if(this.inputMode == 2) {
-			this.setSelection(this.get_nextSelectableIndex(0,1));
+			var ind = this.get_nextSelectableIndex(0,1);
+			if(ind < 0) {
+				this.setScroll(0);
+			} else {
+				this.setSelection(ind);
+			}
 		} else {
 			this.setScroll(0);
 		}
@@ -14327,6 +14338,8 @@ djFlixel_ui_VList.prototype = $extend(flixel_group_FlxTypedSpriteGroup.prototype
 		}
 		if(ind >= this.data.length) {
 			ind = this.data.length - 1;
+		} else if(ind < 0) {
+			ind = 0;
 		}
 		if(this.isFocused) {
 			this.slot_unfocus();
@@ -14399,7 +14412,9 @@ djFlixel_ui_VList.prototype = $extend(flixel_group_FlxTypedSpriteGroup.prototype
 			} else {
 				this.scrollDown1();
 			}
-		} else if(this.inputMode == 1) {
+		} else if(djFlixel_D.ctrl.justPressed(6)) {
+			this.queue_listEvent("back");
+		} else if(this.inputMode == 1 || this.indexItem == null) {
 			return;
 		}
 		if(djFlixel_D.ctrl.timePress(3,0.7,0.08,0.02)) {
@@ -14412,8 +14427,6 @@ djFlixel_ui_VList.prototype = $extend(flixel_group_FlxTypedSpriteGroup.prototype
 			} else {
 				this.indexItem.onInput(djFlixel_ui_ListItemInput.fire);
 			}
-		} else if(djFlixel_D.ctrl.justPressed(6)) {
-			this.queue_listEvent("back");
 		} else if(djFlixel_D.ctrl.justPressed(9)) {
 			if(this.OPT.start_button_fire) {
 				this.indexItem.onInput(djFlixel_ui_ListItemInput.fire);
@@ -14487,7 +14500,7 @@ djFlixel_ui_VList.prototype = $extend(flixel_group_FlxTypedSpriteGroup.prototype
 				}
 			}
 		}
-		if(this.inputMode < 2) {
+		if(this.inputMode < 2 || this.indexItem == null) {
 			return;
 		}
 		var _g = 0;
@@ -14885,6 +14898,7 @@ djFlixel_ui_VList.prototype = $extend(flixel_group_FlxTypedSpriteGroup.prototype
 	,__properties__: $extend(flixel_group_FlxTypedSpriteGroup.prototype.__properties__,{set_scrollPadding:"set_scrollPadding"})
 });
 var djFlixel_ui_menu_MCursor = function(style) {
+	this._tween = null;
 	this.C = style.cursor;
 	if(this.C.anim != null) {
 		var dat = this.C.anim.split(",");
@@ -14947,6 +14961,7 @@ djFlixel_ui_menu_MCursor.prototype = {
 	,xbase: null
 	,tw_x: null
 	,tw_a: null
+	,_tween: null
 	,attach: function(v) {
 		if(this.group != null) {
 			this.group.remove(this.spr);
@@ -14963,8 +14978,10 @@ djFlixel_ui_menu_MCursor.prototype = {
 			this.tw_a = this.C.tween.a0;
 			this.tw_x = this.C.tween.x0;
 			this.spr.set_alpha(this.tw_a);
-			flixel_tweens_FlxTween.cancelTweensOf(this);
-			flixel_tweens_FlxTween.tween(this,{ tw_x : this.C.tween.x1, tw_a : this.C.tween.a1},this.C.tween.time,{ ease : this.easefn, onUpdate : function(_) {
+			if(this._tween != null) {
+				this._tween.cancel();
+			}
+			this._tween = flixel_tweens_FlxTween.tween(this,{ tw_x : this.C.tween.x1, tw_a : this.C.tween.a1},this.C.tween.time,{ ease : this.easefn, onUpdate : function(_) {
 				_gthis.spr.set_alpha(_gthis.tw_a);
 				_gthis.spr.set_x(_gthis.xbase - _gthis.spr.get_width() + _gthis.tw_x);
 			}});
@@ -15145,7 +15162,17 @@ var djFlixel_ui_menu_MItemData = function(str) {
 	this.type = null;
 	this.disabled = false;
 	this.selectable = true;
-	this.parse(str);
+	try {
+		this.parse(str);
+	} catch( _g ) {
+		haxe_NativeStackTrace.lastError = _g;
+		var _g1 = haxe_Exception.caught(_g).unwrap();
+		if(typeof(_g1) == "string") {
+			throw new haxe_Exception("Error Parsing line\n\"" + str + "\"\n::" + _g1);
+		} else {
+			throw _g;
+		}
+	}
 };
 $hxClasses["djFlixel.ui.menu.MItemData"] = djFlixel_ui_menu_MItemData;
 djFlixel_ui_menu_MItemData.__name__ = "djFlixel.ui.menu.MItemData";
@@ -15167,34 +15194,28 @@ djFlixel_ui_menu_MItemData.prototype = {
 			var i = _g++;
 			result[i] = StringTools.trim(_this[i]);
 		}
-		var _g = [];
-		var _g1 = 0;
-		while(_g1 < result.length) {
-			var v = result[_g1];
-			++_g1;
-			if(v.length > 0) {
-				_g.push(v);
-			}
+		var F = result;
+		if(F.length < 2) {
+			throw haxe_Exception.thrown("Insufficient fields");
 		}
-		var F = _g;
 		this.label = F.shift();
-		if(this.label == null) {
-			throw haxe_Exception.thrown("MenuItem Must have a Label");
-		}
 		try {
 			this.type = Type.createEnum(djFlixel_ui_menu_MItemType,F.shift(),null);
 		} catch( _g ) {
-			throw haxe_Exception.thrown("Wrong MenuItemType at \"" + this.label + "\" Typo?");
+			throw haxe_Exception.thrown("Undefined TYPE, typo?");
 		}
 		this.ID = F.shift();
-		if(this.ID == null && this.type != djFlixel_ui_menu_MItemType.label) {
-			throw haxe_Exception.thrown("ItemData \"" + this.label + "\" must have an ID");
+		if((this.ID == null || this.ID == "") && this.type != djFlixel_ui_menu_MItemType.label) {
+			throw haxe_Exception.thrown("No ID defined");
 		}
 		var feed = function(fn) {
 			var _g = 0;
 			while(_g < F.length) {
 				var i = F[_g];
 				++_g;
+				if(i == "") {
+					continue;
+				}
 				if(i == "AF") {
 					_gthis.P.autofocus = true;
 					continue;
@@ -15209,7 +15230,7 @@ djFlixel_ui_menu_MItemData.prototype = {
 				}
 				var KV = i.split("=");
 				if(KV.length != 2) {
-					throw haxe_Exception.thrown("Illegal MenuItem Parameter for " + _gthis.ID);
+					throw haxe_Exception.thrown("Illegal Parameter for \"" + i + "\"");
 				}
 				if(KV[0] == "I") {
 					_gthis.info = KV[1];
@@ -15237,14 +15258,14 @@ djFlixel_ui_menu_MItemData.prototype = {
 					}
 					_gthis.P.ask = v.split(":");
 					if(_gthis.P.ask.length != 3) {
-						throw haxe_Exception.thrown("Improper Ask Format. \"Question:Yes:No\" - Skip the Question with \":Yes:No\"");
+						throw haxe_Exception.thrown("Improper Ask Format");
 					}
 				}
 			});
 			break;
 		case 1:
 			if(F[0] == null) {
-				throw haxe_Exception.thrown("Range Item " + this.ID + " needs a range");
+				throw haxe_Exception.thrown("Must define a Range");
 			}
 			var _n = F.shift().split(",");
 			this.P.c = 0.0;
@@ -15272,7 +15293,7 @@ djFlixel_ui_menu_MItemData.prototype = {
 			break;
 		case 2:
 			if(F[0] == null) {
-				throw haxe_Exception.thrown("List Item " + this.ID + " needs a list");
+				throw haxe_Exception.thrown("Must define a List");
 			}
 			this.P.c = 0;
 			this.P.loop = false;
@@ -19979,7 +20000,7 @@ flixel_math_FlxRandom.prototype = {
 		}
 		return selected;
 	}
-	,getObject_Player: function(Objects,WeightsArray,StartIndex,EndIndex) {
+	,getObject_String: function(Objects,WeightsArray,StartIndex,EndIndex) {
 		if(StartIndex == null) {
 			StartIndex = 0;
 		}
@@ -20021,7 +20042,7 @@ flixel_math_FlxRandom.prototype = {
 		}
 		return selected;
 	}
-	,getObject_String: function(Objects,WeightsArray,StartIndex,EndIndex) {
+	,getObject_Player: function(Objects,WeightsArray,StartIndex,EndIndex) {
 		if(StartIndex == null) {
 			StartIndex = 0;
 		}
@@ -21404,6 +21425,3461 @@ flixel_FlxSubState.prototype = $extend(flixel_FlxState.prototype,{
 		return this._bgColor = Value;
 	}
 	,__class__: flixel_FlxSubState
+});
+var flixel_text_FlxText = function(X,Y,FieldWidth,Text1,Size,EmbeddedFont) {
+	if(EmbeddedFont == null) {
+		EmbeddedFont = true;
+	}
+	if(Size == null) {
+		Size = 8;
+	}
+	if(FieldWidth == null) {
+		FieldWidth = 0;
+	}
+	if(Y == null) {
+		Y = 0;
+	}
+	if(X == null) {
+		X = 0;
+	}
+	this._hasBorderAlpha = false;
+	this._regen = true;
+	this._formatRanges = [];
+	this._autoHeight = true;
+	this.borderQuality = 1;
+	this.borderSize = 1;
+	this.borderColor = 0;
+	this.borderStyle = flixel_text_FlxTextBorderStyle.NONE;
+	this.text = "";
+	flixel_FlxSprite.call(this,X,Y);
+	if(Text1 == null || Text1 == "") {
+		this.set_text("");
+		Text1 = " ";
+	} else {
+		this.set_text(Text1);
+	}
+	this.textField = new openfl_text_TextField();
+	this.textField.set_selectable(false);
+	this.textField.set_multiline(true);
+	this.textField.set_wordWrap(true);
+	this._defaultFormat = new openfl_text_TextFormat(null,Size,16777215);
+	this.set_font(flixel_system_FlxAssets.FONT_DEFAULT);
+	this._formatAdjusted = new openfl_text_TextFormat();
+	this.textField.set_defaultTextFormat(this._defaultFormat);
+	this.textField.set_text(Text1);
+	this.set_fieldWidth(FieldWidth);
+	this.textField.set_embedFonts(EmbeddedFont);
+	this.textField.set_sharpness(100);
+	this.textField.set_height(Text1.length <= 0 ? 1 : 10);
+	this.set_allowCollisions(0);
+	this.set_moves(false);
+	this.drawFrame();
+	var point = flixel_math_FlxBasePoint.pool.get().set(1,1);
+	point._inPool = false;
+	this.shadowOffset = point;
+};
+$hxClasses["flixel.text.FlxText"] = flixel_text_FlxText;
+flixel_text_FlxText.__name__ = "flixel.text.FlxText";
+flixel_text_FlxText.__super__ = flixel_FlxSprite;
+flixel_text_FlxText.prototype = $extend(flixel_FlxSprite.prototype,{
+	text: null
+	,borderStyle: null
+	,borderColor: null
+	,borderSize: null
+	,borderQuality: null
+	,textField: null
+	,_autoHeight: null
+	,shadowOffset: null
+	,_defaultFormat: null
+	,_formatAdjusted: null
+	,_formatRanges: null
+	,_font: null
+	,_regen: null
+	,_borderPixels: null
+	,_borderColorTransform: null
+	,_hasBorderAlpha: null
+	,destroy: function() {
+		this.textField = null;
+		this._font = null;
+		this._defaultFormat = null;
+		this._formatAdjusted = null;
+		this.shadowOffset = flixel_util_FlxDestroyUtil.put(this.shadowOffset);
+		flixel_FlxSprite.prototype.destroy.call(this);
+	}
+	,drawFrame: function(Force) {
+		if(Force == null) {
+			Force = false;
+		}
+		this._regen = this._regen || Force;
+		flixel_FlxSprite.prototype.drawFrame.call(this,this._regen);
+	}
+	,stampOnAtlas: function(atlas) {
+		this.regenGraphic();
+		var node = atlas.addNode(this.graphic.bitmap,this.graphic.key);
+		if(node != null) {
+			this.set_frames(node.getImageFrame());
+		}
+		return node != null;
+	}
+	,applyMarkup: function(input,rules) {
+		if(rules == null || rules.length == 0) {
+			return this;
+		}
+		this.clearFormats();
+		var rangeStarts = [];
+		var rangeEnds = [];
+		var rulesToApply = [];
+		var _g = 0;
+		while(_g < rules.length) {
+			var rule = rules[_g];
+			++_g;
+			if(rule.marker == null || rule.format == null) {
+				continue;
+			}
+			var start = false;
+			var markerLength = UnicodeString.get_length(rule.marker);
+			if(input.indexOf(rule.marker) == -1) {
+				continue;
+			}
+			var _g1 = 0;
+			var _g2 = UnicodeString.get_length(input);
+			while(_g1 < _g2) {
+				var charIndex = _g1++;
+				if(UnicodeString.substr(input,charIndex,markerLength) != rule.marker) {
+					continue;
+				}
+				if(start) {
+					start = false;
+					rangeEnds.push(charIndex);
+				} else {
+					start = true;
+					rangeStarts.push(charIndex);
+					rulesToApply.push(rule);
+				}
+			}
+			if(start) {
+				rangeEnds.push(-1);
+			}
+		}
+		var _g = 0;
+		while(_g < rules.length) input = StringTools.replace(input,rules[_g++].marker,"");
+		var _g = 0;
+		var _g1 = rangeStarts.length;
+		while(_g < _g1) {
+			var i = _g++;
+			var delIndex = rangeStarts[i];
+			var markerLength = UnicodeString.get_length(rulesToApply[i].marker);
+			var _g2 = 0;
+			var _g3 = rangeStarts.length;
+			while(_g2 < _g3) {
+				var j = _g2++;
+				if(rangeStarts[j] > delIndex) {
+					rangeStarts[j] -= markerLength;
+				}
+				if(rangeEnds[j] > delIndex) {
+					rangeEnds[j] -= markerLength;
+				}
+			}
+			delIndex = rangeEnds[i];
+			var _g4 = 0;
+			var _g5 = rangeStarts.length;
+			while(_g4 < _g5) {
+				var j1 = _g4++;
+				if(rangeStarts[j1] > delIndex) {
+					rangeStarts[j1] -= markerLength;
+				}
+				if(rangeEnds[j1] > delIndex) {
+					rangeEnds[j1] -= markerLength;
+				}
+			}
+		}
+		this.set_text(input);
+		var _g = 0;
+		var _g1 = rangeStarts.length;
+		while(_g < _g1) {
+			var i = _g++;
+			this.addFormat(rulesToApply[i].format,rangeStarts[i],rangeEnds[i]);
+		}
+		return this;
+	}
+	,addFormat: function(Format,Start,End) {
+		if(End == null) {
+			End = -1;
+		}
+		if(Start == null) {
+			Start = -1;
+		}
+		this._formatRanges.push(new flixel_text__$FlxText_FlxTextFormatRange(Format,Start,End));
+		this._formatRanges.sort(function(left,right) {
+			if(left.range.start < right.range.start) {
+				return -1;
+			} else {
+				return 1;
+			}
+		});
+		this._regen = true;
+		return this;
+	}
+	,removeFormat: function(Format,Start,End) {
+		var i = this._formatRanges.length;
+		while(i-- > 0) {
+			var formatRange = this._formatRanges[i];
+			if(formatRange.format != Format) {
+				continue;
+			}
+			if(Start != null && End != null) {
+				var range = formatRange.range;
+				if(Start >= range.end || End <= range.start) {
+					continue;
+				}
+				if(Start > range.start && End < range.end) {
+					this.addFormat(formatRange.format,End + 1,range.end);
+					range.end = Start;
+					continue;
+				}
+				if(Start <= range.start && End < range.end) {
+					range.start = End;
+					continue;
+				}
+				if(Start > range.start && End >= range.end) {
+					range.end = Start;
+					continue;
+				}
+			}
+			HxOverrides.remove(this._formatRanges,formatRange);
+		}
+		this._regen = true;
+		return this;
+	}
+	,clearFormats: function() {
+		this._formatRanges = [];
+		this.textField.set_defaultTextFormat(this._defaultFormat);
+		this.textField.setTextFormat(this._defaultFormat);
+		this._regen = true;
+		return this;
+	}
+	,setFormat: function(Font,Size,Color,Alignment,BorderStyle,BorderColor,EmbeddedFont) {
+		if(EmbeddedFont == null) {
+			EmbeddedFont = true;
+		}
+		if(BorderColor == null) {
+			BorderColor = 0;
+		}
+		if(Color == null) {
+			Color = -1;
+		}
+		if(Size == null) {
+			Size = 8;
+		}
+		if(BorderStyle == null) {
+			BorderStyle = flixel_text_FlxTextBorderStyle.NONE;
+		}
+		if(EmbeddedFont) {
+			this.set_font(Font);
+		} else if(Font != null) {
+			this.set_systemFont(Font);
+		}
+		this.set_size(Size);
+		this.set_color(Color);
+		if(Alignment != null) {
+			this.set_alignment(Alignment);
+		}
+		var Color = BorderColor;
+		if(BorderColor == null) {
+			Color = 0;
+		}
+		this.set_borderStyle(BorderStyle);
+		this.set_borderColor(Color);
+		this.set_borderSize(1);
+		this.set_borderQuality(1);
+		this.textField.set_defaultTextFormat(this._defaultFormat);
+		this.textField.setTextFormat(this._defaultFormat);
+		this._regen = true;
+		return this;
+	}
+	,setBorderStyle: function(Style,Color,Size,Quality) {
+		if(Quality == null) {
+			Quality = 1;
+		}
+		if(Size == null) {
+			Size = 1;
+		}
+		if(Color == null) {
+			Color = 0;
+		}
+		this.set_borderStyle(Style);
+		this.set_borderColor(Color);
+		this.set_borderSize(Size);
+		this.set_borderQuality(Quality);
+		return this;
+	}
+	,updateHitbox: function() {
+		this.regenGraphic();
+		flixel_FlxSprite.prototype.updateHitbox.call(this);
+	}
+	,getScreenBounds: function(newRect,camera) {
+		this.regenGraphic();
+		return flixel_FlxSprite.prototype.getScreenBounds.call(this,newRect,camera);
+	}
+	,set_fieldWidth: function(value) {
+		if(this.textField == null) {
+			return value;
+		}
+		if(value <= 0) {
+			this.set_wordWrap(false);
+			this.set_autoSize(true);
+			this._autoHeight = true;
+		} else {
+			this.set_autoSize(false);
+			this.set_wordWrap(true);
+			this.textField.set_width(value);
+		}
+		this._regen = true;
+		return value;
+	}
+	,get_fieldWidth: function() {
+		if(this.textField != null) {
+			return this.textField.get_width();
+		} else {
+			return 0;
+		}
+	}
+	,get_fieldHeight: function() {
+		if(this.textField != null) {
+			return this.textField.get_height();
+		} else {
+			return 0;
+		}
+	}
+	,set_fieldHeight: function(value) {
+		if(this.textField == null) {
+			return value;
+		}
+		if(value <= 0) {
+			this._autoHeight = true;
+		} else {
+			this._autoHeight = false;
+			this.textField.set_height(value);
+		}
+		this._regen = true;
+		return value;
+	}
+	,set_autoSize: function(value) {
+		if(this.textField != null) {
+			this.textField.set_autoSize(value ? 1 : 2);
+			this._regen = true;
+		}
+		return value;
+	}
+	,get_autoSize: function() {
+		if(this.textField != null) {
+			return this.textField.get_autoSize() != 2;
+		} else {
+			return false;
+		}
+	}
+	,set_text: function(Text1) {
+		this.text = Text1;
+		if(this.textField != null) {
+			var ot = this.textField.get_text();
+			this.textField.set_text(Text1);
+			this._regen = this.textField.get_text() != ot || this._regen;
+		}
+		return Text1;
+	}
+	,get_size: function() {
+		return this._defaultFormat.size | 0;
+	}
+	,set_size: function(Size) {
+		this._defaultFormat.size = Size;
+		this.textField.set_defaultTextFormat(this._defaultFormat);
+		this.textField.setTextFormat(this._defaultFormat);
+		this._regen = true;
+		return Size;
+	}
+	,set_color: function(Color) {
+		if(this._defaultFormat.color == (Color & 16777215)) {
+			return Color;
+		}
+		this._defaultFormat.color = Color & 16777215;
+		this.color = Color;
+		this.textField.set_defaultTextFormat(this._defaultFormat);
+		this.textField.setTextFormat(this._defaultFormat);
+		this._regen = true;
+		return Color;
+	}
+	,get_font: function() {
+		return this._font;
+	}
+	,set_font: function(Font) {
+		this.textField.set_embedFonts(true);
+		if(Font != null) {
+			var newFontName = Font;
+			if(openfl_utils_Assets.exists(Font,"FONT")) {
+				newFontName = openfl_utils_Assets.getFont(Font).name;
+			}
+			this._defaultFormat.font = newFontName;
+		} else {
+			this._defaultFormat.font = flixel_system_FlxAssets.FONT_DEFAULT;
+		}
+		this.textField.set_defaultTextFormat(this._defaultFormat);
+		this.textField.setTextFormat(this._defaultFormat);
+		this._regen = true;
+		return this._font = this._defaultFormat.font;
+	}
+	,get_embedded: function() {
+		return this.textField.get_embedFonts();
+	}
+	,get_systemFont: function() {
+		return this._defaultFormat.font;
+	}
+	,set_systemFont: function(Font) {
+		this.textField.set_embedFonts(false);
+		this._defaultFormat.font = Font;
+		this.textField.set_defaultTextFormat(this._defaultFormat);
+		this.textField.setTextFormat(this._defaultFormat);
+		this._regen = true;
+		return Font;
+	}
+	,get_bold: function() {
+		return this._defaultFormat.bold;
+	}
+	,set_bold: function(value) {
+		if(this._defaultFormat.bold != value) {
+			this._defaultFormat.bold = value;
+			this.textField.set_defaultTextFormat(this._defaultFormat);
+			this.textField.setTextFormat(this._defaultFormat);
+			this._regen = true;
+		}
+		return value;
+	}
+	,get_italic: function() {
+		return this._defaultFormat.italic;
+	}
+	,set_italic: function(value) {
+		if(this._defaultFormat.italic != value) {
+			this._defaultFormat.italic = value;
+			this.textField.set_defaultTextFormat(this._defaultFormat);
+			this.textField.setTextFormat(this._defaultFormat);
+			this._regen = true;
+		}
+		return value;
+	}
+	,get_underline: function() {
+		return this._defaultFormat.underline;
+	}
+	,set_underline: function(value) {
+		if(this._defaultFormat.underline != value) {
+			this._defaultFormat.underline = value;
+			this.textField.set_defaultTextFormat(this._defaultFormat);
+			this.textField.setTextFormat(this._defaultFormat);
+			this._regen = true;
+		}
+		return value;
+	}
+	,get_wordWrap: function() {
+		return this.textField.get_wordWrap();
+	}
+	,set_wordWrap: function(value) {
+		if(this.textField.get_wordWrap() != value) {
+			this.textField.set_wordWrap(value);
+			this._regen = true;
+		}
+		return value;
+	}
+	,get_alignment: function() {
+		return flixel_text_FlxTextAlign.fromOpenFL(this._defaultFormat.align);
+	}
+	,set_alignment: function(Alignment) {
+		this._defaultFormat.align = flixel_text_FlxTextAlign.toOpenFL(Alignment);
+		this.textField.set_defaultTextFormat(this._defaultFormat);
+		this.textField.setTextFormat(this._defaultFormat);
+		this._regen = true;
+		return Alignment;
+	}
+	,set_borderStyle: function(style) {
+		if(style != this.borderStyle) {
+			this._regen = true;
+		}
+		return this.borderStyle = style;
+	}
+	,set_borderColor: function(Color) {
+		if(this.borderColor != Color && this.borderStyle != flixel_text_FlxTextBorderStyle.NONE) {
+			this._regen = true;
+		}
+		this._hasBorderAlpha = (Color >> 24 & 255) / 255 < 1;
+		return this.borderColor = Color;
+	}
+	,set_borderSize: function(Value) {
+		if(Value != this.borderSize && this.borderStyle != flixel_text_FlxTextBorderStyle.NONE) {
+			this._regen = true;
+		}
+		return this.borderSize = Value;
+	}
+	,set_borderQuality: function(Value) {
+		var lowerBound = Value < 0 ? 0 : Value;
+		Value = lowerBound > 1 ? 1 : lowerBound;
+		if(Value != this.borderQuality && this.borderStyle != flixel_text_FlxTextBorderStyle.NONE) {
+			this._regen = true;
+		}
+		return this.borderQuality = Value;
+	}
+	,set_graphic: function(Value) {
+		var oldGraphic = this.graphic;
+		var graph = flixel_FlxSprite.prototype.set_graphic.call(this,Value);
+		flixel_FlxG.bitmap.removeIfNoUse(oldGraphic);
+		return graph;
+	}
+	,get_width: function() {
+		this.regenGraphic();
+		return flixel_FlxSprite.prototype.get_width.call(this);
+	}
+	,get_height: function() {
+		this.regenGraphic();
+		return flixel_FlxSprite.prototype.get_height.call(this);
+	}
+	,updateColorTransform: function() {
+		if(this.colorTransform == null) {
+			this.colorTransform = new openfl_geom_ColorTransform();
+		}
+		if(this.alpha != 1) {
+			this.colorTransform.alphaMultiplier = this.alpha;
+			this.useColorTransform = true;
+		} else {
+			this.colorTransform.alphaMultiplier = 1;
+			this.useColorTransform = false;
+		}
+		this.dirty = true;
+	}
+	,regenGraphic: function() {
+		if(this.textField == null || !this._regen) {
+			return;
+		}
+		var oldWidth = 0;
+		var oldHeight = 4;
+		if(this.graphic != null) {
+			oldWidth = this.graphic.width;
+			oldHeight = this.graphic.height;
+		}
+		var newWidth = Math.ceil(this.textField.get_width());
+		var newHeight = Math.ceil(this._autoHeight ? this.textField.get_textHeight() : this.textField.get_height()) + (this._autoHeight ? 4 : 0);
+		if(this.textField.get_textHeight() == 0) {
+			newHeight = oldHeight;
+		}
+		if(oldWidth != newWidth || oldHeight != newHeight) {
+			this.makeGraphic(newWidth,newHeight,0,false,flixel_FlxG.bitmap.getUniqueKey("text"));
+			if(this._hasBorderAlpha) {
+				this._borderPixels = this.graphic.bitmap.clone();
+			}
+			if(this._autoHeight) {
+				this.textField.set_height(newHeight);
+			}
+			this._flashRect.x = 0;
+			this._flashRect.y = 0;
+			this._flashRect.width = newWidth;
+			this._flashRect.height = newHeight;
+		} else {
+			this.graphic.bitmap.fillRect(this._flashRect,0);
+			if(this._hasBorderAlpha) {
+				if(this._borderPixels == null) {
+					this._borderPixels = new openfl_display_BitmapData(this.frameWidth,this.frameHeight,true);
+				} else {
+					this._borderPixels.fillRect(this._flashRect,0);
+				}
+			}
+		}
+		if(this.textField != null && this.textField.get_text() != null) {
+			this.copyTextFormat(this._defaultFormat,this._formatAdjusted);
+			this._matrix.identity();
+			this.applyBorderStyle();
+			if(this._hasBorderAlpha) {
+				if(this._borderColorTransform == null) {
+					this._borderColorTransform = new openfl_geom_ColorTransform();
+				}
+				this._borderColorTransform.alphaMultiplier = (this.borderColor >> 24 & 255) / 255;
+				this._borderPixels.colorTransform(this._borderPixels.rect,this._borderColorTransform);
+				this.graphic.bitmap.draw(this._borderPixels);
+			}
+			this.applyFormats(this._formatAdjusted,false);
+			this.drawTextFieldTo(this.graphic.bitmap);
+		}
+		this._regen = false;
+		this.set_frame(this.frame);
+	}
+	,drawTextFieldTo: function(graphic) {
+		graphic.draw(this.textField,this._matrix);
+	}
+	,draw: function() {
+		this.regenGraphic();
+		flixel_FlxSprite.prototype.draw.call(this);
+	}
+	,calcFrame: function(RunOnCpp) {
+		if(RunOnCpp == null) {
+			RunOnCpp = false;
+		}
+		if(this.textField == null) {
+			return;
+		}
+		if(flixel_FlxG.renderTile && !RunOnCpp) {
+			return;
+		}
+		this.regenGraphic();
+		flixel_FlxSprite.prototype.calcFrame.call(this,RunOnCpp);
+	}
+	,applyBorderStyle: function() {
+		var iterations = this.borderSize * this.borderQuality | 0;
+		if(iterations <= 0) {
+			iterations = 1;
+		}
+		var delta = this.borderSize / iterations;
+		switch(this.borderStyle._hx_index) {
+		case 0:
+			break;
+		case 1:
+			this.applyFormats(this._formatAdjusted,true);
+			var _g = 0;
+			var _g1 = iterations;
+			while(_g < _g1) {
+				++_g;
+				var graphic = this._hasBorderAlpha ? this._borderPixels : this.graphic.bitmap;
+				this._matrix.translate(delta,delta);
+				this.drawTextFieldTo(graphic);
+			}
+			this._matrix.translate(-this.shadowOffset.x * this.borderSize,-this.shadowOffset.y * this.borderSize);
+			break;
+		case 2:
+			this.applyFormats(this._formatAdjusted,true);
+			var curDelta = delta;
+			var _g = 0;
+			var _g1 = iterations;
+			while(_g < _g1) {
+				++_g;
+				var graphic = this._hasBorderAlpha ? this._borderPixels : this.graphic.bitmap;
+				this._matrix.translate(-curDelta,-curDelta);
+				this.drawTextFieldTo(graphic);
+				var graphic1 = this._hasBorderAlpha ? this._borderPixels : this.graphic.bitmap;
+				this._matrix.translate(curDelta,0);
+				this.drawTextFieldTo(graphic1);
+				var graphic2 = this._hasBorderAlpha ? this._borderPixels : this.graphic.bitmap;
+				this._matrix.translate(curDelta,0);
+				this.drawTextFieldTo(graphic2);
+				var graphic3 = this._hasBorderAlpha ? this._borderPixels : this.graphic.bitmap;
+				this._matrix.translate(0,curDelta);
+				this.drawTextFieldTo(graphic3);
+				var graphic4 = this._hasBorderAlpha ? this._borderPixels : this.graphic.bitmap;
+				this._matrix.translate(0,curDelta);
+				this.drawTextFieldTo(graphic4);
+				var graphic5 = this._hasBorderAlpha ? this._borderPixels : this.graphic.bitmap;
+				this._matrix.translate(-curDelta,0);
+				this.drawTextFieldTo(graphic5);
+				var graphic6 = this._hasBorderAlpha ? this._borderPixels : this.graphic.bitmap;
+				this._matrix.translate(-curDelta,0);
+				this.drawTextFieldTo(graphic6);
+				var graphic7 = this._hasBorderAlpha ? this._borderPixels : this.graphic.bitmap;
+				this._matrix.translate(0,-curDelta);
+				this.drawTextFieldTo(graphic7);
+				this._matrix.translate(curDelta,0);
+				curDelta += delta;
+			}
+			break;
+		case 3:
+			this.applyFormats(this._formatAdjusted,true);
+			var curDelta = delta;
+			var _g = 0;
+			var _g1 = iterations;
+			while(_g < _g1) {
+				++_g;
+				var graphic = this._hasBorderAlpha ? this._borderPixels : this.graphic.bitmap;
+				this._matrix.translate(-curDelta,-curDelta);
+				this.drawTextFieldTo(graphic);
+				var graphic1 = this._hasBorderAlpha ? this._borderPixels : this.graphic.bitmap;
+				this._matrix.translate(curDelta * 2,0);
+				this.drawTextFieldTo(graphic1);
+				var graphic2 = this._hasBorderAlpha ? this._borderPixels : this.graphic.bitmap;
+				this._matrix.translate(0,curDelta * 2);
+				this.drawTextFieldTo(graphic2);
+				var graphic3 = this._hasBorderAlpha ? this._borderPixels : this.graphic.bitmap;
+				this._matrix.translate(-curDelta * 2,0);
+				this.drawTextFieldTo(graphic3);
+				this._matrix.translate(curDelta,-curDelta);
+				curDelta += delta;
+			}
+			break;
+		}
+	}
+	,applyBorderTransparency: function() {
+		if(!this._hasBorderAlpha) {
+			return;
+		}
+		if(this._borderColorTransform == null) {
+			this._borderColorTransform = new openfl_geom_ColorTransform();
+		}
+		this._borderColorTransform.alphaMultiplier = (this.borderColor >> 24 & 255) / 255;
+		this._borderPixels.colorTransform(this._borderPixels.rect,this._borderColorTransform);
+		this.graphic.bitmap.draw(this._borderPixels);
+	}
+	,copyTextWithOffset: function(x,y) {
+		var graphic = this._hasBorderAlpha ? this._borderPixels : this.graphic.bitmap;
+		this._matrix.translate(x,y);
+		this.drawTextFieldTo(graphic);
+	}
+	,applyFormats: function(FormatAdjusted,UseBorderColor) {
+		if(UseBorderColor == null) {
+			UseBorderColor = false;
+		}
+		this.copyTextFormat(this._defaultFormat,FormatAdjusted,false);
+		FormatAdjusted.color = UseBorderColor ? this.borderColor & 16777215 : this._defaultFormat.color;
+		this.textField.setTextFormat(FormatAdjusted);
+		var _g = 0;
+		var _g1 = this._formatRanges;
+		while(_g < _g1.length) {
+			var formatRange = _g1[_g];
+			++_g;
+			if(this.textField.get_text().length - 1 < formatRange.range.start) {
+				break;
+			} else {
+				var textFormat = formatRange.format.format;
+				this.copyTextFormat(textFormat,FormatAdjusted,false);
+				FormatAdjusted.color = UseBorderColor ? formatRange.format.borderColor & 16777215 : textFormat.color;
+			}
+			this.textField.setTextFormat(FormatAdjusted,formatRange.range.start,Math.min(formatRange.range.end,this.textField.get_text().length) | 0);
+		}
+	}
+	,copyTextFormat: function(from,to,withAlign) {
+		if(withAlign == null) {
+			withAlign = true;
+		}
+		to.font = from.font;
+		to.bold = from.bold;
+		to.italic = from.italic;
+		to.underline = from.underline;
+		to.size = from.size;
+		to.color = from.color;
+		to.leading = from.leading;
+		if(withAlign) {
+			to.align = from.align;
+		}
+	}
+	,dtfCopy: function() {
+		var dtf = this.textField.get_defaultTextFormat();
+		return new openfl_text_TextFormat(dtf.font,dtf.size,dtf.color,dtf.bold,dtf.italic,dtf.underline,dtf.url,dtf.target,dtf.align);
+	}
+	,updateDefaultFormat: function() {
+		this.textField.set_defaultTextFormat(this._defaultFormat);
+		this.textField.setTextFormat(this._defaultFormat);
+		this._regen = true;
+	}
+	,set_frames: function(Frames) {
+		flixel_FlxSprite.prototype.set_frames.call(this,Frames);
+		this._regen = false;
+		return Frames;
+	}
+	,__class__: flixel_text_FlxText
+	,__properties__: $extend(flixel_FlxSprite.prototype.__properties__,{set_autoSize:"set_autoSize",get_autoSize:"get_autoSize",set_fieldHeight:"set_fieldHeight",get_fieldHeight:"get_fieldHeight",set_fieldWidth:"set_fieldWidth",get_fieldWidth:"get_fieldWidth",set_borderQuality:"set_borderQuality",set_borderSize:"set_borderSize",set_borderColor:"set_borderColor",set_borderStyle:"set_borderStyle",set_alignment:"set_alignment",get_alignment:"get_alignment",set_wordWrap:"set_wordWrap",get_wordWrap:"get_wordWrap",set_underline:"set_underline",get_underline:"get_underline",set_italic:"set_italic",get_italic:"get_italic",set_bold:"set_bold",get_bold:"get_bold",set_systemFont:"set_systemFont",get_systemFont:"get_systemFont",get_embedded:"get_embedded",set_font:"set_font",get_font:"get_font",set_size:"set_size",get_size:"get_size",set_text:"set_text"})
+});
+var flixel_addons_text_internal_FlxBaseTextInput = function(x,y,fieldWidth,text,size,embeddedFont) {
+	if(embeddedFont == null) {
+		embeddedFont = true;
+	}
+	if(size == null) {
+		size = 8;
+	}
+	if(fieldWidth == null) {
+		fieldWidth = 0;
+	}
+	if(y == null) {
+		y = 0;
+	}
+	if(x == null) {
+		x = 0;
+	}
+	this._scrollVCounter = 0;
+	this._regenFormats = false;
+	this._lastPressTime = 0;
+	this._down = false;
+	this.onScroll = new flixel_util__$FlxSignal_FlxSignal0();
+	this.onInput = new flixel_util__$FlxSignal_FlxSignal0();
+	this.onFocusLost = new flixel_util__$FlxSignal_FlxSignal0();
+	this.onFocusGained = new flixel_util__$FlxSignal_FlxSignal0();
+	this.onEnter = new flixel_util__$FlxSignal_FlxSignal0();
+	this.onDelete = new flixel_util__$FlxSignal_FlxSignal0();
+	this.onChange = new flixel_util__$FlxSignal_FlxSignal0();
+	this.onBackspace = new flixel_util__$FlxSignal_FlxSignal0();
+	flixel_text_FlxText.call(this,x,y,fieldWidth,text,size,embeddedFont);
+	var textIsEmpty = text == null || text == "";
+	if(textIsEmpty) {
+		this.set_text("");
+		text = " ";
+	} else {
+		this.set_text(text);
+	}
+	this.textField = new flixel_addons_text_internal_CustomTextField(this);
+	this.textField.set_selectable(true);
+	this.textField.set_multiline(true);
+	this.textField.set_wordWrap(true);
+	this.textField.set_type(1);
+	this.set_font(flixel_system_FlxAssets.FONT_DEFAULT);
+	this.textField.set_defaultTextFormat(this._defaultFormat);
+	this.textField.set_text(text);
+	this.set_fieldWidth(fieldWidth);
+	this.textField.set_embedFonts(embeddedFont);
+	this.textField.set_sharpness(100);
+	this.textField.set_height(text.length <= 0 ? 1 : 10);
+	this.set_graphic(null);
+	this.drawFrame();
+	if(textIsEmpty) {
+		this.textField.set_text("");
+		this._regen = true;
+	}
+	this.initEvents();
+};
+$hxClasses["flixel.addons.text.internal.FlxBaseTextInput"] = flixel_addons_text_internal_FlxBaseTextInput;
+flixel_addons_text_internal_FlxBaseTextInput.__name__ = "flixel.addons.text.internal.FlxBaseTextInput";
+flixel_addons_text_internal_FlxBaseTextInput.isModifierPressed = function(modifier) {
+	if(!lime_ui_KeyModifier.get_metaKey(modifier)) {
+		return lime_ui_KeyModifier.get_ctrlKey(modifier);
+	} else {
+		return true;
+	}
+};
+flixel_addons_text_internal_FlxBaseTextInput.__super__ = flixel_text_FlxText;
+flixel_addons_text_internal_FlxBaseTextInput.prototype = $extend(flixel_text_FlxText.prototype,{
+	onBackspace: null
+	,onChange: null
+	,onDelete: null
+	,onEnter: null
+	,onFocusGained: null
+	,onFocusLost: null
+	,onInput: null
+	,onScroll: null
+	,_cachedKeys: null
+	,_currentCamera: null
+	,_down: null
+	,_lastPressTime: null
+	,_lastShowCursor: null
+	,_regenFormats: null
+	,_scrollVCounter: null
+	,destroy: function() {
+		if(this.textField != null) {
+			this.textField.removeEventListener("focusIn",$bind(this,this._onFocusIn));
+			this.textField.removeEventListener("focusOut",$bind(this,this._onFocusOut));
+			this.textField.removeEventListener("keyDown",$bind(this,this._onKeyDown));
+			this.textField.removeEventListener("scroll",$bind(this,this._onScroll));
+			if(this.textField.__inputEnabled) {
+				this.onStopTextInput();
+			}
+		}
+		this.onBackspace = flixel_util_FlxDestroyUtil.destroy(this.onBackspace);
+		this.onChange = flixel_util_FlxDestroyUtil.destroy(this.onChange);
+		this.onDelete = flixel_util_FlxDestroyUtil.destroy(this.onDelete);
+		this.onEnter = flixel_util_FlxDestroyUtil.destroy(this.onEnter);
+		this.onFocusGained = flixel_util_FlxDestroyUtil.destroy(this.onFocusGained);
+		this.onFocusLost = flixel_util_FlxDestroyUtil.destroy(this.onFocusLost);
+		this.onInput = flixel_util_FlxDestroyUtil.destroy(this.onInput);
+		this.onScroll = flixel_util_FlxDestroyUtil.destroy(this.onScroll);
+		this.set_currentCamera(null);
+		this._cachedKeys = null;
+		flixel_text_FlxText.prototype.destroy.call(this);
+	}
+	,update: function(elapsed) {
+		flixel_text_FlxText.prototype.update.call(this,elapsed);
+		if(this.visible) {
+			this.updateInput(elapsed);
+		}
+		if(this._lastShowCursor != this.textField.__showCursor) {
+			this._regen = true;
+			this._lastShowCursor = this.textField.__showCursor;
+		}
+	}
+	,addFormat: function(format,start,end) {
+		if(end == null) {
+			end = -1;
+		}
+		if(start == null) {
+			start = -1;
+		}
+		flixel_text_FlxText.prototype.addFormat.call(this,format,start,end);
+		this._regenFormats = true;
+		return this;
+	}
+	,removeFormat: function(format,start,end) {
+		flixel_text_FlxText.prototype.removeFormat.call(this,format,start,end);
+		this._regenFormats = true;
+		return this;
+	}
+	,getTextInputRect: function(camera,rect) {
+		if(camera == null) {
+			camera = this.get_currentCamera() != null ? this.get_currentCamera() : this.get_camera();
+		}
+		if(rect == null) {
+			var _this = flixel_math_FlxRect._pool.get();
+			_this.x = 0;
+			_this.y = 0;
+			_this.width = 0;
+			_this.height = 0;
+			_this._inPool = false;
+			rect = _this;
+		}
+		this.getScreenBounds(rect,camera);
+		if(camera.totalScaleX != 1 || camera.totalScaleY != 1) {
+			rect.width *= camera.totalScaleX;
+			rect.height *= camera.totalScaleY;
+			rect.x -= camera.scroll.x * camera.totalScaleX - camera.scroll.x;
+			rect.y -= camera.scroll.y * camera.totalScaleY - camera.scroll.y;
+			rect.x -= 0.5 * camera.width * (camera.scaleX - camera.initialZoom) * flixel_FlxG.scaleMode.scale.x;
+			rect.y -= 0.5 * camera.height * (camera.scaleY - camera.initialZoom) * flixel_FlxG.scaleMode.scale.y;
+		}
+		rect.x += camera.x * flixel_FlxG.scaleMode.scale.x + flixel_FlxG.game.get_x();
+		rect.y += camera.y * flixel_FlxG.scaleMode.scale.y + flixel_FlxG.game.get_y();
+		return rect;
+	}
+	,replaceSelectedText: function(value) {
+		if(value == null) {
+			value = "";
+		}
+		if(value == "" && this.textField.__selectionIndex == this.get_caretIndex()) {
+			return;
+		}
+		this.textField.replaceSelectedText(value);
+		this.updateText();
+	}
+	,setSelection: function(beginIndex,endIndex) {
+		this.textField.setSelection(beginIndex,endIndex);
+		this._regen = true;
+	}
+	,applyFormats: function(formatAdjusted,useBorderColor) {
+		if(useBorderColor == null) {
+			useBorderColor = false;
+		}
+		if(this._regenFormats) {
+			flixel_text_FlxText.prototype.applyFormats.call(this,formatAdjusted,useBorderColor);
+			this._regenFormats = false;
+		}
+	}
+	,checkDoublePress: function() {
+		var currentTime = flixel_FlxG.game.ticks;
+		if(currentTime - this._lastPressTime < 500) {
+			this.onDoublePressHandler();
+			this._lastPressTime = 0;
+		} else {
+			this._lastPressTime = currentTime;
+		}
+	}
+	,checkForFocus: function() {
+		if(this.get_type() == 1 && this.get_focus()) {
+			this.textField.__startTextInput();
+			this.onStartTextInput();
+		} else if(this.get_type() != 1 && this.get_selectable() && this.get_focus()) {
+			this.textField.__startCursorTimer();
+			this._regen = true;
+		}
+	}
+	,initEvents: function() {
+		this.textField.addEventListener("focusIn",$bind(this,this._onFocusIn));
+		this.textField.addEventListener("focusOut",$bind(this,this._onFocusOut));
+		this.textField.addEventListener("keyDown",$bind(this,this._onKeyDown));
+		this.textField.addEventListener("scroll",$bind(this,this._onScroll));
+	}
+	,onChangeHandler: function(_) {
+		this.updateText();
+		this.onChange.dispatch();
+	}
+	,onDoublePressHandler: function() {
+		if(!this.get_selectable()) {
+			return;
+		}
+		this.textField.__updateLayout();
+		var delimiters = ["\n",".","!","?",","," ",";",":","(",")","-","_","/"];
+		var txtStr = this.text;
+		var leftPos = -1;
+		var rightPos = txtStr.length;
+		var pos = 0;
+		var startPos = Math.max(this.get_caretIndex(),1) | 0;
+		if(txtStr.length > 0 && this.get_caretIndex() >= 0 && rightPos >= this.get_caretIndex()) {
+			var _g = 0;
+			while(_g < delimiters.length) {
+				var c = delimiters[_g];
+				++_g;
+				pos = txtStr.lastIndexOf(c,startPos - 1);
+				if(pos > leftPos) {
+					leftPos = pos + 1;
+				}
+				pos = txtStr.indexOf(c,startPos);
+				if(pos < rightPos && pos != -1) {
+					rightPos = pos;
+				}
+			}
+			if(leftPos != rightPos) {
+				this.setSelection(leftPos,rightPos);
+				this.textField.__dirty = true;
+				var _this = this.textField;
+				if(!_this.__renderDirty) {
+					_this.__renderDirty = true;
+					_this.__setParentRenderDirty();
+				}
+			}
+		}
+	}
+	,onFocusInHandler: function() {
+		this.checkForFocus();
+		this.onFocusGained.dispatch();
+	}
+	,onFocusOutHandler: function() {
+		this.textField.__stopCursorTimer();
+		this.textField.__stopTextInput();
+		this.onStopTextInput();
+		if(this.textField.__selectionIndex != this.get_caretIndex()) {
+			this.textField.__selectionIndex = this.get_caretIndex();
+			this.textField.__dirty = true;
+			var _this = this.textField;
+			if(!_this.__renderDirty) {
+				_this.__renderDirty = true;
+				_this.__setParentRenderDirty();
+			}
+		}
+		this.onFocusLost.dispatch();
+	}
+	,onDownHandler: function(pointerX,pointerY) {
+		this._down = true;
+		this.textField.__updateLayout();
+		var tmp = this.textField.__getPosition(pointerX + this.get_scrollH(),pointerY);
+		this.textField.__selectionIndex = this.set_caretIndex(tmp);
+		this.textField.__dirty = true;
+		var _this = this.textField;
+		if(!_this.__renderDirty) {
+			_this.__renderDirty = true;
+			_this.__setParentRenderDirty();
+		}
+		this.set_focus(true);
+	}
+	,onMoveHandler: function(pointerX,pointerY) {
+		if(this.get_selectable() && this.textField.__selectionIndex >= 0) {
+			this.textField.__updateLayout();
+			var position = this.textField.__getPosition(pointerX + this.get_scrollH(),pointerY);
+			if(position != this.get_caretIndex()) {
+				this.textField.__caretIndex = position;
+				this.textField.__dirty = true;
+				var _this = this.textField;
+				if(!_this.__renderDirty) {
+					_this.__renderDirty = true;
+					_this.__setParentRenderDirty();
+				}
+				this._regen = true;
+			}
+		}
+	}
+	,onPasteHandler: function(text) {
+		this.textField.__replaceSelectedText(text,true);
+		this.onInput.dispatch();
+		this.onChangeHandler();
+	}
+	,onStartTextInput: function() {
+		if(!openfl_Lib.get_current().stage.window.onTextInput.has($bind(this,this._onWindowTextInput))) {
+			openfl_Lib.get_current().stage.window.onTextInput.add($bind(this,this._onWindowTextInput));
+			openfl_Lib.get_current().stage.window.onKeyDown.add($bind(this,this._onWindowKeyDown));
+		}
+		if(this._cachedKeys == null) {
+			this._cachedKeys = { volUp : flixel_FlxG.sound.volumeUpKeys, volDown : flixel_FlxG.sound.volumeDownKeys, mute : flixel_FlxG.sound.muteKeys};
+			flixel_FlxG.sound.volumeUpKeys = null;
+			flixel_FlxG.sound.volumeDownKeys = null;
+			flixel_FlxG.sound.muteKeys = null;
+		}
+		this._regen = true;
+	}
+	,onStopTextInput: function() {
+		openfl_Lib.get_current().stage.window.onTextInput.remove($bind(this,this._onWindowTextInput));
+		openfl_Lib.get_current().stage.window.onKeyDown.remove($bind(this,this._onWindowKeyDown));
+		if(this._cachedKeys != null) {
+			flixel_FlxG.sound.volumeUpKeys = this._cachedKeys.volUp;
+			flixel_FlxG.sound.volumeDownKeys = this._cachedKeys.volDown;
+			flixel_FlxG.sound.muteKeys = this._cachedKeys.mute;
+			this._cachedKeys = null;
+		}
+		this._regen = true;
+	}
+	,onUpHandler: function(pointerX,pointerY) {
+		this._down = false;
+		if(this.get_focus()) {
+			this.textField.__getWorldTransform();
+			this.textField.__updateLayout();
+			var upPos = this.textField.__getPosition(pointerX + this.get_scrollH(),pointerY);
+			var rightPos = Math.max(this.textField.__selectionIndex,upPos) | 0;
+			this.textField.__selectionIndex = Math.min(this.textField.__selectionIndex,upPos) | 0;
+			this.textField.__caretIndex = rightPos;
+			if(this.textField.__inputEnabled) {
+				this.checkForFocus();
+				this.textField.__stopCursorTimer();
+				this.textField.__startCursorTimer();
+			}
+			this._regen = true;
+		}
+	}
+	,onWindowKeyDownHandler: function(key,modifier) {
+		switch(key) {
+		case 8:
+			if(this.textField.__selectionIndex == this.get_caretIndex() && this.get_caretIndex() > 0) {
+				var tmp = this.get_caretIndex();
+				this.textField.__selectionIndex = tmp - 1;
+			}
+			if(this.textField.__selectionIndex != this.get_caretIndex()) {
+				this.replaceSelectedText("");
+				this.textField.__selectionIndex = this.get_caretIndex();
+				this.onBackspace.dispatch();
+				this.onChangeHandler();
+			} else {
+				this.textField.__stopCursorTimer();
+				this.textField.__startCursorTimer();
+				this._regen = true;
+			}
+			break;
+		case 97:
+			if(this.get_selectable()) {
+				if(lime_ui_KeyModifier.get_metaKey(modifier) || lime_ui_KeyModifier.get_ctrlKey(modifier)) {
+					this.setSelection(0,this.text.length);
+				}
+			}
+			break;
+		case 99:
+			if(lime_ui_KeyModifier.get_metaKey(modifier) || lime_ui_KeyModifier.get_ctrlKey(modifier)) {
+				if(this.get_caretIndex() != this.textField.__selectionIndex && !this.get_displayAsPassword()) {
+					lime_system_Clipboard.set_text(this.text.substring(this.get_caretIndex(),this.textField.__selectionIndex));
+				}
+			}
+			break;
+		case 120:
+			if(lime_ui_KeyModifier.get_metaKey(modifier) || lime_ui_KeyModifier.get_ctrlKey(modifier)) {
+				if(this.get_caretIndex() != this.textField.__selectionIndex && !this.get_displayAsPassword()) {
+					lime_system_Clipboard.set_text(this.text.substring(this.get_caretIndex(),this.textField.__selectionIndex));
+					this.replaceSelectedText("");
+					this.onChangeHandler();
+				}
+			}
+			break;
+		case 127:
+			if(this.textField.__selectionIndex == this.get_caretIndex() && this.get_caretIndex() < this.text.length) {
+				var tmp = this.get_caretIndex();
+				this.textField.__selectionIndex = tmp + 1;
+			}
+			if(this.textField.__selectionIndex != this.get_caretIndex()) {
+				this.replaceSelectedText("");
+				this.textField.__selectionIndex = this.get_caretIndex();
+				this.onDelete.dispatch();
+				this.onChangeHandler();
+			} else {
+				this.textField.__stopCursorTimer();
+				this.textField.__startCursorTimer();
+				this._regen = true;
+			}
+			break;
+		case 1073741898:
+			if(this.get_selectable()) {
+				if(lime_ui_KeyModifier.get_metaKey(modifier) || lime_ui_KeyModifier.get_ctrlKey(modifier)) {
+					this.textField.__caretIndex = 0;
+				} else {
+					this.textField.__caretBeginningOfLine();
+				}
+				if(!lime_ui_KeyModifier.get_shiftKey(modifier)) {
+					this.textField.__selectionIndex = this.get_caretIndex();
+				}
+				this.setSelection(this.textField.__selectionIndex,this.get_caretIndex());
+			}
+			break;
+		case 1073741901:
+			if(this.get_selectable()) {
+				if(lime_ui_KeyModifier.get_metaKey(modifier) || lime_ui_KeyModifier.get_ctrlKey(modifier)) {
+					this.textField.__caretIndex = this.text.length;
+				} else {
+					this.textField.__caretEndOfLine();
+				}
+				if(!lime_ui_KeyModifier.get_shiftKey(modifier)) {
+					this.textField.__selectionIndex = this.get_caretIndex();
+				}
+				this.setSelection(this.textField.__selectionIndex,this.get_caretIndex());
+			}
+			break;
+		case 1073741903:
+			if(this.get_selectable()) {
+				if(lime_ui_KeyModifier.get_metaKey(modifier) || lime_ui_KeyModifier.get_ctrlKey(modifier)) {
+					this.textField.__caretBeginningOfNextLine();
+				} else {
+					this.textField.__caretNextCharacter();
+				}
+				if(!lime_ui_KeyModifier.get_shiftKey(modifier)) {
+					this.textField.__selectionIndex = this.get_caretIndex();
+				}
+				this.setSelection(this.textField.__selectionIndex,this.get_caretIndex());
+			}
+			break;
+		case 1073741904:
+			if(this.get_selectable()) {
+				if(lime_ui_KeyModifier.get_metaKey(modifier) || lime_ui_KeyModifier.get_ctrlKey(modifier)) {
+					this.textField.__caretBeginningOfPreviousLine();
+				} else {
+					this.textField.__caretPreviousCharacter();
+				}
+				if(!lime_ui_KeyModifier.get_shiftKey(modifier)) {
+					this.textField.__selectionIndex = this.get_caretIndex();
+				}
+				this.setSelection(this.textField.__selectionIndex,this.get_caretIndex());
+			}
+			break;
+		case 1073741905:
+			if(this.get_selectable()) {
+				if(lime_ui_KeyModifier.get_metaKey(modifier) || lime_ui_KeyModifier.get_ctrlKey(modifier)) {
+					this.textField.__caretIndex = this.text.length;
+				} else {
+					this.textField.__caretNextLine();
+				}
+				if(!lime_ui_KeyModifier.get_shiftKey(modifier)) {
+					this.textField.__selectionIndex = this.get_caretIndex();
+				}
+				this.setSelection(this.textField.__selectionIndex,this.get_caretIndex());
+			}
+			break;
+		case 1073741906:
+			if(this.get_selectable()) {
+				if(lime_ui_KeyModifier.get_metaKey(modifier) || lime_ui_KeyModifier.get_ctrlKey(modifier)) {
+					this.textField.__caretIndex = 0;
+				} else {
+					this.textField.__caretPreviousLine();
+				}
+				if(!lime_ui_KeyModifier.get_shiftKey(modifier)) {
+					this.textField.__selectionIndex = this.get_caretIndex();
+				}
+				this.setSelection(this.textField.__selectionIndex,this.get_caretIndex());
+			}
+			break;
+		case 13:case 1073741912:
+			if(this.get_multiline()) {
+				this.textField.__replaceSelectedText("\n",true);
+				this.onEnter.dispatch();
+				this.onInput.dispatch();
+				this.onChangeHandler();
+			} else {
+				this.textField.__stopCursorTimer();
+				this.textField.__startCursorTimer();
+				this.onEnter.dispatch();
+			}
+			this._regen = true;
+			break;
+		default:
+		}
+	}
+	,onWindowTextInputHandler: function(value) {
+		this.textField.__replaceSelectedText(value,true);
+		this.onInput.dispatch();
+		this.onChangeHandler();
+	}
+	,updateDrag: function(elapsed,pointerX,pointerY) {
+		if(pointerX > this.get_width() - 1) {
+			this.set_scrollH(this.get_scrollH() + (Math.max(Math.min((pointerX - this.get_width()) * .1,10),1) | 0));
+		} else if(pointerX < 1) {
+			this.set_scrollH(this.get_scrollH() - (Math.max(Math.min(pointerX * -.1,10),1) | 0));
+		}
+		this._scrollVCounter += elapsed;
+		if(this._scrollVCounter > 0.1) {
+			if(pointerY > this.get_height() - 2) {
+				this.set_scrollV(Math.min(this.get_scrollV() + Math.max(Math.min((pointerY - this.get_height()) * .03,5),1),this.get_maxScrollV()) | 0);
+			} else if(pointerY < 2) {
+				this.set_scrollV(this.get_scrollV() - (Math.max(Math.min(pointerY * -.03,5),1) | 0));
+			}
+			this._scrollVCounter = 0;
+		}
+		this.onMoveHandler(pointerX,pointerY);
+	}
+	,updateInput: function(elapsed) {
+	}
+	,updateText: function() {
+		this.set_text(this.textField.get_text());
+		this._regen = true;
+	}
+	,onKeyDownHandler: function(event) {
+		if(this.get_focus() && this.get_selectable() && this.get_type() != 1 && event.keyCode == 67 && (event.commandKey || event.ctrlKey)) {
+			if(this.get_caretIndex() != this.textField.__selectionIndex && !this.get_displayAsPassword()) {
+				lime_system_Clipboard.set_text(this.text.substring(this.get_caretIndex(),this.textField.__selectionIndex));
+			}
+		}
+	}
+	,_onKeyDown: function(event) {
+		this.onKeyDownHandler(event);
+	}
+	,_onFocusIn: function(event) {
+		this.onFocusInHandler();
+	}
+	,_onFocusOut: function(event) {
+		this.onFocusOutHandler();
+	}
+	,_onScroll: function(_) {
+		this._regen = true;
+		this.onScroll.dispatch();
+	}
+	,_onWindowKeyDown: function(key,modifier) {
+		this.onWindowKeyDownHandler(key,modifier);
+	}
+	,_onWindowTextInput: function(value) {
+		this.onWindowTextInputHandler(value);
+	}
+	,set_alignment: function(value) {
+		this._regenFormats = true;
+		return flixel_text_FlxText.prototype.set_alignment.call(this,value);
+	}
+	,set_bold: function(value) {
+		if(this._defaultFormat.bold != value) {
+			this._regenFormats = true;
+		}
+		return flixel_text_FlxText.prototype.set_bold.call(this,value);
+	}
+	,set_borderColor: function(value) {
+		return value;
+	}
+	,set_borderQuality: function(value) {
+		return value;
+	}
+	,set_borderSize: function(value) {
+		return value;
+	}
+	,set_borderStyle: function(value) {
+		return value;
+	}
+	,set_color: function(value) {
+		if(this._defaultFormat.color != (value & 16777215)) {
+			this._regenFormats = true;
+		}
+		return flixel_text_FlxText.prototype.set_color.call(this,value);
+	}
+	,set_font: function(value) {
+		this._regenFormats = true;
+		return flixel_text_FlxText.prototype.set_font.call(this,value);
+	}
+	,set_italic: function(value) {
+		if(this._defaultFormat.italic != value) {
+			this._regenFormats = true;
+		}
+		return flixel_text_FlxText.prototype.set_italic.call(this,value);
+	}
+	,set_size: function(value) {
+		this._regenFormats = true;
+		return flixel_text_FlxText.prototype.set_size.call(this,value);
+	}
+	,set_systemFont: function(value) {
+		this._regenFormats = true;
+		return flixel_text_FlxText.prototype.set_systemFont.call(this,value);
+	}
+	,set_text: function(value) {
+		if(this.text != value) {
+			this.text = value;
+			if(this.textField != null) {
+				this.textField.set_text(value);
+				this._regen = true;
+			}
+		}
+		return value;
+	}
+	,get_bottomScrollV: function() {
+		return this.textField.get_bottomScrollV();
+	}
+	,get_caretIndex: function() {
+		return this.textField.get_caretIndex();
+	}
+	,set_caretIndex: function(value) {
+		this.setSelection(value,value);
+		return value;
+	}
+	,get_currentCamera: function() {
+		if(this._currentCamera != null && !this._currentCamera.exists) {
+			this._currentCamera = null;
+		}
+		return this._currentCamera;
+	}
+	,set_currentCamera: function(value) {
+		return this._currentCamera = value;
+	}
+	,get_displayAsPassword: function() {
+		return this.textField.get_displayAsPassword();
+	}
+	,set_displayAsPassword: function(value) {
+		if(this.textField.get_displayAsPassword() != value) {
+			this.textField.set_displayAsPassword(value);
+			this._regen = true;
+		}
+		return value;
+	}
+	,get_focus: function() {
+		return openfl_Lib.get_current().stage.get_focus() == this.textField;
+	}
+	,set_focus: function(value) {
+		if(this.get_focus() != value) {
+			if(value) {
+				openfl_Lib.get_current().stage.set_focus(this.textField);
+			} else if(this.get_focus()) {
+				openfl_Lib.get_current().stage.set_focus(null);
+			}
+		}
+		return value;
+	}
+	,get_maxChars: function() {
+		return this.textField.get_maxChars();
+	}
+	,set_maxChars: function(value) {
+		if(this.textField.get_maxChars() != value) {
+			this.textField.set_maxChars(value);
+			this._regen = true;
+		}
+		return value;
+	}
+	,get_maxScrollH: function() {
+		return this.textField.get_maxScrollH();
+	}
+	,get_maxScrollV: function() {
+		return this.textField.get_maxScrollV();
+	}
+	,get_multiline: function() {
+		return this.textField.get_multiline();
+	}
+	,set_multiline: function(value) {
+		if(this.textField.get_multiline() != value) {
+			this.textField.set_multiline(value);
+			this.set_wordWrap(value);
+		}
+		return value;
+	}
+	,get_restrict: function() {
+		return this.textField.get_restrict();
+	}
+	,set_restrict: function(value) {
+		if(this.textField.get_restrict() != value) {
+			this.textField.set_restrict(value);
+			this.updateText();
+		}
+		return value;
+	}
+	,get_scrollH: function() {
+		return this.textField.get_scrollH();
+	}
+	,set_scrollH: function(value) {
+		if(value > this.get_maxScrollH()) {
+			value = this.get_maxScrollH();
+		}
+		if(value < 0) {
+			value = 0;
+		}
+		if(this.textField.get_scrollH() != value) {
+			this.textField.set_scrollH(value);
+		}
+		return value;
+	}
+	,get_scrollV: function() {
+		return this.textField.get_scrollV();
+	}
+	,set_scrollV: function(value) {
+		if(this.textField.get_scrollV() != value || this.textField.get_scrollV() == 0) {
+			this.textField.set_scrollV(value);
+		}
+		return value;
+	}
+	,get_selectable: function() {
+		return this.textField.get_selectable();
+	}
+	,set_selectable: function(value) {
+		if(this.textField.get_selectable() != value) {
+			this.textField.set_selectable(value);
+			if(this.get_type() == 1) {
+				if(this.get_focus()) {
+					this.onStartTextInput();
+				} else if(!value) {
+					this.onStopTextInput();
+				}
+			}
+		}
+		return value;
+	}
+	,get_selectionBeginIndex: function() {
+		return Math.min(this.get_caretIndex(),this.textField.__selectionIndex) | 0;
+	}
+	,set_selectionBeginIndex: function(value) {
+		this.setSelection(value,this.get_selectionEndIndex());
+		return value;
+	}
+	,get_selectionEndIndex: function() {
+		return Math.max(this.get_caretIndex(),this.textField.__selectionIndex) | 0;
+	}
+	,set_selectionEndIndex: function(value) {
+		this.setSelection(this.get_selectionBeginIndex(),value);
+		return value;
+	}
+	,get_type: function() {
+		return this.textField.get_type();
+	}
+	,set_type: function(value) {
+		if(this.textField.get_type() != value) {
+			this.textField.set_type(value);
+			if(value == 1) {
+				this.checkForFocus();
+			} else {
+				this.onStopTextInput();
+			}
+			this._regen = true;
+		}
+		return value;
+	}
+	,__class__: flixel_addons_text_internal_FlxBaseTextInput
+	,__properties__: $extend(flixel_text_FlxText.prototype.__properties__,{set_currentCamera:"set_currentCamera",get_currentCamera:"get_currentCamera",set_type:"set_type",get_type:"get_type",set_selectionEndIndex:"set_selectionEndIndex",get_selectionEndIndex:"get_selectionEndIndex",set_selectionBeginIndex:"set_selectionBeginIndex",get_selectionBeginIndex:"get_selectionBeginIndex",set_selectable:"set_selectable",get_selectable:"get_selectable",set_scrollV:"set_scrollV",get_scrollV:"get_scrollV",set_scrollH:"set_scrollH",get_scrollH:"get_scrollH",set_restrict:"set_restrict",get_restrict:"get_restrict",set_multiline:"set_multiline",get_multiline:"get_multiline",get_maxScrollV:"get_maxScrollV",get_maxScrollH:"get_maxScrollH",set_maxChars:"set_maxChars",get_maxChars:"get_maxChars",set_focus:"set_focus",get_focus:"get_focus",set_displayAsPassword:"set_displayAsPassword",get_displayAsPassword:"get_displayAsPassword",set_caretIndex:"set_caretIndex",get_caretIndex:"get_caretIndex",get_bottomScrollV:"get_bottomScrollV"})
+});
+var flixel_addons_text_FlxTextInput = function(x,y,fieldWidth,text,size,embeddedFont) {
+	this._justGainedFocus = false;
+	this.pointerEnabled = true;
+	this.mouseWheelEnabled = true;
+	this.doublePressEnabled = true;
+	flixel_addons_text_internal_FlxBaseTextInput.call(this,x,y,fieldWidth,text,size,embeddedFont);
+};
+$hxClasses["flixel.addons.text.FlxTextInput"] = flixel_addons_text_FlxTextInput;
+flixel_addons_text_FlxTextInput.__name__ = "flixel.addons.text.FlxTextInput";
+flixel_addons_text_FlxTextInput.__super__ = flixel_addons_text_internal_FlxBaseTextInput;
+flixel_addons_text_FlxTextInput.prototype = $extend(flixel_addons_text_internal_FlxBaseTextInput.prototype,{
+	doublePressEnabled: null
+	,mouseWheelEnabled: null
+	,pointerEnabled: null
+	,_justGainedFocus: null
+	,update: function(elapsed) {
+		flixel_addons_text_internal_FlxBaseTextInput.prototype.update.call(this,elapsed);
+		if(this._justGainedFocus) {
+			this._justGainedFocus = false;
+		}
+	}
+	,updateInput: function(elapsed) {
+		if(!this.updateMouseInput(elapsed)) {
+			this.updateTouchInput(elapsed);
+		}
+	}
+	,checkPointerOverlap: function(pointer,camera) {
+		return this.overlapsPoint(pointer.getWorldPosition(camera,this._point),true,camera);
+	}
+	,getPointerPosition: function(pointer,camera,point) {
+		if(point == null) {
+			var point1 = flixel_math_FlxBasePoint.pool.get().set(0,0);
+			point1._inPool = false;
+			point = point1;
+		}
+		pointer.getScreenPosition(camera,point);
+		var point1 = flixel_math_FlxBasePoint.pool.get().set(0,0);
+		point1._inPool = false;
+		point1._weak = true;
+		var position = this.getScreenPosition(point1,camera);
+		var x = position.x;
+		var y = position.y;
+		if(y == null) {
+			y = 0;
+		}
+		if(x == null) {
+			x = 0;
+		}
+		point.set_x(point.x - x);
+		point.set_y(point.y - y);
+		if(position._weak) {
+			position.put();
+		}
+		return point;
+	}
+	,updateMouseInput: function(elapsed) {
+		var input = false;
+		if(!this.pointerEnabled) {
+			return false;
+		}
+		var overlap = false;
+		var _g = 0;
+		var _g1 = this.get_cameras();
+		while(_g < _g1.length) {
+			var camera = _g1[_g];
+			++_g;
+			if(this.checkPointerOverlap(flixel_FlxG.mouse,camera)) {
+				this.set_currentCamera(camera);
+				overlap = true;
+				break;
+			}
+		}
+		var mousePos = this.getPointerPosition(flixel_FlxG.mouse,this.get_currentCamera());
+		if(flixel_FlxG.mouse._leftButton.current == 2) {
+			if(overlap) {
+				this.onDownHandler(mousePos.x,mousePos.y);
+				input = true;
+			} else if((this.get_selectable() || this.get_type() == 1) && !this._justGainedFocus) {
+				this.set_focus(false);
+			}
+		}
+		if(overlap && flixel_FlxG.mouse.wheel != 0) {
+			this.onMouseWheelHandler();
+			input = true;
+		}
+		if(this._down) {
+			this.updateDrag(elapsed,mousePos.x,mousePos.y);
+			if(flixel_FlxG.mouse._leftButton.current == -1) {
+				this.onUpHandler(mousePos.x,mousePos.y);
+				if(this.doublePressEnabled) {
+					this.checkDoublePress();
+				}
+			}
+			input = true;
+		}
+		mousePos.put();
+		return input;
+	}
+	,updateTouchInput: function(elapsed) {
+		return false;
+	}
+	,onMouseWheelHandler: function() {
+		if(this.mouseWheelEnabled) {
+			this.set_scrollV(Math.min(this.get_scrollV() - flixel_FlxG.mouse.wheel,this.get_maxScrollV()) | 0);
+		}
+	}
+	,set_focus: function(value) {
+		this._justGainedFocus = value;
+		return flixel_addons_text_internal_FlxBaseTextInput.prototype.set_focus.call(this,value);
+	}
+	,__class__: flixel_addons_text_FlxTextInput
+});
+var openfl_text_TextField = function() {
+	this.__forceCachedBitmapUpdate = false;
+	this.__renderedOnCanvasWhileOnDOM = false;
+	this.__mouseScrollVCounter = 0;
+	this.condenseWhite = false;
+	openfl_display_InteractiveObject.call(this);
+	this.__drawableType = 7;
+	this.__caretIndex = -1;
+	this.__selectionIndex = -1;
+	this.__displayAsPassword = false;
+	this.__graphics = new openfl_display_Graphics(this);
+	this.__textEngine = new openfl_text__$internal_TextEngine(this);
+	this.__layoutDirty = true;
+	this.__offsetX = 0;
+	this.__offsetY = 0;
+	this.__mouseWheelEnabled = true;
+	this.__text = "";
+	this.doubleClickEnabled = true;
+	if(openfl_text_TextField.__defaultTextFormat == null) {
+		openfl_text_TextField.__defaultTextFormat = new openfl_text_TextFormat("Times New Roman",12,0,false,false,false,"","",3,0,0,0,0);
+		openfl_text_TextField.__defaultTextFormat.blockIndent = 0;
+		openfl_text_TextField.__defaultTextFormat.bullet = false;
+		openfl_text_TextField.__defaultTextFormat.letterSpacing = 0;
+		openfl_text_TextField.__defaultTextFormat.kerning = false;
+	}
+	this.__textFormat = openfl_text_TextField.__defaultTextFormat.clone();
+	this.__textEngine.textFormatRanges.push(new openfl_text__$internal_TextFormatRange(this.__textFormat,0,0));
+	this.addEventListener("mouseDown",$bind(this,this.this_onMouseDown));
+	this.addEventListener("focusIn",$bind(this,this.this_onFocusIn));
+	this.addEventListener("focusOut",$bind(this,this.this_onFocusOut));
+	this.addEventListener("keyDown",$bind(this,this.this_onKeyDown));
+	this.addEventListener("mouseWheel",$bind(this,this.this_onMouseWheel));
+	this.addEventListener("doubleClick",$bind(this,this.this_onDoubleClick));
+};
+$hxClasses["openfl.text.TextField"] = openfl_text_TextField;
+openfl_text_TextField.__name__ = "openfl.text.TextField";
+openfl_text_TextField.__defaultTextFormat = null;
+openfl_text_TextField.__super__ = openfl_display_InteractiveObject;
+openfl_text_TextField.prototype = $extend(openfl_display_InteractiveObject.prototype,{
+	condenseWhite: null
+	,__bounds: null
+	,__caretIndex: null
+	,__cursorTimer: null
+	,__dirty: null
+	,__displayAsPassword: null
+	,__domRender: null
+	,__inputEnabled: null
+	,__isHTML: null
+	,__layoutDirty: null
+	,__mouseScrollVCounter: null
+	,__mouseWheelEnabled: null
+	,__offsetX: null
+	,__offsetY: null
+	,__selectionIndex: null
+	,__showCursor: null
+	,__styleSheet: null
+	,__text: null
+	,__htmlText: null
+	,__textEngine: null
+	,__textFormat: null
+	,__div: null
+	,__renderedOnCanvasWhileOnDOM: null
+	,__forceCachedBitmapUpdate: null
+	,appendText: function(text) {
+		if(text == null || text == "") {
+			return;
+		}
+		this.__dirty = true;
+		this.__layoutDirty = true;
+		if(!this.__renderDirty) {
+			this.__renderDirty = true;
+			this.__setParentRenderDirty();
+		}
+		this.__updateText(this.__text + text);
+		this.__textEngine.textFormatRanges.get(this.__textEngine.textFormatRanges.get_length() - 1).end = this.__text.length;
+		this.__selectionIndex = this.__caretIndex = this.__text.length;
+	}
+	,getCharBoundaries: function(charIndex) {
+		if(charIndex < 0 || charIndex > this.__text.length - 1) {
+			return null;
+		}
+		var rect = new openfl_geom_Rectangle();
+		if(this.__getCharBoundaries(charIndex,rect)) {
+			return rect;
+		} else {
+			return null;
+		}
+	}
+	,getCharIndexAtPoint: function(x,y) {
+		if(x <= 2 || x > this.get_width() + 4 || y <= 0 || y > this.get_height() + 4) {
+			return -1;
+		}
+		this.__updateLayout();
+		x += this.get_scrollH();
+		var _g = 0;
+		var _g1 = this.get_scrollV() - 1;
+		while(_g < _g1) y += this.__textEngine.lineHeights.get(_g++);
+		var group = this.__textEngine.layoutGroups.iterator();
+		while(group.hasNext()) {
+			var group1 = group.next();
+			if(y >= group1.offsetY && y <= group1.offsetY + group1.height) {
+				if(x >= group1.offsetX && x <= group1.offsetX + group1.width) {
+					var advance = 0.0;
+					var _g = 0;
+					var _g1 = group1.positions.length;
+					while(_g < _g1) {
+						var i = _g++;
+						advance += group1.positions[i];
+						if(x <= group1.offsetX + advance) {
+							return group1.startIndex + i;
+						}
+					}
+					return group1.endIndex;
+				}
+			}
+		}
+		return -1;
+	}
+	,getFirstCharInParagraph: function(charIndex) {
+		if(charIndex < 0 || charIndex > this.get_text().length) {
+			return -1;
+		}
+		if(this.__textEngine.lineBreaks.get_length() == 0) {
+			return 0;
+		}
+		var _g = 0;
+		var _g1 = this.__textEngine.lineBreaks.get_length();
+		while(_g < _g1) {
+			var i = _g++;
+			if(charIndex <= this.__textEngine.lineBreaks.get(i)) {
+				if(i == 0) {
+					return 0;
+				} else {
+					return this.__textEngine.lineBreaks.get(i - 1) + 1;
+				}
+			}
+		}
+		return this.__textEngine.lineBreaks.get(this.__textEngine.lineBreaks.get_length() - 1) + 1;
+	}
+	,getLineIndexAtPoint: function(x,y) {
+		this.__updateLayout();
+		if(x <= 2 || x > this.get_width() + 4 || y <= 0 || y > this.get_height() + 4) {
+			return -1;
+		}
+		var _g = 0;
+		var _g1 = this.get_scrollV() - 1;
+		while(_g < _g1) y += this.__textEngine.lineHeights.get(_g++);
+		var group = this.__textEngine.layoutGroups.iterator();
+		while(group.hasNext()) {
+			var group1 = group.next();
+			if(y >= group1.offsetY && y <= group1.offsetY + group1.height) {
+				return group1.lineIndex;
+			}
+		}
+		return -1;
+	}
+	,getLineIndexOfChar: function(charIndex) {
+		if(charIndex < 0 || charIndex > this.__text.length) {
+			return -1;
+		}
+		this.__updateLayout();
+		var group = this.__textEngine.layoutGroups.iterator();
+		while(group.hasNext()) {
+			var group1 = group.next();
+			if(group1.startIndex <= charIndex && group1.endIndex >= charIndex) {
+				return group1.lineIndex;
+			}
+		}
+		return -1;
+	}
+	,getLineLength: function(lineIndex) {
+		this.__updateLayout();
+		if(lineIndex < 0 || lineIndex > this.__textEngine.numLines - 1) {
+			return 0;
+		}
+		var startIndex = -1;
+		var endIndex = -1;
+		var group = this.__textEngine.layoutGroups.iterator();
+		while(group.hasNext()) {
+			var group1 = group.next();
+			if(group1.lineIndex == lineIndex) {
+				if(startIndex == -1) {
+					startIndex = group1.startIndex;
+				}
+			} else if(group1.lineIndex == lineIndex + 1) {
+				endIndex = group1.startIndex;
+				break;
+			}
+		}
+		if(endIndex == -1) {
+			endIndex = this.__text.length;
+		}
+		return endIndex - startIndex;
+	}
+	,getLineMetrics: function(lineIndex) {
+		this.__updateLayout();
+		var ascender = this.__textEngine.lineAscents.get(lineIndex);
+		var descender = this.__textEngine.lineDescents.get(lineIndex);
+		var leading = this.__textEngine.lineLeadings.get(lineIndex);
+		var lineHeight = this.__textEngine.lineHeights.get(lineIndex);
+		var lineWidth = this.__textEngine.lineWidths.get(lineIndex);
+		var margin;
+		switch(this.__textFormat.align) {
+		case 0:
+			margin = (this.__textEngine.width - lineWidth) / 2;
+			break;
+		case 1:case 4:
+			margin = this.__textEngine.width - lineWidth - 2;
+			break;
+		case 2:case 3:case 5:
+			margin = 2;
+			break;
+		}
+		return new openfl_text_TextLineMetrics(margin,lineWidth,lineHeight,ascender,descender,leading);
+	}
+	,getLineOffset: function(lineIndex) {
+		this.__updateLayout();
+		if(lineIndex < 0 || lineIndex > this.__textEngine.numLines - 1) {
+			return -1;
+		}
+		var group = this.__textEngine.layoutGroups.iterator();
+		while(group.hasNext()) {
+			var group1 = group.next();
+			if(group1.lineIndex == lineIndex) {
+				return group1.startIndex;
+			}
+		}
+		return 0;
+	}
+	,getLineText: function(lineIndex) {
+		this.__updateLayout();
+		if(lineIndex < 0 || lineIndex > this.__textEngine.numLines - 1) {
+			return null;
+		}
+		var startIndex = -1;
+		var endIndex = -1;
+		var group = this.__textEngine.layoutGroups.iterator();
+		while(group.hasNext()) {
+			var group1 = group.next();
+			if(group1.lineIndex == lineIndex) {
+				if(startIndex == -1) {
+					startIndex = group1.startIndex;
+				}
+			} else if(group1.lineIndex == lineIndex + 1) {
+				endIndex = group1.startIndex;
+				break;
+			}
+		}
+		if(endIndex == -1) {
+			endIndex = this.__text.length;
+		}
+		return this.__textEngine.text.substring(startIndex,endIndex);
+	}
+	,getParagraphLength: function(charIndex) {
+		if(charIndex < 0 || charIndex > this.get_text().length) {
+			return -1;
+		}
+		var startIndex = this.getFirstCharInParagraph(charIndex);
+		if(charIndex >= this.get_text().length) {
+			return this.get_text().length - startIndex + 1;
+		}
+		var endIndex = this.__textEngine.getLineBreakIndex(charIndex) + 1;
+		if(endIndex == 0) {
+			endIndex = this.__text.length;
+		}
+		return endIndex - startIndex;
+	}
+	,getTextFormat: function(beginIndex,endIndex) {
+		if(endIndex == null) {
+			endIndex = -1;
+		}
+		if(beginIndex == null) {
+			beginIndex = -1;
+		}
+		var format = null;
+		if(beginIndex >= this.get_text().length || beginIndex < -1 || endIndex > this.get_text().length || endIndex < -1) {
+			throw new openfl_errors_RangeError("The supplied index is out of bounds");
+		}
+		if(beginIndex == -1) {
+			beginIndex = 0;
+		}
+		if(endIndex == -1) {
+			endIndex = this.get_text().length;
+		}
+		if(beginIndex >= endIndex) {
+			return new openfl_text_TextFormat();
+		}
+		var group = this.__textEngine.textFormatRanges.iterator();
+		while(group.hasNext()) {
+			var group1 = group.next();
+			if(group1.start <= beginIndex && group1.end > beginIndex || group1.start < endIndex && group1.end >= endIndex) {
+				if(format == null) {
+					format = group1.format.clone();
+				} else {
+					if(group1.format.font != format.font) {
+						format.font = null;
+					}
+					if(group1.format.size != format.size) {
+						format.size = null;
+					}
+					if(group1.format.color != format.color) {
+						format.color = null;
+					}
+					if(group1.format.bold != format.bold) {
+						format.bold = null;
+					}
+					if(group1.format.italic != format.italic) {
+						format.italic = null;
+					}
+					if(group1.format.underline != format.underline) {
+						format.underline = null;
+					}
+					if(group1.format.url != format.url) {
+						format.url = null;
+					}
+					if(group1.format.target != format.target) {
+						format.target = null;
+					}
+					if(group1.format.align != format.align) {
+						format.align = null;
+					}
+					if(group1.format.leftMargin != format.leftMargin) {
+						format.leftMargin = null;
+					}
+					if(group1.format.rightMargin != format.rightMargin) {
+						format.rightMargin = null;
+					}
+					if(group1.format.indent != format.indent) {
+						format.indent = null;
+					}
+					if(group1.format.leading != format.leading) {
+						format.leading = null;
+					}
+					if(group1.format.blockIndent != format.blockIndent) {
+						format.blockIndent = null;
+					}
+					if(group1.format.bullet != format.bullet) {
+						format.bullet = null;
+					}
+					if(group1.format.kerning != format.kerning) {
+						format.kerning = null;
+					}
+					if(group1.format.letterSpacing != format.letterSpacing) {
+						format.letterSpacing = null;
+					}
+					if(group1.format.tabStops != format.tabStops) {
+						format.tabStops = null;
+					}
+				}
+			}
+		}
+		if(format == null) {
+			format = new openfl_text_TextFormat();
+		}
+		return format;
+	}
+	,replaceSelectedText: function(value) {
+		this.__replaceSelectedText(value,false);
+	}
+	,replaceText: function(beginIndex,endIndex,newText) {
+		this.__replaceText(beginIndex,endIndex,newText,false);
+	}
+	,setSelection: function(beginIndex,endIndex) {
+		this.__selectionIndex = beginIndex;
+		this.__caretIndex = endIndex;
+		this.__updateScrollV();
+		this.__updateScrollH();
+		if(this.stage != null && this.stage.get_focus() == this) {
+			this.__stopCursorTimer();
+			this.__startCursorTimer();
+		}
+	}
+	,setTextFormat: function(format,beginIndex,endIndex) {
+		if(endIndex == null) {
+			endIndex = -1;
+		}
+		if(beginIndex == null) {
+			beginIndex = -1;
+		}
+		var max = this.get_text().length;
+		var range;
+		if(beginIndex == -1) {
+			if(endIndex == -1) {
+				endIndex = max;
+			}
+			beginIndex = 0;
+		} else if(endIndex == -1) {
+			endIndex = beginIndex + 1;
+		}
+		if(beginIndex == endIndex) {
+			return;
+		}
+		if(beginIndex < 0 || endIndex <= 0 || endIndex < beginIndex || beginIndex >= max || endIndex > max) {
+			throw new openfl_errors_RangeError();
+		}
+		if(beginIndex == 0 && endIndex == max) {
+			this.__textEngine.textFormatRanges.set_length(1);
+			range = this.__textEngine.textFormatRanges.get(0);
+			range.start = 0;
+			range.end = max;
+			range.format.__merge(format);
+		} else {
+			var index = 0;
+			var newRange;
+			while(index < this.__textEngine.textFormatRanges.get_length()) {
+				range = this.__textEngine.textFormatRanges.get(index);
+				if(range.end <= beginIndex) {
+					++index;
+				} else if(range.start >= endIndex) {
+					break;
+				} else if(range.start <= beginIndex && range.end >= endIndex) {
+					if(range.start == beginIndex && range.end == endIndex) {
+						range.format = range.format.clone();
+						range.format.__merge(format);
+						break;
+					} else if(range.start == beginIndex) {
+						newRange = new openfl_text__$internal_TextFormatRange(range.format.clone(),beginIndex,endIndex);
+						newRange.format.__merge(format);
+						this.__textEngine.textFormatRanges.insertAt(index,newRange);
+						range.start = endIndex;
+						index += 2;
+					} else if(range.end == endIndex) {
+						newRange = new openfl_text__$internal_TextFormatRange(range.format.clone(),beginIndex,endIndex);
+						newRange.format.__merge(format);
+						this.__textEngine.textFormatRanges.insertAt(index + 1,newRange);
+						range.end = beginIndex;
+						break;
+					} else {
+						newRange = new openfl_text__$internal_TextFormatRange(range.format.clone(),beginIndex,endIndex);
+						newRange.format.__merge(format);
+						this.__textEngine.textFormatRanges.insertAt(index + 1,newRange);
+						newRange = new openfl_text__$internal_TextFormatRange(range.format.clone(),endIndex,range.end);
+						this.__textEngine.textFormatRanges.insertAt(index + 2,newRange);
+						range.end = beginIndex;
+						break;
+					}
+				} else if(range.start >= beginIndex && range.end <= endIndex) {
+					if(range.start == beginIndex) {
+						range.format = range.format.clone();
+						range.format.__merge(format);
+						range.end = endIndex;
+					} else {
+						this.__textEngine.textFormatRanges.removeAt(index);
+					}
+				} else if(range.start > beginIndex && range.end > beginIndex) {
+					range.start = endIndex;
+					break;
+				} else if(range.start < beginIndex && range.end <= endIndex) {
+					newRange = new openfl_text__$internal_TextFormatRange(range.format.clone(),beginIndex,endIndex);
+					newRange.format.__merge(format);
+					this.__textEngine.textFormatRanges.insertAt(index + 1,newRange);
+					range.end = beginIndex;
+					index += 2;
+				} else {
+					++index;
+					lime_utils_Log.warn("You found a bug in OpenFL's text code! Please save a copy of your project and create an issue on GitHub so we can fix this.",{ fileName : "openfl/text/TextField.hx", lineNumber : 1578, className : "openfl.text.TextField", methodName : "setTextFormat"});
+				}
+			}
+		}
+		this.__dirty = true;
+		this.__layoutDirty = true;
+		if(!this.__renderDirty) {
+			this.__renderDirty = true;
+			this.__setParentRenderDirty();
+		}
+	}
+	,__allowMouseFocus: function() {
+		return this.mouseEnabled;
+	}
+	,__caretBeginningOfLine: function() {
+		this.__caretIndex = this.getLineOffset(this.getLineIndexOfChar(this.__caretIndex));
+	}
+	,__caretBeginningOfNextLine: function() {
+		var lineIndex = this.getLineIndexOfChar(this.__caretIndex);
+		if(lineIndex < this.__textEngine.numLines - 1) {
+			this.__caretIndex = this.getLineOffset(lineIndex + 1);
+		} else {
+			this.__caretIndex = this.__text.length;
+		}
+	}
+	,__caretBeginningOfPreviousLine: function() {
+		var lineIndex = this.getLineIndexOfChar(this.__caretIndex);
+		if(lineIndex > 0) {
+			var index = this.getLineOffset(this.getLineIndexOfChar(this.__caretIndex));
+			if(this.__caretIndex == index) {
+				this.__caretIndex = this.getLineOffset(lineIndex - 1);
+			} else {
+				this.__caretIndex = index;
+			}
+		}
+	}
+	,__caretEndOfLine: function() {
+		var lineIndex = this.getLineIndexOfChar(this.__caretIndex);
+		if(lineIndex < this.__textEngine.numLines - 1) {
+			this.__caretIndex = this.getLineOffset(lineIndex + 1) - 1;
+		} else {
+			this.__caretIndex = this.__text.length;
+		}
+	}
+	,__caretNextCharacter: function() {
+		if(this.__caretIndex < this.__text.length) {
+			this.__caretIndex++;
+		}
+	}
+	,__caretNextLine: function() {
+		var lineIndex = this.getLineIndexOfChar(this.__caretIndex);
+		if(lineIndex < this.__textEngine.numLines - 1) {
+			this.__caretIndex = this.__getCharIndexOnDifferentLine(this.get_caretIndex(),lineIndex + 1);
+		}
+	}
+	,__caretPreviousCharacter: function() {
+		if(this.__caretIndex > 0) {
+			this.__caretIndex--;
+		}
+	}
+	,__caretPreviousLine: function() {
+		var lineIndex = this.getLineIndexOfChar(this.__caretIndex);
+		if(lineIndex > 0) {
+			this.__caretIndex = this.__getCharIndexOnDifferentLine(this.get_caretIndex(),lineIndex - 1);
+		}
+	}
+	,__disableInput: function() {
+		if(this.__inputEnabled && this.stage != null) {
+			this.stage.window.__backend.setTextInputEnabled(false);
+			this.stage.window.onTextInput.remove($bind(this,this.window_onTextInput));
+			this.stage.window.onKeyDown.remove($bind(this,this.window_onKeyDown));
+			this.__inputEnabled = false;
+			this.__stopCursorTimer();
+		}
+	}
+	,__dispatch: function(event) {
+		if(event.eventPhase == 2 && event.type == "mouseUp") {
+			var group = this.__getGroup(this.get_mouseX(),this.get_mouseY(),true);
+			if(group != null) {
+				var url = group.format.url;
+				if(url != null && url != "") {
+					if(StringTools.startsWith(url,"event:")) {
+						this.dispatchEvent(new openfl_events_TextEvent("link",true,false,HxOverrides.substr(url,6,null)));
+					} else {
+						openfl_Lib.getURL(new openfl_net_URLRequest(url));
+					}
+				}
+			}
+		}
+		return openfl_display_InteractiveObject.prototype.__dispatch.call(this,event);
+	}
+	,__enableInput: function() {
+		if(this.stage != null) {
+			var bounds = this.getBounds(this.stage);
+			this.stage.window.setTextInputRect(new lime_math_Rectangle(bounds.x,bounds.y,bounds.width,bounds.height));
+			this.stage.window.__backend.setTextInputEnabled(true);
+			if(!this.__inputEnabled) {
+				this.stage.window.__backend.setTextInputEnabled(true);
+				if(!this.stage.window.onTextInput.has($bind(this,this.window_onTextInput))) {
+					this.stage.window.onTextInput.add($bind(this,this.window_onTextInput));
+					this.stage.window.onKeyDown.add($bind(this,this.window_onKeyDown));
+				}
+				this.__inputEnabled = true;
+				this.__stopCursorTimer();
+				this.__startCursorTimer();
+			}
+		}
+	}
+	,__getAdvance: function(position) {
+		return position;
+	}
+	,__getBounds: function(rect,matrix) {
+		this.__updateLayout();
+		var bounds = openfl_geom_Rectangle.__pool.get();
+		bounds.copyFrom(this.__textEngine.bounds);
+		bounds.offset(this.__offsetX,this.__offsetY);
+		bounds.__transform(bounds,matrix);
+		rect.__expand(bounds.x,bounds.y,bounds.width,bounds.height);
+		openfl_geom_Rectangle.__pool.release(bounds);
+	}
+	,__getCharBoundaries: function(charIndex,rect) {
+		if(charIndex < 0 || charIndex > this.__text.length - 1) {
+			return false;
+		}
+		this.__updateLayout();
+		var group = this.__textEngine.layoutGroups.iterator();
+		while(group.hasNext()) {
+			var group1 = group.next();
+			if(charIndex >= group1.startIndex && charIndex < group1.endIndex) {
+				try {
+					var x = group1.offsetX;
+					var _g = 0;
+					var _g1 = charIndex - group1.startIndex;
+					while(_g < _g1) x += group1.positions[_g++];
+					rect.setTo(x,group1.offsetY,group1.positions[charIndex - group1.startIndex],group1.ascent + group1.descent);
+					return true;
+				} catch( _g2 ) {
+					haxe_NativeStackTrace.lastError = _g2;
+				}
+			}
+		}
+		return false;
+	}
+	,__getCharIndexOnDifferentLine: function(charIndex,lineIndex) {
+		if(charIndex < 0 || charIndex > this.__text.length) {
+			return -1;
+		}
+		if(lineIndex < 0 || lineIndex > this.__textEngine.numLines - 1) {
+			return -1;
+		}
+		var x = null;
+		var y = null;
+		var group = this.__textEngine.layoutGroups.iterator();
+		while(group.hasNext()) {
+			var group1 = group.next();
+			if(charIndex >= group1.startIndex && charIndex <= group1.endIndex) {
+				x = group1.offsetX;
+				var _g = 0;
+				var _g1 = charIndex - group1.startIndex;
+				while(_g < _g1) x += group1.positions[_g++];
+				if(y != null) {
+					return this.__getPosition(x,y);
+				}
+			}
+			if(group1.lineIndex == lineIndex) {
+				y = group1.offsetY + group1.height / 2;
+				var _g2 = 0;
+				var _g3 = this.get_scrollV() - 1;
+				while(_g2 < _g3) y -= this.__textEngine.lineHeights.get(_g2++);
+				if(x != null) {
+					return this.__getPosition(x,y);
+				}
+			}
+		}
+		return -1;
+	}
+	,__getCursor: function() {
+		var group = this.__getGroup(this.get_mouseX(),this.get_mouseY(),true);
+		if(group != null && group.format.url != "") {
+			return "button";
+		} else if(this.__textEngine.selectable) {
+			return "ibeam";
+		}
+		return null;
+	}
+	,__getGroup: function(x,y,precise) {
+		if(precise == null) {
+			precise = false;
+		}
+		this.__updateLayout();
+		x += this.get_scrollH();
+		var _g = 0;
+		var _g1 = this.get_scrollV() - 1;
+		while(_g < _g1) y += this.__textEngine.lineHeights.get(_g++);
+		if(!precise && y > this.__textEngine.textHeight) {
+			y = this.__textEngine.textHeight;
+		}
+		var firstGroup = true;
+		var group;
+		var nextGroup;
+		var _g = 0;
+		var _g1 = this.__textEngine.layoutGroups.get_length();
+		while(_g < _g1) {
+			var i = _g++;
+			group = this.__textEngine.layoutGroups.get(i);
+			if(i < this.__textEngine.layoutGroups.get_length() - 1) {
+				nextGroup = this.__textEngine.layoutGroups.get(i + 1);
+			} else {
+				nextGroup = null;
+			}
+			if(firstGroup) {
+				if(y < group.offsetY) {
+					y = group.offsetY;
+				}
+				if(x < group.offsetX) {
+					x = group.offsetX;
+				}
+				firstGroup = false;
+			}
+			if(y >= group.offsetY && y <= group.offsetY + group.height || !precise && nextGroup == null) {
+				if(x >= group.offsetX && x <= group.offsetX + group.width || !precise && (nextGroup == null || nextGroup.lineIndex != group.lineIndex)) {
+					return group;
+				}
+			}
+		}
+		return null;
+	}
+	,__getPosition: function(x,y) {
+		var group = this.__getGroup(x,y);
+		if(group == null) {
+			return this.__text.length;
+		}
+		var advance = 0.0;
+		var _g = 0;
+		var _g1 = group.positions.length;
+		while(_g < _g1) {
+			var i = _g++;
+			advance += group.positions[i];
+			if(x <= group.offsetX + advance) {
+				if(x <= group.offsetX + (advance - group.positions[i]) + group.positions[i] / 2) {
+					return group.startIndex + i;
+				} else if(group.startIndex + i < group.endIndex) {
+					return group.startIndex + i + 1;
+				} else {
+					return group.endIndex;
+				}
+			}
+		}
+		return group.endIndex;
+	}
+	,__hitTest: function(x,y,shapeFlag,stack,interactiveOnly,hitObject) {
+		if(!hitObject.get_visible() || this.__isMask || interactiveOnly && !this.mouseEnabled) {
+			return false;
+		}
+		if(this.get_mask() != null && !this.get_mask().__hitTestMask(x,y)) {
+			return false;
+		}
+		this.__getRenderTransform();
+		this.__updateLayout();
+		var _this = this.__renderTransform;
+		var norm = _this.a * _this.d - _this.b * _this.c;
+		var _this1 = this.__renderTransform;
+		var norm1 = _this1.a * _this1.d - _this1.b * _this1.c;
+		if(this.__textEngine.bounds.contains(norm == 0 ? -_this.tx : 1.0 / norm * (_this.c * (_this.ty - y) + _this.d * (x - _this.tx)),norm1 == 0 ? -_this1.ty : 1.0 / norm1 * (_this1.a * (y - _this1.ty) + _this1.b * (_this1.tx - x)))) {
+			if(stack != null) {
+				stack.push(hitObject);
+			}
+			return true;
+		}
+		return false;
+	}
+	,__hitTestMask: function(x,y) {
+		this.__getRenderTransform();
+		this.__updateLayout();
+		var _this = this.__renderTransform;
+		var norm = _this.a * _this.d - _this.b * _this.c;
+		var _this1 = this.__renderTransform;
+		var norm1 = _this1.a * _this1.d - _this1.b * _this1.c;
+		if(this.__textEngine.bounds.contains(norm == 0 ? -_this.tx : 1.0 / norm * (_this.c * (_this.ty - y) + _this.d * (x - _this.tx)),norm1 == 0 ? -_this1.ty : 1.0 / norm1 * (_this1.a * (y - _this1.ty) + _this1.b * (_this1.tx - x)))) {
+			return true;
+		}
+		return false;
+	}
+	,__replaceSelectedText: function(value,restrict) {
+		if(restrict == null) {
+			restrict = true;
+		}
+		if(value == null) {
+			value = "";
+		}
+		if(value == "" && this.__selectionIndex == this.__caretIndex) {
+			return;
+		}
+		var startIndex = this.__caretIndex < this.__selectionIndex ? this.__caretIndex : this.__selectionIndex;
+		var endIndex = this.__caretIndex > this.__selectionIndex ? this.__caretIndex : this.__selectionIndex;
+		if(startIndex == endIndex && this.__textEngine.maxChars > 0 && this.__text.length == this.__textEngine.maxChars) {
+			return;
+		}
+		if(startIndex > this.__text.length) {
+			startIndex = this.__text.length;
+		}
+		if(endIndex > this.__text.length) {
+			endIndex = this.__text.length;
+		}
+		if(endIndex < startIndex) {
+			var cache = endIndex;
+			endIndex = startIndex;
+			startIndex = cache;
+		}
+		if(startIndex < 0) {
+			startIndex = 0;
+		}
+		this.__replaceText(startIndex,endIndex,value,restrict);
+	}
+	,__replaceText: function(beginIndex,endIndex,newText,restrict) {
+		if(endIndex < beginIndex || beginIndex < 0 || endIndex > this.__text.length || newText == null) {
+			return;
+		}
+		if(restrict) {
+			newText = this.__textEngine.restrictText(newText);
+			if(this.__textEngine.maxChars > 0) {
+				var maxLength = this.__textEngine.maxChars - this.__text.length + (endIndex - beginIndex);
+				if(maxLength <= 0) {
+					newText = "";
+				} else if(maxLength < newText.length) {
+					newText = HxOverrides.substr(newText,0,maxLength);
+				}
+			}
+		}
+		this.__updateText(this.__text.substring(0,beginIndex) + newText + this.__text.substring(endIndex));
+		var offset = newText.length - (endIndex - beginIndex);
+		var i = 0;
+		var range;
+		while(i < this.__textEngine.textFormatRanges.get_length()) {
+			range = this.__textEngine.textFormatRanges.get(i);
+			if(beginIndex == endIndex) {
+				if(range.start == range.end) {
+					if(range.start != 0) {
+						lime_utils_Log.warn("You found a bug in OpenFL's text code! Please save a copy of your project and create an issue on GitHub so we can fix this.",{ fileName : "openfl/text/TextField.hx", lineNumber : 2087, className : "openfl.text.TextField", methodName : "__replaceText"});
+					} else {
+						range.end += offset;
+					}
+				} else if(range.end >= beginIndex) {
+					if(range.start >= beginIndex) {
+						range.start += offset;
+						range.end += offset;
+					} else if(range.start < beginIndex && range.end >= endIndex) {
+						range.end += offset;
+					}
+				}
+			} else if(range.end > beginIndex) {
+				if(range.start > endIndex) {
+					range.start += offset;
+					range.end += offset;
+				} else if(range.start <= beginIndex && range.end > endIndex) {
+					range.end += offset;
+				} else if(range.start >= beginIndex && range.end <= endIndex) {
+					var this1 = this.__textEngine.textFormatRanges;
+					var items = [];
+					this1.__tempIndex = i--;
+					var _g_current = 0;
+					while(_g_current < items.length) {
+						this1.insertAt(this1.__tempIndex,items[_g_current++]);
+						this1.__tempIndex++;
+					}
+					this1.splice(this1.__tempIndex,1);
+				} else if(range.end > endIndex && range.start > beginIndex && range.start <= endIndex) {
+					range.start = beginIndex;
+					range.end += offset;
+				} else if(range.start < beginIndex && range.end > beginIndex && range.end <= endIndex) {
+					range.end = beginIndex;
+				}
+			}
+			++i;
+		}
+		if(this.__textEngine.textFormatRanges.get_length() == 0) {
+			this.__textEngine.textFormatRanges.push(new openfl_text__$internal_TextFormatRange(this.get_defaultTextFormat().clone(),0,newText.length));
+		} else if(beginIndex == endIndex && this.__textEngine.textFormatRanges.get(0).start > 0) {
+			this.__textEngine.textFormatRanges.unshift(new openfl_text__$internal_TextFormatRange(this.get_defaultTextFormat().clone(),0,this.__textEngine.textFormatRanges.get(0).start));
+		} else if(beginIndex != endIndex && this.__textEngine.textFormatRanges.get(this.__textEngine.textFormatRanges.get_length() - 1).end < this.__text.length) {
+			this.__textEngine.textFormatRanges.push(new openfl_text__$internal_TextFormatRange(this.get_defaultTextFormat().clone(),this.__textEngine.textFormatRanges.get(this.__textEngine.textFormatRanges.get_length() - 1).end,this.__text.length));
+		}
+		this.__selectionIndex = this.__caretIndex = beginIndex + newText.length;
+		this.__dirty = true;
+		this.__layoutDirty = true;
+		if(!this.__renderDirty) {
+			this.__renderDirty = true;
+			this.__setParentRenderDirty();
+		}
+	}
+	,__startCursorTimer: function() {
+		if(this.get_type() == 1) {
+			if(this.__inputEnabled) {
+				this.__cursorTimer = haxe_Timer.delay($bind(this,this.__startCursorTimer),600);
+				this.__showCursor = !this.__showCursor;
+			}
+			this.__dirty = true;
+			if(!this.__renderDirty) {
+				this.__renderDirty = true;
+				this.__setParentRenderDirty();
+			}
+		} else if(this.get_selectable()) {
+			this.__dirty = true;
+			if(!this.__renderDirty) {
+				this.__renderDirty = true;
+				this.__setParentRenderDirty();
+			}
+		}
+	}
+	,__startTextInput: function() {
+		if(this.__caretIndex < 0) {
+			this.__caretIndex = this.__text.length;
+			this.__selectionIndex = this.__caretIndex;
+		}
+		if(openfl_display_DisplayObject.__supportDOM ? this.__renderedOnCanvasWhileOnDOM : true) {
+			this.__enableInput();
+		}
+	}
+	,__stopCursorTimer: function() {
+		if(this.__cursorTimer != null) {
+			this.__cursorTimer.stop();
+			this.__cursorTimer = null;
+		}
+		if(this.__showCursor) {
+			this.__showCursor = false;
+			this.__dirty = true;
+			if(!this.__renderDirty) {
+				this.__renderDirty = true;
+				this.__setParentRenderDirty();
+			}
+		}
+	}
+	,__stopTextInput: function() {
+		if(openfl_display_DisplayObject.__supportDOM ? this.__renderedOnCanvasWhileOnDOM : true) {
+			this.__disableInput();
+		}
+	}
+	,__updateLayout: function() {
+		if(this.__layoutDirty) {
+			var cacheWidth = this.__textEngine.width;
+			this.__textEngine.update();
+			if(this.__textEngine.autoSize != 2) {
+				if(this.__textEngine.width != cacheWidth) {
+					switch(this.__textEngine.autoSize) {
+					case 0:
+						this.set_x(this.get_x() + (cacheWidth - this.__textEngine.width) / 2);
+						break;
+					case 3:
+						this.set_x(this.get_x() + (cacheWidth - this.__textEngine.width));
+						break;
+					default:
+					}
+				}
+				this.__textEngine.getBounds();
+			}
+			this.__layoutDirty = false;
+			this.setSelection(this.__selectionIndex,this.__caretIndex);
+		}
+	}
+	,__updateMouseDrag: function() {
+		if(this.stage == null) {
+			return;
+		}
+		var bounds = this.getBounds(this);
+		if(this.get_mouseX() > bounds.width - 1) {
+			this.set_scrollH(this.get_scrollH() + (Math.max(Math.min((this.get_mouseX() - bounds.width) * .1,10),1) | 0));
+		} else if(this.get_mouseX() < 1) {
+			this.set_scrollH(this.get_scrollH() - (Math.max(Math.min(this.get_mouseX() * -.1,10),1) | 0));
+		}
+		this.__mouseScrollVCounter++;
+		if(this.__mouseScrollVCounter > this.stage.get_frameRate() / 10) {
+			if(this.get_mouseY() > bounds.height - 2) {
+				this.set_scrollV(Math.min(this.get_scrollV() + Math.max(Math.min((this.get_mouseY() - bounds.height) * .03,5),1),this.get_maxScrollV()) | 0);
+			} else if(this.get_mouseY() < 2) {
+				this.set_scrollV(this.get_scrollV() - (Math.max(Math.min(this.get_mouseY() * -.03,5),1) | 0));
+			}
+			this.__mouseScrollVCounter = 0;
+		}
+		this.stage_onMouseMove(null);
+	}
+	,__updateScrollH: function() {
+		this.__updateLayout();
+		var bounds = this.getBounds(this);
+		if(this.get_textWidth() <= bounds.width - 4) {
+			this.set_scrollH(0);
+			return;
+		}
+		var tempScrollH = this.get_scrollH();
+		if(this.__caretIndex == 0 || this.getLineOffset(this.getLineIndexOfChar(this.__caretIndex)) == this.__caretIndex) {
+			tempScrollH = 0;
+		} else {
+			var caret = openfl_geom_Rectangle.__pool.get();
+			var written = false;
+			if(this.__caretIndex < this.__text.length) {
+				written = this.__getCharBoundaries(this.__caretIndex,caret);
+			}
+			if(!written) {
+				this.__getCharBoundaries(this.__caretIndex - 1,caret);
+				caret.x += caret.width;
+			}
+			while(caret.x < tempScrollH && tempScrollH > 0) tempScrollH -= 24;
+			while(caret.x > tempScrollH + bounds.width - 4) tempScrollH += 24;
+			openfl_geom_Rectangle.__pool.release(caret);
+		}
+		if(tempScrollH > 0 && this.get_type() != 1) {
+			var lineLength = this.getLineLength(this.getLineIndexOfChar(this.__caretIndex));
+			if(this.get_scrollH() + bounds.width - 4 > lineLength) {
+				this.set_scrollH(Math.ceil(lineLength - bounds.width + 4));
+			}
+		}
+		if(tempScrollH < 0) {
+			this.set_scrollH(0);
+		} else if(tempScrollH > this.get_maxScrollH()) {
+			this.set_scrollH(this.get_maxScrollH());
+		} else {
+			this.set_scrollH(tempScrollH);
+		}
+	}
+	,__updateScrollV: function() {
+		this.__updateLayout();
+		if(this.get_textHeight() <= this.get_height() - 4) {
+			this.set_scrollV(1);
+			return;
+		}
+		var lineIndex = this.getLineIndexOfChar(this.__caretIndex);
+		if(lineIndex == -1 && this.__caretIndex > 0) {
+			lineIndex = this.getLineIndexOfChar(this.__caretIndex - 1) + 1;
+		}
+		if(lineIndex + 1 < this.get_scrollV()) {
+			this.set_scrollV(lineIndex + 1);
+		} else if(lineIndex + 1 > this.get_bottomScrollV()) {
+			var i = lineIndex;
+			var tempHeight = 0.0;
+			if(i >= this.__textEngine.lineHeights.get_length()) {
+				i = this.__textEngine.lineHeights.get_length() - 1;
+			}
+			while(i >= 0) {
+				tempHeight += this.__textEngine.lineHeights.get(i);
+				if(tempHeight > this.get_height() - 4) {
+					i += tempHeight - this.get_height() < 0 ? 1 : 2;
+					break;
+				}
+				--i;
+			}
+			this.set_scrollV(i);
+		} else {
+			this.set_scrollV(this.get_scrollV());
+		}
+	}
+	,__updateText: function(value) {
+		if(openfl_display_DisplayObject.__supportDOM && this.__renderedOnCanvasWhileOnDOM) {
+			this.__forceCachedBitmapUpdate = this.__text != value;
+		}
+		this.__textEngine.set_text(value);
+		this.__text = this.__textEngine.text;
+		if(this.stage != null && this.stage.get_focus() == this) {
+			if(this.__text.length < this.__selectionIndex) {
+				this.__selectionIndex = this.__text.length;
+			}
+			if(this.__text.length < this.__caretIndex) {
+				this.__caretIndex = this.__text.length;
+			}
+		} else if(this.__isHTML) {
+			this.__selectionIndex = this.__caretIndex = this.__text.length;
+		} else {
+			this.__selectionIndex = 0;
+			this.__caretIndex = 0;
+		}
+		if(!this.__displayAsPassword || openfl_display_DisplayObject.__supportDOM && !this.__renderedOnCanvasWhileOnDOM) {
+			this.__textEngine.set_text(this.__text);
+		} else {
+			var length = this.get_text().length;
+			var mask = "";
+			var _g = 0;
+			while(_g < length) {
+				++_g;
+				mask += "*";
+			}
+			this.__textEngine.set_text(mask);
+		}
+	}
+	,__updateTransforms: function(overrideTransform) {
+		openfl_display_InteractiveObject.prototype.__updateTransforms.call(this,overrideTransform);
+		var _this = this.__renderTransform;
+		var px = this.__offsetX;
+		var py = this.__offsetY;
+		_this.tx = px * _this.a + py * _this.c + _this.tx;
+		_this.ty = px * _this.b + py * _this.d + _this.ty;
+	}
+	,get_antiAliasType: function() {
+		return this.__textEngine.antiAliasType;
+	}
+	,set_antiAliasType: function(value) {
+		return this.__textEngine.antiAliasType = value;
+	}
+	,get_autoSize: function() {
+		return this.__textEngine.autoSize;
+	}
+	,set_autoSize: function(value) {
+		if(value != this.__textEngine.autoSize) {
+			this.__dirty = true;
+			this.__layoutDirty = true;
+			if(!this.__renderDirty) {
+				this.__renderDirty = true;
+				this.__setParentRenderDirty();
+			}
+		}
+		return this.__textEngine.autoSize = value;
+	}
+	,get_background: function() {
+		return this.__textEngine.background;
+	}
+	,set_background: function(value) {
+		if(value != this.__textEngine.background) {
+			this.__dirty = true;
+			if(!this.__renderDirty) {
+				this.__renderDirty = true;
+				this.__setParentRenderDirty();
+			}
+		}
+		return this.__textEngine.background = value;
+	}
+	,get_backgroundColor: function() {
+		return this.__textEngine.backgroundColor;
+	}
+	,set_backgroundColor: function(value) {
+		if(value != this.__textEngine.backgroundColor) {
+			this.__dirty = true;
+			if(!this.__renderDirty) {
+				this.__renderDirty = true;
+				this.__setParentRenderDirty();
+			}
+		}
+		return this.__textEngine.backgroundColor = value;
+	}
+	,get_border: function() {
+		return this.__textEngine.border;
+	}
+	,set_border: function(value) {
+		if(value != this.__textEngine.border) {
+			this.__dirty = true;
+			if(!this.__renderDirty) {
+				this.__renderDirty = true;
+				this.__setParentRenderDirty();
+			}
+		}
+		return this.__textEngine.border = value;
+	}
+	,get_borderColor: function() {
+		return this.__textEngine.borderColor;
+	}
+	,set_borderColor: function(value) {
+		if(value != this.__textEngine.borderColor) {
+			this.__dirty = true;
+			if(!this.__renderDirty) {
+				this.__renderDirty = true;
+				this.__setParentRenderDirty();
+			}
+		}
+		return this.__textEngine.borderColor = value;
+	}
+	,get_bottomScrollV: function() {
+		this.__updateLayout();
+		return this.__textEngine.get_bottomScrollV();
+	}
+	,get_caretIndex: function() {
+		return this.__caretIndex;
+	}
+	,get_defaultTextFormat: function() {
+		return this.__textFormat.clone();
+	}
+	,set_defaultTextFormat: function(value) {
+		this.__textFormat.__merge(value);
+		this.__layoutDirty = true;
+		this.__dirty = true;
+		if(!this.__renderDirty) {
+			this.__renderDirty = true;
+			this.__setParentRenderDirty();
+		}
+		return value;
+	}
+	,get_displayAsPassword: function() {
+		return this.__displayAsPassword;
+	}
+	,set_displayAsPassword: function(value) {
+		if(value != this.__displayAsPassword) {
+			this.__dirty = true;
+			this.__layoutDirty = true;
+			if(!this.__renderDirty) {
+				this.__renderDirty = true;
+				this.__setParentRenderDirty();
+			}
+			this.__displayAsPassword = value;
+			this.__updateText(this.__text);
+		}
+		return value;
+	}
+	,get_embedFonts: function() {
+		return this.__textEngine.embedFonts;
+	}
+	,set_embedFonts: function(value) {
+		return this.__textEngine.embedFonts = value;
+	}
+	,get_gridFitType: function() {
+		return this.__textEngine.gridFitType;
+	}
+	,set_gridFitType: function(value) {
+		return this.__textEngine.gridFitType = value;
+	}
+	,get_height: function() {
+		this.__updateLayout();
+		return this.__textEngine.height * Math.abs(this.get_scaleY());
+	}
+	,set_height: function(value) {
+		if(value != this.__textEngine.height) {
+			this.__setTransformDirty();
+			this.__dirty = true;
+			this.__layoutDirty = true;
+			if(!this.__renderDirty) {
+				this.__renderDirty = true;
+				this.__setParentRenderDirty();
+			}
+			this.__textEngine.height = value;
+		}
+		return this.__textEngine.height * Math.abs(this.get_scaleY());
+	}
+	,get_htmlText: function() {
+		if(this.__isHTML) {
+			return this.__htmlText;
+		} else {
+			return this.__text;
+		}
+	}
+	,set_htmlText: function(value) {
+		if(!this.__isHTML || this.__text != value) {
+			this.__dirty = true;
+			this.__layoutDirty = true;
+			if(!this.__renderDirty) {
+				this.__renderDirty = true;
+				this.__setParentRenderDirty();
+			}
+		}
+		this.__isHTML = true;
+		if(this.condenseWhite) {
+			var _this_r = new RegExp("\\s+","g".split("u").join(""));
+			value = value.replace(_this_r," ");
+		}
+		this.__htmlText = value;
+		value = openfl_text__$internal_HTMLParser.parse(value,this.get_multiline(),this.__styleSheet,this.__textFormat,this.__textEngine.textFormatRanges);
+		this.__updateText(value);
+		return value;
+	}
+	,get_length: function() {
+		if(this.__text != null) {
+			return this.__text.length;
+		}
+		return 0;
+	}
+	,get_maxChars: function() {
+		return this.__textEngine.maxChars;
+	}
+	,set_maxChars: function(value) {
+		if(value != this.__textEngine.maxChars) {
+			this.__textEngine.maxChars = value;
+			this.__dirty = true;
+			this.__layoutDirty = true;
+			if(!this.__renderDirty) {
+				this.__renderDirty = true;
+				this.__setParentRenderDirty();
+			}
+		}
+		return value;
+	}
+	,get_maxScrollH: function() {
+		this.__updateLayout();
+		return this.__textEngine.maxScrollH;
+	}
+	,get_maxScrollV: function() {
+		this.__updateLayout();
+		return this.__textEngine.get_maxScrollV();
+	}
+	,get_mouseWheelEnabled: function() {
+		return this.__mouseWheelEnabled;
+	}
+	,set_mouseWheelEnabled: function(value) {
+		return this.__mouseWheelEnabled = value;
+	}
+	,get_multiline: function() {
+		return this.__textEngine.multiline;
+	}
+	,set_multiline: function(value) {
+		return this.__textEngine.multiline = value;
+	}
+	,get_numLines: function() {
+		this.__updateLayout();
+		return this.__textEngine.numLines;
+	}
+	,get_restrict: function() {
+		return this.__textEngine.restrict;
+	}
+	,set_restrict: function(value) {
+		if(this.__textEngine.restrict != value) {
+			this.__textEngine.set_restrict(value);
+			this.__updateText(this.__text);
+		}
+		return value;
+	}
+	,get_scrollH: function() {
+		return this.__textEngine.scrollH;
+	}
+	,set_scrollH: function(value) {
+		this.__updateLayout();
+		if(value > this.__textEngine.maxScrollH) {
+			value = this.__textEngine.maxScrollH;
+		}
+		if(value < 0) {
+			value = 0;
+		}
+		if(value != this.__textEngine.scrollH) {
+			this.__dirty = true;
+			if(!this.__renderDirty) {
+				this.__renderDirty = true;
+				this.__setParentRenderDirty();
+			}
+			this.__textEngine.scrollH = value;
+			this.dispatchEvent(new openfl_events_Event("scroll"));
+		}
+		return this.__textEngine.scrollH;
+	}
+	,get_scrollV: function() {
+		return this.__textEngine.get_scrollV();
+	}
+	,set_scrollV: function(value) {
+		this.__updateLayout();
+		if(value > this.__textEngine.get_maxScrollV()) {
+			value = this.__textEngine.get_maxScrollV();
+		}
+		if(value < 1) {
+			value = 1;
+		}
+		if(value != this.__textEngine.get_scrollV() || this.__textEngine.get_scrollV() == 0) {
+			this.__dirty = true;
+			if(!this.__renderDirty) {
+				this.__renderDirty = true;
+				this.__setParentRenderDirty();
+			}
+			this.__textEngine.set_scrollV(value);
+			this.dispatchEvent(new openfl_events_Event("scroll"));
+		}
+		return this.__textEngine.get_scrollV();
+	}
+	,get_selectable: function() {
+		return this.__textEngine.selectable;
+	}
+	,set_selectable: function(value) {
+		if(value != this.__textEngine.selectable && this.get_type() == 1) {
+			if(this.stage != null && this.stage.get_focus() == this) {
+				this.__startTextInput();
+			} else if(!value) {
+				this.__stopTextInput();
+			}
+		}
+		return this.__textEngine.selectable = value;
+	}
+	,get_selectionBeginIndex: function() {
+		return Math.min(this.__caretIndex,this.__selectionIndex) | 0;
+	}
+	,get_selectionEndIndex: function() {
+		return Math.max(this.__caretIndex,this.__selectionIndex) | 0;
+	}
+	,get_sharpness: function() {
+		return this.__textEngine.sharpness;
+	}
+	,set_sharpness: function(value) {
+		if(value != this.__textEngine.sharpness) {
+			this.__dirty = true;
+			if(!this.__renderDirty) {
+				this.__renderDirty = true;
+				this.__setParentRenderDirty();
+			}
+		}
+		return this.__textEngine.sharpness = value;
+	}
+	,get_styleSheet: function() {
+		return this.__styleSheet;
+	}
+	,set_styleSheet: function(value) {
+		if(!(this.__styleSheet != null && value == null)) {
+			if(value != null) {
+				if(this.__isHTML && value != this.__styleSheet) {
+					this.__dirty = true;
+					this.__layoutDirty = true;
+					if(!this.__renderDirty) {
+						this.__renderDirty = true;
+						this.__setParentRenderDirty();
+					}
+					this.set_htmlText(this.__htmlText);
+				}
+				this.set_type(0);
+			}
+		}
+		return this.__styleSheet = value;
+	}
+	,get_tabEnabled: function() {
+		if(this.__tabEnabled == null) {
+			return this.__textEngine.type == 1;
+		} else {
+			return this.__tabEnabled;
+		}
+	}
+	,get_text: function() {
+		return this.__text;
+	}
+	,set_text: function(value) {
+		if(this.__styleSheet != null) {
+			return this.set_htmlText(value);
+		}
+		if(this.__isHTML || this.__text != value) {
+			this.__dirty = true;
+			this.__layoutDirty = true;
+			if(!this.__renderDirty) {
+				this.__renderDirty = true;
+				this.__setParentRenderDirty();
+			}
+		} else {
+			return value;
+		}
+		if(this.__textEngine.textFormatRanges.get_length() > 1) {
+			var this1 = this.__textEngine.textFormatRanges;
+			var deleteCount = this.__textEngine.textFormatRanges.get_length() - 1;
+			var items = [];
+			this1.__tempIndex = 1;
+			var _g_current = 0;
+			while(_g_current < items.length) {
+				this1.insertAt(this1.__tempIndex,items[_g_current++]);
+				this1.__tempIndex++;
+			}
+			this1.splice(this1.__tempIndex,deleteCount);
+		}
+		var range = this.__textEngine.textFormatRanges.get(0);
+		range.format = this.__textFormat;
+		range.start = 0;
+		range.end = value.length;
+		this.__isHTML = false;
+		this.__updateText(value);
+		return value;
+	}
+	,get_textColor: function() {
+		return this.__textFormat.color;
+	}
+	,set_textColor: function(value) {
+		if(value != this.__textFormat.color) {
+			this.__dirty = true;
+			if(!this.__renderDirty) {
+				this.__renderDirty = true;
+				this.__setParentRenderDirty();
+			}
+		}
+		var range = this.__textEngine.textFormatRanges.iterator();
+		while(range.hasNext()) range.next().format.color = value;
+		return this.__textFormat.color = value;
+	}
+	,get_textWidth: function() {
+		this.__updateLayout();
+		return this.__textEngine.textWidth;
+	}
+	,get_textHeight: function() {
+		this.__updateLayout();
+		return this.__textEngine.textHeight;
+	}
+	,get_type: function() {
+		return this.__textEngine.type;
+	}
+	,set_type: function(value) {
+		if(this.__styleSheet != null) {
+			value = 0;
+		}
+		if(value != this.__textEngine.type) {
+			this.__textEngine.type = value;
+			if(value == 1) {
+				this.addEventListener("addedToStage",$bind(this,this.this_onAddedToStage));
+				this.this_onFocusIn(null);
+				this.__textEngine.__useIntAdvances = true;
+			} else {
+				this.removeEventListener("addedToStage",$bind(this,this.this_onAddedToStage));
+				this.__stopTextInput();
+				this.__textEngine.__useIntAdvances = null;
+			}
+			this.__dirty = true;
+			this.__layoutDirty = true;
+			if(!this.__renderDirty) {
+				this.__renderDirty = true;
+				this.__setParentRenderDirty();
+			}
+		}
+		return this.__textEngine.type;
+	}
+	,get_width: function() {
+		this.__updateLayout();
+		return this.__textEngine.width * Math.abs(this.__scaleX);
+	}
+	,set_width: function(value) {
+		if(value != this.__textEngine.width) {
+			this.__setTransformDirty();
+			this.__dirty = true;
+			this.__layoutDirty = true;
+			if(!this.__renderDirty) {
+				this.__renderDirty = true;
+				this.__setParentRenderDirty();
+			}
+			this.__textEngine.width = value;
+		}
+		return this.__textEngine.width * Math.abs(this.__scaleX);
+	}
+	,get_wordWrap: function() {
+		return this.__textEngine.wordWrap;
+	}
+	,set_wordWrap: function(value) {
+		if(value != this.__textEngine.wordWrap) {
+			this.__dirty = true;
+			this.__layoutDirty = true;
+			if(!this.__renderDirty) {
+				this.__renderDirty = true;
+				this.__setParentRenderDirty();
+			}
+		}
+		return this.__textEngine.wordWrap = value;
+	}
+	,get_x: function() {
+		return this.__transform.tx + this.__offsetX;
+	}
+	,set_x: function(value) {
+		if(value != this.__transform.tx + this.__offsetX) {
+			this.__setTransformDirty();
+		}
+		this.__transform.tx = value - this.__offsetX;
+		return value;
+	}
+	,get_y: function() {
+		return this.__transform.ty + this.__offsetY;
+	}
+	,set_y: function(value) {
+		if(value != this.__transform.ty + this.__offsetY) {
+			this.__setTransformDirty();
+		}
+		this.__transform.ty = value - this.__offsetY;
+		return value;
+	}
+	,stage_onMouseMove: function(event) {
+		if(this.stage == null) {
+			return;
+		}
+		if(this.get_selectable() && this.__selectionIndex >= 0) {
+			this.__updateLayout();
+			var position = this.__getPosition(this.get_mouseX() + this.get_scrollH(),this.get_mouseY());
+			if(position != this.__caretIndex) {
+				this.__caretIndex = position;
+				var setDirty = true;
+				if(openfl_display_DisplayObject.__supportDOM) {
+					if(this.__renderedOnCanvasWhileOnDOM) {
+						this.__forceCachedBitmapUpdate = true;
+					}
+					setDirty = false;
+				}
+				if(setDirty) {
+					this.__dirty = true;
+					if(!this.__renderDirty) {
+						this.__renderDirty = true;
+						this.__setParentRenderDirty();
+					}
+				}
+			}
+		}
+	}
+	,stage_onMouseUp: function(event) {
+		var stage = event.currentTarget;
+		stage.removeEventListener("enterFrame",$bind(this,this.this_onEnterFrame));
+		stage.removeEventListener("mouseMove",$bind(this,this.stage_onMouseMove));
+		stage.removeEventListener("mouseUp",$bind(this,this.stage_onMouseUp));
+		if(this.stage != stage) {
+			return;
+		}
+		if(stage.get_focus() == this) {
+			this.__getWorldTransform();
+			this.__updateLayout();
+			var upPos = this.__getPosition(this.get_mouseX() + this.get_scrollH(),this.get_mouseY());
+			var rightPos = Math.max(this.__selectionIndex,upPos) | 0;
+			this.__selectionIndex = Math.min(this.__selectionIndex,upPos) | 0;
+			this.__caretIndex = rightPos;
+			if(this.__inputEnabled) {
+				this.this_onFocusIn(null);
+				this.__stopCursorTimer();
+				this.__startCursorTimer();
+				if(openfl_display_DisplayObject.__supportDOM && this.__renderedOnCanvasWhileOnDOM) {
+					this.__forceCachedBitmapUpdate = true;
+				}
+			}
+		}
+	}
+	,this_onAddedToStage: function(event) {
+		this.this_onFocusIn(null);
+	}
+	,this_onEnterFrame: function(e) {
+		this.__updateMouseDrag();
+	}
+	,this_onFocusIn: function(event) {
+		if(this.get_type() == 1 && this.stage != null && this.stage.get_focus() == this) {
+			this.__startTextInput();
+		} else if(this.get_type() != 1 && this.get_selectable() && this.stage != null && this.stage.get_focus() == this) {
+			this.__startCursorTimer();
+		}
+	}
+	,this_onFocusOut: function(event) {
+		this.__stopCursorTimer();
+		this.__stopTextInput();
+		if(this.__selectionIndex != this.__caretIndex) {
+			this.__selectionIndex = this.__caretIndex;
+			this.__dirty = true;
+			if(!this.__renderDirty) {
+				this.__renderDirty = true;
+				this.__setParentRenderDirty();
+			}
+		}
+	}
+	,this_onKeyDown: function(event) {
+		if(this.get_selectable() && this.get_type() != 1 && event.keyCode == 67 && (event.commandKey || event.ctrlKey)) {
+			if(this.__caretIndex != this.__selectionIndex && !this.get_displayAsPassword()) {
+				lime_system_Clipboard.set_text(this.__text.substring(this.__caretIndex,this.__selectionIndex));
+			}
+		}
+	}
+	,this_onMouseDown: function(event) {
+		if(!this.get_selectable() && this.get_type() != 1) {
+			return;
+		}
+		this.__updateLayout();
+		this.__caretIndex = this.__getPosition(this.get_mouseX() + this.get_scrollH(),this.get_mouseY());
+		this.__selectionIndex = this.__caretIndex;
+		if(!openfl_display_DisplayObject.__supportDOM) {
+			this.__dirty = true;
+			if(!this.__renderDirty) {
+				this.__renderDirty = true;
+				this.__setParentRenderDirty();
+			}
+		}
+		if(this.stage == null) {
+			return;
+		}
+		this.stage.addEventListener("enterFrame",$bind(this,this.this_onEnterFrame));
+		this.stage.addEventListener("mouseMove",$bind(this,this.stage_onMouseMove));
+		this.stage.addEventListener("mouseUp",$bind(this,this.stage_onMouseUp));
+	}
+	,this_onMouseWheel: function(event) {
+		if(this.get_mouseWheelEnabled()) {
+			this.set_scrollV(Math.min(this.get_scrollV() - event.delta,this.get_maxScrollV()) | 0);
+		}
+	}
+	,this_onDoubleClick: function(event) {
+		if(this.get_selectable()) {
+			this.__updateLayout();
+			var delimiters = ["\n",".","!","?",","," ",";",":","(",")","-","_","/"];
+			var txtStr = this.__text;
+			var leftPos = -1;
+			var rightPos = txtStr.length;
+			var pos = 0;
+			var startPos = Math.max(this.__caretIndex,1) | 0;
+			if(txtStr.length > 0 && this.__caretIndex >= 0 && rightPos >= this.__caretIndex) {
+				var _g = 0;
+				while(_g < delimiters.length) {
+					var c = delimiters[_g];
+					++_g;
+					pos = txtStr.lastIndexOf(c,startPos - 1);
+					if(pos > leftPos) {
+						leftPos = pos + 1;
+					}
+					pos = txtStr.indexOf(c,startPos);
+					if(pos < rightPos && pos != -1) {
+						rightPos = pos;
+					}
+				}
+				if(leftPos != rightPos) {
+					this.setSelection(leftPos,rightPos);
+					var setDirty = true;
+					if(openfl_display_DisplayObject.__supportDOM) {
+						if(this.__renderedOnCanvasWhileOnDOM) {
+							this.__forceCachedBitmapUpdate = true;
+						}
+						setDirty = false;
+					}
+					if(setDirty) {
+						this.__dirty = true;
+						if(!this.__renderDirty) {
+							this.__renderDirty = true;
+							this.__setParentRenderDirty();
+						}
+					}
+				}
+			}
+		}
+	}
+	,window_onKeyDown: function(key,modifier) {
+		switch(key) {
+		case 8:
+			if(this.__selectionIndex == this.__caretIndex && this.__caretIndex > 0) {
+				this.__selectionIndex = this.__caretIndex - 1;
+			}
+			if(this.__selectionIndex != this.__caretIndex) {
+				this.replaceSelectedText("");
+				this.__selectionIndex = this.__caretIndex;
+				this.dispatchEvent(new openfl_events_Event("change",true));
+			} else {
+				this.__stopCursorTimer();
+				this.__startCursorTimer();
+			}
+			break;
+		case 97:
+			if(this.get_selectable()) {
+				if(lime_ui_KeyModifier.get_metaKey(modifier) || lime_ui_KeyModifier.get_ctrlKey(modifier)) {
+					this.setSelection(0,this.__text.length);
+				}
+			}
+			break;
+		case 99:
+			if(lime_ui_KeyModifier.get_metaKey(modifier) || lime_ui_KeyModifier.get_ctrlKey(modifier)) {
+				if(this.__caretIndex != this.__selectionIndex && !this.get_displayAsPassword()) {
+					lime_system_Clipboard.set_text(this.__text.substring(this.__caretIndex,this.__selectionIndex));
+				}
+			}
+			break;
+		case 120:
+			if(lime_ui_KeyModifier.get_metaKey(modifier) || lime_ui_KeyModifier.get_ctrlKey(modifier)) {
+				if(this.__caretIndex != this.__selectionIndex && !this.get_displayAsPassword()) {
+					lime_system_Clipboard.set_text(this.__text.substring(this.__caretIndex,this.__selectionIndex));
+					this.replaceSelectedText("");
+					this.dispatchEvent(new openfl_events_Event("change",true));
+				}
+			}
+			break;
+		case 127:
+			if(this.__selectionIndex == this.__caretIndex && this.__caretIndex < this.__text.length) {
+				this.__selectionIndex = this.__caretIndex + 1;
+			}
+			if(this.__selectionIndex != this.__caretIndex) {
+				this.replaceSelectedText("");
+				this.__selectionIndex = this.__caretIndex;
+				this.dispatchEvent(new openfl_events_Event("change",true));
+			} else {
+				this.__stopCursorTimer();
+				this.__startCursorTimer();
+			}
+			break;
+		case 1073741898:
+			if(this.get_selectable()) {
+				if(lime_ui_KeyModifier.get_metaKey(modifier) || lime_ui_KeyModifier.get_ctrlKey(modifier)) {
+					this.__caretIndex = 0;
+				} else {
+					this.__caretBeginningOfLine();
+				}
+				if(!lime_ui_KeyModifier.get_shiftKey(modifier)) {
+					this.__selectionIndex = this.__caretIndex;
+				}
+				this.setSelection(this.__selectionIndex,this.__caretIndex);
+			}
+			break;
+		case 1073741901:
+			if(this.get_selectable()) {
+				if(lime_ui_KeyModifier.get_metaKey(modifier) || lime_ui_KeyModifier.get_ctrlKey(modifier)) {
+					this.__caretIndex = this.__text.length;
+				} else {
+					this.__caretEndOfLine();
+				}
+				if(!lime_ui_KeyModifier.get_shiftKey(modifier)) {
+					this.__selectionIndex = this.__caretIndex;
+				}
+				this.setSelection(this.__selectionIndex,this.__caretIndex);
+			}
+			break;
+		case 1073741903:
+			if(this.get_selectable()) {
+				if(lime_ui_KeyModifier.get_metaKey(modifier) || lime_ui_KeyModifier.get_ctrlKey(modifier)) {
+					this.__caretBeginningOfNextLine();
+				} else {
+					this.__caretNextCharacter();
+				}
+				if(!lime_ui_KeyModifier.get_shiftKey(modifier)) {
+					this.__selectionIndex = this.__caretIndex;
+				}
+				this.setSelection(this.__selectionIndex,this.__caretIndex);
+			}
+			break;
+		case 1073741904:
+			if(this.get_selectable()) {
+				if(lime_ui_KeyModifier.get_metaKey(modifier) || lime_ui_KeyModifier.get_ctrlKey(modifier)) {
+					this.__caretBeginningOfPreviousLine();
+				} else {
+					this.__caretPreviousCharacter();
+				}
+				if(!lime_ui_KeyModifier.get_shiftKey(modifier)) {
+					this.__selectionIndex = this.__caretIndex;
+				}
+				this.setSelection(this.__selectionIndex,this.__caretIndex);
+			}
+			break;
+		case 1073741905:
+			if(this.get_selectable()) {
+				if(lime_ui_KeyModifier.get_metaKey(modifier) || lime_ui_KeyModifier.get_ctrlKey(modifier)) {
+					this.__caretIndex = this.__text.length;
+				} else {
+					this.__caretNextLine();
+				}
+				if(!lime_ui_KeyModifier.get_shiftKey(modifier)) {
+					this.__selectionIndex = this.__caretIndex;
+				}
+				this.setSelection(this.__selectionIndex,this.__caretIndex);
+			}
+			break;
+		case 1073741906:
+			if(this.get_selectable()) {
+				if(lime_ui_KeyModifier.get_metaKey(modifier) || lime_ui_KeyModifier.get_ctrlKey(modifier)) {
+					this.__caretIndex = 0;
+				} else {
+					this.__caretPreviousLine();
+				}
+				if(!lime_ui_KeyModifier.get_shiftKey(modifier)) {
+					this.__selectionIndex = this.__caretIndex;
+				}
+				this.setSelection(this.__selectionIndex,this.__caretIndex);
+			}
+			break;
+		case 13:case 1073741912:
+			if(this.__textEngine.multiline) {
+				var te = new openfl_events_TextEvent("textInput",true,true,"\n");
+				this.dispatchEvent(te);
+				if(!te.isDefaultPrevented()) {
+					this.__replaceSelectedText("\n",true);
+					this.dispatchEvent(new openfl_events_Event("change",true));
+				}
+			} else {
+				this.__stopCursorTimer();
+				this.__startCursorTimer();
+			}
+			break;
+		default:
+		}
+	}
+	,window_onTextInput: function(value) {
+		this.__replaceSelectedText(value,true);
+		this.dispatchEvent(new openfl_events_Event("change",true));
+	}
+	,__class__: openfl_text_TextField
+	,__properties__: $extend(openfl_display_InteractiveObject.prototype.__properties__,{set_wordWrap:"set_wordWrap",get_wordWrap:"get_wordWrap",set_type:"set_type",get_type:"get_type",get_textWidth:"get_textWidth",get_textHeight:"get_textHeight",set_textColor:"set_textColor",get_textColor:"get_textColor",set_text:"set_text",get_text:"get_text",set_styleSheet:"set_styleSheet",get_styleSheet:"get_styleSheet",set_sharpness:"set_sharpness",get_sharpness:"get_sharpness",get_selectionEndIndex:"get_selectionEndIndex",get_selectionBeginIndex:"get_selectionBeginIndex",set_selectable:"set_selectable",get_selectable:"get_selectable",set_scrollV:"set_scrollV",get_scrollV:"get_scrollV",set_scrollH:"set_scrollH",get_scrollH:"get_scrollH",set_restrict:"set_restrict",get_restrict:"get_restrict",get_numLines:"get_numLines",set_multiline:"set_multiline",get_multiline:"get_multiline",set_mouseWheelEnabled:"set_mouseWheelEnabled",get_mouseWheelEnabled:"get_mouseWheelEnabled",get_maxScrollV:"get_maxScrollV",get_maxScrollH:"get_maxScrollH",set_maxChars:"set_maxChars",get_maxChars:"get_maxChars",get_length:"get_length",set_htmlText:"set_htmlText",get_htmlText:"get_htmlText",set_gridFitType:"set_gridFitType",get_gridFitType:"get_gridFitType",set_embedFonts:"set_embedFonts",get_embedFonts:"get_embedFonts",set_displayAsPassword:"set_displayAsPassword",get_displayAsPassword:"get_displayAsPassword",set_defaultTextFormat:"set_defaultTextFormat",get_defaultTextFormat:"get_defaultTextFormat",get_caretIndex:"get_caretIndex",get_bottomScrollV:"get_bottomScrollV",set_borderColor:"set_borderColor",get_borderColor:"get_borderColor",set_border:"set_border",get_border:"get_border",set_backgroundColor:"set_backgroundColor",get_backgroundColor:"get_backgroundColor",set_background:"set_background",get_background:"get_background",set_autoSize:"set_autoSize",get_autoSize:"get_autoSize",set_antiAliasType:"set_antiAliasType",get_antiAliasType:"get_antiAliasType"})
+});
+var flixel_addons_text_internal_CustomTextField = function(parent) {
+	openfl_text_TextField.call(this);
+	this.textParent = parent;
+	this.stage = openfl_Lib.get_current().stage;
+	this.__removeAllListeners();
+};
+$hxClasses["flixel.addons.text.internal.CustomTextField"] = flixel_addons_text_internal_CustomTextField;
+flixel_addons_text_internal_CustomTextField.__name__ = "flixel.addons.text.internal.CustomTextField";
+flixel_addons_text_internal_CustomTextField.__super__ = openfl_text_TextField;
+flixel_addons_text_internal_CustomTextField.prototype = $extend(openfl_text_TextField.prototype,{
+	textParent: null
+	,getBounds: function(targetCoordinateSpace) {
+		var rect = this.textParent.getTextInputRect();
+		var bounds = new openfl_geom_Rectangle(rect.x,rect.y,rect.width,rect.height);
+		if(!rect._inPool) {
+			rect._inPool = true;
+			rect._weak = false;
+			flixel_math_FlxRect._pool.putUnsafe(rect);
+		}
+		return bounds;
+	}
+	,__enableInput: function() {
+		openfl_text_TextField.prototype.__enableInput.call(this);
+		this.stage.window.onTextInput.remove($bind(this,this.window_onTextInput));
+		this.stage.window.onKeyDown.remove($bind(this,this.window_onKeyDown));
+	}
+	,__getInteractive: function(stack) {
+		if(stack != null) {
+			stack.push(this);
+			if(flixel_FlxG.game != null) {
+				flixel_FlxG.game.__getInteractive(stack);
+			}
+		}
+		return true;
+	}
+	,__class__: flixel_addons_text_internal_CustomTextField
 });
 var flixel_animation_FlxBaseAnimation = function(Parent,Name) {
 	this.curIndex = 0;
@@ -30014,10 +33490,10 @@ openfl_display_Shader.prototype = {
 };
 var openfl_display_GraphicsShader = function(code) {
 	if(this.__glFragmentSource == null) {
-		this.__glFragmentSource = "varying float openfl_Alphav;\n\t\tvarying vec4 openfl_ColorMultiplierv;\n\t\tvarying vec4 openfl_ColorOffsetv;\n\t\tvarying vec2 openfl_TextureCoordv;\n\n\t\tuniform bool openfl_HasColorTransform;\n\t\tuniform vec2 openfl_TextureSize;\n\t\tuniform sampler2D bitmap;\n\n\t\tvoid main(void) {\n\n\t\t\tvec4 color = texture2D (bitmap, openfl_TextureCoordv);\n\n\t\tif (color.a == 0.0) {\n\n\t\t\tgl_FragColor = vec4 (0.0, 0.0, 0.0, 0.0);\n\n\t\t} else if (openfl_HasColorTransform) {\n\n\t\t\tcolor = vec4 (color.rgb / color.a, color.a);\n\n\t\t\tmat4 colorMultiplier = mat4 (0);\n\t\t\tcolorMultiplier[0][0] = openfl_ColorMultiplierv.x;\n\t\t\tcolorMultiplier[1][1] = openfl_ColorMultiplierv.y;\n\t\t\tcolorMultiplier[2][2] = openfl_ColorMultiplierv.z;\n\t\t\tcolorMultiplier[3][3] = 1.0; // openfl_ColorMultiplierv.w;\n\n\t\t\tcolor = clamp (openfl_ColorOffsetv + (color * colorMultiplier), 0.0, 1.0);\n\n\t\t\tif (color.a > 0.0) {\n\n\t\t\t\tgl_FragColor = vec4 (color.rgb * color.a * openfl_Alphav, color.a * openfl_Alphav);\n\n\t\t\t} else {\n\n\t\t\t\tgl_FragColor = vec4 (0.0, 0.0, 0.0, 0.0);\n\n\t\t\t}\n\n\t\t} else {\n\n\t\t\tgl_FragColor = color * openfl_Alphav;\n\n\t\t}\n\n\t\t}";
+		this.__glFragmentSource = "varying float openfl_Alphav;\r\n\t\tvarying vec4 openfl_ColorMultiplierv;\r\n\t\tvarying vec4 openfl_ColorOffsetv;\r\n\t\tvarying vec2 openfl_TextureCoordv;\r\n\r\n\t\tuniform bool openfl_HasColorTransform;\r\n\t\tuniform vec2 openfl_TextureSize;\r\n\t\tuniform sampler2D bitmap;\r\n\r\n\t\tvoid main(void) {\r\n\r\n\t\t\tvec4 color = texture2D (bitmap, openfl_TextureCoordv);\r\n\r\n\t\tif (color.a == 0.0) {\r\n\r\n\t\t\tgl_FragColor = vec4 (0.0, 0.0, 0.0, 0.0);\r\n\r\n\t\t} else if (openfl_HasColorTransform) {\r\n\r\n\t\t\tcolor = vec4 (color.rgb / color.a, color.a);\r\n\r\n\t\t\tmat4 colorMultiplier = mat4 (0);\r\n\t\t\tcolorMultiplier[0][0] = openfl_ColorMultiplierv.x;\r\n\t\t\tcolorMultiplier[1][1] = openfl_ColorMultiplierv.y;\r\n\t\t\tcolorMultiplier[2][2] = openfl_ColorMultiplierv.z;\r\n\t\t\tcolorMultiplier[3][3] = 1.0; // openfl_ColorMultiplierv.w;\r\n\r\n\t\t\tcolor = clamp (openfl_ColorOffsetv + (color * colorMultiplier), 0.0, 1.0);\r\n\r\n\t\t\tif (color.a > 0.0) {\r\n\r\n\t\t\t\tgl_FragColor = vec4 (color.rgb * color.a * openfl_Alphav, color.a * openfl_Alphav);\r\n\r\n\t\t\t} else {\r\n\r\n\t\t\t\tgl_FragColor = vec4 (0.0, 0.0, 0.0, 0.0);\r\n\r\n\t\t\t}\r\n\r\n\t\t} else {\r\n\r\n\t\t\tgl_FragColor = color * openfl_Alphav;\r\n\r\n\t\t}\r\n\r\n\t\t}";
 	}
 	if(this.__glVertexSource == null) {
-		this.__glVertexSource = "attribute float openfl_Alpha;\n\t\tattribute vec4 openfl_ColorMultiplier;\n\t\tattribute vec4 openfl_ColorOffset;\n\t\tattribute vec4 openfl_Position;\n\t\tattribute vec2 openfl_TextureCoord;\n\n\t\tvarying float openfl_Alphav;\n\t\tvarying vec4 openfl_ColorMultiplierv;\n\t\tvarying vec4 openfl_ColorOffsetv;\n\t\tvarying vec2 openfl_TextureCoordv;\n\n\t\tuniform mat4 openfl_Matrix;\n\t\tuniform bool openfl_HasColorTransform;\n\t\tuniform vec2 openfl_TextureSize;\n\n\t\tvoid main(void) {\n\n\t\t\topenfl_Alphav = openfl_Alpha;\n\t\topenfl_TextureCoordv = openfl_TextureCoord;\n\n\t\tif (openfl_HasColorTransform) {\n\n\t\t\topenfl_ColorMultiplierv = openfl_ColorMultiplier;\n\t\t\topenfl_ColorOffsetv = openfl_ColorOffset / 255.0;\n\n\t\t}\n\n\t\tgl_Position = openfl_Matrix * openfl_Position;\n\n\t\t}";
+		this.__glVertexSource = "attribute float openfl_Alpha;\r\n\t\tattribute vec4 openfl_ColorMultiplier;\r\n\t\tattribute vec4 openfl_ColorOffset;\r\n\t\tattribute vec4 openfl_Position;\r\n\t\tattribute vec2 openfl_TextureCoord;\r\n\r\n\t\tvarying float openfl_Alphav;\r\n\t\tvarying vec4 openfl_ColorMultiplierv;\r\n\t\tvarying vec4 openfl_ColorOffsetv;\r\n\t\tvarying vec2 openfl_TextureCoordv;\r\n\r\n\t\tuniform mat4 openfl_Matrix;\r\n\t\tuniform bool openfl_HasColorTransform;\r\n\t\tuniform vec2 openfl_TextureSize;\r\n\r\n\t\tvoid main(void) {\r\n\r\n\t\t\topenfl_Alphav = openfl_Alpha;\r\n\t\topenfl_TextureCoordv = openfl_TextureCoord;\r\n\r\n\t\tif (openfl_HasColorTransform) {\r\n\r\n\t\t\topenfl_ColorMultiplierv = openfl_ColorMultiplier;\r\n\t\t\topenfl_ColorOffsetv = openfl_ColorOffset / 255.0;\r\n\r\n\t\t}\r\n\r\n\t\tgl_Position = openfl_Matrix * openfl_Position;\r\n\r\n\t\t}";
 	}
 	openfl_display_Shader.call(this,code);
 	this.__isGenerated = true;
@@ -30040,10 +33516,10 @@ openfl_display_GraphicsShader.prototype = $extend(openfl_display_Shader.prototyp
 });
 var flixel_graphics_tile_FlxGraphicsShader = function() {
 	if(this.__glFragmentSource == null) {
-		this.__glFragmentSource = "\r\n\t\tvarying float openfl_Alphav;\n\t\tvarying vec4 openfl_ColorMultiplierv;\n\t\tvarying vec4 openfl_ColorOffsetv;\n\t\tvarying vec2 openfl_TextureCoordv;\n\n\t\tuniform bool openfl_HasColorTransform;\n\t\tuniform vec2 openfl_TextureSize;\n\t\tuniform sampler2D bitmap;\n\r\n\t\tuniform bool hasTransform;\r\n\t\tuniform bool hasColorTransform;\r\n\r\n\t\tvec4 flixel_texture2D(sampler2D bitmap, vec2 coord)\r\n\t\t{\r\n\t\t\tvec4 color = texture2D(bitmap, coord);\r\n\t\t\tif (!hasTransform)\r\n\t\t\t{\r\n\t\t\t\treturn color;\r\n\t\t\t}\r\n\r\n\t\t\tif (color.a == 0.0)\r\n\t\t\t{\r\n\t\t\t\treturn vec4(0.0, 0.0, 0.0, 0.0);\r\n\t\t\t}\r\n\r\n\t\t\tif (!hasColorTransform)\r\n\t\t\t{\r\n\t\t\t\treturn color * openfl_Alphav;\r\n\t\t\t}\r\n\r\n\t\t\tcolor = vec4(color.rgb / color.a, color.a);\r\n\r\n\t\t\tmat4 colorMultiplier = mat4(0);\r\n\t\t\tcolorMultiplier[0][0] = openfl_ColorMultiplierv.x;\r\n\t\t\tcolorMultiplier[1][1] = openfl_ColorMultiplierv.y;\r\n\t\t\tcolorMultiplier[2][2] = openfl_ColorMultiplierv.z;\r\n\t\t\tcolorMultiplier[3][3] = openfl_ColorMultiplierv.w;\r\n\r\n\t\t\tcolor = clamp(openfl_ColorOffsetv + (color * colorMultiplier), 0.0, 1.0);\r\n\r\n\t\t\tif (color.a > 0.0)\r\n\t\t\t{\r\n\t\t\t\treturn vec4(color.rgb * color.a * openfl_Alphav, color.a * openfl_Alphav);\r\n\t\t\t}\r\n\t\t\treturn vec4(0.0, 0.0, 0.0, 0.0);\r\n\t\t}\r\n\t\r\n\t\t\r\n\t\tvoid main(void)\r\n\t\t{\r\n\t\t\tgl_FragColor = flixel_texture2D(bitmap, openfl_TextureCoordv);\r\n\t\t}";
+		this.__glFragmentSource = "\r\n\t\tvarying float openfl_Alphav;\r\n\t\tvarying vec4 openfl_ColorMultiplierv;\r\n\t\tvarying vec4 openfl_ColorOffsetv;\r\n\t\tvarying vec2 openfl_TextureCoordv;\r\n\r\n\t\tuniform bool openfl_HasColorTransform;\r\n\t\tuniform vec2 openfl_TextureSize;\r\n\t\tuniform sampler2D bitmap;\n\r\n\t\tuniform bool hasTransform;\r\n\t\tuniform bool hasColorTransform;\r\n\r\n\t\tvec4 flixel_texture2D(sampler2D bitmap, vec2 coord)\r\n\t\t{\r\n\t\t\tvec4 color = texture2D(bitmap, coord);\r\n\t\t\tif (!hasTransform)\r\n\t\t\t{\r\n\t\t\t\treturn color;\r\n\t\t\t}\r\n\r\n\t\t\tif (color.a == 0.0)\r\n\t\t\t{\r\n\t\t\t\treturn vec4(0.0, 0.0, 0.0, 0.0);\r\n\t\t\t}\r\n\r\n\t\t\tif (!hasColorTransform)\r\n\t\t\t{\r\n\t\t\t\treturn color * openfl_Alphav;\r\n\t\t\t}\r\n\r\n\t\t\tcolor = vec4(color.rgb / color.a, color.a);\r\n\r\n\t\t\tmat4 colorMultiplier = mat4(0);\r\n\t\t\tcolorMultiplier[0][0] = openfl_ColorMultiplierv.x;\r\n\t\t\tcolorMultiplier[1][1] = openfl_ColorMultiplierv.y;\r\n\t\t\tcolorMultiplier[2][2] = openfl_ColorMultiplierv.z;\r\n\t\t\tcolorMultiplier[3][3] = openfl_ColorMultiplierv.w;\r\n\r\n\t\t\tcolor = clamp(openfl_ColorOffsetv + (color * colorMultiplier), 0.0, 1.0);\r\n\r\n\t\t\tif (color.a > 0.0)\r\n\t\t\t{\r\n\t\t\t\treturn vec4(color.rgb * color.a * openfl_Alphav, color.a * openfl_Alphav);\r\n\t\t\t}\r\n\t\t\treturn vec4(0.0, 0.0, 0.0, 0.0);\r\n\t\t}\r\n\t\r\n\t\t\r\n\t\tvoid main(void)\r\n\t\t{\r\n\t\t\tgl_FragColor = flixel_texture2D(bitmap, openfl_TextureCoordv);\r\n\t\t}";
 	}
 	if(this.__glVertexSource == null) {
-		this.__glVertexSource = "\r\n\t\tattribute float openfl_Alpha;\n\t\tattribute vec4 openfl_ColorMultiplier;\n\t\tattribute vec4 openfl_ColorOffset;\n\t\tattribute vec4 openfl_Position;\n\t\tattribute vec2 openfl_TextureCoord;\n\n\t\tvarying float openfl_Alphav;\n\t\tvarying vec4 openfl_ColorMultiplierv;\n\t\tvarying vec4 openfl_ColorOffsetv;\n\t\tvarying vec2 openfl_TextureCoordv;\n\n\t\tuniform mat4 openfl_Matrix;\n\t\tuniform bool openfl_HasColorTransform;\n\t\tuniform vec2 openfl_TextureSize;\n\r\n\t\t\r\n\t\tattribute float alpha;\r\n\t\tattribute vec4 colorMultiplier;\r\n\t\tattribute vec4 colorOffset;\r\n\t\tuniform bool hasColorTransform;\r\n\t\t\r\n\t\tvoid main(void)\r\n\t\t{\r\n\t\t\topenfl_Alphav = openfl_Alpha;\n\t\topenfl_TextureCoordv = openfl_TextureCoord;\n\n\t\tif (openfl_HasColorTransform) {\n\n\t\t\topenfl_ColorMultiplierv = openfl_ColorMultiplier;\n\t\t\topenfl_ColorOffsetv = openfl_ColorOffset / 255.0;\n\n\t\t}\n\n\t\tgl_Position = openfl_Matrix * openfl_Position;\n\r\n\t\t\t\r\n\t\t\topenfl_Alphav = openfl_Alpha * alpha;\r\n\t\t\t\r\n\t\t\tif (hasColorTransform)\r\n\t\t\t{\r\n\t\t\t\topenfl_ColorOffsetv = colorOffset / 255.0;\r\n\t\t\t\topenfl_ColorMultiplierv = colorMultiplier;\r\n\t\t\t}\r\n\t\t}";
+		this.__glVertexSource = "\r\n\t\tattribute float openfl_Alpha;\r\n\t\tattribute vec4 openfl_ColorMultiplier;\r\n\t\tattribute vec4 openfl_ColorOffset;\r\n\t\tattribute vec4 openfl_Position;\r\n\t\tattribute vec2 openfl_TextureCoord;\r\n\r\n\t\tvarying float openfl_Alphav;\r\n\t\tvarying vec4 openfl_ColorMultiplierv;\r\n\t\tvarying vec4 openfl_ColorOffsetv;\r\n\t\tvarying vec2 openfl_TextureCoordv;\r\n\r\n\t\tuniform mat4 openfl_Matrix;\r\n\t\tuniform bool openfl_HasColorTransform;\r\n\t\tuniform vec2 openfl_TextureSize;\n\r\n\t\t\r\n\t\tattribute float alpha;\r\n\t\tattribute vec4 colorMultiplier;\r\n\t\tattribute vec4 colorOffset;\r\n\t\tuniform bool hasColorTransform;\r\n\t\t\r\n\t\tvoid main(void)\r\n\t\t{\r\n\t\t\topenfl_Alphav = openfl_Alpha;\r\n\t\topenfl_TextureCoordv = openfl_TextureCoord;\r\n\r\n\t\tif (openfl_HasColorTransform) {\r\n\r\n\t\t\topenfl_ColorMultiplierv = openfl_ColorMultiplier;\r\n\t\t\topenfl_ColorOffsetv = openfl_ColorOffset / 255.0;\r\n\r\n\t\t}\r\n\r\n\t\tgl_Position = openfl_Matrix * openfl_Position;\n\r\n\t\t\t\r\n\t\t\topenfl_Alphav = openfl_Alpha * alpha;\r\n\t\t\t\r\n\t\t\tif (hasColorTransform)\r\n\t\t\t{\r\n\t\t\t\topenfl_ColorOffsetv = colorOffset / 255.0;\r\n\t\t\t\topenfl_ColorMultiplierv = colorMultiplier;\r\n\t\t\t}\r\n\t\t}";
 	}
 	openfl_display_GraphicsShader.call(this);
 	this.__isGenerated = true;
@@ -30663,1312 +34139,6 @@ flixel_input_FlxSwipe.prototype = {
 	}
 	,__class__: flixel_input_FlxSwipe
 	,__properties__: {get_duration:"get_duration",get_radians:"get_radians",get_degrees:"get_degrees",get_angle:"get_angle",get_distance:"get_distance"}
-};
-var flixel_input_actions_FlxAction = function(InputType,Name) {
-	this.steamOriginsChanged = false;
-	this._checked = false;
-	this._timestamp = 0;
-	this._y = null;
-	this._x = null;
-	this.triggered = false;
-	this.steamHandle = -1;
-	this.type = InputType;
-	this.name = Name;
-	this.inputs = [];
-};
-$hxClasses["flixel.input.actions.FlxAction"] = flixel_input_actions_FlxAction;
-flixel_input_actions_FlxAction.__name__ = "flixel.input.actions.FlxAction";
-flixel_input_actions_FlxAction.__interfaces__ = [flixel_util_IFlxDestroyable];
-flixel_input_actions_FlxAction.prototype = {
-	type: null
-	,name: null
-	,steamHandle: null
-	,triggered: null
-	,inputs: null
-	,_x: null
-	,_y: null
-	,_timestamp: null
-	,_checked: null
-	,steamOriginsChanged: null
-	,getFirstSteamOrigin: function() {
-		return 0;
-	}
-	,getSteamOrigins: function(origins) {
-		return origins;
-	}
-	,removeAll: function(Destroy) {
-		if(Destroy == null) {
-			Destroy = true;
-		}
-		var len = this.inputs.length;
-		var _g = 0;
-		while(_g < len) {
-			var j = len - _g++ - 1;
-			this.remove(this.inputs[j],Destroy);
-			this.inputs.splice(j,1);
-		}
-	}
-	,remove: function(Input,Destroy) {
-		if(Destroy == null) {
-			Destroy = false;
-		}
-		if(Input == null) {
-			return;
-		}
-		HxOverrides.remove(this.inputs,Input);
-		if(Destroy) {
-			Input.destroy();
-		}
-	}
-	,toString: function() {
-		return "FlxAction(" + Std.string(this.type) + ") name:" + this.name;
-	}
-	,check: function() {
-		this._x = null;
-		this._y = null;
-		if(this._timestamp == flixel_FlxG.game.ticks) {
-			this.triggered = this._checked;
-			return this._checked;
-		}
-		this._timestamp = flixel_FlxG.game.ticks;
-		this._checked = false;
-		var len = this.inputs != null ? this.inputs.length : 0;
-		var _g = 0;
-		var _g1 = len;
-		while(_g < _g1) {
-			var j = len - _g++ - 1;
-			var input = this.inputs[j];
-			if(input.destroyed) {
-				this.inputs.splice(j,1);
-				continue;
-			}
-			input.update();
-			if(input.check(this)) {
-				this._checked = true;
-			}
-		}
-		this.triggered = this._checked;
-		return this._checked;
-	}
-	,update: function() {
-		this.check();
-	}
-	,destroy: function() {
-		flixel_util_FlxDestroyUtil.destroyArray(this.inputs);
-		this.inputs = null;
-	}
-	,match: function(other) {
-		if(this.name == other.name) {
-			return this.steamHandle == other.steamHandle;
-		} else {
-			return false;
-		}
-	}
-	,addGenericInput: function(input) {
-		if(this.inputs == null) {
-			this.inputs = [];
-		}
-		if(!this.checkExists(input)) {
-			this.inputs.push(input);
-		}
-		return this;
-	}
-	,checkExists: function(input) {
-		if(this.inputs == null) {
-			return false;
-		}
-		return this.inputs.indexOf(input) != -1;
-	}
-	,__class__: flixel_input_actions_FlxAction
-};
-var flixel_input_actions_FlxActionDigital = function(Name,Callback) {
-	if(Name == null) {
-		Name = "";
-	}
-	flixel_input_actions_FlxAction.call(this,flixel_input_actions_FlxInputType.DIGITAL,Name);
-	this.callback = Callback;
-};
-$hxClasses["flixel.input.actions.FlxActionDigital"] = flixel_input_actions_FlxActionDigital;
-flixel_input_actions_FlxActionDigital.__name__ = "flixel.input.actions.FlxActionDigital";
-flixel_input_actions_FlxActionDigital.__super__ = flixel_input_actions_FlxAction;
-flixel_input_actions_FlxActionDigital.prototype = $extend(flixel_input_actions_FlxAction.prototype,{
-	callback: null
-	,add: function(input) {
-		this.addGenericInput(input);
-		return this;
-	}
-	,addInput: function(Input,Trigger) {
-		return this.add(new flixel_input_actions_FlxActionInputDigitalIFlxInput(Input,Trigger));
-	}
-	,addGamepad: function(InputID,Trigger,GamepadID) {
-		if(GamepadID == null) {
-			GamepadID = -2;
-		}
-		return this.add(new flixel_input_actions_FlxActionInputDigitalGamepad(InputID,Trigger,GamepadID));
-	}
-	,addKey: function(Key,Trigger) {
-		return this.add(new flixel_input_actions_FlxActionInputDigitalKeyboard(Key,Trigger));
-	}
-	,addMouse: function(ButtonID,Trigger) {
-		return this.add(new flixel_input_actions_FlxActionInputDigitalMouse(ButtonID,Trigger));
-	}
-	,addMouseWheel: function(Positive,Trigger) {
-		return this.add(new flixel_input_actions_FlxActionInputDigitalMouseWheel(Positive,Trigger));
-	}
-	,destroy: function() {
-		this.callback = null;
-		flixel_input_actions_FlxAction.prototype.destroy.call(this);
-	}
-	,check: function() {
-		var val = flixel_input_actions_FlxAction.prototype.check.call(this);
-		if(val && this.callback != null) {
-			this.callback(this);
-		}
-		return val;
-	}
-	,__class__: flixel_input_actions_FlxActionDigital
-});
-var flixel_input_actions_FlxActionAnalog = function(Name,Callback) {
-	if(Name == null) {
-		Name = "";
-	}
-	flixel_input_actions_FlxAction.call(this,flixel_input_actions_FlxInputType.ANALOG,Name);
-	this.callback = Callback;
-};
-$hxClasses["flixel.input.actions.FlxActionAnalog"] = flixel_input_actions_FlxActionAnalog;
-flixel_input_actions_FlxActionAnalog.__name__ = "flixel.input.actions.FlxActionAnalog";
-flixel_input_actions_FlxActionAnalog.__super__ = flixel_input_actions_FlxAction;
-flixel_input_actions_FlxActionAnalog.prototype = $extend(flixel_input_actions_FlxAction.prototype,{
-	callback: null
-	,add: function(input) {
-		this.addGenericInput(input);
-		return this;
-	}
-	,addMouseClickAndDragMotion: function(ButtonID,Trigger,Axis,PixelsPerUnit,DeadZone,InvertY,InvertX) {
-		if(InvertX == null) {
-			InvertX = false;
-		}
-		if(InvertY == null) {
-			InvertY = false;
-		}
-		if(DeadZone == null) {
-			DeadZone = 0.1;
-		}
-		if(PixelsPerUnit == null) {
-			PixelsPerUnit = 10;
-		}
-		if(Axis == null) {
-			Axis = 3;
-		}
-		return this.add(new flixel_input_actions_FlxActionInputAnalogClickAndDragMouseMotion(ButtonID,Trigger,Axis,PixelsPerUnit,DeadZone,InvertY,InvertX));
-	}
-	,addMouseMotion: function(Trigger,Axis,PixelsPerUnit,DeadZone,InvertY,InvertX) {
-		if(InvertX == null) {
-			InvertX = false;
-		}
-		if(InvertY == null) {
-			InvertY = false;
-		}
-		if(DeadZone == null) {
-			DeadZone = 0.1;
-		}
-		if(PixelsPerUnit == null) {
-			PixelsPerUnit = 10;
-		}
-		if(Axis == null) {
-			Axis = 3;
-		}
-		return this.add(new flixel_input_actions_FlxActionInputAnalogMouseMotion(Trigger,Axis,PixelsPerUnit,DeadZone,InvertY,InvertX));
-	}
-	,addMousePosition: function(Trigger,Axis) {
-		if(Axis == null) {
-			Axis = 3;
-		}
-		return this.add(new flixel_input_actions_FlxActionInputAnalogMousePosition(Trigger,Axis));
-	}
-	,addGamepad: function(InputID,Trigger,Axis,GamepadID) {
-		if(GamepadID == null) {
-			GamepadID = -2;
-		}
-		if(Axis == null) {
-			Axis = 3;
-		}
-		return this.add(new flixel_input_actions_FlxActionInputAnalogGamepad(InputID,Trigger,Axis,GamepadID));
-	}
-	,update: function() {
-		this._x = null;
-		this._y = null;
-		flixel_input_actions_FlxAction.prototype.update.call(this);
-	}
-	,destroy: function() {
-		this.callback = null;
-		flixel_input_actions_FlxAction.prototype.destroy.call(this);
-	}
-	,toString: function() {
-		return "FlxAction(" + Std.string(this.type) + ") name:" + this.name + " x/y:" + this._x + "," + this._y;
-	}
-	,check: function() {
-		var val = flixel_input_actions_FlxAction.prototype.check.call(this);
-		if(val && this.callback != null) {
-			this.callback(this);
-		}
-		return val;
-	}
-	,get_x: function() {
-		if(this._x != null) {
-			return this._x;
-		} else {
-			return 0;
-		}
-	}
-	,get_y: function() {
-		if(this._y != null) {
-			return this._y;
-		} else {
-			return 0;
-		}
-	}
-	,__class__: flixel_input_actions_FlxActionAnalog
-	,__properties__: {get_y:"get_y",get_x:"get_x"}
-});
-var flixel_input_actions_FlxActionInput = function(InputType,Device,InputID,Trigger,DeviceID) {
-	if(DeviceID == null) {
-		DeviceID = -2;
-	}
-	this.destroyed = false;
-	this.type = InputType;
-	this.device = Device;
-	this.inputID = InputID;
-	this.trigger = Trigger;
-	this.deviceID = DeviceID;
-};
-$hxClasses["flixel.input.actions.FlxActionInput"] = flixel_input_actions_FlxActionInput;
-flixel_input_actions_FlxActionInput.__name__ = "flixel.input.actions.FlxActionInput";
-flixel_input_actions_FlxActionInput.__interfaces__ = [flixel_util_IFlxDestroyable];
-flixel_input_actions_FlxActionInput.prototype = {
-	type: null
-	,device: null
-	,deviceID: null
-	,destroyed: null
-	,inputID: null
-	,trigger: null
-	,update: function() {
-	}
-	,destroy: function() {
-		this.destroyed = true;
-	}
-	,check: function(action) {
-		return false;
-	}
-	,compareState: function(condition,state) {
-		switch(condition) {
-		case -1:
-			return state == -1;
-		case 0:
-			if(state != 0) {
-				return state == -1;
-			} else {
-				return true;
-			}
-			break;
-		case 1:
-			if(state != 1) {
-				return state == 2;
-			} else {
-				return true;
-			}
-			break;
-		case 2:
-			return state == 2;
-		default:
-			return false;
-		}
-	}
-	,__class__: flixel_input_actions_FlxActionInput
-};
-var flixel_input_actions_FlxInputType = $hxEnums["flixel.input.actions.FlxInputType"] = { __ename__:"flixel.input.actions.FlxInputType",__constructs__:null
-	,DIGITAL: {_hx_name:"DIGITAL",_hx_index:0,__enum__:"flixel.input.actions.FlxInputType",toString:$estr}
-	,ANALOG: {_hx_name:"ANALOG",_hx_index:1,__enum__:"flixel.input.actions.FlxInputType",toString:$estr}
-};
-flixel_input_actions_FlxInputType.__constructs__ = [flixel_input_actions_FlxInputType.DIGITAL,flixel_input_actions_FlxInputType.ANALOG];
-var flixel_input_actions_FlxInputDevice = $hxEnums["flixel.input.actions.FlxInputDevice"] = { __ename__:"flixel.input.actions.FlxInputDevice",__constructs__:null
-	,UNKNOWN: {_hx_name:"UNKNOWN",_hx_index:0,__enum__:"flixel.input.actions.FlxInputDevice",toString:$estr}
-	,MOUSE: {_hx_name:"MOUSE",_hx_index:1,__enum__:"flixel.input.actions.FlxInputDevice",toString:$estr}
-	,MOUSE_WHEEL: {_hx_name:"MOUSE_WHEEL",_hx_index:2,__enum__:"flixel.input.actions.FlxInputDevice",toString:$estr}
-	,KEYBOARD: {_hx_name:"KEYBOARD",_hx_index:3,__enum__:"flixel.input.actions.FlxInputDevice",toString:$estr}
-	,GAMEPAD: {_hx_name:"GAMEPAD",_hx_index:4,__enum__:"flixel.input.actions.FlxInputDevice",toString:$estr}
-	,STEAM_CONTROLLER: {_hx_name:"STEAM_CONTROLLER",_hx_index:5,__enum__:"flixel.input.actions.FlxInputDevice",toString:$estr}
-	,IFLXINPUT_OBJECT: {_hx_name:"IFLXINPUT_OBJECT",_hx_index:6,__enum__:"flixel.input.actions.FlxInputDevice",toString:$estr}
-	,OTHER: {_hx_name:"OTHER",_hx_index:7,__enum__:"flixel.input.actions.FlxInputDevice",toString:$estr}
-	,ANDROID: {_hx_name:"ANDROID",_hx_index:8,__enum__:"flixel.input.actions.FlxInputDevice",toString:$estr}
-	,ALL: {_hx_name:"ALL",_hx_index:9,__enum__:"flixel.input.actions.FlxInputDevice",toString:$estr}
-	,NONE: {_hx_name:"NONE",_hx_index:10,__enum__:"flixel.input.actions.FlxInputDevice",toString:$estr}
-};
-flixel_input_actions_FlxInputDevice.__constructs__ = [flixel_input_actions_FlxInputDevice.UNKNOWN,flixel_input_actions_FlxInputDevice.MOUSE,flixel_input_actions_FlxInputDevice.MOUSE_WHEEL,flixel_input_actions_FlxInputDevice.KEYBOARD,flixel_input_actions_FlxInputDevice.GAMEPAD,flixel_input_actions_FlxInputDevice.STEAM_CONTROLLER,flixel_input_actions_FlxInputDevice.IFLXINPUT_OBJECT,flixel_input_actions_FlxInputDevice.OTHER,flixel_input_actions_FlxInputDevice.ANDROID,flixel_input_actions_FlxInputDevice.ALL,flixel_input_actions_FlxInputDevice.NONE];
-var flixel_input_actions_FlxInputDeviceID = function() { };
-$hxClasses["flixel.input.actions.FlxInputDeviceID"] = flixel_input_actions_FlxInputDeviceID;
-flixel_input_actions_FlxInputDeviceID.__name__ = "flixel.input.actions.FlxInputDeviceID";
-var flixel_input_actions_FlxInputDeviceObject = function(Device,ID,Model) {
-	if(Model == null) {
-		Model = "";
-	}
-	this.device = Device;
-	this.id = ID;
-	this.model = Model;
-};
-$hxClasses["flixel.input.actions.FlxInputDeviceObject"] = flixel_input_actions_FlxInputDeviceObject;
-flixel_input_actions_FlxInputDeviceObject.__name__ = "flixel.input.actions.FlxInputDeviceObject";
-flixel_input_actions_FlxInputDeviceObject.prototype = {
-	device: null
-	,id: null
-	,model: null
-	,toString: function() {
-		return "{device:" + Std.string(this.device) + ",id:" + this.id + ",model:" + this.model + "}";
-	}
-	,__class__: flixel_input_actions_FlxInputDeviceObject
-};
-var flixel_input_actions_FlxActionInputAnalog = function(Device,InputID,Trigger,Axis,DeviceID) {
-	if(DeviceID == null) {
-		DeviceID = -2;
-	}
-	if(Axis == null) {
-		Axis = 3;
-	}
-	this.y = 0;
-	this.x = 0;
-	flixel_input_actions_FlxActionInput.call(this,flixel_input_actions_FlxInputType.ANALOG,Device,InputID,Trigger,DeviceID);
-	this.axis = Axis;
-	this.xMoved = new flixel_input_FlxInput(0);
-	this.yMoved = new flixel_input_FlxInput(1);
-};
-$hxClasses["flixel.input.actions.FlxActionInputAnalog"] = flixel_input_actions_FlxActionInputAnalog;
-flixel_input_actions_FlxActionInputAnalog.__name__ = "flixel.input.actions.FlxActionInputAnalog";
-flixel_input_actions_FlxActionInputAnalog.__super__ = flixel_input_actions_FlxActionInput;
-flixel_input_actions_FlxActionInputAnalog.prototype = $extend(flixel_input_actions_FlxActionInput.prototype,{
-	axis: null
-	,x: null
-	,y: null
-	,xMoved: null
-	,yMoved: null
-	,check: function(Action) {
-		var returnVal;
-		switch(this.axis) {
-		case 0:
-			var state = this.xMoved.current;
-			switch(this.trigger) {
-			case -1:
-				returnVal = state == -1;
-				break;
-			case 0:
-				returnVal = state == 0 || state == -1;
-				break;
-			case 1:
-				returnVal = state == 1 || state == 2;
-				break;
-			case 2:
-				returnVal = state == 2;
-				break;
-			default:
-				returnVal = false;
-			}
-			break;
-		case 1:
-			var state = this.yMoved.current;
-			switch(this.trigger) {
-			case -1:
-				returnVal = state == -1;
-				break;
-			case 0:
-				returnVal = state == 0 || state == -1;
-				break;
-			case 1:
-				returnVal = state == 1 || state == 2;
-				break;
-			case 2:
-				returnVal = state == 2;
-				break;
-			default:
-				returnVal = false;
-			}
-			break;
-		case 2:
-			var state = this.xMoved.current;
-			var returnVal1;
-			switch(this.trigger) {
-			case -1:
-				returnVal1 = state == -1;
-				break;
-			case 0:
-				returnVal1 = state == 0 || state == -1;
-				break;
-			case 1:
-				returnVal1 = state == 1 || state == 2;
-				break;
-			case 2:
-				returnVal1 = state == 2;
-				break;
-			default:
-				returnVal1 = false;
-			}
-			if(returnVal1) {
-				var state = this.yMoved.current;
-				switch(this.trigger) {
-				case -1:
-					returnVal = state == -1;
-					break;
-				case 0:
-					returnVal = state == 0 || state == -1;
-					break;
-				case 1:
-					returnVal = state == 1 || state == 2;
-					break;
-				case 2:
-					returnVal = state == 2;
-					break;
-				default:
-					returnVal = false;
-				}
-			} else {
-				returnVal = false;
-			}
-			break;
-		case 3:
-			switch(this.trigger) {
-			case -1:
-				returnVal = this.checkAxis(true,-1) && this.checkAxis(false,0) || this.checkAxis(true,0) && this.checkAxis(false,-1);
-				break;
-			case 0:
-				returnVal = this.checkAxis(true,0) || this.checkAxis(false,0);
-				break;
-			case 1:
-				returnVal = this.checkAxis(true,1) || this.checkAxis(false,1);
-				break;
-			case 2:
-				returnVal = this.checkAxis(true,2) && this.checkAxis(false,2) || this.checkAxis(true,2) && this.checkAxis(false,0) || this.checkAxis(true,0) && this.checkAxis(false,2);
-				break;
-			}
-			break;
-		}
-		if(returnVal) {
-			if(Action._x == null) {
-				Action._x = this.x;
-			}
-			if(Action._y == null) {
-				Action._y = this.y;
-			}
-		}
-		return returnVal;
-	}
-	,checkAxis: function(isX,state) {
-		var state1 = (isX ? this.xMoved : this.yMoved).current;
-		switch(state) {
-		case -1:
-			return state1 == -1;
-		case 0:
-			if(state1 != 0) {
-				return state1 == -1;
-			} else {
-				return true;
-			}
-			break;
-		case 1:
-			if(state1 != 1) {
-				return state1 == 2;
-			} else {
-				return true;
-			}
-			break;
-		case 2:
-			return state1 == 2;
-		default:
-			return false;
-		}
-	}
-	,updateValues: function(X,Y) {
-		if(X != 0) {
-			this.xMoved.press();
-		} else {
-			this.xMoved.release();
-		}
-		if(Y != 0) {
-			this.yMoved.press();
-		} else {
-			this.yMoved.release();
-		}
-		this.x = X;
-		this.y = Y;
-	}
-	,__class__: flixel_input_actions_FlxActionInputAnalog
-});
-var flixel_input_actions_FlxActionInputAnalogMouseMotion = function(Trigger,Axis,PixelsPerUnit,DeadZone,InvertY,InvertX) {
-	if(InvertX == null) {
-		InvertX = false;
-	}
-	if(InvertY == null) {
-		InvertY = false;
-	}
-	if(DeadZone == null) {
-		DeadZone = 0.1;
-	}
-	if(PixelsPerUnit == null) {
-		PixelsPerUnit = 10;
-	}
-	if(Axis == null) {
-		Axis = 3;
-	}
-	this.lastY = 0;
-	this.lastX = 0;
-	this.pixelsPerUnit = PixelsPerUnit;
-	if(this.pixelsPerUnit < 1) {
-		this.pixelsPerUnit = 1;
-	}
-	this.deadZone = DeadZone;
-	this.invertX = InvertX;
-	this.invertY = InvertY;
-	flixel_input_actions_FlxActionInputAnalog.call(this,flixel_input_actions_FlxInputDevice.MOUSE,-1,Trigger,Axis);
-};
-$hxClasses["flixel.input.actions.FlxActionInputAnalogMouseMotion"] = flixel_input_actions_FlxActionInputAnalogMouseMotion;
-flixel_input_actions_FlxActionInputAnalogMouseMotion.__name__ = "flixel.input.actions.FlxActionInputAnalogMouseMotion";
-flixel_input_actions_FlxActionInputAnalogMouseMotion.__super__ = flixel_input_actions_FlxActionInputAnalog;
-flixel_input_actions_FlxActionInputAnalogMouseMotion.prototype = $extend(flixel_input_actions_FlxActionInputAnalog.prototype,{
-	lastX: null
-	,lastY: null
-	,pixelsPerUnit: null
-	,deadZone: null
-	,invertX: null
-	,invertY: null
-	,update: function() {
-		this.updateXYPosition(flixel_FlxG.mouse.x,flixel_FlxG.mouse.y);
-	}
-	,updateXYPosition: function(X,Y) {
-		var xDiff = X - this.lastX;
-		var yDiff = Y - this.lastY;
-		this.lastX = X;
-		this.lastY = Y;
-		if(this.invertX) {
-			xDiff *= -1;
-		}
-		if(this.invertY) {
-			yDiff *= -1;
-		}
-		xDiff /= this.pixelsPerUnit;
-		yDiff /= this.pixelsPerUnit;
-		if(Math.abs(xDiff) < this.deadZone) {
-			xDiff = 0;
-		}
-		if(Math.abs(yDiff) < this.deadZone) {
-			yDiff = 0;
-		}
-		this.updateValues(xDiff,yDiff);
-	}
-	,__class__: flixel_input_actions_FlxActionInputAnalogMouseMotion
-});
-var flixel_input_actions_FlxActionInputAnalogClickAndDragMouseMotion = function(ButtonID,Trigger,Axis,PixelsPerUnit,DeadZone,InvertY,InvertX) {
-	if(InvertX == null) {
-		InvertX = false;
-	}
-	if(InvertY == null) {
-		InvertY = false;
-	}
-	if(DeadZone == null) {
-		DeadZone = 0.1;
-	}
-	if(PixelsPerUnit == null) {
-		PixelsPerUnit = 10;
-	}
-	if(Axis == null) {
-		Axis = 3;
-	}
-	flixel_input_actions_FlxActionInputAnalogMouseMotion.call(this,Trigger,Axis,PixelsPerUnit,DeadZone,InvertY,InvertX);
-	this.button = ButtonID;
-};
-$hxClasses["flixel.input.actions.FlxActionInputAnalogClickAndDragMouseMotion"] = flixel_input_actions_FlxActionInputAnalogClickAndDragMouseMotion;
-flixel_input_actions_FlxActionInputAnalogClickAndDragMouseMotion.__name__ = "flixel.input.actions.FlxActionInputAnalogClickAndDragMouseMotion";
-flixel_input_actions_FlxActionInputAnalogClickAndDragMouseMotion.__super__ = flixel_input_actions_FlxActionInputAnalogMouseMotion;
-flixel_input_actions_FlxActionInputAnalogClickAndDragMouseMotion.prototype = $extend(flixel_input_actions_FlxActionInputAnalogMouseMotion.prototype,{
-	button: null
-	,updateValues: function(X,Y) {
-		var pass = false;
-		switch(this.button) {
-		case -3:
-			var _this = flixel_FlxG.mouse._rightButton;
-			pass = _this.current == 1 || _this.current == 2;
-			break;
-		case -2:
-			var _this = flixel_FlxG.mouse._middleButton;
-			pass = _this.current == 1 || _this.current == 2;
-			break;
-		case -1:
-			var _this = flixel_FlxG.mouse._leftButton;
-			pass = _this.current == 1 || _this.current == 2;
-			break;
-		}
-		if(!pass) {
-			X = 0;
-			Y = 0;
-		}
-		flixel_input_actions_FlxActionInputAnalogMouseMotion.prototype.updateValues.call(this,X,Y);
-	}
-	,__class__: flixel_input_actions_FlxActionInputAnalogClickAndDragMouseMotion
-});
-var flixel_input_actions_FlxActionInputAnalogMousePosition = function(Trigger,Axis) {
-	if(Axis == null) {
-		Axis = 3;
-	}
-	flixel_input_actions_FlxActionInputAnalog.call(this,flixel_input_actions_FlxInputDevice.MOUSE,-1,Trigger,Axis);
-};
-$hxClasses["flixel.input.actions.FlxActionInputAnalogMousePosition"] = flixel_input_actions_FlxActionInputAnalogMousePosition;
-flixel_input_actions_FlxActionInputAnalogMousePosition.__name__ = "flixel.input.actions.FlxActionInputAnalogMousePosition";
-flixel_input_actions_FlxActionInputAnalogMousePosition.__super__ = flixel_input_actions_FlxActionInputAnalog;
-flixel_input_actions_FlxActionInputAnalogMousePosition.prototype = $extend(flixel_input_actions_FlxActionInputAnalog.prototype,{
-	update: function() {
-		this.updateValues(flixel_FlxG.mouse.x,flixel_FlxG.mouse.y);
-	}
-	,updateValues: function(X,Y) {
-		if(X != this.x) {
-			this.xMoved.press();
-		} else {
-			this.xMoved.release();
-		}
-		if(Y != this.y) {
-			this.yMoved.press();
-		} else {
-			this.yMoved.release();
-		}
-		this.x = X;
-		this.y = Y;
-	}
-	,__class__: flixel_input_actions_FlxActionInputAnalogMousePosition
-});
-var flixel_input_actions_FlxActionInputAnalogGamepad = function(InputID,Trigger,Axis,GamepadID) {
-	if(GamepadID == null) {
-		GamepadID = -2;
-	}
-	if(Axis == null) {
-		Axis = 3;
-	}
-	flixel_input_actions_FlxActionInputAnalog.call(this,flixel_input_actions_FlxInputDevice.GAMEPAD,InputID,Trigger,Axis,GamepadID);
-};
-$hxClasses["flixel.input.actions.FlxActionInputAnalogGamepad"] = flixel_input_actions_FlxActionInputAnalogGamepad;
-flixel_input_actions_FlxActionInputAnalogGamepad.__name__ = "flixel.input.actions.FlxActionInputAnalogGamepad";
-flixel_input_actions_FlxActionInputAnalogGamepad.__super__ = flixel_input_actions_FlxActionInputAnalog;
-flixel_input_actions_FlxActionInputAnalogGamepad.prototype = $extend(flixel_input_actions_FlxActionInputAnalog.prototype,{
-	update: function() {
-		if(this.deviceID == -1) {
-			return;
-		}
-		var gamepad = null;
-		if(this.deviceID == -2) {
-			gamepad = flixel_FlxG.gamepads.getFirstActiveGamepad();
-		} else if(this.deviceID >= 0) {
-			gamepad = flixel_FlxG.gamepads._activeGamepads[this.deviceID];
-		}
-		if(gamepad != null) {
-			switch(this.inputID) {
-			case 17:
-				this.updateValues(gamepad.analog.value.gamepad.getAxis(17),0);
-				break;
-			case 18:
-				this.updateValues(gamepad.analog.value.gamepad.getAxis(18),0);
-				break;
-			case 19:
-				var _this = gamepad.analog.value.gamepad;
-				var tmp = _this.getAnalogXAxisValue(_this.mapping.getAnalogStick(19));
-				var _this = gamepad.analog.value.gamepad;
-				this.updateValues(tmp,_this.getYAxisRaw(_this.mapping.getAnalogStick(19)));
-				break;
-			case 20:
-				var _this = gamepad.analog.value.gamepad;
-				var tmp = _this.getAnalogXAxisValue(_this.mapping.getAnalogStick(20));
-				var _this = gamepad.analog.value.gamepad;
-				this.updateValues(tmp,_this.getYAxisRaw(_this.mapping.getAnalogStick(20)));
-				break;
-			case 21:
-				var tmp;
-				var _this = gamepad.pressed;
-				var id = 13;
-				var _this1 = _this.gamepad;
-				var Status = _this.status;
-				var tmp1;
-				switch(id) {
-				case -2:
-					break;
-				case -1:
-					break;
-				default:
-					var RawID = _this1.mapping.getRawID(id);
-					var button = _this1.buttons[RawID];
-					tmp1 = button != null && button.hasState(Status);
-				}
-				if(tmp1) {
-					tmp = -1.0;
-				} else {
-					var _this = gamepad.pressed;
-					var id = 14;
-					var _this1 = _this.gamepad;
-					var Status = _this.status;
-					var tmp1;
-					switch(id) {
-					case -2:
-						break;
-					case -1:
-						break;
-					default:
-						var RawID = _this1.mapping.getRawID(id);
-						var button = _this1.buttons[RawID];
-						tmp1 = button != null && button.hasState(Status);
-					}
-					tmp = tmp1 ? 1.0 : 0.0;
-				}
-				var tmp1;
-				var _this = gamepad.pressed;
-				var id = 11;
-				var _this1 = _this.gamepad;
-				var Status = _this.status;
-				var tmp2;
-				switch(id) {
-				case -2:
-					break;
-				case -1:
-					break;
-				default:
-					var RawID = _this1.mapping.getRawID(id);
-					var button = _this1.buttons[RawID];
-					tmp2 = button != null && button.hasState(Status);
-				}
-				if(tmp2) {
-					tmp1 = -1.0;
-				} else {
-					var _this = gamepad.pressed;
-					var id = 12;
-					var _this1 = _this.gamepad;
-					var Status = _this.status;
-					var tmp2;
-					switch(id) {
-					case -2:
-						break;
-					case -1:
-						break;
-					default:
-						var RawID = _this1.mapping.getRawID(id);
-						var button = _this1.buttons[RawID];
-						tmp2 = button != null && button.hasState(Status);
-					}
-					tmp1 = tmp2 ? 1.0 : 0.0;
-				}
-				this.updateValues(tmp,tmp1);
-				break;
-			case 28:
-				this.updateValues(gamepad.analog.value.gamepad.getAxis(28),0);
-				break;
-			case 29:
-				this.updateValues(gamepad.analog.value.gamepad.getAxis(29),0);
-				break;
-			}
-		} else {
-			this.updateValues(0,0);
-		}
-	}
-	,__class__: flixel_input_actions_FlxActionInputAnalogGamepad
-});
-var flixel_input_actions_FlxActionInputAnalogSteam = function(ActionHandle,Trigger,Axis,DeviceID) {
-	if(DeviceID == null) {
-		DeviceID = -1;
-	}
-	if(Axis == null) {
-		Axis = 3;
-	}
-	flixel_input_actions_FlxActionInputAnalog.call(this,flixel_input_actions_FlxInputDevice.STEAM_CONTROLLER,ActionHandle,Trigger,Axis,DeviceID);
-};
-$hxClasses["flixel.input.actions.FlxActionInputAnalogSteam"] = flixel_input_actions_FlxActionInputAnalogSteam;
-flixel_input_actions_FlxActionInputAnalogSteam.__name__ = "flixel.input.actions.FlxActionInputAnalogSteam";
-flixel_input_actions_FlxActionInputAnalogSteam.__super__ = flixel_input_actions_FlxActionInputAnalog;
-flixel_input_actions_FlxActionInputAnalogSteam.prototype = $extend(flixel_input_actions_FlxActionInputAnalog.prototype,{
-	update: function() {
-	}
-	,__class__: flixel_input_actions_FlxActionInputAnalogSteam
-});
-var flixel_input_actions_FlxActionInputDigital = function(Device,InputID,Trigger,DeviceID) {
-	if(DeviceID == null) {
-		DeviceID = -2;
-	}
-	flixel_input_actions_FlxActionInput.call(this,flixel_input_actions_FlxInputType.DIGITAL,Device,InputID,Trigger,DeviceID);
-	this.inputID = InputID;
-};
-$hxClasses["flixel.input.actions.FlxActionInputDigital"] = flixel_input_actions_FlxActionInputDigital;
-flixel_input_actions_FlxActionInputDigital.__name__ = "flixel.input.actions.FlxActionInputDigital";
-flixel_input_actions_FlxActionInputDigital.__super__ = flixel_input_actions_FlxActionInput;
-flixel_input_actions_FlxActionInputDigital.prototype = $extend(flixel_input_actions_FlxActionInput.prototype,{
-	__class__: flixel_input_actions_FlxActionInputDigital
-});
-var flixel_input_actions_FlxActionInputDigitalMouseWheel = function(Positive,Trigger) {
-	this.sign = 0;
-	flixel_input_actions_FlxActionInputDigital.call(this,flixel_input_actions_FlxInputDevice.MOUSE_WHEEL,0,Trigger);
-	this.input = new flixel_input_FlxInput(0);
-	this.sign = Positive ? 1 : -1;
-};
-$hxClasses["flixel.input.actions.FlxActionInputDigitalMouseWheel"] = flixel_input_actions_FlxActionInputDigitalMouseWheel;
-flixel_input_actions_FlxActionInputDigitalMouseWheel.__name__ = "flixel.input.actions.FlxActionInputDigitalMouseWheel";
-flixel_input_actions_FlxActionInputDigitalMouseWheel.__super__ = flixel_input_actions_FlxActionInputDigital;
-flixel_input_actions_FlxActionInputDigitalMouseWheel.prototype = $extend(flixel_input_actions_FlxActionInputDigital.prototype,{
-	input: null
-	,sign: null
-	,check: function(Action) {
-		switch(this.trigger) {
-		case -1:
-			return this.input.current == -1;
-		case 0:
-			var _this = this.input;
-			if(!(_this.current == 0 || _this.current == -1)) {
-				return this.input.current == -1;
-			} else {
-				return true;
-			}
-			break;
-		case 1:
-			var _this = this.input;
-			if(!(_this.current == 1 || _this.current == 2)) {
-				return this.input.current == 2;
-			} else {
-				return true;
-			}
-			break;
-		case 2:
-			return this.input.current == 2;
-		default:
-			return false;
-		}
-	}
-	,update: function() {
-		flixel_input_actions_FlxActionInputDigital.prototype.update.call(this);
-		if(flixel_FlxG.mouse.wheel * this.sign > 0) {
-			this.input.press();
-		} else {
-			this.input.release();
-		}
-	}
-	,__class__: flixel_input_actions_FlxActionInputDigitalMouseWheel
-});
-var flixel_input_actions_FlxActionInputDigitalGamepad = function(InputID,Trigger,GamepadID) {
-	if(GamepadID == null) {
-		GamepadID = -2;
-	}
-	flixel_input_actions_FlxActionInputDigital.call(this,flixel_input_actions_FlxInputDevice.GAMEPAD,InputID,Trigger,GamepadID);
-	this.input = new flixel_input_FlxInput(InputID);
-};
-$hxClasses["flixel.input.actions.FlxActionInputDigitalGamepad"] = flixel_input_actions_FlxActionInputDigitalGamepad;
-flixel_input_actions_FlxActionInputDigitalGamepad.__name__ = "flixel.input.actions.FlxActionInputDigitalGamepad";
-flixel_input_actions_FlxActionInputDigitalGamepad.__super__ = flixel_input_actions_FlxActionInputDigital;
-flixel_input_actions_FlxActionInputDigitalGamepad.prototype = $extend(flixel_input_actions_FlxActionInputDigital.prototype,{
-	input: null
-	,toString: function() {
-		return "FlxActionInputDigitalGamepad{inputID:" + this.inputID + ",trigger:" + this.trigger + ",deviceID:" + this.deviceID + ",device:" + Std.string(this.device) + ",type:" + Std.string(this.type) + "}";
-	}
-	,update: function() {
-		flixel_input_actions_FlxActionInputDigital.prototype.update.call(this);
-		if(this.deviceID == -1) {
-			if(flixel_FlxG.gamepads.anyHasState(this.inputID,1) || flixel_FlxG.gamepads.anyHasState(this.inputID,2)) {
-				this.input.press();
-			} else {
-				this.input.release();
-			}
-		} else {
-			var gamepad = null;
-			if(this.deviceID == -2) {
-				gamepad = flixel_FlxG.gamepads.getFirstActiveGamepad();
-			} else if(this.deviceID >= 0) {
-				gamepad = flixel_FlxG.gamepads._activeGamepads[this.deviceID];
-			}
-			if(gamepad != null) {
-				if(this.inputID == -2 && this.trigger == 0) {
-					if(gamepad.released.get_ANY()) {
-						this.input.release();
-					} else {
-						this.input.press();
-					}
-				} else {
-					var tmp;
-					var ID = this.inputID;
-					var Status = 1;
-					var tmp1;
-					switch(ID) {
-					case -2:
-						tmp1 = gamepad.anyButton(Status);
-						break;
-					case -1:
-						tmp1 = !gamepad.anyButton(Status);
-						break;
-					default:
-						var RawID = gamepad.mapping.getRawID(ID);
-						var button = gamepad.buttons[RawID];
-						tmp1 = button != null && button.hasState(Status);
-					}
-					if(!tmp1) {
-						var ID = this.inputID;
-						var Status = 2;
-						switch(ID) {
-						case -2:
-							tmp = gamepad.anyButton(Status);
-							break;
-						case -1:
-							tmp = !gamepad.anyButton(Status);
-							break;
-						default:
-							var RawID = gamepad.mapping.getRawID(ID);
-							var button = gamepad.buttons[RawID];
-							tmp = button != null && button.hasState(Status);
-						}
-					} else {
-						tmp = true;
-					}
-					if(tmp) {
-						this.input.press();
-					} else {
-						this.input.release();
-					}
-				}
-			} else if(this.deviceID == -2) {
-				this.input.release();
-			}
-		}
-	}
-	,check: function(Action) {
-		switch(this.trigger) {
-		case -1:
-			return this.input.current == -1;
-		case 0:
-			var _this = this.input;
-			if(!(_this.current == 0 || _this.current == -1)) {
-				return this.input.current == -1;
-			} else {
-				return true;
-			}
-			break;
-		case 1:
-			var _this = this.input;
-			if(!(_this.current == 1 || _this.current == 2)) {
-				return this.input.current == 2;
-			} else {
-				return true;
-			}
-			break;
-		case 2:
-			return this.input.current == 2;
-		default:
-			return false;
-		}
-	}
-	,__class__: flixel_input_actions_FlxActionInputDigitalGamepad
-});
-var flixel_input_actions_FlxActionInputDigitalKeyboard = function(Key,Trigger) {
-	flixel_input_actions_FlxActionInputDigital.call(this,flixel_input_actions_FlxInputDevice.KEYBOARD,Key,Trigger);
-};
-$hxClasses["flixel.input.actions.FlxActionInputDigitalKeyboard"] = flixel_input_actions_FlxActionInputDigitalKeyboard;
-flixel_input_actions_FlxActionInputDigitalKeyboard.__name__ = "flixel.input.actions.FlxActionInputDigitalKeyboard";
-flixel_input_actions_FlxActionInputDigitalKeyboard.__super__ = flixel_input_actions_FlxActionInputDigital;
-flixel_input_actions_FlxActionInputDigitalKeyboard.prototype = $extend(flixel_input_actions_FlxActionInputDigital.prototype,{
-	check: function(Action) {
-		switch(this.trigger) {
-		case -1:
-			return flixel_FlxG.keys.checkStatus(this.inputID,-1);
-		case 0:
-			if(!flixel_FlxG.keys.checkStatus(this.inputID,0)) {
-				return flixel_FlxG.keys.checkStatus(this.inputID,-1);
-			} else {
-				return true;
-			}
-			break;
-		case 1:
-			if(!flixel_FlxG.keys.checkStatus(this.inputID,1)) {
-				return flixel_FlxG.keys.checkStatus(this.inputID,2);
-			} else {
-				return true;
-			}
-			break;
-		case 2:
-			return flixel_FlxG.keys.checkStatus(this.inputID,2);
-		default:
-			return false;
-		}
-	}
-	,__class__: flixel_input_actions_FlxActionInputDigitalKeyboard
-});
-var flixel_input_actions_FlxActionInputDigitalMouse = function(ButtonID,Trigger) {
-	flixel_input_actions_FlxActionInputDigital.call(this,flixel_input_actions_FlxInputDevice.MOUSE,ButtonID,Trigger);
-};
-$hxClasses["flixel.input.actions.FlxActionInputDigitalMouse"] = flixel_input_actions_FlxActionInputDigitalMouse;
-flixel_input_actions_FlxActionInputDigitalMouse.__name__ = "flixel.input.actions.FlxActionInputDigitalMouse";
-flixel_input_actions_FlxActionInputDigitalMouse.__super__ = flixel_input_actions_FlxActionInputDigital;
-flixel_input_actions_FlxActionInputDigitalMouse.prototype = $extend(flixel_input_actions_FlxActionInputDigital.prototype,{
-	check: function(Action) {
-		switch(this.inputID) {
-		case -3:
-			switch(this.trigger) {
-			case -1:
-				return flixel_FlxG.mouse._rightButton.current == -1;
-			case 0:
-				var _this = flixel_FlxG.mouse._rightButton;
-				if(_this.current == 1 || _this.current == 2) {
-					return flixel_FlxG.mouse._rightButton.current == -1;
-				} else {
-					return true;
-				}
-				break;
-			case 1:
-				var _this = flixel_FlxG.mouse._rightButton;
-				if(!(_this.current == 1 || _this.current == 2)) {
-					return flixel_FlxG.mouse._rightButton.current == 2;
-				} else {
-					return true;
-				}
-				break;
-			case 2:
-				return flixel_FlxG.mouse._rightButton.current == 2;
-			}
-			break;
-		case -2:
-			switch(this.trigger) {
-			case -1:
-				return flixel_FlxG.mouse._middleButton.current == -1;
-			case 0:
-				var _this = flixel_FlxG.mouse._middleButton;
-				if(_this.current == 1 || _this.current == 2) {
-					return flixel_FlxG.mouse._middleButton.current == -1;
-				} else {
-					return true;
-				}
-				break;
-			case 1:
-				var _this = flixel_FlxG.mouse._middleButton;
-				if(!(_this.current == 1 || _this.current == 2)) {
-					return flixel_FlxG.mouse._middleButton.current == 2;
-				} else {
-					return true;
-				}
-				break;
-			case 2:
-				return flixel_FlxG.mouse._middleButton.current == 2;
-			}
-			break;
-		case -1:
-			switch(this.trigger) {
-			case -1:
-				return flixel_FlxG.mouse._leftButton.current == -1;
-			case 0:
-				var _this = flixel_FlxG.mouse._leftButton;
-				if(_this.current == 1 || _this.current == 2) {
-					return flixel_FlxG.mouse._leftButton.current == -1;
-				} else {
-					return true;
-				}
-				break;
-			case 1:
-				var _this = flixel_FlxG.mouse._leftButton;
-				if(!(_this.current == 1 || _this.current == 2)) {
-					return flixel_FlxG.mouse._leftButton.current == 2;
-				} else {
-					return true;
-				}
-				break;
-			case 2:
-				return flixel_FlxG.mouse._leftButton.current == 2;
-			}
-			break;
-		default:
-			return false;
-		}
-	}
-	,__class__: flixel_input_actions_FlxActionInputDigitalMouse
-});
-var flixel_input_actions_FlxActionInputDigitalSteam = function(ActionHandle,Trigger,DeviceHandle) {
-	if(DeviceHandle == null) {
-		DeviceHandle = -2;
-	}
-	flixel_input_actions_FlxActionInputDigital.call(this,flixel_input_actions_FlxInputDevice.STEAM_CONTROLLER,ActionHandle,Trigger,DeviceHandle);
-	flixel_FlxG.log.advanced("steamwrap library not installed; steam inputs will be ignored.",flixel_system_debug_log_LogStyle.WARNING,true);
-};
-$hxClasses["flixel.input.actions.FlxActionInputDigitalSteam"] = flixel_input_actions_FlxActionInputDigitalSteam;
-flixel_input_actions_FlxActionInputDigitalSteam.__name__ = "flixel.input.actions.FlxActionInputDigitalSteam";
-flixel_input_actions_FlxActionInputDigitalSteam.__super__ = flixel_input_actions_FlxActionInputDigital;
-flixel_input_actions_FlxActionInputDigitalSteam.prototype = $extend(flixel_input_actions_FlxActionInputDigital.prototype,{
-	steamInput: null
-	,check: function(Action) {
-		switch(this.trigger) {
-		case -1:
-			return this.steamInput.current == -1;
-		case 0:
-			var _this = this.steamInput;
-			if(_this.current == 0 || _this.current == -1) {
-				return this.steamInput.current == -1;
-			} else {
-				return true;
-			}
-			break;
-		case 1:
-			var _this = this.steamInput;
-			if(!(_this.current == 1 || _this.current == 2)) {
-				return this.steamInput.current == 2;
-			} else {
-				return true;
-			}
-			break;
-		case 2:
-			return this.steamInput.current == 2;
-		}
-	}
-	,update: function() {
-		var controllerHandle = this.deviceID;
-		if(controllerHandle == -2) {
-			controllerHandle = flixel_input_actions_FlxSteamController.getFirstActiveHandle();
-		}
-		var data = flixel_input_actions_FlxSteamController.getDigitalActionData(controllerHandle,this.inputID);
-		if(data.bActive && data.bState) {
-			this.steamInput.press();
-		} else {
-			this.steamInput.release();
-		}
-	}
-	,getSteamControllerData: function(controllerHandle) {
-		if(controllerHandle == -2) {
-			controllerHandle = flixel_input_actions_FlxSteamController.getFirstActiveHandle();
-		}
-		var data = flixel_input_actions_FlxSteamController.getDigitalActionData(controllerHandle,this.inputID);
-		if(data.bActive) {
-			return data.bState;
-		} else {
-			return false;
-		}
-	}
-	,__class__: flixel_input_actions_FlxActionInputDigitalSteam
-});
-var flixel_input_actions_FlxActionInputDigitalIFlxInput = function(Input,Trigger) {
-	flixel_input_actions_FlxActionInputDigital.call(this,flixel_input_actions_FlxInputDevice.IFLXINPUT_OBJECT,0,Trigger);
-	this.input = Input;
-};
-$hxClasses["flixel.input.actions.FlxActionInputDigitalIFlxInput"] = flixel_input_actions_FlxActionInputDigitalIFlxInput;
-flixel_input_actions_FlxActionInputDigitalIFlxInput.__name__ = "flixel.input.actions.FlxActionInputDigitalIFlxInput";
-flixel_input_actions_FlxActionInputDigitalIFlxInput.__super__ = flixel_input_actions_FlxActionInputDigital;
-flixel_input_actions_FlxActionInputDigitalIFlxInput.prototype = $extend(flixel_input_actions_FlxActionInputDigital.prototype,{
-	input: null
-	,check: function(action) {
-		switch(this.trigger) {
-		case -1:
-			return this.input.get_justReleased();
-		case 0:
-			if(this.input.get_pressed()) {
-				return this.input.get_justReleased();
-			} else {
-				return true;
-			}
-			break;
-		case 1:
-			if(!this.input.get_pressed()) {
-				return this.input.get_justPressed();
-			} else {
-				return true;
-			}
-			break;
-		case 2:
-			return this.input.get_justPressed();
-		default:
-			return false;
-		}
-	}
-	,destroy: function() {
-		flixel_input_actions_FlxActionInputDigital.prototype.destroy.call(this);
-		this.input = null;
-	}
-	,__class__: flixel_input_actions_FlxActionInputDigitalIFlxInput
-});
-var flixel_input_actions_FlxSteamController = function() { };
-$hxClasses["flixel.input.actions.FlxSteamController"] = flixel_input_actions_FlxSteamController;
-flixel_input_actions_FlxSteamController.__name__ = "flixel.input.actions.FlxSteamController";
-flixel_input_actions_FlxSteamController.__properties__ = {get_MAX_ORIGINS:"get_MAX_ORIGINS",get_MAX_CONTROLLERS:"get_MAX_CONTROLLERS"};
-flixel_input_actions_FlxSteamController.controllers = null;
-flixel_input_actions_FlxSteamController.get_MAX_CONTROLLERS = function() {
-	return 0;
-};
-flixel_input_actions_FlxSteamController.get_MAX_ORIGINS = function() {
-	return 0;
-};
-flixel_input_actions_FlxSteamController.clear = function() {
-};
-flixel_input_actions_FlxSteamController.init = function() {
-	flixel_input_actions_FlxSteamController.controllers = [];
-};
-flixel_input_actions_FlxSteamController.getActionSetHandle = function(name) {
-	return -1;
-};
-flixel_input_actions_FlxSteamController.getCurrentActionSet = function(SteamControllerHandle) {
-	return -1;
-};
-flixel_input_actions_FlxSteamController.activateActionSet = function(SteamControllerHandle,ActionSetHandle) {
-};
-flixel_input_actions_FlxSteamController.getFirstActiveHandle = function() {
-	return -1;
-};
-flixel_input_actions_FlxSteamController.getConnectedControllers = function() {
-	return [];
-};
-flixel_input_actions_FlxSteamController.getAnalogActionData = function(controller,action,data) {
-	return null;
-};
-flixel_input_actions_FlxSteamController.getDigitalActionData = function(controller,action) {
-	return new flixel_input_actions__$FlxSteamController_DigitalActionData(false,false);
-};
-flixel_input_actions_FlxSteamController.getAnalogActionHandle = function(name) {
-	return -1;
-};
-flixel_input_actions_FlxSteamController.getDigitalActionHandle = function(name) {
-	return -1;
-};
-var flixel_input_actions__$FlxSteamController_DigitalActionData = function(bActive,bState) {
-	this.bActive = bActive;
-	this.bState = bState;
-};
-$hxClasses["flixel.input.actions._FlxSteamController.DigitalActionData"] = flixel_input_actions__$FlxSteamController_DigitalActionData;
-flixel_input_actions__$FlxSteamController_DigitalActionData.__name__ = "flixel.input.actions._FlxSteamController.DigitalActionData";
-flixel_input_actions__$FlxSteamController_DigitalActionData.prototype = {
-	bActive: null
-	,bState: null
-	,__class__: flixel_input_actions__$FlxSteamController_DigitalActionData
-};
-var flixel_input_actions__$FlxSteamController_FlxSteamControllerMetadata = function() {
-	this.connected = new flixel_input_FlxInput(0);
-	this.active = false;
-	this.actionSet = -1;
-	this.handle = -1;
-};
-$hxClasses["flixel.input.actions._FlxSteamController.FlxSteamControllerMetadata"] = flixel_input_actions__$FlxSteamController_FlxSteamControllerMetadata;
-flixel_input_actions__$FlxSteamController_FlxSteamControllerMetadata.__name__ = "flixel.input.actions._FlxSteamController.FlxSteamControllerMetadata";
-flixel_input_actions__$FlxSteamController_FlxSteamControllerMetadata.prototype = {
-	handle: null
-	,actionSet: null
-	,active: null
-	,connected: null
-	,__class__: flixel_input_actions__$FlxSteamController_FlxSteamControllerMetadata
-};
-var flixel_input_actions__$FlxSteamController_FlxSteamUpdater = function() {
-	this.originTime = 0.0;
-	this.controllerTime = 0.0;
-};
-$hxClasses["flixel.input.actions._FlxSteamController.FlxSteamUpdater"] = flixel_input_actions__$FlxSteamController_FlxSteamUpdater;
-flixel_input_actions__$FlxSteamController_FlxSteamUpdater.__name__ = "flixel.input.actions._FlxSteamController.FlxSteamUpdater";
-flixel_input_actions__$FlxSteamController_FlxSteamUpdater.__interfaces__ = [flixel_input_IFlxInputManager];
-flixel_input_actions__$FlxSteamController_FlxSteamUpdater.prototype = {
-	controllerTime: null
-	,originTime: null
-	,destroy: function() {
-	}
-	,reset: function() {
-	}
-	,update: function() {
-	}
-	,onFocus: function() {
-	}
-	,onFocusLost: function() {
-	}
-	,__class__: flixel_input_actions__$FlxSteamController_FlxSteamUpdater
 };
 var flixel_input_gamepad_FlxGamepad = function(ID,Manager,Model,Attachment) {
 	this.buttons = [];
@@ -39223,6 +41393,9 @@ flixel_input_mouse_FlxMouseEventManager.prototype = $extend(flixel_FlxBasic.prot
 	}
 	,__class__: flixel_input_mouse_FlxMouseEventManager
 });
+var flixel_input_touch_FlxTouch = function() { };
+$hxClasses["flixel.input.touch.FlxTouch"] = flixel_input_touch_FlxTouch;
+flixel_input_touch_FlxTouch.__name__ = "flixel.input.touch.FlxTouch";
 var flixel_math_FlxAngle = function() { };
 $hxClasses["flixel.math.FlxAngle"] = flixel_math_FlxAngle;
 flixel_math_FlxAngle.__name__ = "flixel.math.FlxAngle";
@@ -46206,44 +48379,6 @@ flixel_system_replay_MouseRecord.prototype = {
 	,wheel: null
 	,__class__: flixel_system_replay_MouseRecord
 };
-var flixel_system_ui_FlxFocusLostScreen = function() {
-	openfl_display_Sprite.call(this);
-	this.draw();
-	var logo = new openfl_display_Sprite();
-	flixel_system_FlxAssets.drawLogo(logo.get_graphics());
-	logo.set_scaleX(logo.set_scaleY(0.2));
-	logo.set_x(logo.set_y(5));
-	logo.set_alpha(0.35);
-	this.addChild(logo);
-	this.set_visible(false);
-};
-$hxClasses["flixel.system.ui.FlxFocusLostScreen"] = flixel_system_ui_FlxFocusLostScreen;
-flixel_system_ui_FlxFocusLostScreen.__name__ = "flixel.system.ui.FlxFocusLostScreen";
-flixel_system_ui_FlxFocusLostScreen.__super__ = openfl_display_Sprite;
-flixel_system_ui_FlxFocusLostScreen.prototype = $extend(openfl_display_Sprite.prototype,{
-	draw: function() {
-		var gfx = this.get_graphics();
-		var screenWidth = openfl_Lib.get_current().stage.stageWidth | 0;
-		var screenHeight = openfl_Lib.get_current().stage.stageHeight | 0;
-		gfx.clear();
-		gfx.moveTo(0,0);
-		gfx.beginFill(0,0.5);
-		gfx.drawRect(0,0,screenWidth,screenHeight);
-		gfx.endFill();
-		var halfWidth = screenWidth / 2 | 0;
-		var halfHeight = screenHeight / 2 | 0;
-		var helper = Math.min(halfWidth,halfHeight) / 3 | 0;
-		gfx.moveTo(halfWidth - helper,halfHeight - helper);
-		gfx.beginFill(16777215,0.65);
-		gfx.lineTo(halfWidth + helper,halfHeight);
-		gfx.lineTo(halfWidth - helper,halfHeight + helper);
-		gfx.lineTo(halfWidth - helper,halfHeight - helper);
-		gfx.endFill();
-		this.set_x(-flixel_FlxG.scaleMode.offset.x);
-		this.set_y(-flixel_FlxG.scaleMode.offset.y);
-	}
-	,__class__: flixel_system_ui_FlxFocusLostScreen
-});
 var flixel_system_ui_FlxSoundTray = function() {
 	this.silent = false;
 	this.volumeDownSound = "flixel/sounds/beep";
@@ -46425,757 +48560,6 @@ flixel_system_ui_FlxSystemButton.prototype = $extend(openfl_display_Sprite.proto
 	}
 	,__class__: flixel_system_ui_FlxSystemButton
 	,__properties__: $extend(openfl_display_Sprite.prototype.__properties__,{set_toggled:"set_toggled"})
-});
-var flixel_text_FlxText = function(X,Y,FieldWidth,Text1,Size,EmbeddedFont) {
-	if(EmbeddedFont == null) {
-		EmbeddedFont = true;
-	}
-	if(Size == null) {
-		Size = 8;
-	}
-	if(FieldWidth == null) {
-		FieldWidth = 0;
-	}
-	if(Y == null) {
-		Y = 0;
-	}
-	if(X == null) {
-		X = 0;
-	}
-	this._hasBorderAlpha = false;
-	this._regen = true;
-	this._formatRanges = [];
-	this._autoHeight = true;
-	this.borderQuality = 1;
-	this.borderSize = 1;
-	this.borderColor = 0;
-	this.borderStyle = flixel_text_FlxTextBorderStyle.NONE;
-	this.text = "";
-	flixel_FlxSprite.call(this,X,Y);
-	if(Text1 == null || Text1 == "") {
-		this.set_text("");
-		Text1 = " ";
-	} else {
-		this.set_text(Text1);
-	}
-	this.textField = new openfl_text_TextField();
-	this.textField.set_selectable(false);
-	this.textField.set_multiline(true);
-	this.textField.set_wordWrap(true);
-	this._defaultFormat = new openfl_text_TextFormat(null,Size,16777215);
-	this.set_font(flixel_system_FlxAssets.FONT_DEFAULT);
-	this._formatAdjusted = new openfl_text_TextFormat();
-	this.textField.set_defaultTextFormat(this._defaultFormat);
-	this.textField.set_text(Text1);
-	this.set_fieldWidth(FieldWidth);
-	this.textField.set_embedFonts(EmbeddedFont);
-	this.textField.set_sharpness(100);
-	this.textField.set_height(Text1.length <= 0 ? 1 : 10);
-	this.set_allowCollisions(0);
-	this.set_moves(false);
-	this.drawFrame();
-	var point = flixel_math_FlxBasePoint.pool.get().set(1,1);
-	point._inPool = false;
-	this.shadowOffset = point;
-};
-$hxClasses["flixel.text.FlxText"] = flixel_text_FlxText;
-flixel_text_FlxText.__name__ = "flixel.text.FlxText";
-flixel_text_FlxText.__super__ = flixel_FlxSprite;
-flixel_text_FlxText.prototype = $extend(flixel_FlxSprite.prototype,{
-	text: null
-	,borderStyle: null
-	,borderColor: null
-	,borderSize: null
-	,borderQuality: null
-	,textField: null
-	,_autoHeight: null
-	,shadowOffset: null
-	,_defaultFormat: null
-	,_formatAdjusted: null
-	,_formatRanges: null
-	,_font: null
-	,_regen: null
-	,_borderPixels: null
-	,_borderColorTransform: null
-	,_hasBorderAlpha: null
-	,destroy: function() {
-		this.textField = null;
-		this._font = null;
-		this._defaultFormat = null;
-		this._formatAdjusted = null;
-		this.shadowOffset = flixel_util_FlxDestroyUtil.put(this.shadowOffset);
-		flixel_FlxSprite.prototype.destroy.call(this);
-	}
-	,drawFrame: function(Force) {
-		if(Force == null) {
-			Force = false;
-		}
-		this._regen = this._regen || Force;
-		flixel_FlxSprite.prototype.drawFrame.call(this,this._regen);
-	}
-	,stampOnAtlas: function(atlas) {
-		this.regenGraphic();
-		var node = atlas.addNode(this.graphic.bitmap,this.graphic.key);
-		if(node != null) {
-			this.set_frames(node.getImageFrame());
-		}
-		return node != null;
-	}
-	,applyMarkup: function(input,rules) {
-		if(rules == null || rules.length == 0) {
-			return this;
-		}
-		this.clearFormats();
-		var rangeStarts = [];
-		var rangeEnds = [];
-		var rulesToApply = [];
-		var _g = 0;
-		while(_g < rules.length) {
-			var rule = rules[_g];
-			++_g;
-			if(rule.marker == null || rule.format == null) {
-				continue;
-			}
-			var start = false;
-			var markerLength = UnicodeString.get_length(rule.marker);
-			if(input.indexOf(rule.marker) == -1) {
-				continue;
-			}
-			var _g1 = 0;
-			var _g2 = UnicodeString.get_length(input);
-			while(_g1 < _g2) {
-				var charIndex = _g1++;
-				if(UnicodeString.substr(input,charIndex,markerLength) != rule.marker) {
-					continue;
-				}
-				if(start) {
-					start = false;
-					rangeEnds.push(charIndex);
-				} else {
-					start = true;
-					rangeStarts.push(charIndex);
-					rulesToApply.push(rule);
-				}
-			}
-			if(start) {
-				rangeEnds.push(-1);
-			}
-		}
-		var _g = 0;
-		while(_g < rules.length) input = StringTools.replace(input,rules[_g++].marker,"");
-		var _g = 0;
-		var _g1 = rangeStarts.length;
-		while(_g < _g1) {
-			var i = _g++;
-			var delIndex = rangeStarts[i];
-			var markerLength = UnicodeString.get_length(rulesToApply[i].marker);
-			var _g2 = 0;
-			var _g3 = rangeStarts.length;
-			while(_g2 < _g3) {
-				var j = _g2++;
-				if(rangeStarts[j] > delIndex) {
-					rangeStarts[j] -= markerLength;
-				}
-				if(rangeEnds[j] > delIndex) {
-					rangeEnds[j] -= markerLength;
-				}
-			}
-			delIndex = rangeEnds[i];
-			var _g4 = 0;
-			var _g5 = rangeStarts.length;
-			while(_g4 < _g5) {
-				var j1 = _g4++;
-				if(rangeStarts[j1] > delIndex) {
-					rangeStarts[j1] -= markerLength;
-				}
-				if(rangeEnds[j1] > delIndex) {
-					rangeEnds[j1] -= markerLength;
-				}
-			}
-		}
-		this.set_text(input);
-		var _g = 0;
-		var _g1 = rangeStarts.length;
-		while(_g < _g1) {
-			var i = _g++;
-			this.addFormat(rulesToApply[i].format,rangeStarts[i],rangeEnds[i]);
-		}
-		return this;
-	}
-	,addFormat: function(Format,Start,End) {
-		if(End == null) {
-			End = -1;
-		}
-		if(Start == null) {
-			Start = -1;
-		}
-		this._formatRanges.push(new flixel_text__$FlxText_FlxTextFormatRange(Format,Start,End));
-		this._formatRanges.sort(function(left,right) {
-			if(left.range.start < right.range.start) {
-				return -1;
-			} else {
-				return 1;
-			}
-		});
-		this._regen = true;
-		return this;
-	}
-	,removeFormat: function(Format,Start,End) {
-		var i = this._formatRanges.length;
-		while(i-- > 0) {
-			var formatRange = this._formatRanges[i];
-			if(formatRange.format != Format) {
-				continue;
-			}
-			if(Start != null && End != null) {
-				var range = formatRange.range;
-				if(Start >= range.end || End <= range.start) {
-					continue;
-				}
-				if(Start > range.start && End < range.end) {
-					this.addFormat(formatRange.format,End + 1,range.end);
-					range.end = Start;
-					continue;
-				}
-				if(Start <= range.start && End < range.end) {
-					range.start = End;
-					continue;
-				}
-				if(Start > range.start && End >= range.end) {
-					range.end = Start;
-					continue;
-				}
-			}
-			HxOverrides.remove(this._formatRanges,formatRange);
-		}
-		this._regen = true;
-		return this;
-	}
-	,clearFormats: function() {
-		this._formatRanges = [];
-		this.textField.set_defaultTextFormat(this._defaultFormat);
-		this.textField.setTextFormat(this._defaultFormat);
-		this._regen = true;
-		return this;
-	}
-	,setFormat: function(Font,Size,Color,Alignment,BorderStyle,BorderColor,EmbeddedFont) {
-		if(EmbeddedFont == null) {
-			EmbeddedFont = true;
-		}
-		if(BorderColor == null) {
-			BorderColor = 0;
-		}
-		if(Color == null) {
-			Color = -1;
-		}
-		if(Size == null) {
-			Size = 8;
-		}
-		if(BorderStyle == null) {
-			BorderStyle = flixel_text_FlxTextBorderStyle.NONE;
-		}
-		if(EmbeddedFont) {
-			this.set_font(Font);
-		} else if(Font != null) {
-			this.set_systemFont(Font);
-		}
-		this.set_size(Size);
-		this.set_color(Color);
-		if(Alignment != null) {
-			this.set_alignment(Alignment);
-		}
-		var Color = BorderColor;
-		if(BorderColor == null) {
-			Color = 0;
-		}
-		this.set_borderStyle(BorderStyle);
-		this.set_borderColor(Color);
-		this.set_borderSize(1);
-		this.set_borderQuality(1);
-		this.textField.set_defaultTextFormat(this._defaultFormat);
-		this.textField.setTextFormat(this._defaultFormat);
-		this._regen = true;
-		return this;
-	}
-	,setBorderStyle: function(Style,Color,Size,Quality) {
-		if(Quality == null) {
-			Quality = 1;
-		}
-		if(Size == null) {
-			Size = 1;
-		}
-		if(Color == null) {
-			Color = 0;
-		}
-		this.set_borderStyle(Style);
-		this.set_borderColor(Color);
-		this.set_borderSize(Size);
-		this.set_borderQuality(Quality);
-		return this;
-	}
-	,updateHitbox: function() {
-		this.regenGraphic();
-		flixel_FlxSprite.prototype.updateHitbox.call(this);
-	}
-	,getScreenBounds: function(newRect,camera) {
-		this.regenGraphic();
-		return flixel_FlxSprite.prototype.getScreenBounds.call(this,newRect,camera);
-	}
-	,set_fieldWidth: function(value) {
-		if(this.textField == null) {
-			return value;
-		}
-		if(value <= 0) {
-			this.set_wordWrap(false);
-			this.set_autoSize(true);
-			this._autoHeight = true;
-		} else {
-			this.set_autoSize(false);
-			this.set_wordWrap(true);
-			this.textField.set_width(value);
-		}
-		this._regen = true;
-		return value;
-	}
-	,get_fieldWidth: function() {
-		if(this.textField != null) {
-			return this.textField.get_width();
-		} else {
-			return 0;
-		}
-	}
-	,get_fieldHeight: function() {
-		if(this.textField != null) {
-			return this.textField.get_height();
-		} else {
-			return 0;
-		}
-	}
-	,set_fieldHeight: function(value) {
-		if(this.textField == null) {
-			return value;
-		}
-		if(value <= 0) {
-			this._autoHeight = true;
-		} else {
-			this._autoHeight = false;
-			this.textField.set_height(value);
-		}
-		this._regen = true;
-		return value;
-	}
-	,set_autoSize: function(value) {
-		if(this.textField != null) {
-			this.textField.set_autoSize(value ? 1 : 2);
-			this._regen = true;
-		}
-		return value;
-	}
-	,get_autoSize: function() {
-		if(this.textField != null) {
-			return this.textField.get_autoSize() != 2;
-		} else {
-			return false;
-		}
-	}
-	,set_text: function(Text1) {
-		this.text = Text1;
-		if(this.textField != null) {
-			var ot = this.textField.get_text();
-			this.textField.set_text(Text1);
-			this._regen = this.textField.get_text() != ot || this._regen;
-		}
-		return Text1;
-	}
-	,get_size: function() {
-		return this._defaultFormat.size | 0;
-	}
-	,set_size: function(Size) {
-		this._defaultFormat.size = Size;
-		this.textField.set_defaultTextFormat(this._defaultFormat);
-		this.textField.setTextFormat(this._defaultFormat);
-		this._regen = true;
-		return Size;
-	}
-	,set_color: function(Color) {
-		if(this._defaultFormat.color == (Color & 16777215)) {
-			return Color;
-		}
-		this._defaultFormat.color = Color & 16777215;
-		this.color = Color;
-		this.textField.set_defaultTextFormat(this._defaultFormat);
-		this.textField.setTextFormat(this._defaultFormat);
-		this._regen = true;
-		return Color;
-	}
-	,get_font: function() {
-		return this._font;
-	}
-	,set_font: function(Font) {
-		this.textField.set_embedFonts(true);
-		if(Font != null) {
-			var newFontName = Font;
-			if(openfl_utils_Assets.exists(Font,"FONT")) {
-				newFontName = openfl_utils_Assets.getFont(Font).name;
-			}
-			this._defaultFormat.font = newFontName;
-		} else {
-			this._defaultFormat.font = flixel_system_FlxAssets.FONT_DEFAULT;
-		}
-		this.textField.set_defaultTextFormat(this._defaultFormat);
-		this.textField.setTextFormat(this._defaultFormat);
-		this._regen = true;
-		return this._font = this._defaultFormat.font;
-	}
-	,get_embedded: function() {
-		return this.textField.get_embedFonts();
-	}
-	,get_systemFont: function() {
-		return this._defaultFormat.font;
-	}
-	,set_systemFont: function(Font) {
-		this.textField.set_embedFonts(false);
-		this._defaultFormat.font = Font;
-		this.textField.set_defaultTextFormat(this._defaultFormat);
-		this.textField.setTextFormat(this._defaultFormat);
-		this._regen = true;
-		return Font;
-	}
-	,get_bold: function() {
-		return this._defaultFormat.bold;
-	}
-	,set_bold: function(value) {
-		if(this._defaultFormat.bold != value) {
-			this._defaultFormat.bold = value;
-			this.textField.set_defaultTextFormat(this._defaultFormat);
-			this.textField.setTextFormat(this._defaultFormat);
-			this._regen = true;
-		}
-		return value;
-	}
-	,get_italic: function() {
-		return this._defaultFormat.italic;
-	}
-	,set_italic: function(value) {
-		if(this._defaultFormat.italic != value) {
-			this._defaultFormat.italic = value;
-			this.textField.set_defaultTextFormat(this._defaultFormat);
-			this.textField.setTextFormat(this._defaultFormat);
-			this._regen = true;
-		}
-		return value;
-	}
-	,get_underline: function() {
-		return this._defaultFormat.underline;
-	}
-	,set_underline: function(value) {
-		if(this._defaultFormat.underline != value) {
-			this._defaultFormat.underline = value;
-			this.textField.set_defaultTextFormat(this._defaultFormat);
-			this.textField.setTextFormat(this._defaultFormat);
-			this._regen = true;
-		}
-		return value;
-	}
-	,get_wordWrap: function() {
-		return this.textField.get_wordWrap();
-	}
-	,set_wordWrap: function(value) {
-		if(this.textField.get_wordWrap() != value) {
-			this.textField.set_wordWrap(value);
-			this._regen = true;
-		}
-		return value;
-	}
-	,get_alignment: function() {
-		return flixel_text_FlxTextAlign.fromOpenFL(this._defaultFormat.align);
-	}
-	,set_alignment: function(Alignment) {
-		this._defaultFormat.align = flixel_text_FlxTextAlign.toOpenFL(Alignment);
-		this.textField.set_defaultTextFormat(this._defaultFormat);
-		this.textField.setTextFormat(this._defaultFormat);
-		this._regen = true;
-		return Alignment;
-	}
-	,set_borderStyle: function(style) {
-		if(style != this.borderStyle) {
-			this._regen = true;
-		}
-		return this.borderStyle = style;
-	}
-	,set_borderColor: function(Color) {
-		if(this.borderColor != Color && this.borderStyle != flixel_text_FlxTextBorderStyle.NONE) {
-			this._regen = true;
-		}
-		this._hasBorderAlpha = (Color >> 24 & 255) / 255 < 1;
-		return this.borderColor = Color;
-	}
-	,set_borderSize: function(Value) {
-		if(Value != this.borderSize && this.borderStyle != flixel_text_FlxTextBorderStyle.NONE) {
-			this._regen = true;
-		}
-		return this.borderSize = Value;
-	}
-	,set_borderQuality: function(Value) {
-		var lowerBound = Value < 0 ? 0 : Value;
-		Value = lowerBound > 1 ? 1 : lowerBound;
-		if(Value != this.borderQuality && this.borderStyle != flixel_text_FlxTextBorderStyle.NONE) {
-			this._regen = true;
-		}
-		return this.borderQuality = Value;
-	}
-	,set_graphic: function(Value) {
-		var oldGraphic = this.graphic;
-		var graph = flixel_FlxSprite.prototype.set_graphic.call(this,Value);
-		flixel_FlxG.bitmap.removeIfNoUse(oldGraphic);
-		return graph;
-	}
-	,get_width: function() {
-		this.regenGraphic();
-		return flixel_FlxSprite.prototype.get_width.call(this);
-	}
-	,get_height: function() {
-		this.regenGraphic();
-		return flixel_FlxSprite.prototype.get_height.call(this);
-	}
-	,updateColorTransform: function() {
-		if(this.colorTransform == null) {
-			this.colorTransform = new openfl_geom_ColorTransform();
-		}
-		if(this.alpha != 1) {
-			this.colorTransform.alphaMultiplier = this.alpha;
-			this.useColorTransform = true;
-		} else {
-			this.colorTransform.alphaMultiplier = 1;
-			this.useColorTransform = false;
-		}
-		this.dirty = true;
-	}
-	,regenGraphic: function() {
-		if(this.textField == null || !this._regen) {
-			return;
-		}
-		var oldWidth = 0;
-		var oldHeight = 4;
-		if(this.graphic != null) {
-			oldWidth = this.graphic.width;
-			oldHeight = this.graphic.height;
-		}
-		var newWidth = Math.ceil(this.textField.get_width());
-		var newHeight = Math.ceil(this._autoHeight ? this.textField.get_textHeight() : this.textField.get_height()) + (this._autoHeight ? 4 : 0);
-		if(this.textField.get_textHeight() == 0) {
-			newHeight = oldHeight;
-		}
-		if(oldWidth != newWidth || oldHeight != newHeight) {
-			this.makeGraphic(newWidth,newHeight,0,false,flixel_FlxG.bitmap.getUniqueKey("text"));
-			if(this._hasBorderAlpha) {
-				this._borderPixels = this.graphic.bitmap.clone();
-			}
-			if(this._autoHeight) {
-				this.textField.set_height(newHeight);
-			}
-			this._flashRect.x = 0;
-			this._flashRect.y = 0;
-			this._flashRect.width = newWidth;
-			this._flashRect.height = newHeight;
-		} else {
-			this.graphic.bitmap.fillRect(this._flashRect,0);
-			if(this._hasBorderAlpha) {
-				if(this._borderPixels == null) {
-					this._borderPixels = new openfl_display_BitmapData(this.frameWidth,this.frameHeight,true);
-				} else {
-					this._borderPixels.fillRect(this._flashRect,0);
-				}
-			}
-		}
-		if(this.textField != null && this.textField.get_text() != null) {
-			this.copyTextFormat(this._defaultFormat,this._formatAdjusted);
-			this._matrix.identity();
-			this.applyBorderStyle();
-			if(this._hasBorderAlpha) {
-				if(this._borderColorTransform == null) {
-					this._borderColorTransform = new openfl_geom_ColorTransform();
-				}
-				this._borderColorTransform.alphaMultiplier = (this.borderColor >> 24 & 255) / 255;
-				this._borderPixels.colorTransform(this._borderPixels.rect,this._borderColorTransform);
-				this.graphic.bitmap.draw(this._borderPixels);
-			}
-			this.applyFormats(this._formatAdjusted,false);
-			this.drawTextFieldTo(this.graphic.bitmap);
-		}
-		this._regen = false;
-		this.set_frame(this.frame);
-	}
-	,drawTextFieldTo: function(graphic) {
-		graphic.draw(this.textField,this._matrix);
-	}
-	,draw: function() {
-		this.regenGraphic();
-		flixel_FlxSprite.prototype.draw.call(this);
-	}
-	,calcFrame: function(RunOnCpp) {
-		if(RunOnCpp == null) {
-			RunOnCpp = false;
-		}
-		if(this.textField == null) {
-			return;
-		}
-		if(flixel_FlxG.renderTile && !RunOnCpp) {
-			return;
-		}
-		this.regenGraphic();
-		flixel_FlxSprite.prototype.calcFrame.call(this,RunOnCpp);
-	}
-	,applyBorderStyle: function() {
-		var iterations = this.borderSize * this.borderQuality | 0;
-		if(iterations <= 0) {
-			iterations = 1;
-		}
-		var delta = this.borderSize / iterations;
-		switch(this.borderStyle._hx_index) {
-		case 0:
-			break;
-		case 1:
-			this.applyFormats(this._formatAdjusted,true);
-			var _g = 0;
-			var _g1 = iterations;
-			while(_g < _g1) {
-				++_g;
-				var graphic = this._hasBorderAlpha ? this._borderPixels : this.graphic.bitmap;
-				this._matrix.translate(delta,delta);
-				this.drawTextFieldTo(graphic);
-			}
-			this._matrix.translate(-this.shadowOffset.x * this.borderSize,-this.shadowOffset.y * this.borderSize);
-			break;
-		case 2:
-			this.applyFormats(this._formatAdjusted,true);
-			var curDelta = delta;
-			var _g = 0;
-			var _g1 = iterations;
-			while(_g < _g1) {
-				++_g;
-				var graphic = this._hasBorderAlpha ? this._borderPixels : this.graphic.bitmap;
-				this._matrix.translate(-curDelta,-curDelta);
-				this.drawTextFieldTo(graphic);
-				var graphic1 = this._hasBorderAlpha ? this._borderPixels : this.graphic.bitmap;
-				this._matrix.translate(curDelta,0);
-				this.drawTextFieldTo(graphic1);
-				var graphic2 = this._hasBorderAlpha ? this._borderPixels : this.graphic.bitmap;
-				this._matrix.translate(curDelta,0);
-				this.drawTextFieldTo(graphic2);
-				var graphic3 = this._hasBorderAlpha ? this._borderPixels : this.graphic.bitmap;
-				this._matrix.translate(0,curDelta);
-				this.drawTextFieldTo(graphic3);
-				var graphic4 = this._hasBorderAlpha ? this._borderPixels : this.graphic.bitmap;
-				this._matrix.translate(0,curDelta);
-				this.drawTextFieldTo(graphic4);
-				var graphic5 = this._hasBorderAlpha ? this._borderPixels : this.graphic.bitmap;
-				this._matrix.translate(-curDelta,0);
-				this.drawTextFieldTo(graphic5);
-				var graphic6 = this._hasBorderAlpha ? this._borderPixels : this.graphic.bitmap;
-				this._matrix.translate(-curDelta,0);
-				this.drawTextFieldTo(graphic6);
-				var graphic7 = this._hasBorderAlpha ? this._borderPixels : this.graphic.bitmap;
-				this._matrix.translate(0,-curDelta);
-				this.drawTextFieldTo(graphic7);
-				this._matrix.translate(curDelta,0);
-				curDelta += delta;
-			}
-			break;
-		case 3:
-			this.applyFormats(this._formatAdjusted,true);
-			var curDelta = delta;
-			var _g = 0;
-			var _g1 = iterations;
-			while(_g < _g1) {
-				++_g;
-				var graphic = this._hasBorderAlpha ? this._borderPixels : this.graphic.bitmap;
-				this._matrix.translate(-curDelta,-curDelta);
-				this.drawTextFieldTo(graphic);
-				var graphic1 = this._hasBorderAlpha ? this._borderPixels : this.graphic.bitmap;
-				this._matrix.translate(curDelta * 2,0);
-				this.drawTextFieldTo(graphic1);
-				var graphic2 = this._hasBorderAlpha ? this._borderPixels : this.graphic.bitmap;
-				this._matrix.translate(0,curDelta * 2);
-				this.drawTextFieldTo(graphic2);
-				var graphic3 = this._hasBorderAlpha ? this._borderPixels : this.graphic.bitmap;
-				this._matrix.translate(-curDelta * 2,0);
-				this.drawTextFieldTo(graphic3);
-				this._matrix.translate(curDelta,-curDelta);
-				curDelta += delta;
-			}
-			break;
-		}
-	}
-	,applyBorderTransparency: function() {
-		if(!this._hasBorderAlpha) {
-			return;
-		}
-		if(this._borderColorTransform == null) {
-			this._borderColorTransform = new openfl_geom_ColorTransform();
-		}
-		this._borderColorTransform.alphaMultiplier = (this.borderColor >> 24 & 255) / 255;
-		this._borderPixels.colorTransform(this._borderPixels.rect,this._borderColorTransform);
-		this.graphic.bitmap.draw(this._borderPixels);
-	}
-	,copyTextWithOffset: function(x,y) {
-		var graphic = this._hasBorderAlpha ? this._borderPixels : this.graphic.bitmap;
-		this._matrix.translate(x,y);
-		this.drawTextFieldTo(graphic);
-	}
-	,applyFormats: function(FormatAdjusted,UseBorderColor) {
-		if(UseBorderColor == null) {
-			UseBorderColor = false;
-		}
-		this.copyTextFormat(this._defaultFormat,FormatAdjusted,false);
-		FormatAdjusted.color = UseBorderColor ? this.borderColor & 16777215 : this._defaultFormat.color;
-		this.textField.setTextFormat(FormatAdjusted);
-		var _g = 0;
-		var _g1 = this._formatRanges;
-		while(_g < _g1.length) {
-			var formatRange = _g1[_g];
-			++_g;
-			if(this.textField.get_text().length - 1 < formatRange.range.start) {
-				break;
-			} else {
-				var textFormat = formatRange.format.format;
-				this.copyTextFormat(textFormat,FormatAdjusted,false);
-				FormatAdjusted.color = UseBorderColor ? formatRange.format.borderColor & 16777215 : textFormat.color;
-			}
-			this.textField.setTextFormat(FormatAdjusted,formatRange.range.start,Math.min(formatRange.range.end,this.textField.get_text().length) | 0);
-		}
-	}
-	,copyTextFormat: function(from,to,withAlign) {
-		if(withAlign == null) {
-			withAlign = true;
-		}
-		to.font = from.font;
-		to.bold = from.bold;
-		to.italic = from.italic;
-		to.underline = from.underline;
-		to.size = from.size;
-		to.color = from.color;
-		to.leading = from.leading;
-		if(withAlign) {
-			to.align = from.align;
-		}
-	}
-	,dtfCopy: function() {
-		var dtf = this.textField.get_defaultTextFormat();
-		return new openfl_text_TextFormat(dtf.font,dtf.size,dtf.color,dtf.bold,dtf.italic,dtf.underline,dtf.url,dtf.target,dtf.align);
-	}
-	,updateDefaultFormat: function() {
-		this.textField.set_defaultTextFormat(this._defaultFormat);
-		this.textField.setTextFormat(this._defaultFormat);
-		this._regen = true;
-	}
-	,set_frames: function(Frames) {
-		flixel_FlxSprite.prototype.set_frames.call(this,Frames);
-		this._regen = false;
-		return Frames;
-	}
-	,__class__: flixel_text_FlxText
-	,__properties__: $extend(flixel_FlxSprite.prototype.__properties__,{set_autoSize:"set_autoSize",get_autoSize:"get_autoSize",set_fieldHeight:"set_fieldHeight",get_fieldHeight:"get_fieldHeight",set_fieldWidth:"set_fieldWidth",get_fieldWidth:"get_fieldWidth",set_borderQuality:"set_borderQuality",set_borderSize:"set_borderSize",set_borderColor:"set_borderColor",set_borderStyle:"set_borderStyle",set_alignment:"set_alignment",get_alignment:"get_alignment",set_wordWrap:"set_wordWrap",get_wordWrap:"get_wordWrap",set_underline:"set_underline",get_underline:"get_underline",set_italic:"set_italic",get_italic:"get_italic",set_bold:"set_bold",get_bold:"get_bold",set_systemFont:"set_systemFont",get_systemFont:"get_systemFont",get_embedded:"get_embedded",set_font:"set_font",get_font:"get_font",set_size:"set_size",get_size:"get_size",set_text:"set_text"})
 });
 var flixel_text_FlxTextFormat = function(fontColor,bold,italic,borderColor,underline) {
 	this.format = new openfl_text_TextFormat(null,null,fontColor,bold,italic,underline);
@@ -77337,7 +78721,7 @@ var lime_utils_AssetCache = function() {
 	this.audio = new haxe_ds_StringMap();
 	this.font = new haxe_ds_StringMap();
 	this.image = new haxe_ds_StringMap();
-	this.version = 474957;
+	this.version = 265348;
 };
 $hxClasses["lime.utils.AssetCache"] = lime_utils_AssetCache;
 lime_utils_AssetCache.__name__ = "lime.utils.AssetCache";
@@ -80623,6 +82007,7 @@ state_BaseState.prototype = $extend(flixel_FlxSubState.prototype,{
 	,__properties__: $extend(flixel_FlxSubState.prototype.__properties__,{get_GAME:"get_GAME",set_canPause:"set_canPause"})
 });
 var menu_CongratScreen = function(playAgainMenuAction) {
+	this.isCreated = false;
 	this.screenType = true;
 	this.winnerName = "Unknown";
 	state_BaseState.call(this);
@@ -80703,12 +82088,18 @@ menu_CongratScreen.prototype = $extend(state_BaseState.prototype,{
 			var sprite = _gthis.screenType ? _gthis.winnerSprite : _gthis.looserSprite;
 			sprite.setWinnerName(_gthis.winnerName);
 			_gthis.uiObjects.add(sprite);
-			if(_gthis.screenType == true) {
-				flixel_FlxG.sound.play("assets/sounds/win crowd applause.ogg",1.0,false,flixel_FlxG.game.gameSoundGroup);
+			if(_gthis.isCreated) {
+				if(_gthis.screenType == true) {
+					flixel_FlxG.sound.play("assets/sounds/win crowd applause.ogg",1.0,false,flixel_FlxG.game.gameSoundGroup);
+				} else {
+					flixel_FlxG.sound.play("assets/sounds/lose crowd disappointed.ogg",1.0,false,flixel_FlxG.game.gameSoundGroup);
+				}
 			}
 		};
 		this.openCallback();
+		this.isCreated = true;
 	}
+	,isCreated: null
 	,__class__: menu_CongratScreen
 });
 var menu_WinnerSprite = function(isWinner) {
@@ -80785,35 +82176,22 @@ menu_MainMenu.prototype = $extend(state_BaseState.prototype,{
 		}
 		flixel_FlxG.game.peer = null;
 		state_BaseState.prototype.create.call(this);
-		var menu = new menu__$BaseMenu_BaseMenuImpl(0,0,0,10);
-		menu_MenuUtils_addExitGameItem(menu.createPage("main").add(menu_MenuUtils_wrapMenuPage("PONG","\r\n\t\t\t\t-| 1 player | link | @1_player\r\n\t\t\t\t-| 2 players | link | @multiplayer_menu_page\r\n\t\t",""))).par({ pos : "screen,c,c"});
-		menu.createPage("1_player").add(menu_MenuUtils_wrapMenuPage("Single Player","\r\n\t\t\t\t-| vs AI | link | @" + menu_MainMenu.VS_AI_SETTINGS_MENU_ID + "\r\n\t\t\t\t-| vs self | link | " + menu_MainMenu.SELF_ROOM_MENU_ID + "\r\n\t\t\t\t-| training room | link | " + menu_MainMenu.TRAINING_ROOM_MENU_ID + "\r\n\t\t")).par({ pos : "screen,c,c"});
-		menu.createPage(menu_MainMenu.VS_AI_SETTINGS_MENU_ID).add(menu_MenuUtils_wrapMenuPage("Settings","\r\n\t\t\t\t-| your position | list | player_pos | left,right\r\n\t\t\t\t-| AI difficulty | list | ai_smarteness | " + ai_AIFactory_ais.join(",") + "\r\n\t\t\t\t-| * START * | link | load_ai_room\r\n\t\t")).par({ pos : "screen,c,c"});
-		menu.createPage("multiplayer_menu_page").add(menu_MenuUtils_wrapMenuPage("2 players","\r\n\t\t\t\t-| split screen | link | split_screen\r\n\t\t\t\t-| " + menu_MainMenu.NETPLAY_MENU_LABEL + " | link | " + menu_MainMenu.NETPLAY_MENU_ID + "\r\n\t\t")).par({ pos : "screen,c,c"});
-		menu.goto("main");
-		menu.menuEvent.add(function(e,id) {
+		var mainMenu = new menu__$BaseMenu_BaseMenuImpl(0,0,0,10);
+		menu_MenuUtils_addExitGameItem(mainMenu.createPage("main").add(menu_MenuUtils_wrapMenuPage("PONG","\r\n\t\t\t\t-| 1 player | link | @1_player\r\n\t\t\t\t-| 2 players | link | @multiplayer_menu_page\r\n\t\t",""))).par({ pos : "screen,c,c"});
+		mainMenu.createPage("1_player").add(menu_MenuUtils_wrapMenuPage("Single Player","\r\n\t\t\t\t-| vs AI | link | @" + menu_MainMenu.VS_AI_SETTINGS_MENU_ID + "\r\n\t\t\t\t-| vs self | link | " + menu_MainMenu.SELF_ROOM_MENU_ID + "\r\n\t\t\t\t-| training room | link | " + menu_MainMenu.TRAINING_ROOM_MENU_ID + "\r\n\t\t")).par({ pos : "screen,c,c"});
+		mainMenu.createPage(menu_MainMenu.VS_AI_SETTINGS_MENU_ID).add(menu_MenuUtils_wrapMenuPage("Settings","\r\n\t\t\t\t-| your position | list | player_pos | left,right\r\n\t\t\t\t-| AI difficulty | list | ai_smarteness | " + ai_AIFactory_ais.join(",") + "\r\n\t\t\t\t-| * START * | link | load_ai_room\r\n\t\t")).par({ pos : "screen,c,c"});
+		mainMenu.createPage("multiplayer_menu_page").add(menu_MenuUtils_wrapMenuPage("2 players","\r\n\t\t\t\t-| split screen | link | split_screen\r\n\t\t\t\t-| " + menu_MainMenu.NETPLAY_MENU_LABEL + " | link | " + menu_MainMenu.NETPLAY_MENU_ID + "\r\n\t\t")).par({ pos : "screen,c,c"});
+		mainMenu.goto("main");
+		mainMenu.menuEvent.add(function(e,id) {
 			if(e._hx_index == 10) {
 				switch(id) {
-				case menu_MainMenu.NETPLAY_MENU_ID:
-					var nextState = flixel_util_typeLimit_NextState.fromState(new network_$wrtc_Lobby1v1());
+				case menu_MainMenu.SELF_ROOM_MENU_ID:
+					var nextState = flixel_util_typeLimit_NextState.fromState(new room_TwoPlayersRoom({ name : "you", color : -1, position : 1},{ name : "also you", color : -1, position : 16}));
 					var stateOnCall = flixel_FlxG.game._state;
 					if(!((nextState) instanceof flixel_FlxState) || flixel_FlxG.canSwitchTo(nextState)) {
 						flixel_FlxG.game._state.startOutro(function() {
 							if(flixel_FlxG.game._state == stateOnCall) {
 								flixel_FlxG.game._nextState = nextState;
-							} else {
-								flixel_FlxG.log.advanced("`onOutroComplete` was called after the state was switched. This will be ignored",flixel_system_debug_log_LogStyle.WARNING,true);
-							}
-						});
-					}
-					break;
-				case menu_MainMenu.SELF_ROOM_MENU_ID:
-					var nextState1 = flixel_util_typeLimit_NextState.fromState(new room_TwoPlayersRoom({ name : "you", color : -1, position : 1},{ name : "also you", color : -1, position : 16}));
-					var stateOnCall1 = flixel_FlxG.game._state;
-					if(!((nextState1) instanceof flixel_FlxState) || flixel_FlxG.canSwitchTo(nextState1)) {
-						flixel_FlxG.game._state.startOutro(function() {
-							if(flixel_FlxG.game._state == stateOnCall1) {
-								flixel_FlxG.game._nextState = nextState1;
 							} else {
 								flixel_FlxG.log.advanced("`onOutroComplete` was called after the state was switched. This will be ignored",flixel_system_debug_log_LogStyle.WARNING,true);
 							}
@@ -80826,7 +82204,7 @@ menu_MainMenu.prototype = $extend(state_BaseState.prototype,{
 					players_0.name = "YOU";
 					players_0.position = 1;
 					players_1.position = 16;
-					var settings = menu.pages.h[menu_MainMenu.VS_AI_SETTINGS_MENU_ID];
+					var settings = mainMenu.pages.h[menu_MainMenu.VS_AI_SETTINGS_MENU_ID];
 					var playerPos = settings.get("player_pos").get();
 					var aiType = settings.get("ai_smarteness").get();
 					if(playerPos.toLowerCase() == "left") {
@@ -80841,7 +82219,20 @@ menu_MainMenu.prototype = $extend(state_BaseState.prototype,{
 						players_0 = players_1;
 						players_1 = tmp;
 					}
-					var nextState2 = flixel_util_typeLimit_NextState.fromState(new room_TwoPlayersRoom(players_0,players_1));
+					var nextState1 = flixel_util_typeLimit_NextState.fromState(new room_TwoPlayersRoom(players_0,players_1));
+					var stateOnCall1 = flixel_FlxG.game._state;
+					if(!((nextState1) instanceof flixel_FlxState) || flixel_FlxG.canSwitchTo(nextState1)) {
+						flixel_FlxG.game._state.startOutro(function() {
+							if(flixel_FlxG.game._state == stateOnCall1) {
+								flixel_FlxG.game._nextState = nextState1;
+							} else {
+								flixel_FlxG.log.advanced("`onOutroComplete` was called after the state was switched. This will be ignored",flixel_system_debug_log_LogStyle.WARNING,true);
+							}
+						});
+					}
+					break;
+				case menu_MainMenu.NETPLAY_MENU_ID:
+					var nextState2 = flixel_util_typeLimit_NextState.fromState(new netplay_Lobby1v1());
 					var stateOnCall2 = flixel_FlxG.game._state;
 					if(!((nextState2) instanceof flixel_FlxState) || flixel_FlxG.canSwitchTo(nextState2)) {
 						flixel_FlxG.game._state.startOutro(function() {
@@ -80853,12 +82244,8 @@ menu_MainMenu.prototype = $extend(state_BaseState.prototype,{
 						});
 					}
 					break;
-				case "split_screen":
-					var nextState3 = flixel_util_typeLimit_NextState.fromState(new room_SplitscreenRoom({ name : "left", position : 1, getController : function(racket) {
-						return new racket_KeyboardMovementController(racket,87,83);
-					}},{ name : "right", position : 16, getController : function(racket) {
-						return new racket_KeyboardMovementController(racket,38,40);
-					}}));
+				case menu_MainMenu.TRAINING_ROOM_MENU_ID:
+					var nextState3 = flixel_util_typeLimit_NextState.fromState(new room_TrainingRoom());
 					var stateOnCall3 = flixel_FlxG.game._state;
 					if(!((nextState3) instanceof flixel_FlxState) || flixel_FlxG.canSwitchTo(nextState3)) {
 						flixel_FlxG.game._state.startOutro(function() {
@@ -80870,8 +82257,12 @@ menu_MainMenu.prototype = $extend(state_BaseState.prototype,{
 						});
 					}
 					break;
-				case menu_MainMenu.TRAINING_ROOM_MENU_ID:
-					var nextState4 = flixel_util_typeLimit_NextState.fromState(new room_TrainingRoom());
+				case "split_screen":
+					var nextState4 = flixel_util_typeLimit_NextState.fromState(new room_SplitscreenRoom({ name : "left", position : 1, getController : function(racket) {
+						return new racket_KeyboardMovementController(racket,87,83);
+					}},{ name : "right", position : 16, getController : function(racket) {
+						return new racket_KeyboardMovementController(racket,38,40);
+					}}));
 					var stateOnCall4 = flixel_FlxG.game._state;
 					if(!((nextState4) instanceof flixel_FlxState) || flixel_FlxG.canSwitchTo(nextState4)) {
 						flixel_FlxG.game._state.startOutro(function() {
@@ -80887,10 +82278,13 @@ menu_MainMenu.prototype = $extend(state_BaseState.prototype,{
 				}
 			}
 		});
-		this.uiObjects.add(menu);
-		menu.mpActive.group.forEach(function(s) {
-			s.set_x((flixel_FlxG.width - s.get_width()) / 2);
-		},false);
+		this.uiObjects.add(mainMenu);
+		var tmp = mainMenu.mpActive;
+		if(tmp != null) {
+			tmp.group.forEach(function(s) {
+				s.set_x((flixel_FlxG.width - s.get_width()) / 2);
+			},false);
+		}
 		var repoLink = new ui_GithubRepoLink();
 		repoLink.set_x(flixel_FlxG.width - 16 - repoLink.get_width());
 		repoLink.set_y(flixel_FlxG.height - 16 - repoLink.get_height());
@@ -80972,7 +82366,7 @@ menu_NetplayDisconnectedScreen.prototype = $extend(state_BaseState.prototype,{
 		menu.itemEvent.add(function(e,data) {
 			if(e._hx_index == 1) {
 				if(data.ID == "go_to_menu") {
-					var nextState = flixel_util_typeLimit_NextState.fromState(new network_$wrtc_Lobby1v1());
+					var nextState = flixel_util_typeLimit_NextState.fromState(new netplay_Lobby1v1());
 					var stateOnCall = flixel_FlxG.game._state;
 					if(!((nextState) instanceof flixel_FlxState) || flixel_FlxG.canSwitchTo(nextState)) {
 						flixel_FlxG.game._state.startOutro(function() {
@@ -81446,32 +82840,20 @@ mouse_SpriteAsMouse.prototype = $extend(flixel_FlxBasic.prototype,{
 	,__class__: mouse_SpriteAsMouse
 	,__properties__: $extend(flixel_FlxBasic.prototype.__properties__,{get_GAME:"get_GAME",set_cursor:"set_cursor"})
 });
-var netplay_TwoPlayersNetplayData = function() { };
-$hxClasses["netplay.TwoPlayersNetplayData"] = netplay_TwoPlayersNetplayData;
-netplay_TwoPlayersNetplayData.__name__ = "netplay.TwoPlayersNetplayData";
-function netplay_TwoPlayersNetplayData_getBallCollisionData(wall,ball) {
-	var tmp = wall != null ? wall.netplayUid : null;
-	netplay_TwoPlayersNetplayData_ballCollisionData.wallUid = tmp != null ? tmp : -1;
-	netplay_TwoPlayersNetplayData_ballCollisionData.ball.uid = ball.netplayUid;
-	netplay_TwoPlayersNetplayData_ballCollisionData.ball.x = ball.x;
-	netplay_TwoPlayersNetplayData_ballCollisionData.ball.y = ball.y;
-	netplay_TwoPlayersNetplayData_ballCollisionData.ball.vx = ball.velocity.x;
-	netplay_TwoPlayersNetplayData_ballCollisionData.ball.vy = ball.velocity.y;
-	return netplay_TwoPlayersNetplayData_ballCollisionData;
-}
-var network_$wrtc_Lobby1v1 = function() {
+var netplay_Lobby1v1 = function() {
 	this.connectionState = "Initial";
 	state_BaseState.call(this);
 };
-$hxClasses["network_wrtc.Lobby1v1"] = network_$wrtc_Lobby1v1;
-network_$wrtc_Lobby1v1.__name__ = "network_wrtc.Lobby1v1";
-network_$wrtc_Lobby1v1.__super__ = state_BaseState;
-network_$wrtc_Lobby1v1.prototype = $extend(state_BaseState.prototype,{
+$hxClasses["netplay.Lobby1v1"] = netplay_Lobby1v1;
+netplay_Lobby1v1.__name__ = "netplay.Lobby1v1";
+netplay_Lobby1v1.__super__ = state_BaseState;
+netplay_Lobby1v1.prototype = $extend(state_BaseState.prototype,{
 	connectionState: null
 	,menu: null
 	,infobox: null
 	,peer: null
 	,timer: null
+	,hostInput: null
 	,create: function() {
 		var _gthis = this;
 		var tmp = flixel_FlxG.game.peer;
@@ -81482,6 +82864,9 @@ network_$wrtc_Lobby1v1.prototype = $extend(state_BaseState.prototype,{
 		state_BaseState.prototype.create.call(this);
 		this.set_canPause(false);
 		this.uiObjects.add(this.infobox = this.buildInfoBox());
+		this.uiObjects.add(this.hostInput = new ui_HostInput().setPos(this.infobox.x,this.infobox.y));
+		this.hostInput.set_visible(false);
+		this.hostInput.set_active(false);
 		if(!SimplePeer.WEBRTC_SUPPORT) {
 			this.infobox.set_alignment("center");
 			this.infobox.set_text("WebRTC is not supported!" + "\nGoing back to Main menu...");
@@ -81524,17 +82909,27 @@ network_$wrtc_Lobby1v1.prototype = $extend(state_BaseState.prototype,{
 					}
 					break;
 				case "connect_to_lobby":
+					_gthis.hostInput.set_active(false);
+					flixel_FlxG.save.data.lastHost = flixel_FlxG.game.host.address;
+					flixel_FlxG.save.data.lastPort = flixel_FlxG.game.host.port;
 					_gthis.peer = _gthis.getPeer();
-					_gthis.peer.join("",0);
+					_gthis.peer.join(flixel_FlxG.game.host.address,Std.parseInt(flixel_FlxG.game.host.port));
 					break;
 				case "create_lobby":
+					_gthis.hostInput.set_active(false);
+					flixel_FlxG.save.data.lastHost = flixel_FlxG.game.host.address;
+					flixel_FlxG.save.data.lastPort = flixel_FlxG.game.host.port;
 					_gthis.peer = _gthis.getPeer();
-					_gthis.peer.create();
+					_gthis.peer.create(flixel_FlxG.game.host.address,Std.parseInt(flixel_FlxG.game.host.port));
 					break;
 				default:
 				}
 			}
 		});
+		var menuTop = this.menu.mpActive.findMinY();
+		var _this = this.hostInput;
+		_this.set_x((flixel_FlxG.width - _this.get_width()) / 2);
+		this.hostInput.set_y(menuTop - this.hostInput.get_height() - 10);
 	}
 	,getPeer: function() {
 		var tmp = this.peer;
@@ -81542,7 +82937,7 @@ network_$wrtc_Lobby1v1.prototype = $extend(state_BaseState.prototype,{
 			tmp.destroy();
 		}
 		this.peer = null;
-		this.peer = new network_$wrtc_PeerWebRTC();
+		this.peer = new netplay_PeerWebRTC();
 		this.peer.onConnect.addOnce($bind(this,this.onPeerConnected));
 		this.peer.onError.addOnce($bind(this,this.onPeerError));
 		this.peer.onDisconnect.addOnce($bind(this,this.onPeerDisconnect));
@@ -81554,16 +82949,21 @@ network_$wrtc_Lobby1v1.prototype = $extend(state_BaseState.prototype,{
 		var h = flixel_FlxG.height * 0.25;
 		var infobox = new flixel_text_FlxText(flixel_FlxG.width * 0.5 - w * 0.5,flixel_FlxG.height - h - 12,w,"Create a lobby or join to one!",18);
 		infobox.set_fieldHeight(h);
-		infobox.set_color(1118481);
-		infobox.set_alignment("left");
-		infobox.textField.set_background(true);
-		infobox.textField.set_backgroundColor(15658734);
-		var format = infobox._defaultFormat;
-		format.leftMargin = format.rightMargin = 12;
-		infobox.textField.set_defaultTextFormat(infobox._defaultFormat);
-		infobox.textField.setTextFormat(infobox._defaultFormat);
-		infobox._regen = true;
+		this.styleText(infobox);
 		return infobox;
+	}
+	,styleText: function(text) {
+		text.set_size(18);
+		text.set_color(1118481);
+		text.set_alignment("left");
+		text.textField.set_background(true);
+		text.textField.set_backgroundColor(15658734);
+		var format = text._defaultFormat;
+		format.leftMargin = format.rightMargin = 12;
+		text.textField.set_defaultTextFormat(text._defaultFormat);
+		text.textField.setTextFormat(text._defaultFormat);
+		text._regen = true;
+		return text;
 	}
 	,onPeerError: function(e) {
 		var msg = "";
@@ -81576,37 +82976,51 @@ network_$wrtc_Lobby1v1.prototype = $extend(state_BaseState.prototype,{
 		this.connectionState = "Initial";
 		this.infobox.set_text("Error: " + (msg == null ? "null" : Std.string(msg)));
 		this.menu.goto("Initial");
+		this.hostInput.set_active(true);
 	}
 	,onPeerDisconnect: function() {
 		this.connectionState = "Initial";
 		this.infobox.set_text("Disconnected");
 		this.menu.goto("Initial");
+		this.hostInput.set_active(true);
 	}
 	,onPeerConnected: function() {
+		var _gthis = this;
 		this.connectionState = "Connected";
 		this.infobox.set_alignment("center");
 		this.infobox.set_text("Connected!");
 		var leftUid = "left" + "#" + flixel_util_FlxDirection.toString(1);
 		var rightUid = "right" + "#" + flixel_util_FlxDirection.toString(16);
-		var nextState = flixel_util_typeLimit_NextState.fromState(new network_$wrtc_TwoPlayerRoomNew({ name : "left", uid : leftUid, position : 1, getController : this.peer.isServer ? function(racket) {
-			return new network_$wrtc_NetplayRacketController(racket,leftUid);
+		var room = new netplay_TwoPlayerRoom({ name : "left", uid : leftUid, position : 1, getController : this.peer.isServer ? function(racket) {
+			return new netplay_NetplayRacketController(racket,leftUid);
 		} : function(r) {
 			return null;
 		}},{ name : "right", uid : rightUid, position : 16, getController : this.peer.isServer ? function(r) {
 			return null;
 		} : function(racket) {
-			return new network_$wrtc_NetplayRacketController(racket,rightUid);
-		}}));
-		var stateOnCall = flixel_FlxG.game._state;
-		if(!((nextState) instanceof flixel_FlxState) || flixel_FlxG.canSwitchTo(nextState)) {
-			flixel_FlxG.game._state.startOutro(function() {
-				if(flixel_FlxG.game._state == stateOnCall) {
-					flixel_FlxG.game._nextState = nextState;
-				} else {
-					flixel_FlxG.log.advanced("`onOutroComplete` was called after the state was switched. This will be ignored",flixel_system_debug_log_LogStyle.WARNING,true);
+			return new netplay_NetplayRacketController(racket,rightUid);
+		}});
+		var countdown = 3;
+		haxe_Timer.delay(function() {
+			_gthis.infobox.set_text("Game starts in " + countdown);
+			new flixel_util_FlxTimer(_gthis.timerManager).start(1,function(t) {
+				var left = t.loops - t._loopsCounter <= 1 ? "GO" : countdown - t._loopsCounter;
+				_gthis.infobox.set_text(left == "GO" ? left : "Game starts in " + Std.string(left));
+				if(t._loopsCounter == t.loops) {
+					var nextState = flixel_util_typeLimit_NextState.fromState(room);
+					var stateOnCall = flixel_FlxG.game._state;
+					if(!((nextState) instanceof flixel_FlxState) || flixel_FlxG.canSwitchTo(nextState)) {
+						flixel_FlxG.game._state.startOutro(function() {
+							if(flixel_FlxG.game._state == stateOnCall) {
+								flixel_FlxG.game._nextState = nextState;
+							} else {
+								flixel_FlxG.log.advanced("`onOutroComplete` was called after the state was switched. This will be ignored",flixel_system_debug_log_LogStyle.WARNING,true);
+							}
+						});
+					}
 				}
-			});
-		}
+			},countdown + 1);
+		},2000);
 	}
 	,update: function(elapsed) {
 		state_BaseState.prototype.update.call(this,elapsed);
@@ -81631,52 +83045,79 @@ network_$wrtc_Lobby1v1.prototype = $extend(state_BaseState.prototype,{
 			tmp.stop();
 		}
 	}
-	,__class__: network_$wrtc_Lobby1v1
+	,__class__: netplay_Lobby1v1
 });
-var network_$wrtc_NetplayRacketController = function(racket,name,up,down) {
-	if(down == null) {
-		down = 40;
-	}
-	if(up == null) {
-		up = 38;
-	}
-	racket_RacketController.call(this,racket);
-	this.keyUp = up;
-	this.keyDown = down;
-	this.name = name;
-	this.data = { paddleName : name, actionMoveDown : false, actionMoveUp : false};
+function netplay_Netplay_nextUid() {
+	return netplay_Netplay_netplayUid++;
+}
+function netplay_Netplay_getBallCollisionData(wall,ball) {
+	var tmp = wall != null ? wall.netplayUid : null;
+	netplay_Netplay_ballCollisionData.wallUid = tmp != null ? tmp : -1;
+	netplay_Netplay_ballCollisionData.ball.uid = ball.netplayUid;
+	netplay_Netplay_ballCollisionData.ball.x = ball.x;
+	netplay_Netplay_ballCollisionData.ball.y = ball.y;
+	netplay_Netplay_ballCollisionData.ball.vx = ball.velocity.x;
+	netplay_Netplay_ballCollisionData.ball.vy = ball.velocity.y;
+	return netplay_Netplay_ballCollisionData;
+}
+var netplay_NetplayCongratScreen = function(playAgainMenuAction) {
+	this.isServer = false;
+	menu_CongratScreen.call(this,playAgainMenuAction);
 };
-$hxClasses["network_wrtc.NetplayRacketController"] = network_$wrtc_NetplayRacketController;
-network_$wrtc_NetplayRacketController.__name__ = "network_wrtc.NetplayRacketController";
-network_$wrtc_NetplayRacketController.__super__ = racket_RacketController;
-network_$wrtc_NetplayRacketController.prototype = $extend(racket_RacketController.prototype,{
-	keyUp: null
-	,keyDown: null
-	,name: null
-	,data: null
-	,update: function(dt) {
-		var actionMoveUp = flixel_FlxG.keys.checkStatus(this.keyUp,1);
-		var actionMoveDown = flixel_FlxG.keys.checkStatus(this.keyDown,1);
-		if(actionMoveDown && actionMoveUp) {
-			return;
+$hxClasses["netplay.NetplayCongratScreen"] = netplay_NetplayCongratScreen;
+netplay_NetplayCongratScreen.__name__ = "netplay.NetplayCongratScreen";
+netplay_NetplayCongratScreen.__super__ = menu_CongratScreen;
+netplay_NetplayCongratScreen.prototype = $extend(menu_CongratScreen.prototype,{
+	isServer: null
+	,network: null
+	,create: function() {
+		var _gthis = this;
+		menu_CongratScreen.prototype.create.call(this);
+		if(!this.isServer) {
+			var itemData = this.menu.pages.h["main"].get("again");
+			itemData.disabled = true;
+			itemData.selectable = false;
+			this.menu.mpActive.item_update(itemData);
+			this.menu.mpActive.item_focus("SWITCH_TO_MAIN_MENU");
 		}
-		var upJustReleased = flixel_FlxG.keys.checkStatus(this.keyUp,-1);
-		var downJustReleased = flixel_FlxG.keys.checkStatus(this.keyDown,-1);
-		if(!(actionMoveDown || actionMoveUp || upJustReleased || downJustReleased)) {
-			return;
-		}
-		this.data.paddleName = this.name;
-		this.data.actionMoveUp = actionMoveUp;
-		this.data.actionMoveDown = actionMoveDown;
-		flixel_FlxG.game.peer.send("PaddleAction",this.data);
+		this.errorHandler = function(_) {
+			_gthis.onDisconnect("error");
+		};
+		this.disconnectHandler = function() {
+			_gthis.onDisconnect("disconnected");
+		};
+		this.network.onError.addOnce(this.errorHandler);
+		this.network.onDisconnect.addOnce(this.disconnectHandler);
 	}
-	,__class__: network_$wrtc_NetplayRacketController
+	,disconnectHandler: null
+	,errorHandler: null
+	,onDisconnect: function(reason) {
+		if(reason == null) {
+			reason = "disconnected";
+		}
+		this.network.onError.remove(this.errorHandler);
+		this.network.onDisconnect.remove(this.disconnectHandler);
+		var itemData = this.menu.pages.h["main"].get("again");
+		itemData.disabled = true;
+		itemData.selectable = false;
+		itemData.label = reason;
+		this.menu.mpActive.item_update(itemData);
+		this.menu.mpActive.item_focus("SWITCH_TO_MAIN_MENU");
+		this.menu.mpActive.setDataSource(this.menu.mpActive.page.items);
+	}
+	,destroy: function() {
+		menu_CongratScreen.prototype.destroy.call(this);
+		this.network.onError.remove(this.errorHandler);
+		this.network.onDisconnect.remove(this.disconnectHandler);
+		this.network = null;
+	}
+	,__class__: netplay_NetplayCongratScreen
 });
-var network_$wrtc_INetplayPeer = function() { };
-$hxClasses["network_wrtc.INetplayPeer"] = network_$wrtc_INetplayPeer;
-network_$wrtc_INetplayPeer.__name__ = "network_wrtc.INetplayPeer";
-network_$wrtc_INetplayPeer.__isInterface__ = true;
-network_$wrtc_INetplayPeer.prototype = {
+var netplay_INetplayPeer = function() { };
+$hxClasses["netplay.INetplayPeer"] = netplay_INetplayPeer;
+netplay_INetplayPeer.__name__ = "netplay.INetplayPeer";
+netplay_INetplayPeer.__isInterface__ = true;
+netplay_INetplayPeer.prototype = {
 	get_peerType: null
 	,initiator: null
 	,isServer: null
@@ -81690,10 +83131,10 @@ network_$wrtc_INetplayPeer.prototype = {
 	,loop: null
 	,create: null
 	,join: null
-	,__class__: network_$wrtc_INetplayPeer
+	,__class__: netplay_INetplayPeer
 	,__properties__: {get_peerType:"get_peerType"}
 };
-var network_$wrtc_NetplayPeerBase = function() {
+var netplay_NetplayPeerBase = function() {
 	this.onError = new flixel_util__$FlxSignal_FlxSignal1();
 	this.onDisconnect = new flixel_util__$FlxSignal_FlxSignal0();
 	this.onConnect = new flixel_util__$FlxSignal_FlxSignal0();
@@ -81701,10 +83142,10 @@ var network_$wrtc_NetplayPeerBase = function() {
 	this.isServer = false;
 	this.initiator = false;
 };
-$hxClasses["network_wrtc.NetplayPeerBase"] = network_$wrtc_NetplayPeerBase;
-network_$wrtc_NetplayPeerBase.__name__ = "network_wrtc.NetplayPeerBase";
-network_$wrtc_NetplayPeerBase.__interfaces__ = [network_$wrtc_INetplayPeer];
-network_$wrtc_NetplayPeerBase.prototype = {
+$hxClasses["netplay.NetplayPeerBase"] = netplay_NetplayPeerBase;
+netplay_NetplayPeerBase.__name__ = "netplay.NetplayPeerBase";
+netplay_NetplayPeerBase.__interfaces__ = [netplay_INetplayPeer];
+netplay_NetplayPeerBase.prototype = {
 	initiator: null
 	,isServer: null
 	,get_peerType: function() {
@@ -81744,30 +83185,66 @@ network_$wrtc_NetplayPeerBase.prototype = {
 	}
 	,loop: function() {
 	}
-	,create: function() {
+	,create: function(host,port) {
 	}
 	,join: function(host,port) {
 	}
-	,__class__: network_$wrtc_NetplayPeerBase
+	,__class__: netplay_NetplayPeerBase
 	,__properties__: {get_peerType:"get_peerType"}
 };
-function network_$wrtc_Network_nextUid() {
-	return network_$wrtc_Network_netplayUid++;
-}
-var network_$wrtc_PeerWebRTC = function() {
+var netplay_NetplayRacketController = function(racket,name,up,down) {
+	if(down == null) {
+		down = 40;
+	}
+	if(up == null) {
+		up = 38;
+	}
+	racket_RacketController.call(this,racket);
+	this.keyUp = up;
+	this.keyDown = down;
+	this.name = name;
+	this.data = { paddleName : name, actionMoveDown : false, actionMoveUp : false};
+};
+$hxClasses["netplay.NetplayRacketController"] = netplay_NetplayRacketController;
+netplay_NetplayRacketController.__name__ = "netplay.NetplayRacketController";
+netplay_NetplayRacketController.__super__ = racket_RacketController;
+netplay_NetplayRacketController.prototype = $extend(racket_RacketController.prototype,{
+	keyUp: null
+	,keyDown: null
+	,name: null
+	,data: null
+	,update: function(dt) {
+		var actionMoveUp = flixel_FlxG.keys.checkStatus(this.keyUp,1);
+		var actionMoveDown = flixel_FlxG.keys.checkStatus(this.keyDown,1);
+		if(actionMoveDown && actionMoveUp) {
+			return;
+		}
+		var upJustReleased = flixel_FlxG.keys.checkStatus(this.keyUp,-1);
+		var downJustReleased = flixel_FlxG.keys.checkStatus(this.keyDown,-1);
+		if(!(actionMoveDown || actionMoveUp || upJustReleased || downJustReleased)) {
+			return;
+		}
+		this.data.paddleName = this.name;
+		this.data.actionMoveUp = actionMoveUp;
+		this.data.actionMoveDown = actionMoveDown;
+		flixel_FlxG.game.peer.send("PaddleAction",this.data);
+	}
+	,__class__: netplay_NetplayRacketController
+});
+var netplay_PeerWebRTC = function() {
 	this.peerOptions = { initiator : false, trickle : false, stream : false, iceCompleteTimeout : 120000};
-	network_$wrtc_NetplayPeerBase.call(this);
+	netplay_NetplayPeerBase.call(this);
 	this.lobby = flixel_FlxG.game._state;
 };
-$hxClasses["network_wrtc.PeerWebRTC"] = network_$wrtc_PeerWebRTC;
-network_$wrtc_PeerWebRTC.__name__ = "network_wrtc.PeerWebRTC";
-network_$wrtc_PeerWebRTC.__super__ = network_$wrtc_NetplayPeerBase;
-network_$wrtc_PeerWebRTC.prototype = $extend(network_$wrtc_NetplayPeerBase.prototype,{
+$hxClasses["netplay.PeerWebRTC"] = netplay_PeerWebRTC;
+netplay_PeerWebRTC.__name__ = "netplay.PeerWebRTC";
+netplay_PeerWebRTC.__super__ = netplay_NetplayPeerBase;
+netplay_PeerWebRTC.prototype = $extend(netplay_NetplayPeerBase.prototype,{
 	peer: null
 	,signalData: null
 	,lobby: null
 	,peerOptions: null
-	,create: function() {
+	,create: function(host,port) {
 		var _gthis = this;
 		this.isServer = true;
 		this.lobby.infobox.set_text("Creating lobby...");
@@ -81901,7 +83378,7 @@ network_$wrtc_PeerWebRTC.prototype = $extend(network_$wrtc_NetplayPeerBase.proto
 		this.onMessage.dispatch(msg);
 	}
 	,destroy: function() {
-		network_$wrtc_NetplayPeerBase.prototype.destroy.call(this);
+		netplay_NetplayPeerBase.prototype.destroy.call(this);
 		var tmp = this.peer;
 		if(tmp != null) {
 			tmp.removeAllListeners("signal");
@@ -81928,7 +83405,7 @@ network_$wrtc_PeerWebRTC.prototype = $extend(network_$wrtc_NetplayPeerBase.proto
 		}
 		this.peer = null;
 	}
-	,__class__: network_$wrtc_PeerWebRTC
+	,__class__: netplay_PeerWebRTC
 });
 var state_BaseGameState = function() {
 	this.canOpenPauseMenu = true;
@@ -82425,12 +83902,13 @@ room_TwoPlayersRoom.prototype = $extend(state_BaseGameState.prototype,{
 	}
 	,__class__: room_TwoPlayersRoom
 });
-var network_$wrtc_TwoPlayerRoomNew = function(left,right) {
+var netplay_TwoPlayerRoom = function(left,right) {
 	this.ballPayload = { x : 0, y : 0, vx : 0, vy : 0, hitBy : "unknown"};
 	this.interpTweenOpts = { ease : flixel_tweens_FlxEase.cubeOut};
 	this.paddleData = { uid : "", x : 0, y : 0, vx : 0, vy : 0};
 	this.tmpObject = new flixel_FlxObject();
 	this.interpolationTweens = new haxe_ds_IntMap();
+	this.gameStarted = false;
 	this.gameFinished = false;
 	var _gthis = this;
 	room_TwoPlayersRoom.call(this,left,right);
@@ -82452,16 +83930,18 @@ var network_$wrtc_TwoPlayerRoomNew = function(left,right) {
 	});
 	haxe_Log.trace = utils_TraceUtils_trace;
 };
-$hxClasses["network_wrtc.TwoPlayerRoomNew"] = network_$wrtc_TwoPlayerRoomNew;
-network_$wrtc_TwoPlayerRoomNew.__name__ = "network_wrtc.TwoPlayerRoomNew";
-network_$wrtc_TwoPlayerRoomNew.__super__ = room_TwoPlayersRoom;
-network_$wrtc_TwoPlayerRoomNew.prototype = $extend(room_TwoPlayersRoom.prototype,{
+$hxClasses["netplay.TwoPlayerRoom"] = netplay_TwoPlayerRoom;
+netplay_TwoPlayerRoom.__name__ = "netplay.TwoPlayerRoom";
+netplay_TwoPlayerRoom.__super__ = room_TwoPlayersRoom;
+netplay_TwoPlayerRoom.prototype = $extend(room_TwoPlayersRoom.prototype,{
 	currentPlayerUid: null
 	,gameFinished: null
+	,gameStarted: null
 	,interpolationTweens: null
+	,readyToStartTimer: null
 	,create: function() {
 		var _gthis = this;
-		network_$wrtc_Network_netplayUid = 11;
+		netplay_Netplay_netplayUid = 11;
 		room_TwoPlayersRoom.prototype.create.call(this);
 		flixel_FlxG.game.peer.onMessage.add($bind(this,this.onMessage));
 		flixel_FlxG.game.peer.onDisconnect.addOnce(function() {
@@ -82491,10 +83971,16 @@ network_$wrtc_TwoPlayerRoomNew.prototype = $extend(room_TwoPlayersRoom.prototype
 				flixel_FlxG.game.peer.send("BallData",_gthis.getBallPayload());
 			};
 			this.onBallCollisionCB = function(w,b) {
-				flixel_FlxG.game.peer.send("BallCollision",netplay_TwoPlayersNetplayData_getBallCollisionData(w,b));
+				flixel_FlxG.game.peer.send("BallCollision",netplay_Netplay_getBallCollisionData(w,b));
 			};
 			flixel_FlxG.game.signals.ballServed.add(this.onBallServedCB);
 			flixel_FlxG.game.signals.ballCollision.add(this.onBallCollisionCB);
+		}
+		if(!flixel_FlxG.game.peer.isServer) {
+			flixel_FlxG.game.peer.send("ReadyToStart");
+			this.readyToStartTimer = new flixel_util_FlxTimer(this.timerManager).start(0.1,function(t) {
+				flixel_FlxG.game.peer.send("ReadyToStart");
+			},0);
 		}
 	}
 	,flushPeerData: function() {
@@ -82525,6 +84011,9 @@ network_$wrtc_TwoPlayerRoomNew.prototype = $extend(room_TwoPlayersRoom.prototype
 				break;
 			case "PaddleAction":
 				this.messagePaddleAction(msg.data);
+				break;
+			case "ReadyToStart":
+				this.messageReadyToStart();
 				break;
 			case "ResetRoom":
 				this.messageResetRoom();
@@ -82563,12 +84052,25 @@ network_$wrtc_TwoPlayerRoomNew.prototype = $extend(room_TwoPlayersRoom.prototype
 			case "ShowCongratScreen":
 				this.messageShowCongratScreen(msg.data);
 				break;
+			case "StartGame":
+				this.messageStartGame();
+				break;
 			default:
 			}
 		}
 	}
+	,messageReadyToStart: function() {
+		flixel_FlxG.game.peer.send("StartGame");
+		this.gameStarted = true;
+	}
+	,messageStartGame: function() {
+		this.gameStarted = true;
+		this.readyToStartTimer.cancel();
+		this.readyToStartTimer.destroy();
+		this.readyToStartTimer = null;
+	}
 	,messageResetRoom: function() {
-		var nextState = flixel_util_typeLimit_NextState.fromState(new network_$wrtc_TwoPlayerRoomNew(this.leftOptions,this.rightOptions));
+		var nextState = flixel_util_typeLimit_NextState.fromState(new netplay_TwoPlayerRoom(this.leftOptions,this.rightOptions));
 		var stateOnCall = flixel_FlxG.game._state;
 		if(!((nextState) instanceof flixel_FlxState) || flixel_FlxG.canSwitchTo(nextState)) {
 			flixel_FlxG.game._state.startOutro(function() {
@@ -82717,6 +84219,9 @@ network_$wrtc_TwoPlayerRoomNew.prototype = $extend(room_TwoPlayersRoom.prototype
 		this1.h[uid] = v;
 	}
 	,roomUpdate: function(dt) {
+		if(!this.gameStarted) {
+			return;
+		}
 		if(flixel_FlxG.game.peer.isServer) {
 			room_TwoPlayersRoom.prototype.roomUpdate.call(this,dt);
 		} else {
@@ -82827,7 +84332,7 @@ network_$wrtc_TwoPlayerRoomNew.prototype = $extend(room_TwoPlayersRoom.prototype
 		}
 	}
 	,showCongratScreen: function(player,screenType) {
-		var congrats = new network_$wrtc_NetplayCongratScreen(function(_) {
+		var congrats = new netplay_NetplayCongratScreen(function(_) {
 			flixel_FlxG.game.peer.send("ResetRoom");
 		});
 		flixel_util_FlxDestroyUtil.destroyArray(flixel_FlxG.game.peer.onError.handlers);
@@ -82893,304 +84398,7 @@ network_$wrtc_TwoPlayerRoomNew.prototype = $extend(room_TwoPlayersRoom.prototype
 		flixel_FlxG.game.signals.ballServed.remove(this.onBallServedCB);
 		flixel_FlxG.game.signals.ballCollision.remove(this.onBallCollisionCB);
 	}
-	,__class__: network_$wrtc_TwoPlayerRoomNew
-});
-var network_$wrtc_TwoPlayersRoom = function(left,right) {
-	this.ballPayload = { x : 0, y : 0, vx : 0, vy : 0, hitBy : "unknown"};
-	this.tmpObject = new flixel_FlxObject();
-	var _gthis = this;
-	room_TwoPlayersRoom.call(this,left,right);
-	this.currentPlayerUid = flixel_FlxG.game.peer.isServer ? left.uid : right.uid;
-	this.set_canPause(false);
-	this.get_subStateOpened().add(function(state) {
-		if(((state) instanceof menu_PauseMenu)) {
-			Lambda.find(_gthis.players,function(p) {
-				return p.uid == _gthis.currentPlayerUid;
-			}).set_active(false);
-		}
-	});
-	this.get_subStateClosed().add(function(state) {
-		if(((state) instanceof menu_PauseMenu)) {
-			Lambda.find(_gthis.players,function(p) {
-				return p.uid == _gthis.currentPlayerUid;
-			}).set_active(true);
-		}
-	});
-	this.network = flixel_FlxG.game.peer;
-};
-$hxClasses["network_wrtc.TwoPlayersRoom"] = network_$wrtc_TwoPlayersRoom;
-network_$wrtc_TwoPlayersRoom.__name__ = "network_wrtc.TwoPlayersRoom";
-network_$wrtc_TwoPlayersRoom.__super__ = room_TwoPlayersRoom;
-network_$wrtc_TwoPlayersRoom.prototype = $extend(room_TwoPlayersRoom.prototype,{
-	network: null
-	,currentPlayerUid: null
-	,create: function() {
-		room_TwoPlayersRoom.prototype.create.call(this);
-		this.network.onMessage.add($bind(this,this.onMessage));
-		flixel_FlxG.vcr.pauseChanged.add($bind(this,this.onPauseChange));
-	}
-	,onPauseChange: function(paused) {
-		this.network.send("DebugPause",{ paused : paused});
-	}
-	,destroy: function() {
-		room_TwoPlayersRoom.prototype.destroy.call(this);
-		var tmp = this.network;
-		var tmp1 = tmp != null ? tmp.onMessage : null;
-		if(tmp1 != null) {
-			tmp1.remove($bind(this,this.onMessage));
-		}
-		flixel_FlxG.vcr.pauseChanged.remove($bind(this,this.onPauseChange));
-	}
-	,onMessage: function(msg) {
-		switch(msg.type) {
-		case "BallData":
-			this.messageBallData(msg.data);
-			break;
-		case "BallPreServe":
-			this.messageBallPreServe(msg.data);
-			break;
-		case "CongratScreenData":
-			this.messageCongratScreenData(msg.data);
-			break;
-		case "DebugPause":
-			this.messageDebugPause(msg.data);
-			break;
-		case "PaddleAction":
-			this.messagePaddleAction(msg.data);
-			break;
-		case "ResetRoom":
-			this.messageResetRoom();
-			break;
-		case "ScoreData":
-			this.messageScoreData(msg.data);
-			break;
-		default:
-		}
-	}
-	,messagePaddleAction: function(data) {
-		var tmp = data.actionMoveUp;
-		var actionUp = tmp != null && tmp;
-		var tmp = data.actionMoveDown;
-		var actionDown = tmp != null && tmp;
-		var paddleName = data.paddleName;
-		var player = Lambda.find(this.players,function(p) {
-			return p.uid == paddleName;
-		});
-		var this1 = player.racket.velocity;
-		this1.set_x(0);
-		this1.set_y(0);
-		if(!(actionUp && actionDown)) {
-			if(actionUp) {
-				var this1 = player.racket.velocity;
-				var y = -Pong.params.racketSpeed;
-				if(y == null) {
-					y = 0;
-				}
-				this1.set_x(0);
-				this1.set_y(y);
-			}
-			if(actionDown) {
-				var this1 = player.racket.velocity;
-				var y = Pong.params.racketSpeed;
-				if(y == null) {
-					y = 0;
-				}
-				this1.set_x(0);
-				this1.set_y(y);
-			}
-		}
-	}
-	,tmpObject: null
-	,messageBallData: function(data) {
-		var _gthis = this;
-		this.ball.setPosition(data.x,data.y);
-		var this1 = this.ball.velocity;
-		var x = data.vx;
-		var y = data.vy;
-		if(y == null) {
-			y = 0;
-		}
-		if(x == null) {
-			x = 0;
-		}
-		this1.set_x(x);
-		this1.set_y(y);
-		if(!this.network.isServer) {
-			var _g = data.hitBy;
-			if(_g == null) {
-				flixel_FlxG.game.signals.ballServed.dispatch();
-			} else {
-				switch(_g) {
-				case "racket_ours":
-					var tmp = Lambda.find(this.players,function(p) {
-						return p.uid != _gthis.currentPlayerUid;
-					});
-					flixel_FlxG.game.signals.ballCollision.dispatch(tmp != null ? tmp.racket : null,flixel_FlxG.game.room.ball);
-					break;
-				case "racket_theirs":
-					var tmp = this.findPlayerById(this.currentPlayerUid);
-					flixel_FlxG.game.signals.ballCollision.dispatch(tmp != null ? tmp.racket : null,flixel_FlxG.game.room.ball);
-					break;
-				case "wall":
-					flixel_FlxG.game.signals.ballCollision.dispatch(this.tmpObject,flixel_FlxG.game.room.ball);
-					break;
-				}
-			}
-		}
-	}
-	,messageScoreData: function(data) {
-		this.players[0].set_score(data.leftScore);
-		this.players[1].set_score(data.rightScore);
-	}
-	,messageCongratScreenData: function(data) {
-		if(this.network.isServer) {
-			return;
-		}
-		this.showCongratScreen(Lambda.find(this.players,function(p) {
-			return p.uid == data.winnerUid;
-		}),data.winnerUid == this.currentPlayerUid && true);
-	}
-	,messageResetRoom: function() {
-		var nextState = flixel_util_typeLimit_NextState.fromState(new network_$wrtc_TwoPlayersRoom(this.leftOptions,this.rightOptions));
-		var stateOnCall = flixel_FlxG.game._state;
-		if(!((nextState) instanceof flixel_FlxState) || flixel_FlxG.canSwitchTo(nextState)) {
-			flixel_FlxG.game._state.startOutro(function() {
-				if(flixel_FlxG.game._state == stateOnCall) {
-					flixel_FlxG.game._nextState = nextState;
-				} else {
-					flixel_FlxG.log.advanced("`onOutroComplete` was called after the state was switched. This will be ignored",flixel_system_debug_log_LogStyle.WARNING,true);
-				}
-			});
-		}
-	}
-	,messageBallPreServe: function(data) {
-		if(!this.network.isServer) {
-			this.ballPreServe(flixel_FlxG.game.room.ball,data.delay);
-		}
-	}
-	,messageDebugPause: function(data) {
-	}
-	,ballPayload: null
-	,getBallPayload: function(hitby) {
-		this.ballPayload.x = this.ball.x;
-		this.ballPayload.y = this.ball.y;
-		this.ballPayload.vx = this.ball.velocity.x;
-		this.ballPayload.vy = this.ball.velocity.y;
-		this.ballPayload.hitBy = hitby;
-		return this.ballPayload;
-	}
-	,serveBall: function(byPlayer,ball,delay) {
-		var _gthis = this;
-		if(this.network.isServer) {
-			room_TwoPlayersRoom.prototype.serveBall.call(this,byPlayer,ball,delay);
-			this.network.send("BallData",this.getBallPayload(""));
-			this.network.send("BallPreServe",{ delay : delay});
-			new flixel_util_FlxTimer(this.timerManager).start(delay,function(_) {
-				_gthis.network.send("BallData",_gthis.getBallPayload(null));
-			});
-		}
-	}
-	,firstBallServe: function() {
-		if(this.network.isServer) {
-			room_TwoPlayersRoom.prototype.firstBallServe.call(this);
-		}
-	}
-	,ballOutWorldBounds: function() {
-		if(this.network.isServer) {
-			room_TwoPlayersRoom.prototype.ballOutWorldBounds.call(this);
-		}
-	}
-	,goal: function(hitArea,ball) {
-		if(this.network.isServer) {
-			room_TwoPlayersRoom.prototype.goal.call(this,hitArea,ball);
-		}
-	}
-	,updateScore: function(player,score) {
-		room_TwoPlayersRoom.prototype.updateScore.call(this,player,score);
-		this.network.send("ScoreData",{ leftScore : this.players[0].score, rightScore : this.players[1].score});
-	}
-	,showCongratScreen: function(player,screenType) {
-		var _gthis = this;
-		var congrats = new network_$wrtc_NetplayCongratScreen(function(_) {
-			_gthis.network.send("ResetRoom");
-		});
-		congrats.network = flixel_FlxG.game.peer;
-		congrats.isServer = this.network.isServer;
-		congrats.openMainMenuAction = function() {
-		};
-		this.canOpenPauseMenu = false;
-		this.set_canPause(true);
-		this.persistentDraw = true;
-		this.openSubState(congrats.setWinner(player.name,player.uid == this.currentPlayerUid && true));
-		if(this.network.isServer) {
-			this.network.send("CongratScreenData",{ winnerName : player.name, winnerUid : player.uid});
-		}
-	}
-	,ballCollision: function(wall,ball) {
-		room_TwoPlayersRoom.prototype.ballCollision.call(this,wall,ball);
-		if(this.network.isServer) {
-			var hitBy = ((wall) instanceof racket_Racket) ? "racket" : "wall";
-			if(hitBy == "racket") {
-				var tmp = this.findPlayerById(this.currentPlayerUid);
-				hitBy = (tmp != null ? tmp.racket : null) == wall ? "racket_ours" : "racket_theirs";
-			}
-			this.network.send("BallData",this.getBallPayload(hitBy));
-		}
-	}
-	,__class__: network_$wrtc_TwoPlayersRoom
-});
-var network_$wrtc_NetplayCongratScreen = function(playAgainMenuAction) {
-	this.isServer = false;
-	menu_CongratScreen.call(this,playAgainMenuAction);
-};
-$hxClasses["network_wrtc.NetplayCongratScreen"] = network_$wrtc_NetplayCongratScreen;
-network_$wrtc_NetplayCongratScreen.__name__ = "network_wrtc.NetplayCongratScreen";
-network_$wrtc_NetplayCongratScreen.__super__ = menu_CongratScreen;
-network_$wrtc_NetplayCongratScreen.prototype = $extend(menu_CongratScreen.prototype,{
-	isServer: null
-	,network: null
-	,create: function() {
-		var _gthis = this;
-		menu_CongratScreen.prototype.create.call(this);
-		if(!this.isServer) {
-			var itemData = this.menu.pages.h["main"].get("again");
-			itemData.disabled = true;
-			itemData.selectable = false;
-			this.menu.mpActive.item_update(itemData);
-			this.menu.mpActive.item_focus("SWITCH_TO_MAIN_MENU");
-		}
-		this.errorHandler = function(_) {
-			_gthis.onDisconnect("error");
-		};
-		this.disconnectHandler = function() {
-			_gthis.onDisconnect("disconnected");
-		};
-		this.network.onError.addOnce(this.errorHandler);
-		this.network.onDisconnect.addOnce(this.disconnectHandler);
-	}
-	,disconnectHandler: null
-	,errorHandler: null
-	,onDisconnect: function(reason) {
-		if(reason == null) {
-			reason = "disconnected";
-		}
-		this.network.onError.remove(this.errorHandler);
-		this.network.onDisconnect.remove(this.disconnectHandler);
-		var itemData = this.menu.pages.h["main"].get("again");
-		itemData.disabled = true;
-		itemData.selectable = false;
-		itemData.label = reason;
-		this.menu.mpActive.item_update(itemData);
-		this.menu.mpActive.item_focus("SWITCH_TO_MAIN_MENU");
-		this.menu.mpActive.setDataSource(this.menu.mpActive.page.items);
-	}
-	,destroy: function() {
-		menu_CongratScreen.prototype.destroy.call(this);
-		this.network.onError.remove(this.errorHandler);
-		this.network.onDisconnect.remove(this.disconnectHandler);
-		this.network = null;
-	}
-	,__class__: network_$wrtc_NetplayCongratScreen
+	,__class__: netplay_TwoPlayerRoom
 });
 var openfl_Lib = function() { };
 $hxClasses["openfl.Lib"] = openfl_Lib;
@@ -85007,7 +86215,7 @@ openfl_display_DisplayObjectRenderer.prototype = $extend(openfl_events_EventDisp
 			colorTransform.__combine(this.__worldColorTransform);
 		}
 		var updated = false;
-		if(displayObject.get_cacheAsBitmap() || this.__type != "opengl" && !colorTransform.__isDefault(true) || this.__type == "opengl" && displayObject.get_scale9Grid() != null) {
+		if(displayObject.get_cacheAsBitmap() || this.__type != "opengl" && !colorTransform.__isDefault(true)) {
 			var rect = null;
 			var needRender = displayObject.__cacheBitmap == null || displayObject.__renderDirty && (force || displayObject.__children != null && displayObject.__children.length > 0) || displayObject.opaqueBackground != displayObject.__cacheBitmapBackground;
 			var softwareDirty = needRender || displayObject.__graphics != null && displayObject.__graphics.__softwareDirty || !displayObject.__cacheBitmapColorTransform.__equals(colorTransform,true);
@@ -86100,10 +87308,10 @@ openfl_display_DOMRenderer.prototype = $extend(openfl_display_DisplayObjectRende
 });
 var openfl_display_DisplayObjectShader = function(code) {
 	if(this.__glFragmentSource == null) {
-		this.__glFragmentSource = "varying float openfl_Alphav;\n\t\tvarying vec4 openfl_ColorMultiplierv;\n\t\tvarying vec4 openfl_ColorOffsetv;\n\t\tvarying vec2 openfl_TextureCoordv;\n\n\t\tuniform bool openfl_HasColorTransform;\n\t\tuniform sampler2D openfl_Texture;\n\t\tuniform vec2 openfl_TextureSize;\n\n\t\tvoid main(void) {\n\n\t\t\tvec4 color = texture2D (openfl_Texture, openfl_TextureCoordv);\n\n\t\tif (color.a == 0.0) {\n\n\t\t\tgl_FragColor = vec4 (0.0, 0.0, 0.0, 0.0);\n\n\t\t} else if (openfl_HasColorTransform) {\n\n\t\t\tcolor = vec4 (color.rgb / color.a, color.a);\n\n\t\t\tmat4 colorMultiplier = mat4 (0);\n\t\t\tcolorMultiplier[0][0] = openfl_ColorMultiplierv.x;\n\t\t\tcolorMultiplier[1][1] = openfl_ColorMultiplierv.y;\n\t\t\tcolorMultiplier[2][2] = openfl_ColorMultiplierv.z;\n\t\t\tcolorMultiplier[3][3] = 1.0; // openfl_ColorMultiplierv.w;\n\n\t\t\tcolor = clamp (openfl_ColorOffsetv + (color * colorMultiplier), 0.0, 1.0);\n\n\t\t\tif (color.a > 0.0) {\n\n\t\t\t\tgl_FragColor = vec4 (color.rgb * color.a * openfl_Alphav, color.a * openfl_Alphav);\n\n\t\t\t} else {\n\n\t\t\t\tgl_FragColor = vec4 (0.0, 0.0, 0.0, 0.0);\n\n\t\t\t}\n\n\t\t} else {\n\n\t\t\tgl_FragColor = color * openfl_Alphav;\n\n\t\t}\n\n\t\t}";
+		this.__glFragmentSource = "varying float openfl_Alphav;\r\n\t\tvarying vec4 openfl_ColorMultiplierv;\r\n\t\tvarying vec4 openfl_ColorOffsetv;\r\n\t\tvarying vec2 openfl_TextureCoordv;\r\n\r\n\t\tuniform bool openfl_HasColorTransform;\r\n\t\tuniform sampler2D openfl_Texture;\r\n\t\tuniform vec2 openfl_TextureSize;\r\n\r\n\t\tvoid main(void) {\r\n\r\n\t\t\tvec4 color = texture2D (openfl_Texture, openfl_TextureCoordv);\r\n\r\n\t\tif (color.a == 0.0) {\r\n\r\n\t\t\tgl_FragColor = vec4 (0.0, 0.0, 0.0, 0.0);\r\n\r\n\t\t} else if (openfl_HasColorTransform) {\r\n\r\n\t\t\tcolor = vec4 (color.rgb / color.a, color.a);\r\n\r\n\t\t\tmat4 colorMultiplier = mat4 (0);\r\n\t\t\tcolorMultiplier[0][0] = openfl_ColorMultiplierv.x;\r\n\t\t\tcolorMultiplier[1][1] = openfl_ColorMultiplierv.y;\r\n\t\t\tcolorMultiplier[2][2] = openfl_ColorMultiplierv.z;\r\n\t\t\tcolorMultiplier[3][3] = 1.0; // openfl_ColorMultiplierv.w;\r\n\r\n\t\t\tcolor = clamp (openfl_ColorOffsetv + (color * colorMultiplier), 0.0, 1.0);\r\n\r\n\t\t\tif (color.a > 0.0) {\r\n\r\n\t\t\t\tgl_FragColor = vec4 (color.rgb * color.a * openfl_Alphav, color.a * openfl_Alphav);\r\n\r\n\t\t\t} else {\r\n\r\n\t\t\t\tgl_FragColor = vec4 (0.0, 0.0, 0.0, 0.0);\r\n\r\n\t\t\t}\r\n\r\n\t\t} else {\r\n\r\n\t\t\tgl_FragColor = color * openfl_Alphav;\r\n\r\n\t\t}\r\n\r\n\t\t}";
 	}
 	if(this.__glVertexSource == null) {
-		this.__glVertexSource = "attribute float openfl_Alpha;\n\t\tattribute vec4 openfl_ColorMultiplier;\n\t\tattribute vec4 openfl_ColorOffset;\n\t\tattribute vec4 openfl_Position;\n\t\tattribute vec2 openfl_TextureCoord;\n\n\t\tvarying float openfl_Alphav;\n\t\tvarying vec4 openfl_ColorMultiplierv;\n\t\tvarying vec4 openfl_ColorOffsetv;\n\t\tvarying vec2 openfl_TextureCoordv;\n\n\t\tuniform mat4 openfl_Matrix;\n\t\tuniform bool openfl_HasColorTransform;\n\t\tuniform vec2 openfl_TextureSize;\n\n\t\tvoid main(void) {\n\n\t\t\topenfl_Alphav = openfl_Alpha;\n\t\topenfl_TextureCoordv = openfl_TextureCoord;\n\n\t\tif (openfl_HasColorTransform) {\n\n\t\t\topenfl_ColorMultiplierv = openfl_ColorMultiplier;\n\t\t\topenfl_ColorOffsetv = openfl_ColorOffset / 255.0;\n\n\t\t}\n\n\t\tgl_Position = openfl_Matrix * openfl_Position;\n\n\t\t}";
+		this.__glVertexSource = "attribute float openfl_Alpha;\r\n\t\tattribute vec4 openfl_ColorMultiplier;\r\n\t\tattribute vec4 openfl_ColorOffset;\r\n\t\tattribute vec4 openfl_Position;\r\n\t\tattribute vec2 openfl_TextureCoord;\r\n\r\n\t\tvarying float openfl_Alphav;\r\n\t\tvarying vec4 openfl_ColorMultiplierv;\r\n\t\tvarying vec4 openfl_ColorOffsetv;\r\n\t\tvarying vec2 openfl_TextureCoordv;\r\n\r\n\t\tuniform mat4 openfl_Matrix;\r\n\t\tuniform bool openfl_HasColorTransform;\r\n\t\tuniform vec2 openfl_TextureSize;\r\n\r\n\t\tvoid main(void) {\r\n\r\n\t\t\topenfl_Alphav = openfl_Alpha;\r\n\t\topenfl_TextureCoordv = openfl_TextureCoord;\r\n\r\n\t\tif (openfl_HasColorTransform) {\r\n\r\n\t\t\topenfl_ColorMultiplierv = openfl_ColorMultiplier;\r\n\t\t\topenfl_ColorOffsetv = openfl_ColorOffset / 255.0;\r\n\r\n\t\t}\r\n\r\n\t\tgl_Position = openfl_Matrix * openfl_Position;\r\n\r\n\t\t}";
 	}
 	openfl_display_Shader.call(this,code);
 	this.__isGenerated = true;
@@ -107975,10 +109183,10 @@ openfl_display__$internal_Context3DGraphics.resizeVertexBuffer = function(graphi
 };
 var openfl_display__$internal_Context3DMaskShader = function() {
 	if(this.__glFragmentSource == null) {
-		this.__glFragmentSource = "varying vec2 openfl_TextureCoordv;\n\n\t\tuniform sampler2D openfl_Texture;\n\n\t\tvoid main(void) {\n\n\t\t\tvec4 color = texture2D (openfl_Texture, openfl_TextureCoordv);\n\n\t\t\tif (color.a == 0.0) {\n\n\t\t\t\tdiscard;\n\n\t\t\t} else {\n\n\t\t\t\tgl_FragColor = color;\n\n\t\t\t}\n\n\t\t}";
+		this.__glFragmentSource = "varying vec2 openfl_TextureCoordv;\r\n\r\n\t\tuniform sampler2D openfl_Texture;\r\n\r\n\t\tvoid main(void) {\r\n\r\n\t\t\tvec4 color = texture2D (openfl_Texture, openfl_TextureCoordv);\r\n\r\n\t\t\tif (color.a == 0.0) {\r\n\r\n\t\t\t\tdiscard;\r\n\r\n\t\t\t} else {\r\n\r\n\t\t\t\tgl_FragColor = color;\r\n\r\n\t\t\t}\r\n\r\n\t\t}";
 	}
 	if(this.__glVertexSource == null) {
-		this.__glVertexSource = "attribute vec4 openfl_Position;\n\t\tattribute vec2 openfl_TextureCoord;\n\t\tvarying vec2 openfl_TextureCoordv;\n\n\t\tuniform mat4 openfl_Matrix;\n\n\t\tvoid main(void) {\n\n\t\t\topenfl_TextureCoordv = openfl_TextureCoord;\n\n\t\t\tgl_Position = openfl_Matrix * openfl_Position;\n\n\t\t}";
+		this.__glVertexSource = "attribute vec4 openfl_Position;\r\n\t\tattribute vec2 openfl_TextureCoord;\r\n\t\tvarying vec2 openfl_TextureCoordv;\r\n\r\n\t\tuniform mat4 openfl_Matrix;\r\n\r\n\t\tvoid main(void) {\r\n\r\n\t\t\topenfl_TextureCoordv = openfl_TextureCoord;\r\n\r\n\t\t\tgl_Position = openfl_Matrix * openfl_Position;\r\n\r\n\t\t}";
 	}
 	openfl_display_Shader.call(this);
 	this.__isGenerated = true;
@@ -114819,8 +116027,8 @@ openfl_display3D_Program3D.prototype = {
 		if(this.__format != 1) {
 			return;
 		}
-		var vertex = "#ifdef GL_ES\n\t\t\t#ifdef GL_FRAGMENT_PRECISION_HIGH\n\t\t\tprecision highp float;\n\t\t\t#else\n\t\t\tprecision mediump float;\n\t\t\t#endif\n\t\t\t#endif\n\t\t\t" + vertexSource;
-		var fragment = "#ifdef GL_ES\n\t\t\t#ifdef GL_FRAGMENT_PRECISION_HIGH\n\t\t\tprecision highp float;\n\t\t\t#else\n\t\t\tprecision mediump float;\n\t\t\t#endif\n\t\t\t#endif\n\t\t\t" + fragmentSource;
+		var vertex = "#ifdef GL_ES\r\n\t\t\t#ifdef GL_FRAGMENT_PRECISION_HIGH\r\n\t\t\tprecision highp float;\r\n\t\t\t#else\r\n\t\t\tprecision mediump float;\r\n\t\t\t#endif\r\n\t\t\t#endif\r\n\t\t\t" + vertexSource;
+		var fragment = "#ifdef GL_ES\r\n\t\t\t#ifdef GL_FRAGMENT_PRECISION_HIGH\r\n\t\t\tprecision highp float;\r\n\t\t\t#else\r\n\t\t\tprecision mediump float;\r\n\t\t\t#endif\r\n\t\t\t#endif\r\n\t\t\t" + fragmentSource;
 		if(vertex == this.__glVertexSource && fragment == this.__glFragmentSource) {
 			return;
 		}
@@ -121333,1807 +122541,6 @@ openfl_text_StyleSheet.prototype = $extend(openfl_events_EventDispatcher.prototy
 	,__class__: openfl_text_StyleSheet
 	,__properties__: {get_styleNames:"get_styleNames"}
 });
-var openfl_text_TextField = function() {
-	this.__forceCachedBitmapUpdate = false;
-	this.__renderedOnCanvasWhileOnDOM = false;
-	this.__mouseScrollVCounter = 0;
-	this.condenseWhite = false;
-	openfl_display_InteractiveObject.call(this);
-	this.__drawableType = 7;
-	this.__caretIndex = -1;
-	this.__selectionIndex = -1;
-	this.__displayAsPassword = false;
-	this.__graphics = new openfl_display_Graphics(this);
-	this.__textEngine = new openfl_text__$internal_TextEngine(this);
-	this.__layoutDirty = true;
-	this.__offsetX = 0;
-	this.__offsetY = 0;
-	this.__mouseWheelEnabled = true;
-	this.__text = "";
-	this.doubleClickEnabled = true;
-	if(openfl_text_TextField.__defaultTextFormat == null) {
-		openfl_text_TextField.__defaultTextFormat = new openfl_text_TextFormat("Times New Roman",12,0,false,false,false,"","",3,0,0,0,0);
-		openfl_text_TextField.__defaultTextFormat.blockIndent = 0;
-		openfl_text_TextField.__defaultTextFormat.bullet = false;
-		openfl_text_TextField.__defaultTextFormat.letterSpacing = 0;
-		openfl_text_TextField.__defaultTextFormat.kerning = false;
-	}
-	this.__textFormat = openfl_text_TextField.__defaultTextFormat.clone();
-	this.__textEngine.textFormatRanges.push(new openfl_text__$internal_TextFormatRange(this.__textFormat,0,0));
-	this.addEventListener("mouseDown",$bind(this,this.this_onMouseDown));
-	this.addEventListener("focusIn",$bind(this,this.this_onFocusIn));
-	this.addEventListener("focusOut",$bind(this,this.this_onFocusOut));
-	this.addEventListener("keyDown",$bind(this,this.this_onKeyDown));
-	this.addEventListener("mouseWheel",$bind(this,this.this_onMouseWheel));
-	this.addEventListener("doubleClick",$bind(this,this.this_onDoubleClick));
-};
-$hxClasses["openfl.text.TextField"] = openfl_text_TextField;
-openfl_text_TextField.__name__ = "openfl.text.TextField";
-openfl_text_TextField.__defaultTextFormat = null;
-openfl_text_TextField.__super__ = openfl_display_InteractiveObject;
-openfl_text_TextField.prototype = $extend(openfl_display_InteractiveObject.prototype,{
-	condenseWhite: null
-	,__bounds: null
-	,__caretIndex: null
-	,__cursorTimer: null
-	,__dirty: null
-	,__displayAsPassword: null
-	,__domRender: null
-	,__inputEnabled: null
-	,__isHTML: null
-	,__layoutDirty: null
-	,__mouseScrollVCounter: null
-	,__mouseWheelEnabled: null
-	,__offsetX: null
-	,__offsetY: null
-	,__selectionIndex: null
-	,__showCursor: null
-	,__styleSheet: null
-	,__text: null
-	,__htmlText: null
-	,__textEngine: null
-	,__textFormat: null
-	,__div: null
-	,__renderedOnCanvasWhileOnDOM: null
-	,__forceCachedBitmapUpdate: null
-	,appendText: function(text) {
-		if(text == null || text == "") {
-			return;
-		}
-		this.__dirty = true;
-		this.__layoutDirty = true;
-		if(!this.__renderDirty) {
-			this.__renderDirty = true;
-			this.__setParentRenderDirty();
-		}
-		this.__updateText(this.__text + text);
-		this.__textEngine.textFormatRanges.get(this.__textEngine.textFormatRanges.get_length() - 1).end = this.__text.length;
-		this.__selectionIndex = this.__caretIndex = this.__text.length;
-	}
-	,getCharBoundaries: function(charIndex) {
-		if(charIndex < 0 || charIndex > this.__text.length - 1) {
-			return null;
-		}
-		var rect = new openfl_geom_Rectangle();
-		if(this.__getCharBoundaries(charIndex,rect)) {
-			return rect;
-		} else {
-			return null;
-		}
-	}
-	,getCharIndexAtPoint: function(x,y) {
-		if(x <= 2 || x > this.get_width() + 4 || y <= 0 || y > this.get_height() + 4) {
-			return -1;
-		}
-		this.__updateLayout();
-		x += this.get_scrollH();
-		var _g = 0;
-		var _g1 = this.get_scrollV() - 1;
-		while(_g < _g1) y += this.__textEngine.lineHeights.get(_g++);
-		var group = this.__textEngine.layoutGroups.iterator();
-		while(group.hasNext()) {
-			var group1 = group.next();
-			if(y >= group1.offsetY && y <= group1.offsetY + group1.height) {
-				if(x >= group1.offsetX && x <= group1.offsetX + group1.width) {
-					var advance = 0.0;
-					var _g = 0;
-					var _g1 = group1.positions.length;
-					while(_g < _g1) {
-						var i = _g++;
-						advance += group1.positions[i];
-						if(x <= group1.offsetX + advance) {
-							return group1.startIndex + i;
-						}
-					}
-					return group1.endIndex;
-				}
-			}
-		}
-		return -1;
-	}
-	,getFirstCharInParagraph: function(charIndex) {
-		if(charIndex < 0 || charIndex > this.get_text().length) {
-			return -1;
-		}
-		if(this.__textEngine.lineBreaks.get_length() == 0) {
-			return 0;
-		}
-		var _g = 0;
-		var _g1 = this.__textEngine.lineBreaks.get_length();
-		while(_g < _g1) {
-			var i = _g++;
-			if(charIndex <= this.__textEngine.lineBreaks.get(i)) {
-				if(i == 0) {
-					return 0;
-				} else {
-					return this.__textEngine.lineBreaks.get(i - 1) + 1;
-				}
-			}
-		}
-		return this.__textEngine.lineBreaks.get(this.__textEngine.lineBreaks.get_length() - 1) + 1;
-	}
-	,getLineIndexAtPoint: function(x,y) {
-		this.__updateLayout();
-		if(x <= 2 || x > this.get_width() + 4 || y <= 0 || y > this.get_height() + 4) {
-			return -1;
-		}
-		var _g = 0;
-		var _g1 = this.get_scrollV() - 1;
-		while(_g < _g1) y += this.__textEngine.lineHeights.get(_g++);
-		var group = this.__textEngine.layoutGroups.iterator();
-		while(group.hasNext()) {
-			var group1 = group.next();
-			if(y >= group1.offsetY && y <= group1.offsetY + group1.height) {
-				return group1.lineIndex;
-			}
-		}
-		return -1;
-	}
-	,getLineIndexOfChar: function(charIndex) {
-		if(charIndex < 0 || charIndex > this.__text.length) {
-			return -1;
-		}
-		this.__updateLayout();
-		var group = this.__textEngine.layoutGroups.iterator();
-		while(group.hasNext()) {
-			var group1 = group.next();
-			if(group1.startIndex <= charIndex && group1.endIndex >= charIndex) {
-				return group1.lineIndex;
-			}
-		}
-		return -1;
-	}
-	,getLineLength: function(lineIndex) {
-		this.__updateLayout();
-		if(lineIndex < 0 || lineIndex > this.__textEngine.numLines - 1) {
-			return 0;
-		}
-		var startIndex = -1;
-		var endIndex = -1;
-		var group = this.__textEngine.layoutGroups.iterator();
-		while(group.hasNext()) {
-			var group1 = group.next();
-			if(group1.lineIndex == lineIndex) {
-				if(startIndex == -1) {
-					startIndex = group1.startIndex;
-				}
-			} else if(group1.lineIndex == lineIndex + 1) {
-				endIndex = group1.startIndex;
-				break;
-			}
-		}
-		if(endIndex == -1) {
-			endIndex = this.__text.length;
-		}
-		return endIndex - startIndex;
-	}
-	,getLineMetrics: function(lineIndex) {
-		this.__updateLayout();
-		var ascender = this.__textEngine.lineAscents.get(lineIndex);
-		var descender = this.__textEngine.lineDescents.get(lineIndex);
-		var leading = this.__textEngine.lineLeadings.get(lineIndex);
-		var lineHeight = this.__textEngine.lineHeights.get(lineIndex);
-		var lineWidth = this.__textEngine.lineWidths.get(lineIndex);
-		var margin;
-		switch(this.__textFormat.align) {
-		case 0:
-			margin = (this.__textEngine.width - lineWidth) / 2;
-			break;
-		case 1:case 4:
-			margin = this.__textEngine.width - lineWidth - 2;
-			break;
-		case 2:case 3:case 5:
-			margin = 2;
-			break;
-		}
-		return new openfl_text_TextLineMetrics(margin,lineWidth,lineHeight,ascender,descender,leading);
-	}
-	,getLineOffset: function(lineIndex) {
-		this.__updateLayout();
-		if(lineIndex < 0 || lineIndex > this.__textEngine.numLines - 1) {
-			return -1;
-		}
-		var group = this.__textEngine.layoutGroups.iterator();
-		while(group.hasNext()) {
-			var group1 = group.next();
-			if(group1.lineIndex == lineIndex) {
-				return group1.startIndex;
-			}
-		}
-		return 0;
-	}
-	,getLineText: function(lineIndex) {
-		this.__updateLayout();
-		if(lineIndex < 0 || lineIndex > this.__textEngine.numLines - 1) {
-			return null;
-		}
-		var startIndex = -1;
-		var endIndex = -1;
-		var group = this.__textEngine.layoutGroups.iterator();
-		while(group.hasNext()) {
-			var group1 = group.next();
-			if(group1.lineIndex == lineIndex) {
-				if(startIndex == -1) {
-					startIndex = group1.startIndex;
-				}
-			} else if(group1.lineIndex == lineIndex + 1) {
-				endIndex = group1.startIndex;
-				break;
-			}
-		}
-		if(endIndex == -1) {
-			endIndex = this.__text.length;
-		}
-		return this.__textEngine.text.substring(startIndex,endIndex);
-	}
-	,getParagraphLength: function(charIndex) {
-		if(charIndex < 0 || charIndex > this.get_text().length) {
-			return -1;
-		}
-		var startIndex = this.getFirstCharInParagraph(charIndex);
-		if(charIndex >= this.get_text().length) {
-			return this.get_text().length - startIndex + 1;
-		}
-		var endIndex = this.__textEngine.getLineBreakIndex(charIndex) + 1;
-		if(endIndex == 0) {
-			endIndex = this.__text.length;
-		}
-		return endIndex - startIndex;
-	}
-	,getTextFormat: function(beginIndex,endIndex) {
-		if(endIndex == null) {
-			endIndex = -1;
-		}
-		if(beginIndex == null) {
-			beginIndex = -1;
-		}
-		var format = null;
-		if(beginIndex >= this.get_text().length || beginIndex < -1 || endIndex > this.get_text().length || endIndex < -1) {
-			throw new openfl_errors_RangeError("The supplied index is out of bounds");
-		}
-		if(beginIndex == -1) {
-			beginIndex = 0;
-		}
-		if(endIndex == -1) {
-			endIndex = this.get_text().length;
-		}
-		if(beginIndex >= endIndex) {
-			return new openfl_text_TextFormat();
-		}
-		var group = this.__textEngine.textFormatRanges.iterator();
-		while(group.hasNext()) {
-			var group1 = group.next();
-			if(group1.start <= beginIndex && group1.end > beginIndex || group1.start < endIndex && group1.end >= endIndex) {
-				if(format == null) {
-					format = group1.format.clone();
-				} else {
-					if(group1.format.font != format.font) {
-						format.font = null;
-					}
-					if(group1.format.size != format.size) {
-						format.size = null;
-					}
-					if(group1.format.color != format.color) {
-						format.color = null;
-					}
-					if(group1.format.bold != format.bold) {
-						format.bold = null;
-					}
-					if(group1.format.italic != format.italic) {
-						format.italic = null;
-					}
-					if(group1.format.underline != format.underline) {
-						format.underline = null;
-					}
-					if(group1.format.url != format.url) {
-						format.url = null;
-					}
-					if(group1.format.target != format.target) {
-						format.target = null;
-					}
-					if(group1.format.align != format.align) {
-						format.align = null;
-					}
-					if(group1.format.leftMargin != format.leftMargin) {
-						format.leftMargin = null;
-					}
-					if(group1.format.rightMargin != format.rightMargin) {
-						format.rightMargin = null;
-					}
-					if(group1.format.indent != format.indent) {
-						format.indent = null;
-					}
-					if(group1.format.leading != format.leading) {
-						format.leading = null;
-					}
-					if(group1.format.blockIndent != format.blockIndent) {
-						format.blockIndent = null;
-					}
-					if(group1.format.bullet != format.bullet) {
-						format.bullet = null;
-					}
-					if(group1.format.kerning != format.kerning) {
-						format.kerning = null;
-					}
-					if(group1.format.letterSpacing != format.letterSpacing) {
-						format.letterSpacing = null;
-					}
-					if(group1.format.tabStops != format.tabStops) {
-						format.tabStops = null;
-					}
-				}
-			}
-		}
-		if(format == null) {
-			format = new openfl_text_TextFormat();
-		}
-		return format;
-	}
-	,replaceSelectedText: function(value) {
-		this.__replaceSelectedText(value,false);
-	}
-	,replaceText: function(beginIndex,endIndex,newText) {
-		this.__replaceText(beginIndex,endIndex,newText,false);
-	}
-	,setSelection: function(beginIndex,endIndex) {
-		this.__selectionIndex = beginIndex;
-		this.__caretIndex = endIndex;
-		this.__updateScrollV();
-		this.__updateScrollH();
-		if(this.stage != null && this.stage.get_focus() == this) {
-			this.__stopCursorTimer();
-			this.__startCursorTimer();
-		}
-	}
-	,setTextFormat: function(format,beginIndex,endIndex) {
-		if(endIndex == null) {
-			endIndex = -1;
-		}
-		if(beginIndex == null) {
-			beginIndex = -1;
-		}
-		var max = this.get_text().length;
-		var range;
-		if(beginIndex == -1) {
-			if(endIndex == -1) {
-				endIndex = max;
-			}
-			beginIndex = 0;
-		} else if(endIndex == -1) {
-			endIndex = beginIndex + 1;
-		}
-		if(beginIndex == endIndex) {
-			return;
-		}
-		if(beginIndex < 0 || endIndex <= 0 || endIndex < beginIndex || beginIndex >= max || endIndex > max) {
-			throw new openfl_errors_RangeError();
-		}
-		if(beginIndex == 0 && endIndex == max) {
-			this.__textEngine.textFormatRanges.set_length(1);
-			range = this.__textEngine.textFormatRanges.get(0);
-			range.start = 0;
-			range.end = max;
-			range.format.__merge(format);
-		} else {
-			var index = 0;
-			var newRange;
-			while(index < this.__textEngine.textFormatRanges.get_length()) {
-				range = this.__textEngine.textFormatRanges.get(index);
-				if(range.end <= beginIndex) {
-					++index;
-				} else if(range.start >= endIndex) {
-					break;
-				} else if(range.start <= beginIndex && range.end >= endIndex) {
-					if(range.start == beginIndex && range.end == endIndex) {
-						range.format = range.format.clone();
-						range.format.__merge(format);
-						break;
-					} else if(range.start == beginIndex) {
-						newRange = new openfl_text__$internal_TextFormatRange(range.format.clone(),beginIndex,endIndex);
-						newRange.format.__merge(format);
-						this.__textEngine.textFormatRanges.insertAt(index,newRange);
-						range.start = endIndex;
-						index += 2;
-					} else if(range.end == endIndex) {
-						newRange = new openfl_text__$internal_TextFormatRange(range.format.clone(),beginIndex,endIndex);
-						newRange.format.__merge(format);
-						this.__textEngine.textFormatRanges.insertAt(index + 1,newRange);
-						range.end = beginIndex;
-						break;
-					} else {
-						newRange = new openfl_text__$internal_TextFormatRange(range.format.clone(),beginIndex,endIndex);
-						newRange.format.__merge(format);
-						this.__textEngine.textFormatRanges.insertAt(index + 1,newRange);
-						newRange = new openfl_text__$internal_TextFormatRange(range.format.clone(),endIndex,range.end);
-						this.__textEngine.textFormatRanges.insertAt(index + 2,newRange);
-						range.end = beginIndex;
-						break;
-					}
-				} else if(range.start >= beginIndex && range.end <= endIndex) {
-					if(range.start == beginIndex) {
-						range.format = range.format.clone();
-						range.format.__merge(format);
-						range.end = endIndex;
-					} else {
-						this.__textEngine.textFormatRanges.removeAt(index);
-					}
-				} else if(range.start > beginIndex && range.end > beginIndex) {
-					range.start = endIndex;
-					break;
-				} else if(range.start < beginIndex && range.end <= endIndex) {
-					newRange = new openfl_text__$internal_TextFormatRange(range.format.clone(),beginIndex,endIndex);
-					newRange.format.__merge(format);
-					this.__textEngine.textFormatRanges.insertAt(index + 1,newRange);
-					range.end = beginIndex;
-					index += 2;
-				} else {
-					++index;
-					lime_utils_Log.warn("You found a bug in OpenFL's text code! Please save a copy of your project and create an issue on GitHub so we can fix this.",{ fileName : "openfl/text/TextField.hx", lineNumber : 1578, className : "openfl.text.TextField", methodName : "setTextFormat"});
-				}
-			}
-		}
-		this.__dirty = true;
-		this.__layoutDirty = true;
-		if(!this.__renderDirty) {
-			this.__renderDirty = true;
-			this.__setParentRenderDirty();
-		}
-	}
-	,__allowMouseFocus: function() {
-		return this.mouseEnabled;
-	}
-	,__caretBeginningOfLine: function() {
-		this.__caretIndex = this.getLineOffset(this.getLineIndexOfChar(this.__caretIndex));
-	}
-	,__caretBeginningOfNextLine: function() {
-		var lineIndex = this.getLineIndexOfChar(this.__caretIndex);
-		if(lineIndex < this.__textEngine.numLines - 1) {
-			this.__caretIndex = this.getLineOffset(lineIndex + 1);
-		} else {
-			this.__caretIndex = this.__text.length;
-		}
-	}
-	,__caretBeginningOfPreviousLine: function() {
-		var lineIndex = this.getLineIndexOfChar(this.__caretIndex);
-		if(lineIndex > 0) {
-			var index = this.getLineOffset(this.getLineIndexOfChar(this.__caretIndex));
-			if(this.__caretIndex == index) {
-				this.__caretIndex = this.getLineOffset(lineIndex - 1);
-			} else {
-				this.__caretIndex = index;
-			}
-		}
-	}
-	,__caretEndOfLine: function() {
-		var lineIndex = this.getLineIndexOfChar(this.__caretIndex);
-		if(lineIndex < this.__textEngine.numLines - 1) {
-			this.__caretIndex = this.getLineOffset(lineIndex + 1) - 1;
-		} else {
-			this.__caretIndex = this.__text.length;
-		}
-	}
-	,__caretNextCharacter: function() {
-		if(this.__caretIndex < this.__text.length) {
-			this.__caretIndex++;
-		}
-	}
-	,__caretNextLine: function() {
-		var lineIndex = this.getLineIndexOfChar(this.__caretIndex);
-		if(lineIndex < this.__textEngine.numLines - 1) {
-			this.__caretIndex = this.__getCharIndexOnDifferentLine(this.get_caretIndex(),lineIndex + 1);
-		}
-	}
-	,__caretPreviousCharacter: function() {
-		if(this.__caretIndex > 0) {
-			this.__caretIndex--;
-		}
-	}
-	,__caretPreviousLine: function() {
-		var lineIndex = this.getLineIndexOfChar(this.__caretIndex);
-		if(lineIndex > 0) {
-			this.__caretIndex = this.__getCharIndexOnDifferentLine(this.get_caretIndex(),lineIndex - 1);
-		}
-	}
-	,__disableInput: function() {
-		if(this.__inputEnabled && this.stage != null) {
-			this.stage.window.__backend.setTextInputEnabled(false);
-			this.stage.window.onTextInput.remove($bind(this,this.window_onTextInput));
-			this.stage.window.onKeyDown.remove($bind(this,this.window_onKeyDown));
-			this.__inputEnabled = false;
-			this.__stopCursorTimer();
-		}
-	}
-	,__dispatch: function(event) {
-		if(event.eventPhase == 2 && event.type == "mouseUp") {
-			var group = this.__getGroup(this.get_mouseX(),this.get_mouseY(),true);
-			if(group != null) {
-				var url = group.format.url;
-				if(url != null && url != "") {
-					if(StringTools.startsWith(url,"event:")) {
-						this.dispatchEvent(new openfl_events_TextEvent("link",true,false,HxOverrides.substr(url,6,null)));
-					} else {
-						openfl_Lib.getURL(new openfl_net_URLRequest(url));
-					}
-				}
-			}
-		}
-		return openfl_display_InteractiveObject.prototype.__dispatch.call(this,event);
-	}
-	,__enableInput: function() {
-		if(this.stage != null) {
-			var bounds = this.getBounds(this.stage);
-			this.stage.window.setTextInputRect(new lime_math_Rectangle(bounds.x,bounds.y,bounds.width,bounds.height));
-			this.stage.window.__backend.setTextInputEnabled(true);
-			if(!this.__inputEnabled) {
-				this.stage.window.__backend.setTextInputEnabled(true);
-				if(!this.stage.window.onTextInput.has($bind(this,this.window_onTextInput))) {
-					this.stage.window.onTextInput.add($bind(this,this.window_onTextInput));
-					this.stage.window.onKeyDown.add($bind(this,this.window_onKeyDown));
-				}
-				this.__inputEnabled = true;
-				this.__stopCursorTimer();
-				this.__startCursorTimer();
-			}
-		}
-	}
-	,__getAdvance: function(position) {
-		return position;
-	}
-	,__getBounds: function(rect,matrix) {
-		this.__updateLayout();
-		var bounds = openfl_geom_Rectangle.__pool.get();
-		bounds.copyFrom(this.__textEngine.bounds);
-		bounds.offset(this.__offsetX,this.__offsetY);
-		bounds.__transform(bounds,matrix);
-		rect.__expand(bounds.x,bounds.y,bounds.width,bounds.height);
-		openfl_geom_Rectangle.__pool.release(bounds);
-	}
-	,__getCharBoundaries: function(charIndex,rect) {
-		if(charIndex < 0 || charIndex > this.__text.length - 1) {
-			return false;
-		}
-		this.__updateLayout();
-		var group = this.__textEngine.layoutGroups.iterator();
-		while(group.hasNext()) {
-			var group1 = group.next();
-			if(charIndex >= group1.startIndex && charIndex < group1.endIndex) {
-				try {
-					var x = group1.offsetX;
-					var _g = 0;
-					var _g1 = charIndex - group1.startIndex;
-					while(_g < _g1) x += group1.positions[_g++];
-					rect.setTo(x,group1.offsetY,group1.positions[charIndex - group1.startIndex],group1.ascent + group1.descent);
-					return true;
-				} catch( _g2 ) {
-					haxe_NativeStackTrace.lastError = _g2;
-				}
-			}
-		}
-		return false;
-	}
-	,__getCharIndexOnDifferentLine: function(charIndex,lineIndex) {
-		if(charIndex < 0 || charIndex > this.__text.length) {
-			return -1;
-		}
-		if(lineIndex < 0 || lineIndex > this.__textEngine.numLines - 1) {
-			return -1;
-		}
-		var x = null;
-		var y = null;
-		var group = this.__textEngine.layoutGroups.iterator();
-		while(group.hasNext()) {
-			var group1 = group.next();
-			if(charIndex >= group1.startIndex && charIndex <= group1.endIndex) {
-				x = group1.offsetX;
-				var _g = 0;
-				var _g1 = charIndex - group1.startIndex;
-				while(_g < _g1) x += group1.positions[_g++];
-				if(y != null) {
-					return this.__getPosition(x,y);
-				}
-			}
-			if(group1.lineIndex == lineIndex) {
-				y = group1.offsetY + group1.height / 2;
-				var _g2 = 0;
-				var _g3 = this.get_scrollV() - 1;
-				while(_g2 < _g3) y -= this.__textEngine.lineHeights.get(_g2++);
-				if(x != null) {
-					return this.__getPosition(x,y);
-				}
-			}
-		}
-		return -1;
-	}
-	,__getCursor: function() {
-		var group = this.__getGroup(this.get_mouseX(),this.get_mouseY(),true);
-		if(group != null && group.format.url != "") {
-			return "button";
-		} else if(this.__textEngine.selectable) {
-			return "ibeam";
-		}
-		return null;
-	}
-	,__getGroup: function(x,y,precise) {
-		if(precise == null) {
-			precise = false;
-		}
-		this.__updateLayout();
-		x += this.get_scrollH();
-		var _g = 0;
-		var _g1 = this.get_scrollV() - 1;
-		while(_g < _g1) y += this.__textEngine.lineHeights.get(_g++);
-		if(!precise && y > this.__textEngine.textHeight) {
-			y = this.__textEngine.textHeight;
-		}
-		var firstGroup = true;
-		var group;
-		var nextGroup;
-		var _g = 0;
-		var _g1 = this.__textEngine.layoutGroups.get_length();
-		while(_g < _g1) {
-			var i = _g++;
-			group = this.__textEngine.layoutGroups.get(i);
-			if(i < this.__textEngine.layoutGroups.get_length() - 1) {
-				nextGroup = this.__textEngine.layoutGroups.get(i + 1);
-			} else {
-				nextGroup = null;
-			}
-			if(firstGroup) {
-				if(y < group.offsetY) {
-					y = group.offsetY;
-				}
-				if(x < group.offsetX) {
-					x = group.offsetX;
-				}
-				firstGroup = false;
-			}
-			if(y >= group.offsetY && y <= group.offsetY + group.height || !precise && nextGroup == null) {
-				if(x >= group.offsetX && x <= group.offsetX + group.width || !precise && (nextGroup == null || nextGroup.lineIndex != group.lineIndex)) {
-					return group;
-				}
-			}
-		}
-		return null;
-	}
-	,__getPosition: function(x,y) {
-		var group = this.__getGroup(x,y);
-		if(group == null) {
-			return this.__text.length;
-		}
-		var advance = 0.0;
-		var _g = 0;
-		var _g1 = group.positions.length;
-		while(_g < _g1) {
-			var i = _g++;
-			advance += group.positions[i];
-			if(x <= group.offsetX + advance) {
-				if(x <= group.offsetX + (advance - group.positions[i]) + group.positions[i] / 2) {
-					return group.startIndex + i;
-				} else if(group.startIndex + i < group.endIndex) {
-					return group.startIndex + i + 1;
-				} else {
-					return group.endIndex;
-				}
-			}
-		}
-		return group.endIndex;
-	}
-	,__hitTest: function(x,y,shapeFlag,stack,interactiveOnly,hitObject) {
-		if(!hitObject.get_visible() || this.__isMask || interactiveOnly && !this.mouseEnabled) {
-			return false;
-		}
-		if(this.get_mask() != null && !this.get_mask().__hitTestMask(x,y)) {
-			return false;
-		}
-		this.__getRenderTransform();
-		this.__updateLayout();
-		var _this = this.__renderTransform;
-		var norm = _this.a * _this.d - _this.b * _this.c;
-		var _this1 = this.__renderTransform;
-		var norm1 = _this1.a * _this1.d - _this1.b * _this1.c;
-		if(this.__textEngine.bounds.contains(norm == 0 ? -_this.tx : 1.0 / norm * (_this.c * (_this.ty - y) + _this.d * (x - _this.tx)),norm1 == 0 ? -_this1.ty : 1.0 / norm1 * (_this1.a * (y - _this1.ty) + _this1.b * (_this1.tx - x)))) {
-			if(stack != null) {
-				stack.push(hitObject);
-			}
-			return true;
-		}
-		return false;
-	}
-	,__hitTestMask: function(x,y) {
-		this.__getRenderTransform();
-		this.__updateLayout();
-		var _this = this.__renderTransform;
-		var norm = _this.a * _this.d - _this.b * _this.c;
-		var _this1 = this.__renderTransform;
-		var norm1 = _this1.a * _this1.d - _this1.b * _this1.c;
-		if(this.__textEngine.bounds.contains(norm == 0 ? -_this.tx : 1.0 / norm * (_this.c * (_this.ty - y) + _this.d * (x - _this.tx)),norm1 == 0 ? -_this1.ty : 1.0 / norm1 * (_this1.a * (y - _this1.ty) + _this1.b * (_this1.tx - x)))) {
-			return true;
-		}
-		return false;
-	}
-	,__replaceSelectedText: function(value,restrict) {
-		if(restrict == null) {
-			restrict = true;
-		}
-		if(value == null) {
-			value = "";
-		}
-		if(value == "" && this.__selectionIndex == this.__caretIndex) {
-			return;
-		}
-		var startIndex = this.__caretIndex < this.__selectionIndex ? this.__caretIndex : this.__selectionIndex;
-		var endIndex = this.__caretIndex > this.__selectionIndex ? this.__caretIndex : this.__selectionIndex;
-		if(startIndex == endIndex && this.__textEngine.maxChars > 0 && this.__text.length == this.__textEngine.maxChars) {
-			return;
-		}
-		if(startIndex > this.__text.length) {
-			startIndex = this.__text.length;
-		}
-		if(endIndex > this.__text.length) {
-			endIndex = this.__text.length;
-		}
-		if(endIndex < startIndex) {
-			var cache = endIndex;
-			endIndex = startIndex;
-			startIndex = cache;
-		}
-		if(startIndex < 0) {
-			startIndex = 0;
-		}
-		this.__replaceText(startIndex,endIndex,value,restrict);
-	}
-	,__replaceText: function(beginIndex,endIndex,newText,restrict) {
-		if(endIndex < beginIndex || beginIndex < 0 || endIndex > this.__text.length || newText == null) {
-			return;
-		}
-		if(restrict) {
-			newText = this.__textEngine.restrictText(newText);
-			if(this.__textEngine.maxChars > 0) {
-				var maxLength = this.__textEngine.maxChars - this.__text.length + (endIndex - beginIndex);
-				if(maxLength <= 0) {
-					newText = "";
-				} else if(maxLength < newText.length) {
-					newText = HxOverrides.substr(newText,0,maxLength);
-				}
-			}
-		}
-		this.__updateText(this.__text.substring(0,beginIndex) + newText + this.__text.substring(endIndex));
-		var offset = newText.length - (endIndex - beginIndex);
-		var i = 0;
-		var range;
-		while(i < this.__textEngine.textFormatRanges.get_length()) {
-			range = this.__textEngine.textFormatRanges.get(i);
-			if(beginIndex == endIndex) {
-				if(range.start == range.end) {
-					if(range.start != 0) {
-						lime_utils_Log.warn("You found a bug in OpenFL's text code! Please save a copy of your project and create an issue on GitHub so we can fix this.",{ fileName : "openfl/text/TextField.hx", lineNumber : 2087, className : "openfl.text.TextField", methodName : "__replaceText"});
-					} else {
-						range.end += offset;
-					}
-				} else if(range.end >= beginIndex) {
-					if(range.start >= beginIndex) {
-						range.start += offset;
-						range.end += offset;
-					} else if(range.start < beginIndex && range.end >= endIndex) {
-						range.end += offset;
-					}
-				}
-			} else if(range.end > beginIndex) {
-				if(range.start > endIndex) {
-					range.start += offset;
-					range.end += offset;
-				} else if(range.start <= beginIndex && range.end > endIndex) {
-					range.end += offset;
-				} else if(range.start >= beginIndex && range.end <= endIndex) {
-					var this1 = this.__textEngine.textFormatRanges;
-					var items = [];
-					this1.__tempIndex = i--;
-					var _g_current = 0;
-					while(_g_current < items.length) {
-						this1.insertAt(this1.__tempIndex,items[_g_current++]);
-						this1.__tempIndex++;
-					}
-					this1.splice(this1.__tempIndex,1);
-				} else if(range.end > endIndex && range.start > beginIndex && range.start <= endIndex) {
-					range.start = beginIndex;
-					range.end += offset;
-				} else if(range.start < beginIndex && range.end > beginIndex && range.end <= endIndex) {
-					range.end = beginIndex;
-				}
-			}
-			++i;
-		}
-		if(this.__textEngine.textFormatRanges.get_length() == 0) {
-			this.__textEngine.textFormatRanges.push(new openfl_text__$internal_TextFormatRange(this.get_defaultTextFormat().clone(),0,newText.length));
-		} else if(beginIndex == endIndex && this.__textEngine.textFormatRanges.get(0).start > 0) {
-			this.__textEngine.textFormatRanges.unshift(new openfl_text__$internal_TextFormatRange(this.get_defaultTextFormat().clone(),0,this.__textEngine.textFormatRanges.get(0).start));
-		} else if(beginIndex != endIndex && this.__textEngine.textFormatRanges.get(this.__textEngine.textFormatRanges.get_length() - 1).end < this.__text.length) {
-			this.__textEngine.textFormatRanges.push(new openfl_text__$internal_TextFormatRange(this.get_defaultTextFormat().clone(),this.__textEngine.textFormatRanges.get(this.__textEngine.textFormatRanges.get_length() - 1).end,this.__text.length));
-		}
-		this.__selectionIndex = this.__caretIndex = beginIndex + newText.length;
-		this.__dirty = true;
-		this.__layoutDirty = true;
-		if(!this.__renderDirty) {
-			this.__renderDirty = true;
-			this.__setParentRenderDirty();
-		}
-	}
-	,__startCursorTimer: function() {
-		if(this.get_type() == 1) {
-			if(this.__inputEnabled) {
-				this.__cursorTimer = haxe_Timer.delay($bind(this,this.__startCursorTimer),600);
-				this.__showCursor = !this.__showCursor;
-			}
-			this.__dirty = true;
-			if(!this.__renderDirty) {
-				this.__renderDirty = true;
-				this.__setParentRenderDirty();
-			}
-		} else if(this.get_selectable()) {
-			this.__dirty = true;
-			if(!this.__renderDirty) {
-				this.__renderDirty = true;
-				this.__setParentRenderDirty();
-			}
-		}
-	}
-	,__startTextInput: function() {
-		if(this.__caretIndex < 0) {
-			this.__caretIndex = this.__text.length;
-			this.__selectionIndex = this.__caretIndex;
-		}
-		if(openfl_display_DisplayObject.__supportDOM ? this.__renderedOnCanvasWhileOnDOM : true) {
-			this.__enableInput();
-		}
-	}
-	,__stopCursorTimer: function() {
-		if(this.__cursorTimer != null) {
-			this.__cursorTimer.stop();
-			this.__cursorTimer = null;
-		}
-		if(this.__showCursor) {
-			this.__showCursor = false;
-			this.__dirty = true;
-			if(!this.__renderDirty) {
-				this.__renderDirty = true;
-				this.__setParentRenderDirty();
-			}
-		}
-	}
-	,__stopTextInput: function() {
-		if(openfl_display_DisplayObject.__supportDOM ? this.__renderedOnCanvasWhileOnDOM : true) {
-			this.__disableInput();
-		}
-	}
-	,__updateLayout: function() {
-		if(this.__layoutDirty) {
-			var cacheWidth = this.__textEngine.width;
-			this.__textEngine.update();
-			if(this.__textEngine.autoSize != 2) {
-				if(this.__textEngine.width != cacheWidth) {
-					switch(this.__textEngine.autoSize) {
-					case 0:
-						this.set_x(this.get_x() + (cacheWidth - this.__textEngine.width) / 2);
-						break;
-					case 3:
-						this.set_x(this.get_x() + (cacheWidth - this.__textEngine.width));
-						break;
-					default:
-					}
-				}
-				this.__textEngine.getBounds();
-			}
-			this.__layoutDirty = false;
-			this.setSelection(this.__selectionIndex,this.__caretIndex);
-		}
-	}
-	,__updateMouseDrag: function() {
-		if(this.stage == null) {
-			return;
-		}
-		var bounds = this.getBounds(this);
-		if(this.get_mouseX() > bounds.width - 1) {
-			this.set_scrollH(this.get_scrollH() + (Math.max(Math.min((this.get_mouseX() - bounds.width) * .1,10),1) | 0));
-		} else if(this.get_mouseX() < 1) {
-			this.set_scrollH(this.get_scrollH() - (Math.max(Math.min(this.get_mouseX() * -.1,10),1) | 0));
-		}
-		this.__mouseScrollVCounter++;
-		if(this.__mouseScrollVCounter > this.stage.get_frameRate() / 10) {
-			if(this.get_mouseY() > bounds.height - 2) {
-				this.set_scrollV(Math.min(this.get_scrollV() + Math.max(Math.min((this.get_mouseY() - bounds.height) * .03,5),1),this.get_maxScrollV()) | 0);
-			} else if(this.get_mouseY() < 2) {
-				this.set_scrollV(this.get_scrollV() - (Math.max(Math.min(this.get_mouseY() * -.03,5),1) | 0));
-			}
-			this.__mouseScrollVCounter = 0;
-		}
-		this.stage_onMouseMove(null);
-	}
-	,__updateScrollH: function() {
-		this.__updateLayout();
-		var bounds = this.getBounds(this);
-		if(this.get_textWidth() <= bounds.width - 4) {
-			this.set_scrollH(0);
-			return;
-		}
-		var tempScrollH = this.get_scrollH();
-		if(this.__caretIndex == 0 || this.getLineOffset(this.getLineIndexOfChar(this.__caretIndex)) == this.__caretIndex) {
-			tempScrollH = 0;
-		} else {
-			var caret = openfl_geom_Rectangle.__pool.get();
-			var written = false;
-			if(this.__caretIndex < this.__text.length) {
-				written = this.__getCharBoundaries(this.__caretIndex,caret);
-			}
-			if(!written) {
-				this.__getCharBoundaries(this.__caretIndex - 1,caret);
-				caret.x += caret.width;
-			}
-			while(caret.x < tempScrollH && tempScrollH > 0) tempScrollH -= 24;
-			while(caret.x > tempScrollH + bounds.width - 4) tempScrollH += 24;
-			openfl_geom_Rectangle.__pool.release(caret);
-		}
-		if(tempScrollH > 0 && this.get_type() != 1) {
-			var lineLength = this.getLineLength(this.getLineIndexOfChar(this.__caretIndex));
-			if(this.get_scrollH() + bounds.width - 4 > lineLength) {
-				this.set_scrollH(Math.ceil(lineLength - bounds.width + 4));
-			}
-		}
-		if(tempScrollH < 0) {
-			this.set_scrollH(0);
-		} else if(tempScrollH > this.get_maxScrollH()) {
-			this.set_scrollH(this.get_maxScrollH());
-		} else {
-			this.set_scrollH(tempScrollH);
-		}
-	}
-	,__updateScrollV: function() {
-		this.__updateLayout();
-		if(this.get_textHeight() <= this.get_height() - 4) {
-			this.set_scrollV(1);
-			return;
-		}
-		var lineIndex = this.getLineIndexOfChar(this.__caretIndex);
-		if(lineIndex == -1 && this.__caretIndex > 0) {
-			lineIndex = this.getLineIndexOfChar(this.__caretIndex - 1) + 1;
-		}
-		if(lineIndex + 1 < this.get_scrollV()) {
-			this.set_scrollV(lineIndex + 1);
-		} else if(lineIndex + 1 > this.get_bottomScrollV()) {
-			var i = lineIndex;
-			var tempHeight = 0.0;
-			if(i >= this.__textEngine.lineHeights.get_length()) {
-				i = this.__textEngine.lineHeights.get_length() - 1;
-			}
-			while(i >= 0) {
-				tempHeight += this.__textEngine.lineHeights.get(i);
-				if(tempHeight > this.get_height() - 4) {
-					i += tempHeight - this.get_height() < 0 ? 1 : 2;
-					break;
-				}
-				--i;
-			}
-			this.set_scrollV(i);
-		} else {
-			this.set_scrollV(this.get_scrollV());
-		}
-	}
-	,__updateText: function(value) {
-		if(openfl_display_DisplayObject.__supportDOM && this.__renderedOnCanvasWhileOnDOM) {
-			this.__forceCachedBitmapUpdate = this.__text != value;
-		}
-		this.__textEngine.set_text(value);
-		this.__text = this.__textEngine.text;
-		if(this.stage != null && this.stage.get_focus() == this) {
-			if(this.__text.length < this.__selectionIndex) {
-				this.__selectionIndex = this.__text.length;
-			}
-			if(this.__text.length < this.__caretIndex) {
-				this.__caretIndex = this.__text.length;
-			}
-		} else if(this.__isHTML) {
-			this.__selectionIndex = this.__caretIndex = this.__text.length;
-		} else {
-			this.__selectionIndex = 0;
-			this.__caretIndex = 0;
-		}
-		if(!this.__displayAsPassword || openfl_display_DisplayObject.__supportDOM && !this.__renderedOnCanvasWhileOnDOM) {
-			this.__textEngine.set_text(this.__text);
-		} else {
-			var length = this.get_text().length;
-			var mask = "";
-			var _g = 0;
-			while(_g < length) {
-				++_g;
-				mask += "*";
-			}
-			this.__textEngine.set_text(mask);
-		}
-	}
-	,__updateTransforms: function(overrideTransform) {
-		openfl_display_InteractiveObject.prototype.__updateTransforms.call(this,overrideTransform);
-		var _this = this.__renderTransform;
-		var px = this.__offsetX;
-		var py = this.__offsetY;
-		_this.tx = px * _this.a + py * _this.c + _this.tx;
-		_this.ty = px * _this.b + py * _this.d + _this.ty;
-	}
-	,get_antiAliasType: function() {
-		return this.__textEngine.antiAliasType;
-	}
-	,set_antiAliasType: function(value) {
-		return this.__textEngine.antiAliasType = value;
-	}
-	,get_autoSize: function() {
-		return this.__textEngine.autoSize;
-	}
-	,set_autoSize: function(value) {
-		if(value != this.__textEngine.autoSize) {
-			this.__dirty = true;
-			this.__layoutDirty = true;
-			if(!this.__renderDirty) {
-				this.__renderDirty = true;
-				this.__setParentRenderDirty();
-			}
-		}
-		return this.__textEngine.autoSize = value;
-	}
-	,get_background: function() {
-		return this.__textEngine.background;
-	}
-	,set_background: function(value) {
-		if(value != this.__textEngine.background) {
-			this.__dirty = true;
-			if(!this.__renderDirty) {
-				this.__renderDirty = true;
-				this.__setParentRenderDirty();
-			}
-		}
-		return this.__textEngine.background = value;
-	}
-	,get_backgroundColor: function() {
-		return this.__textEngine.backgroundColor;
-	}
-	,set_backgroundColor: function(value) {
-		if(value != this.__textEngine.backgroundColor) {
-			this.__dirty = true;
-			if(!this.__renderDirty) {
-				this.__renderDirty = true;
-				this.__setParentRenderDirty();
-			}
-		}
-		return this.__textEngine.backgroundColor = value;
-	}
-	,get_border: function() {
-		return this.__textEngine.border;
-	}
-	,set_border: function(value) {
-		if(value != this.__textEngine.border) {
-			this.__dirty = true;
-			if(!this.__renderDirty) {
-				this.__renderDirty = true;
-				this.__setParentRenderDirty();
-			}
-		}
-		return this.__textEngine.border = value;
-	}
-	,get_borderColor: function() {
-		return this.__textEngine.borderColor;
-	}
-	,set_borderColor: function(value) {
-		if(value != this.__textEngine.borderColor) {
-			this.__dirty = true;
-			if(!this.__renderDirty) {
-				this.__renderDirty = true;
-				this.__setParentRenderDirty();
-			}
-		}
-		return this.__textEngine.borderColor = value;
-	}
-	,get_bottomScrollV: function() {
-		this.__updateLayout();
-		return this.__textEngine.get_bottomScrollV();
-	}
-	,get_caretIndex: function() {
-		return this.__caretIndex;
-	}
-	,get_defaultTextFormat: function() {
-		return this.__textFormat.clone();
-	}
-	,set_defaultTextFormat: function(value) {
-		this.__textFormat.__merge(value);
-		this.__layoutDirty = true;
-		this.__dirty = true;
-		if(!this.__renderDirty) {
-			this.__renderDirty = true;
-			this.__setParentRenderDirty();
-		}
-		return value;
-	}
-	,get_displayAsPassword: function() {
-		return this.__displayAsPassword;
-	}
-	,set_displayAsPassword: function(value) {
-		if(value != this.__displayAsPassword) {
-			this.__dirty = true;
-			this.__layoutDirty = true;
-			if(!this.__renderDirty) {
-				this.__renderDirty = true;
-				this.__setParentRenderDirty();
-			}
-			this.__displayAsPassword = value;
-			this.__updateText(this.__text);
-		}
-		return value;
-	}
-	,get_embedFonts: function() {
-		return this.__textEngine.embedFonts;
-	}
-	,set_embedFonts: function(value) {
-		return this.__textEngine.embedFonts = value;
-	}
-	,get_gridFitType: function() {
-		return this.__textEngine.gridFitType;
-	}
-	,set_gridFitType: function(value) {
-		return this.__textEngine.gridFitType = value;
-	}
-	,get_height: function() {
-		this.__updateLayout();
-		return this.__textEngine.height * Math.abs(this.get_scaleY());
-	}
-	,set_height: function(value) {
-		if(value != this.__textEngine.height) {
-			this.__setTransformDirty();
-			this.__dirty = true;
-			this.__layoutDirty = true;
-			if(!this.__renderDirty) {
-				this.__renderDirty = true;
-				this.__setParentRenderDirty();
-			}
-			this.__textEngine.height = value;
-		}
-		return this.__textEngine.height * Math.abs(this.get_scaleY());
-	}
-	,get_htmlText: function() {
-		if(this.__isHTML) {
-			return this.__htmlText;
-		} else {
-			return this.__text;
-		}
-	}
-	,set_htmlText: function(value) {
-		if(!this.__isHTML || this.__text != value) {
-			this.__dirty = true;
-			this.__layoutDirty = true;
-			if(!this.__renderDirty) {
-				this.__renderDirty = true;
-				this.__setParentRenderDirty();
-			}
-		}
-		this.__isHTML = true;
-		if(this.condenseWhite) {
-			var _this_r = new RegExp("\\s+","g".split("u").join(""));
-			value = value.replace(_this_r," ");
-		}
-		this.__htmlText = value;
-		value = openfl_text__$internal_HTMLParser.parse(value,this.get_multiline(),this.__styleSheet,this.__textFormat,this.__textEngine.textFormatRanges);
-		this.__updateText(value);
-		return value;
-	}
-	,get_length: function() {
-		if(this.__text != null) {
-			return this.__text.length;
-		}
-		return 0;
-	}
-	,get_maxChars: function() {
-		return this.__textEngine.maxChars;
-	}
-	,set_maxChars: function(value) {
-		if(value != this.__textEngine.maxChars) {
-			this.__textEngine.maxChars = value;
-			this.__dirty = true;
-			this.__layoutDirty = true;
-			if(!this.__renderDirty) {
-				this.__renderDirty = true;
-				this.__setParentRenderDirty();
-			}
-		}
-		return value;
-	}
-	,get_maxScrollH: function() {
-		this.__updateLayout();
-		return this.__textEngine.maxScrollH;
-	}
-	,get_maxScrollV: function() {
-		this.__updateLayout();
-		return this.__textEngine.get_maxScrollV();
-	}
-	,get_mouseWheelEnabled: function() {
-		return this.__mouseWheelEnabled;
-	}
-	,set_mouseWheelEnabled: function(value) {
-		return this.__mouseWheelEnabled = value;
-	}
-	,get_multiline: function() {
-		return this.__textEngine.multiline;
-	}
-	,set_multiline: function(value) {
-		return this.__textEngine.multiline = value;
-	}
-	,get_numLines: function() {
-		this.__updateLayout();
-		return this.__textEngine.numLines;
-	}
-	,get_restrict: function() {
-		return this.__textEngine.restrict;
-	}
-	,set_restrict: function(value) {
-		if(this.__textEngine.restrict != value) {
-			this.__textEngine.set_restrict(value);
-			this.__updateText(this.__text);
-		}
-		return value;
-	}
-	,get_scrollH: function() {
-		return this.__textEngine.scrollH;
-	}
-	,set_scrollH: function(value) {
-		this.__updateLayout();
-		if(value > this.__textEngine.maxScrollH) {
-			value = this.__textEngine.maxScrollH;
-		}
-		if(value < 0) {
-			value = 0;
-		}
-		if(value != this.__textEngine.scrollH) {
-			this.__dirty = true;
-			if(!this.__renderDirty) {
-				this.__renderDirty = true;
-				this.__setParentRenderDirty();
-			}
-			this.__textEngine.scrollH = value;
-			this.dispatchEvent(new openfl_events_Event("scroll"));
-		}
-		return this.__textEngine.scrollH;
-	}
-	,get_scrollV: function() {
-		return this.__textEngine.get_scrollV();
-	}
-	,set_scrollV: function(value) {
-		this.__updateLayout();
-		if(value != this.__textEngine.get_scrollV() || this.__textEngine.get_scrollV() == 0) {
-			this.__dirty = true;
-			if(!this.__renderDirty) {
-				this.__renderDirty = true;
-				this.__setParentRenderDirty();
-			}
-			this.__textEngine.set_scrollV(value);
-			this.dispatchEvent(new openfl_events_Event("scroll"));
-		}
-		return this.__textEngine.get_scrollV();
-	}
-	,get_selectable: function() {
-		return this.__textEngine.selectable;
-	}
-	,set_selectable: function(value) {
-		if(value != this.__textEngine.selectable && this.get_type() == 1) {
-			if(this.stage != null && this.stage.get_focus() == this) {
-				this.__startTextInput();
-			} else if(!value) {
-				this.__stopTextInput();
-			}
-		}
-		return this.__textEngine.selectable = value;
-	}
-	,get_selectionBeginIndex: function() {
-		return Math.min(this.__caretIndex,this.__selectionIndex) | 0;
-	}
-	,get_selectionEndIndex: function() {
-		return Math.max(this.__caretIndex,this.__selectionIndex) | 0;
-	}
-	,get_sharpness: function() {
-		return this.__textEngine.sharpness;
-	}
-	,set_sharpness: function(value) {
-		if(value != this.__textEngine.sharpness) {
-			this.__dirty = true;
-			if(!this.__renderDirty) {
-				this.__renderDirty = true;
-				this.__setParentRenderDirty();
-			}
-		}
-		return this.__textEngine.sharpness = value;
-	}
-	,get_styleSheet: function() {
-		return this.__styleSheet;
-	}
-	,set_styleSheet: function(value) {
-		if(!(this.__styleSheet != null && value == null)) {
-			if(value != null) {
-				if(this.__isHTML && value != this.__styleSheet) {
-					this.__dirty = true;
-					this.__layoutDirty = true;
-					if(!this.__renderDirty) {
-						this.__renderDirty = true;
-						this.__setParentRenderDirty();
-					}
-					this.set_htmlText(this.__htmlText);
-				}
-				this.set_type(0);
-			}
-		}
-		return this.__styleSheet = value;
-	}
-	,get_tabEnabled: function() {
-		if(this.__tabEnabled == null) {
-			return this.__textEngine.type == 1;
-		} else {
-			return this.__tabEnabled;
-		}
-	}
-	,get_text: function() {
-		return this.__text;
-	}
-	,set_text: function(value) {
-		if(this.__styleSheet != null) {
-			return this.set_htmlText(value);
-		}
-		if(this.__isHTML || this.__text != value) {
-			this.__dirty = true;
-			this.__layoutDirty = true;
-			if(!this.__renderDirty) {
-				this.__renderDirty = true;
-				this.__setParentRenderDirty();
-			}
-		} else {
-			return value;
-		}
-		if(this.__textEngine.textFormatRanges.get_length() > 1) {
-			var this1 = this.__textEngine.textFormatRanges;
-			var deleteCount = this.__textEngine.textFormatRanges.get_length() - 1;
-			var items = [];
-			this1.__tempIndex = 1;
-			var _g_current = 0;
-			while(_g_current < items.length) {
-				this1.insertAt(this1.__tempIndex,items[_g_current++]);
-				this1.__tempIndex++;
-			}
-			this1.splice(this1.__tempIndex,deleteCount);
-		}
-		var range = this.__textEngine.textFormatRanges.get(0);
-		range.format = this.__textFormat;
-		range.start = 0;
-		range.end = value.length;
-		this.__isHTML = false;
-		this.__updateText(value);
-		return value;
-	}
-	,get_textColor: function() {
-		return this.__textFormat.color;
-	}
-	,set_textColor: function(value) {
-		if(value != this.__textFormat.color) {
-			this.__dirty = true;
-			if(!this.__renderDirty) {
-				this.__renderDirty = true;
-				this.__setParentRenderDirty();
-			}
-		}
-		var range = this.__textEngine.textFormatRanges.iterator();
-		while(range.hasNext()) range.next().format.color = value;
-		return this.__textFormat.color = value;
-	}
-	,get_textWidth: function() {
-		this.__updateLayout();
-		return this.__textEngine.textWidth;
-	}
-	,get_textHeight: function() {
-		this.__updateLayout();
-		return this.__textEngine.textHeight;
-	}
-	,get_type: function() {
-		return this.__textEngine.type;
-	}
-	,set_type: function(value) {
-		if(this.__styleSheet != null) {
-			value = 0;
-		}
-		if(value != this.__textEngine.type) {
-			this.__textEngine.type = value;
-			if(value == 1) {
-				this.addEventListener("addedToStage",$bind(this,this.this_onAddedToStage));
-				this.this_onFocusIn(null);
-				this.__textEngine.__useIntAdvances = true;
-			} else {
-				this.removeEventListener("addedToStage",$bind(this,this.this_onAddedToStage));
-				this.__stopTextInput();
-				this.__textEngine.__useIntAdvances = null;
-			}
-			this.__dirty = true;
-			this.__layoutDirty = true;
-			if(!this.__renderDirty) {
-				this.__renderDirty = true;
-				this.__setParentRenderDirty();
-			}
-		}
-		return this.__textEngine.type;
-	}
-	,get_width: function() {
-		this.__updateLayout();
-		return this.__textEngine.width * Math.abs(this.__scaleX);
-	}
-	,set_width: function(value) {
-		if(value != this.__textEngine.width) {
-			this.__setTransformDirty();
-			this.__dirty = true;
-			this.__layoutDirty = true;
-			if(!this.__renderDirty) {
-				this.__renderDirty = true;
-				this.__setParentRenderDirty();
-			}
-			this.__textEngine.width = value;
-		}
-		return this.__textEngine.width * Math.abs(this.__scaleX);
-	}
-	,get_wordWrap: function() {
-		return this.__textEngine.wordWrap;
-	}
-	,set_wordWrap: function(value) {
-		if(value != this.__textEngine.wordWrap) {
-			this.__dirty = true;
-			this.__layoutDirty = true;
-			if(!this.__renderDirty) {
-				this.__renderDirty = true;
-				this.__setParentRenderDirty();
-			}
-		}
-		return this.__textEngine.wordWrap = value;
-	}
-	,get_x: function() {
-		return this.__transform.tx + this.__offsetX;
-	}
-	,set_x: function(value) {
-		if(value != this.__transform.tx + this.__offsetX) {
-			this.__setTransformDirty();
-		}
-		this.__transform.tx = value - this.__offsetX;
-		return value;
-	}
-	,get_y: function() {
-		return this.__transform.ty + this.__offsetY;
-	}
-	,set_y: function(value) {
-		if(value != this.__transform.ty + this.__offsetY) {
-			this.__setTransformDirty();
-		}
-		this.__transform.ty = value - this.__offsetY;
-		return value;
-	}
-	,stage_onMouseMove: function(event) {
-		if(this.stage == null) {
-			return;
-		}
-		if(this.get_selectable() && this.__selectionIndex >= 0) {
-			this.__updateLayout();
-			var position = this.__getPosition(this.get_mouseX() + this.get_scrollH(),this.get_mouseY());
-			if(position != this.__caretIndex) {
-				this.__caretIndex = position;
-				var setDirty = true;
-				if(openfl_display_DisplayObject.__supportDOM) {
-					if(this.__renderedOnCanvasWhileOnDOM) {
-						this.__forceCachedBitmapUpdate = true;
-					}
-					setDirty = false;
-				}
-				if(setDirty) {
-					this.__dirty = true;
-					if(!this.__renderDirty) {
-						this.__renderDirty = true;
-						this.__setParentRenderDirty();
-					}
-				}
-			}
-		}
-	}
-	,stage_onMouseUp: function(event) {
-		var stage = event.currentTarget;
-		stage.removeEventListener("enterFrame",$bind(this,this.this_onEnterFrame));
-		stage.removeEventListener("mouseMove",$bind(this,this.stage_onMouseMove));
-		stage.removeEventListener("mouseUp",$bind(this,this.stage_onMouseUp));
-		if(this.stage != stage) {
-			return;
-		}
-		if(stage.get_focus() == this) {
-			this.__getWorldTransform();
-			this.__updateLayout();
-			var upPos = this.__getPosition(this.get_mouseX() + this.get_scrollH(),this.get_mouseY());
-			var rightPos = Math.max(this.__selectionIndex,upPos) | 0;
-			this.__selectionIndex = Math.min(this.__selectionIndex,upPos) | 0;
-			this.__caretIndex = rightPos;
-			if(this.__inputEnabled) {
-				this.this_onFocusIn(null);
-				this.__stopCursorTimer();
-				this.__startCursorTimer();
-				if(openfl_display_DisplayObject.__supportDOM && this.__renderedOnCanvasWhileOnDOM) {
-					this.__forceCachedBitmapUpdate = true;
-				}
-			}
-		}
-	}
-	,this_onAddedToStage: function(event) {
-		this.this_onFocusIn(null);
-	}
-	,this_onEnterFrame: function(e) {
-		this.__updateMouseDrag();
-	}
-	,this_onFocusIn: function(event) {
-		if(this.get_type() == 1 && this.stage != null && this.stage.get_focus() == this) {
-			this.__startTextInput();
-		} else if(this.get_type() != 1 && this.get_selectable() && this.stage != null && this.stage.get_focus() == this) {
-			this.__startCursorTimer();
-		}
-	}
-	,this_onFocusOut: function(event) {
-		this.__stopCursorTimer();
-		this.__stopTextInput();
-		if(this.__selectionIndex != this.__caretIndex) {
-			this.__selectionIndex = this.__caretIndex;
-			this.__dirty = true;
-			if(!this.__renderDirty) {
-				this.__renderDirty = true;
-				this.__setParentRenderDirty();
-			}
-		}
-	}
-	,this_onKeyDown: function(event) {
-		if(this.get_selectable() && this.get_type() != 1 && event.keyCode == 67 && (event.commandKey || event.ctrlKey)) {
-			if(this.__caretIndex != this.__selectionIndex && !this.get_displayAsPassword()) {
-				lime_system_Clipboard.set_text(this.__text.substring(this.__caretIndex,this.__selectionIndex));
-			}
-		}
-	}
-	,this_onMouseDown: function(event) {
-		if(!this.get_selectable() && this.get_type() != 1) {
-			return;
-		}
-		this.__updateLayout();
-		this.__caretIndex = this.__getPosition(this.get_mouseX() + this.get_scrollH(),this.get_mouseY());
-		this.__selectionIndex = this.__caretIndex;
-		if(!openfl_display_DisplayObject.__supportDOM) {
-			this.__dirty = true;
-			if(!this.__renderDirty) {
-				this.__renderDirty = true;
-				this.__setParentRenderDirty();
-			}
-		}
-		if(this.stage == null) {
-			return;
-		}
-		this.stage.addEventListener("enterFrame",$bind(this,this.this_onEnterFrame));
-		this.stage.addEventListener("mouseMove",$bind(this,this.stage_onMouseMove));
-		this.stage.addEventListener("mouseUp",$bind(this,this.stage_onMouseUp));
-	}
-	,this_onMouseWheel: function(event) {
-		if(this.get_mouseWheelEnabled()) {
-			this.set_scrollV(Math.min(this.get_scrollV() - event.delta,this.get_maxScrollV()) | 0);
-		}
-	}
-	,this_onDoubleClick: function(event) {
-		if(this.get_selectable()) {
-			this.__updateLayout();
-			var delimiters = ["\n",".","!","?",","," ",";",":","(",")","-","_","/"];
-			var txtStr = this.__text;
-			var leftPos = -1;
-			var rightPos = txtStr.length;
-			var pos = 0;
-			var startPos = Math.max(this.__caretIndex,1) | 0;
-			if(txtStr.length > 0 && this.__caretIndex >= 0 && rightPos >= this.__caretIndex) {
-				var _g = 0;
-				while(_g < delimiters.length) {
-					var c = delimiters[_g];
-					++_g;
-					pos = txtStr.lastIndexOf(c,startPos - 1);
-					if(pos > leftPos) {
-						leftPos = pos + 1;
-					}
-					pos = txtStr.indexOf(c,startPos);
-					if(pos < rightPos && pos != -1) {
-						rightPos = pos;
-					}
-				}
-				if(leftPos != rightPos) {
-					this.setSelection(leftPos,rightPos);
-					var setDirty = true;
-					if(openfl_display_DisplayObject.__supportDOM) {
-						if(this.__renderedOnCanvasWhileOnDOM) {
-							this.__forceCachedBitmapUpdate = true;
-						}
-						setDirty = false;
-					}
-					if(setDirty) {
-						this.__dirty = true;
-						if(!this.__renderDirty) {
-							this.__renderDirty = true;
-							this.__setParentRenderDirty();
-						}
-					}
-				}
-			}
-		}
-	}
-	,window_onKeyDown: function(key,modifier) {
-		switch(key) {
-		case 8:
-			if(this.__selectionIndex == this.__caretIndex && this.__caretIndex > 0) {
-				this.__selectionIndex = this.__caretIndex - 1;
-			}
-			if(this.__selectionIndex != this.__caretIndex) {
-				this.replaceSelectedText("");
-				this.__selectionIndex = this.__caretIndex;
-				this.dispatchEvent(new openfl_events_Event("change",true));
-			} else {
-				this.__stopCursorTimer();
-				this.__startCursorTimer();
-			}
-			break;
-		case 97:
-			if(this.get_selectable()) {
-				if(lime_ui_KeyModifier.get_metaKey(modifier) || lime_ui_KeyModifier.get_ctrlKey(modifier)) {
-					this.setSelection(0,this.__text.length);
-				}
-			}
-			break;
-		case 99:
-			if(lime_ui_KeyModifier.get_metaKey(modifier) || lime_ui_KeyModifier.get_ctrlKey(modifier)) {
-				if(this.__caretIndex != this.__selectionIndex && !this.get_displayAsPassword()) {
-					lime_system_Clipboard.set_text(this.__text.substring(this.__caretIndex,this.__selectionIndex));
-				}
-			}
-			break;
-		case 120:
-			if(lime_ui_KeyModifier.get_metaKey(modifier) || lime_ui_KeyModifier.get_ctrlKey(modifier)) {
-				if(this.__caretIndex != this.__selectionIndex && !this.get_displayAsPassword()) {
-					lime_system_Clipboard.set_text(this.__text.substring(this.__caretIndex,this.__selectionIndex));
-					this.replaceSelectedText("");
-					this.dispatchEvent(new openfl_events_Event("change",true));
-				}
-			}
-			break;
-		case 127:
-			if(this.__selectionIndex == this.__caretIndex && this.__caretIndex < this.__text.length) {
-				this.__selectionIndex = this.__caretIndex + 1;
-			}
-			if(this.__selectionIndex != this.__caretIndex) {
-				this.replaceSelectedText("");
-				this.__selectionIndex = this.__caretIndex;
-				this.dispatchEvent(new openfl_events_Event("change",true));
-			} else {
-				this.__stopCursorTimer();
-				this.__startCursorTimer();
-			}
-			break;
-		case 1073741898:
-			if(this.get_selectable()) {
-				if(lime_ui_KeyModifier.get_metaKey(modifier) || lime_ui_KeyModifier.get_ctrlKey(modifier)) {
-					this.__caretIndex = 0;
-				} else {
-					this.__caretBeginningOfLine();
-				}
-				if(!lime_ui_KeyModifier.get_shiftKey(modifier)) {
-					this.__selectionIndex = this.__caretIndex;
-				}
-				this.setSelection(this.__selectionIndex,this.__caretIndex);
-			}
-			break;
-		case 1073741901:
-			if(this.get_selectable()) {
-				if(lime_ui_KeyModifier.get_metaKey(modifier) || lime_ui_KeyModifier.get_ctrlKey(modifier)) {
-					this.__caretIndex = this.__text.length;
-				} else {
-					this.__caretEndOfLine();
-				}
-				if(!lime_ui_KeyModifier.get_shiftKey(modifier)) {
-					this.__selectionIndex = this.__caretIndex;
-				}
-				this.setSelection(this.__selectionIndex,this.__caretIndex);
-			}
-			break;
-		case 1073741903:
-			if(this.get_selectable()) {
-				if(lime_ui_KeyModifier.get_metaKey(modifier) || lime_ui_KeyModifier.get_ctrlKey(modifier)) {
-					this.__caretBeginningOfNextLine();
-				} else {
-					this.__caretNextCharacter();
-				}
-				if(!lime_ui_KeyModifier.get_shiftKey(modifier)) {
-					this.__selectionIndex = this.__caretIndex;
-				}
-				this.setSelection(this.__selectionIndex,this.__caretIndex);
-			}
-			break;
-		case 1073741904:
-			if(this.get_selectable()) {
-				if(lime_ui_KeyModifier.get_metaKey(modifier) || lime_ui_KeyModifier.get_ctrlKey(modifier)) {
-					this.__caretBeginningOfPreviousLine();
-				} else {
-					this.__caretPreviousCharacter();
-				}
-				if(!lime_ui_KeyModifier.get_shiftKey(modifier)) {
-					this.__selectionIndex = this.__caretIndex;
-				}
-				this.setSelection(this.__selectionIndex,this.__caretIndex);
-			}
-			break;
-		case 1073741905:
-			if(this.get_selectable()) {
-				if(lime_ui_KeyModifier.get_metaKey(modifier) || lime_ui_KeyModifier.get_ctrlKey(modifier)) {
-					this.__caretIndex = this.__text.length;
-				} else {
-					this.__caretNextLine();
-				}
-				if(!lime_ui_KeyModifier.get_shiftKey(modifier)) {
-					this.__selectionIndex = this.__caretIndex;
-				}
-				this.setSelection(this.__selectionIndex,this.__caretIndex);
-			}
-			break;
-		case 1073741906:
-			if(this.get_selectable()) {
-				if(lime_ui_KeyModifier.get_metaKey(modifier) || lime_ui_KeyModifier.get_ctrlKey(modifier)) {
-					this.__caretIndex = 0;
-				} else {
-					this.__caretPreviousLine();
-				}
-				if(!lime_ui_KeyModifier.get_shiftKey(modifier)) {
-					this.__selectionIndex = this.__caretIndex;
-				}
-				this.setSelection(this.__selectionIndex,this.__caretIndex);
-			}
-			break;
-		case 13:case 1073741912:
-			if(this.__textEngine.multiline) {
-				var te = new openfl_events_TextEvent("textInput",true,true,"\n");
-				this.dispatchEvent(te);
-				if(!te.isDefaultPrevented()) {
-					this.__replaceSelectedText("\n",true);
-					this.dispatchEvent(new openfl_events_Event("change",true));
-				}
-			} else {
-				this.__stopCursorTimer();
-				this.__startCursorTimer();
-			}
-			break;
-		default:
-		}
-	}
-	,window_onTextInput: function(value) {
-		this.__replaceSelectedText(value,true);
-		this.dispatchEvent(new openfl_events_Event("change",true));
-	}
-	,__class__: openfl_text_TextField
-	,__properties__: $extend(openfl_display_InteractiveObject.prototype.__properties__,{set_wordWrap:"set_wordWrap",get_wordWrap:"get_wordWrap",set_type:"set_type",get_type:"get_type",get_textWidth:"get_textWidth",get_textHeight:"get_textHeight",set_textColor:"set_textColor",get_textColor:"get_textColor",set_text:"set_text",get_text:"get_text",set_styleSheet:"set_styleSheet",get_styleSheet:"get_styleSheet",set_sharpness:"set_sharpness",get_sharpness:"get_sharpness",get_selectionEndIndex:"get_selectionEndIndex",get_selectionBeginIndex:"get_selectionBeginIndex",set_selectable:"set_selectable",get_selectable:"get_selectable",set_scrollV:"set_scrollV",get_scrollV:"get_scrollV",set_scrollH:"set_scrollH",get_scrollH:"get_scrollH",set_restrict:"set_restrict",get_restrict:"get_restrict",get_numLines:"get_numLines",set_multiline:"set_multiline",get_multiline:"get_multiline",set_mouseWheelEnabled:"set_mouseWheelEnabled",get_mouseWheelEnabled:"get_mouseWheelEnabled",get_maxScrollV:"get_maxScrollV",get_maxScrollH:"get_maxScrollH",set_maxChars:"set_maxChars",get_maxChars:"get_maxChars",get_length:"get_length",set_htmlText:"set_htmlText",get_htmlText:"get_htmlText",set_gridFitType:"set_gridFitType",get_gridFitType:"get_gridFitType",set_embedFonts:"set_embedFonts",get_embedFonts:"get_embedFonts",set_displayAsPassword:"set_displayAsPassword",get_displayAsPassword:"get_displayAsPassword",set_defaultTextFormat:"set_defaultTextFormat",get_defaultTextFormat:"get_defaultTextFormat",get_caretIndex:"get_caretIndex",get_bottomScrollV:"get_bottomScrollV",set_borderColor:"set_borderColor",get_borderColor:"get_borderColor",set_border:"set_border",get_border:"get_border",set_backgroundColor:"set_backgroundColor",get_backgroundColor:"get_backgroundColor",set_background:"set_background",get_background:"get_background",set_autoSize:"set_autoSize",get_autoSize:"get_autoSize",set_antiAliasType:"set_antiAliasType",get_antiAliasType:"get_antiAliasType"})
-});
 var openfl_text_TextFieldAutoSize = {};
 openfl_text_TextFieldAutoSize.fromString = function(value) {
 	switch(value) {
@@ -128622,10 +128029,10 @@ room_TrainingRoom.prototype = $extend(state_BaseGameState.prototype,{
 });
 var shader_BloomShader = function() {
 	if(this.__glFragmentSource == null) {
-		this.__glFragmentSource = "// src https://www.shadertoy.com/view/lsXGWn\r\n\r\nvarying float openfl_Alphav;\n\t\tvarying vec4 openfl_ColorMultiplierv;\n\t\tvarying vec4 openfl_ColorOffsetv;\n\t\tvarying vec2 openfl_TextureCoordv;\n\n\t\tuniform bool openfl_HasColorTransform;\n\t\tuniform vec2 openfl_TextureSize;\n\t\tuniform sampler2D bitmap;\n\r\n\t\tuniform bool hasTransform;\r\n\t\tuniform bool hasColorTransform;\r\n\r\n\t\tvec4 flixel_texture2D(sampler2D bitmap, vec2 coord)\r\n\t\t{\r\n\t\t\tvec4 color = texture2D(bitmap, coord);\r\n\t\t\tif (!hasTransform)\r\n\t\t\t{\r\n\t\t\t\treturn color;\r\n\t\t\t}\r\n\r\n\t\t\tif (color.a == 0.0)\r\n\t\t\t{\r\n\t\t\t\treturn vec4(0.0, 0.0, 0.0, 0.0);\r\n\t\t\t}\r\n\r\n\t\t\tif (!hasColorTransform)\r\n\t\t\t{\r\n\t\t\t\treturn color * openfl_Alphav;\r\n\t\t\t}\r\n\r\n\t\t\tcolor = vec4(color.rgb / color.a, color.a);\r\n\r\n\t\t\tmat4 colorMultiplier = mat4(0);\r\n\t\t\tcolorMultiplier[0][0] = openfl_ColorMultiplierv.x;\r\n\t\t\tcolorMultiplier[1][1] = openfl_ColorMultiplierv.y;\r\n\t\t\tcolorMultiplier[2][2] = openfl_ColorMultiplierv.z;\r\n\t\t\tcolorMultiplier[3][3] = openfl_ColorMultiplierv.w;\r\n\r\n\t\t\tcolor = clamp(openfl_ColorOffsetv + (color * colorMultiplier), 0.0, 1.0);\r\n\r\n\t\t\tif (color.a > 0.0)\r\n\t\t\t{\r\n\t\t\t\treturn vec4(color.rgb * color.a * openfl_Alphav, color.a * openfl_Alphav);\r\n\t\t\t}\r\n\t\t\treturn vec4(0.0, 0.0, 0.0, 0.0);\r\n\t\t}\r\n\t\n\r\n\r\n// uniform float blurSize;\r\n// uniform float intensity;\r\nfloat blurSize = 1.0/256.0;\r\nfloat intensity = 0.25;\r\n\r\nvoid main()\r\n{\r\n   vec4 color = vec4(0.0);\r\n   vec2 uv = openfl_TextureCoordv.xy;\r\n\r\n   //thank you! http://www.gamerendering.com/2008/10/11/gaussian-blur-filter-shader/ for the \r\n   //blur tutorial\r\n   // blur in x (horizontal)\r\n   // take nine samples, with the distance blurSize between them\r\n   color += texture2D(bitmap, vec2(uv.x - 4.0*blurSize, uv.y)) * 0.05;\r\n   color += texture2D(bitmap, vec2(uv.x - 3.0*blurSize, uv.y)) * 0.09;\r\n   color += texture2D(bitmap, vec2(uv.x - 2.0*blurSize, uv.y)) * 0.12;\r\n   color += texture2D(bitmap, vec2(uv.x - blurSize, uv.y)) * 0.15;\r\n   color += texture2D(bitmap, vec2(uv.x, uv.y)) * 0.16;\r\n   color += texture2D(bitmap, vec2(uv.x + blurSize, uv.y)) * 0.15;\r\n   color += texture2D(bitmap, vec2(uv.x + 2.0*blurSize, uv.y)) * 0.12;\r\n   color += texture2D(bitmap, vec2(uv.x + 3.0*blurSize, uv.y)) * 0.09;\r\n   color += texture2D(bitmap, vec2(uv.x + 4.0*blurSize, uv.y)) * 0.05;\r\n\t\r\n\t// blur in y (vertical)\r\n   // take nine samples, with the distance blurSize between them\r\n   color += texture2D(bitmap, vec2(uv.x, uv.y - 4.0*blurSize)) * 0.05;\r\n   color += texture2D(bitmap, vec2(uv.x, uv.y - 3.0*blurSize)) * 0.09;\r\n   color += texture2D(bitmap, vec2(uv.x, uv.y - 2.0*blurSize)) * 0.12;\r\n   color += texture2D(bitmap, vec2(uv.x, uv.y - blurSize)) * 0.15;\r\n   color += texture2D(bitmap, vec2(uv.x, uv.y)) * 0.16;\r\n   color += texture2D(bitmap, vec2(uv.x, uv.y + blurSize)) * 0.15;\r\n   color += texture2D(bitmap, vec2(uv.x, uv.y + 2.0*blurSize)) * 0.12;\r\n   color += texture2D(bitmap, vec2(uv.x, uv.y + 3.0*blurSize)) * 0.09;\r\n   color += texture2D(bitmap, vec2(uv.x, uv.y + 4.0*blurSize)) * 0.05;\r\n\r\n\t// original\r\n\t//gl_FragColor = color*intensity + texture2D(bitmap, uv);\r\n\r\n\tvec4 origColor = texture2D(bitmap, uv);\r\n\r\n   // SCREEN blending\r\n\tgl_FragColor = 1.0-(1.0-origColor)*(1.0-color*intensity);\r\n\r\n   // gl_FragColor = color*intensity + origColor;\r\n}";
+		this.__glFragmentSource = "// src https://www.shadertoy.com/view/lsXGWn\r\n\r\nvarying float openfl_Alphav;\r\n\t\tvarying vec4 openfl_ColorMultiplierv;\r\n\t\tvarying vec4 openfl_ColorOffsetv;\r\n\t\tvarying vec2 openfl_TextureCoordv;\r\n\r\n\t\tuniform bool openfl_HasColorTransform;\r\n\t\tuniform vec2 openfl_TextureSize;\r\n\t\tuniform sampler2D bitmap;\n\r\n\t\tuniform bool hasTransform;\r\n\t\tuniform bool hasColorTransform;\r\n\r\n\t\tvec4 flixel_texture2D(sampler2D bitmap, vec2 coord)\r\n\t\t{\r\n\t\t\tvec4 color = texture2D(bitmap, coord);\r\n\t\t\tif (!hasTransform)\r\n\t\t\t{\r\n\t\t\t\treturn color;\r\n\t\t\t}\r\n\r\n\t\t\tif (color.a == 0.0)\r\n\t\t\t{\r\n\t\t\t\treturn vec4(0.0, 0.0, 0.0, 0.0);\r\n\t\t\t}\r\n\r\n\t\t\tif (!hasColorTransform)\r\n\t\t\t{\r\n\t\t\t\treturn color * openfl_Alphav;\r\n\t\t\t}\r\n\r\n\t\t\tcolor = vec4(color.rgb / color.a, color.a);\r\n\r\n\t\t\tmat4 colorMultiplier = mat4(0);\r\n\t\t\tcolorMultiplier[0][0] = openfl_ColorMultiplierv.x;\r\n\t\t\tcolorMultiplier[1][1] = openfl_ColorMultiplierv.y;\r\n\t\t\tcolorMultiplier[2][2] = openfl_ColorMultiplierv.z;\r\n\t\t\tcolorMultiplier[3][3] = openfl_ColorMultiplierv.w;\r\n\r\n\t\t\tcolor = clamp(openfl_ColorOffsetv + (color * colorMultiplier), 0.0, 1.0);\r\n\r\n\t\t\tif (color.a > 0.0)\r\n\t\t\t{\r\n\t\t\t\treturn vec4(color.rgb * color.a * openfl_Alphav, color.a * openfl_Alphav);\r\n\t\t\t}\r\n\t\t\treturn vec4(0.0, 0.0, 0.0, 0.0);\r\n\t\t}\r\n\t\n\r\n\r\n// uniform float blurSize;\r\n// uniform float intensity;\r\nfloat blurSize = 1.0/256.0;\r\nfloat intensity = 0.25;\r\n\r\nvoid main()\r\n{\r\n   vec4 color = vec4(0.0);\r\n   vec2 uv = openfl_TextureCoordv.xy;\r\n\r\n   //thank you! http://www.gamerendering.com/2008/10/11/gaussian-blur-filter-shader/ for the \r\n   //blur tutorial\r\n   // blur in x (horizontal)\r\n   // take nine samples, with the distance blurSize between them\r\n   color += texture2D(bitmap, vec2(uv.x - 4.0*blurSize, uv.y)) * 0.05;\r\n   color += texture2D(bitmap, vec2(uv.x - 3.0*blurSize, uv.y)) * 0.09;\r\n   color += texture2D(bitmap, vec2(uv.x - 2.0*blurSize, uv.y)) * 0.12;\r\n   color += texture2D(bitmap, vec2(uv.x - blurSize, uv.y)) * 0.15;\r\n   color += texture2D(bitmap, vec2(uv.x, uv.y)) * 0.16;\r\n   color += texture2D(bitmap, vec2(uv.x + blurSize, uv.y)) * 0.15;\r\n   color += texture2D(bitmap, vec2(uv.x + 2.0*blurSize, uv.y)) * 0.12;\r\n   color += texture2D(bitmap, vec2(uv.x + 3.0*blurSize, uv.y)) * 0.09;\r\n   color += texture2D(bitmap, vec2(uv.x + 4.0*blurSize, uv.y)) * 0.05;\r\n\t\r\n\t// blur in y (vertical)\r\n   // take nine samples, with the distance blurSize between them\r\n   color += texture2D(bitmap, vec2(uv.x, uv.y - 4.0*blurSize)) * 0.05;\r\n   color += texture2D(bitmap, vec2(uv.x, uv.y - 3.0*blurSize)) * 0.09;\r\n   color += texture2D(bitmap, vec2(uv.x, uv.y - 2.0*blurSize)) * 0.12;\r\n   color += texture2D(bitmap, vec2(uv.x, uv.y - blurSize)) * 0.15;\r\n   color += texture2D(bitmap, vec2(uv.x, uv.y)) * 0.16;\r\n   color += texture2D(bitmap, vec2(uv.x, uv.y + blurSize)) * 0.15;\r\n   color += texture2D(bitmap, vec2(uv.x, uv.y + 2.0*blurSize)) * 0.12;\r\n   color += texture2D(bitmap, vec2(uv.x, uv.y + 3.0*blurSize)) * 0.09;\r\n   color += texture2D(bitmap, vec2(uv.x, uv.y + 4.0*blurSize)) * 0.05;\r\n\r\n\t// original\r\n\t//gl_FragColor = color*intensity + texture2D(bitmap, uv);\r\n\r\n\tvec4 origColor = texture2D(bitmap, uv);\r\n\r\n   // SCREEN blending\r\n\tgl_FragColor = 1.0-(1.0-origColor)*(1.0-color*intensity);\r\n\r\n   // gl_FragColor = color*intensity + origColor;\r\n}";
 	}
 	if(this.__glVertexSource == null) {
-		this.__glVertexSource = "\r\n\t\tattribute float openfl_Alpha;\n\t\tattribute vec4 openfl_ColorMultiplier;\n\t\tattribute vec4 openfl_ColorOffset;\n\t\tattribute vec4 openfl_Position;\n\t\tattribute vec2 openfl_TextureCoord;\n\n\t\tvarying float openfl_Alphav;\n\t\tvarying vec4 openfl_ColorMultiplierv;\n\t\tvarying vec4 openfl_ColorOffsetv;\n\t\tvarying vec2 openfl_TextureCoordv;\n\n\t\tuniform mat4 openfl_Matrix;\n\t\tuniform bool openfl_HasColorTransform;\n\t\tuniform vec2 openfl_TextureSize;\n\r\n\t\t\r\n\t\tattribute float alpha;\r\n\t\tattribute vec4 colorMultiplier;\r\n\t\tattribute vec4 colorOffset;\r\n\t\tuniform bool hasColorTransform;\r\n\t\t\r\n\t\tvoid main(void)\r\n\t\t{\r\n\t\t\topenfl_Alphav = openfl_Alpha;\n\t\topenfl_TextureCoordv = openfl_TextureCoord;\n\n\t\tif (openfl_HasColorTransform) {\n\n\t\t\topenfl_ColorMultiplierv = openfl_ColorMultiplier;\n\t\t\topenfl_ColorOffsetv = openfl_ColorOffset / 255.0;\n\n\t\t}\n\n\t\tgl_Position = openfl_Matrix * openfl_Position;\n\r\n\t\t\t\r\n\t\t\topenfl_Alphav = openfl_Alpha * alpha;\r\n\t\t\t\r\n\t\t\tif (hasColorTransform)\r\n\t\t\t{\r\n\t\t\t\topenfl_ColorOffsetv = colorOffset / 255.0;\r\n\t\t\t\topenfl_ColorMultiplierv = colorMultiplier;\r\n\t\t\t}\r\n\t\t}";
+		this.__glVertexSource = "\r\n\t\tattribute float openfl_Alpha;\r\n\t\tattribute vec4 openfl_ColorMultiplier;\r\n\t\tattribute vec4 openfl_ColorOffset;\r\n\t\tattribute vec4 openfl_Position;\r\n\t\tattribute vec2 openfl_TextureCoord;\r\n\r\n\t\tvarying float openfl_Alphav;\r\n\t\tvarying vec4 openfl_ColorMultiplierv;\r\n\t\tvarying vec4 openfl_ColorOffsetv;\r\n\t\tvarying vec2 openfl_TextureCoordv;\r\n\r\n\t\tuniform mat4 openfl_Matrix;\r\n\t\tuniform bool openfl_HasColorTransform;\r\n\t\tuniform vec2 openfl_TextureSize;\n\r\n\t\t\r\n\t\tattribute float alpha;\r\n\t\tattribute vec4 colorMultiplier;\r\n\t\tattribute vec4 colorOffset;\r\n\t\tuniform bool hasColorTransform;\r\n\t\t\r\n\t\tvoid main(void)\r\n\t\t{\r\n\t\t\topenfl_Alphav = openfl_Alpha;\r\n\t\topenfl_TextureCoordv = openfl_TextureCoord;\r\n\r\n\t\tif (openfl_HasColorTransform) {\r\n\r\n\t\t\topenfl_ColorMultiplierv = openfl_ColorMultiplier;\r\n\t\t\topenfl_ColorOffsetv = openfl_ColorOffset / 255.0;\r\n\r\n\t\t}\r\n\r\n\t\tgl_Position = openfl_Matrix * openfl_Position;\n\r\n\t\t\t\r\n\t\t\topenfl_Alphav = openfl_Alpha * alpha;\r\n\t\t\t\r\n\t\t\tif (hasColorTransform)\r\n\t\t\t{\r\n\t\t\t\topenfl_ColorOffsetv = colorOffset / 255.0;\r\n\t\t\t\topenfl_ColorMultiplierv = colorMultiplier;\r\n\t\t\t}\r\n\t\t}";
 	}
 	flixel_graphics_tile_FlxGraphicsShader.call(this);
 	this.__isGenerated = true;
@@ -128641,10 +128048,10 @@ shader_BloomShader.prototype = $extend(flixel_graphics_tile_FlxGraphicsShader.pr
 });
 var shader_CrtShader = function() {
 	if(this.__glFragmentSource == null) {
-		this.__glFragmentSource = "// load custom texture example:\r\n// https://www.shadertoy.com/view/lsGGDd\r\n\r\n// other examples of \"Barrel Distortion\"\r\n// https://www.shadertoy.com/view/4tVSRw\r\n// https://www.shadertoy.com/view/lslGRN\r\n// https://www.shadertoy.com/view/4sXcDN\r\n\r\n\r\n// see other crt shaders\r\n// https://www.shadertoy.com/view/DlfSz8\r\n\r\n// found the original source of this shader https://www.shadertoy.com/view/WdjfDy\r\n\r\nvarying float openfl_Alphav;\n\t\tvarying vec4 openfl_ColorMultiplierv;\n\t\tvarying vec4 openfl_ColorOffsetv;\n\t\tvarying vec2 openfl_TextureCoordv;\n\n\t\tuniform bool openfl_HasColorTransform;\n\t\tuniform vec2 openfl_TextureSize;\n\t\tuniform sampler2D bitmap;\n\r\n\t\tuniform bool hasTransform;\r\n\t\tuniform bool hasColorTransform;\r\n\r\n\t\tvec4 flixel_texture2D(sampler2D bitmap, vec2 coord)\r\n\t\t{\r\n\t\t\tvec4 color = texture2D(bitmap, coord);\r\n\t\t\tif (!hasTransform)\r\n\t\t\t{\r\n\t\t\t\treturn color;\r\n\t\t\t}\r\n\r\n\t\t\tif (color.a == 0.0)\r\n\t\t\t{\r\n\t\t\t\treturn vec4(0.0, 0.0, 0.0, 0.0);\r\n\t\t\t}\r\n\r\n\t\t\tif (!hasColorTransform)\r\n\t\t\t{\r\n\t\t\t\treturn color * openfl_Alphav;\r\n\t\t\t}\r\n\r\n\t\t\tcolor = vec4(color.rgb / color.a, color.a);\r\n\r\n\t\t\tmat4 colorMultiplier = mat4(0);\r\n\t\t\tcolorMultiplier[0][0] = openfl_ColorMultiplierv.x;\r\n\t\t\tcolorMultiplier[1][1] = openfl_ColorMultiplierv.y;\r\n\t\t\tcolorMultiplier[2][2] = openfl_ColorMultiplierv.z;\r\n\t\t\tcolorMultiplier[3][3] = openfl_ColorMultiplierv.w;\r\n\r\n\t\t\tcolor = clamp(openfl_ColorOffsetv + (color * colorMultiplier), 0.0, 1.0);\r\n\r\n\t\t\tif (color.a > 0.0)\r\n\t\t\t{\r\n\t\t\t\treturn vec4(color.rgb * color.a * openfl_Alphav, color.a * openfl_Alphav);\r\n\t\t\t}\r\n\t\t\treturn vec4(0.0, 0.0, 0.0, 0.0);\r\n\t\t}\r\n\t\n\r\n\r\n#define PI 3.1415926535\r\n\r\nuniform float iTime;\r\n\r\nvec2 curve(vec2 uv)\r\n{\r\n\tuv = (uv - 0.5) * 2.0;\r\n\tuv *= 1.00;\t\r\n\tuv.x *= 1. + pow((abs(uv.y) / 5.0), 2.);\r\n\tuv.y *= 1. + pow((abs(uv.x) / 4.5), 2.);\r\n\tuv  = (uv / 2.0) + 0.5;\r\n\t// uv =  uv *0.92 + 0.04;\r\n\treturn uv;\r\n}\r\n\r\nvec3 chroma(sampler2D source, vec2 uv, float chx, float chy){\r\n    vec3 col = vec3(0.0);\r\n    col.r = texture2D(source, vec2(uv.x+chx, uv.y+0.0)).x;\r\n\t\tcol.g = texture2D(source, vec2(uv.x+0.0, uv.y+chy)).y;\r\n\t\tcol.b = texture2D(source, vec2(uv.x-chx, uv.y+chy)).z;\r\n    return col;\r\n}\r\n\r\nvoid main()\r\n{\r\n\tvec2 uv = openfl_TextureCoordv.xy;\r\n\tuv = curve( uv );\r\n\t\r\n\t// Chromatic\r\n\tfloat chx = 0.003;\r\n\tfloat chy = 0.00125;\r\n\tvec3 col = chroma(bitmap, uv, chx, chy);\r\n    \r\n\t// drop things beyond curved image\r\n\tcol *= step(0.0, uv.x) * step(0.0, uv.y);\r\n\tcol *= 1.0 - step(1.0, uv.x) * 1.0 - step(1.0, uv.y);\r\n\r\n\t// vignete 1\r\n\t//col *= 0.75 + 0.25*16.0*uv.x*uv.y*(1.0-uv.x)*(1.0-uv.y);\r\n\r\n\t// vignete 2\r\n\t// float vig = (0.0 + 1.0*16.0*uv.x*uv.y*(1.0-uv.x)*(1.0-uv.y));\r\n\t//col *= vec3(pow(vig,0.3));\r\n\r\n\t// vignete 3\r\n\tfloat vig = (0.5 + 32.0*uv.x*uv.y*(1.0-uv.x)*(1.0-uv.y));\r\n\tcol *= vec3(pow(vig,0.2));\r\n\r\n\t// slighly change colors\r\n\t//col *= vec3(1.05,0.95,1.05);\r\n\t\r\n\t// make it brighter\r\n\tcol *= 1.1;\r\n\r\n\t// horizontal scanlines:\r\n\t// gues what is it\r\n\tfloat scanSpeed = 10.0;\r\n\t// bigger number - more scanlines\r\n\tfloat scanlinesNumber = 20.0;\r\n\t// scanline darkness\r\n\tfloat s_am = 0.0350;\r\n\tfloat s_b = 1.0 - s_am;\r\n\tcol *= s_b + s_am*(sin(scanSpeed * iTime + \r\n\t\t\t\t\t\t\t\t\t\t(uv.y*scanlinesNumber*3.14)));\r\n\r\n\t// // another way to do stripes\r\n\t// float dash = 10.0 / 640.0;\r\n\t// float space = dash;\r\n\t// step(0.0, dash - mod(uv.y + iTime, dash+space));\r\n\r\n\t// screen flickering\r\n\tfloat freq = 35.0*PI;\t\t\t// PI is used to make it \"per second\"\r\n\tfloat f_am = 0.020;\t\t\t\t// amplitude modulation\r\n\tfloat f_m = 1.0 - f_am;\t\r\n\tcol *= f_m + f_am*sin(freq*iTime);\r\n\r\n\tgl_FragColor = vec4(col, 1.0);\r\n}";
+		this.__glFragmentSource = "// load custom texture example:\r\n// https://www.shadertoy.com/view/lsGGDd\r\n\r\n// other examples of \"Barrel Distortion\"\r\n// https://www.shadertoy.com/view/4tVSRw\r\n// https://www.shadertoy.com/view/lslGRN\r\n// https://www.shadertoy.com/view/4sXcDN\r\n\r\n\r\n// see other crt shaders\r\n// https://www.shadertoy.com/view/DlfSz8\r\n\r\n// found the original source of this shader https://www.shadertoy.com/view/WdjfDy\r\n\r\nvarying float openfl_Alphav;\r\n\t\tvarying vec4 openfl_ColorMultiplierv;\r\n\t\tvarying vec4 openfl_ColorOffsetv;\r\n\t\tvarying vec2 openfl_TextureCoordv;\r\n\r\n\t\tuniform bool openfl_HasColorTransform;\r\n\t\tuniform vec2 openfl_TextureSize;\r\n\t\tuniform sampler2D bitmap;\n\r\n\t\tuniform bool hasTransform;\r\n\t\tuniform bool hasColorTransform;\r\n\r\n\t\tvec4 flixel_texture2D(sampler2D bitmap, vec2 coord)\r\n\t\t{\r\n\t\t\tvec4 color = texture2D(bitmap, coord);\r\n\t\t\tif (!hasTransform)\r\n\t\t\t{\r\n\t\t\t\treturn color;\r\n\t\t\t}\r\n\r\n\t\t\tif (color.a == 0.0)\r\n\t\t\t{\r\n\t\t\t\treturn vec4(0.0, 0.0, 0.0, 0.0);\r\n\t\t\t}\r\n\r\n\t\t\tif (!hasColorTransform)\r\n\t\t\t{\r\n\t\t\t\treturn color * openfl_Alphav;\r\n\t\t\t}\r\n\r\n\t\t\tcolor = vec4(color.rgb / color.a, color.a);\r\n\r\n\t\t\tmat4 colorMultiplier = mat4(0);\r\n\t\t\tcolorMultiplier[0][0] = openfl_ColorMultiplierv.x;\r\n\t\t\tcolorMultiplier[1][1] = openfl_ColorMultiplierv.y;\r\n\t\t\tcolorMultiplier[2][2] = openfl_ColorMultiplierv.z;\r\n\t\t\tcolorMultiplier[3][3] = openfl_ColorMultiplierv.w;\r\n\r\n\t\t\tcolor = clamp(openfl_ColorOffsetv + (color * colorMultiplier), 0.0, 1.0);\r\n\r\n\t\t\tif (color.a > 0.0)\r\n\t\t\t{\r\n\t\t\t\treturn vec4(color.rgb * color.a * openfl_Alphav, color.a * openfl_Alphav);\r\n\t\t\t}\r\n\t\t\treturn vec4(0.0, 0.0, 0.0, 0.0);\r\n\t\t}\r\n\t\n\r\n\r\n#define PI 3.1415926535\r\n\r\nuniform float iTime;\r\n\r\nvec2 curve(vec2 uv)\r\n{\r\n\tuv = (uv - 0.5) * 2.0;\r\n\tuv *= 1.00;\t\r\n\tuv.x *= 1. + pow((abs(uv.y) / 5.0), 2.);\r\n\tuv.y *= 1. + pow((abs(uv.x) / 4.5), 2.);\r\n\tuv  = (uv / 2.0) + 0.5;\r\n\t// uv =  uv *0.92 + 0.04;\r\n\treturn uv;\r\n}\r\n\r\nvec3 chroma(sampler2D source, vec2 uv, float chx, float chy){\r\n    vec3 col = vec3(0.0);\r\n    col.r = texture2D(source, vec2(uv.x+chx, uv.y+0.0)).x;\r\n\t\tcol.g = texture2D(source, vec2(uv.x+0.0, uv.y+chy)).y;\r\n\t\tcol.b = texture2D(source, vec2(uv.x-chx, uv.y+chy)).z;\r\n    return col;\r\n}\r\n\r\nvoid main()\r\n{\r\n\tvec2 uv = openfl_TextureCoordv.xy;\r\n\tuv = curve( uv );\r\n\t\r\n\t// Chromatic\r\n\tfloat chx = 0.003;\r\n\tfloat chy = 0.00125;\r\n\tvec3 col = chroma(bitmap, uv, chx, chy);\r\n\t// vec3 col = texture2D(bitmap, uv).rgb;\r\n    \r\n\t// drop things beyond curved image\r\n\tcol *= step(0.0, uv.x) * step(0.0, uv.y);\r\n\tcol *= 1.0 - step(1.0, uv.x) * 1.0 - step(1.0, uv.y);\r\n\r\n\t// vignete 1\r\n\t//col *= 0.75 + 0.25*16.0*uv.x*uv.y*(1.0-uv.x)*(1.0-uv.y);\r\n\r\n\t// vignete 2\r\n\t// float vig = (0.0 + 1.0*16.0*uv.x*uv.y*(1.0-uv.x)*(1.0-uv.y));\r\n\t//col *= vec3(pow(vig,0.3));\r\n\r\n\t// vignete 3\r\n\tfloat vig = (0.5 + 32.0*uv.x*uv.y*(1.0-uv.x)*(1.0-uv.y));\r\n\tcol *= vec3(pow(vig,0.2));\r\n\r\n\t// slighly change colors\r\n\t//col *= vec3(1.05,0.95,1.05);\r\n\t\r\n\t// make it brighter\r\n\tcol *= 1.1;\r\n\r\n\t// horizontal scanlines:\r\n\t// gues what is it\r\n\tfloat scanSpeed = 10.0;\r\n\t// bigger number - more scanlines\r\n\tfloat scanlinesNumber = 20.0;\r\n\t// scanline darkness\r\n\tfloat s_am = 0.0350;\r\n\tfloat s_b = 1.0 - s_am;\r\n\tcol *= s_b + s_am*(sin(-scanSpeed * iTime + \r\n\t\t\t\t\t\t\t\t\t\t(uv.y*scanlinesNumber*3.14)));\r\n\r\n\t// // another way to do stripes\r\n\t// float dash = 10.0 / 640.0;\r\n\t// float space = dash;\r\n\t// step(0.0, dash - mod(uv.y + iTime, dash+space));\r\n\r\n\t// screen flickering\r\n\tfloat freq = 35.0*PI;\t\t\t// PI is used to make it \"per second\"\r\n\tfloat f_am = 0.020;\t\t\t\t// amplitude modulation\r\n\tfloat f_m = 1.0 - f_am;\t\r\n\tcol *= f_m + f_am*sin(freq*iTime);\r\n\r\n\tgl_FragColor = vec4(col, 1.0);\r\n}";
 	}
 	if(this.__glVertexSource == null) {
-		this.__glVertexSource = "\r\n\t\tattribute float openfl_Alpha;\n\t\tattribute vec4 openfl_ColorMultiplier;\n\t\tattribute vec4 openfl_ColorOffset;\n\t\tattribute vec4 openfl_Position;\n\t\tattribute vec2 openfl_TextureCoord;\n\n\t\tvarying float openfl_Alphav;\n\t\tvarying vec4 openfl_ColorMultiplierv;\n\t\tvarying vec4 openfl_ColorOffsetv;\n\t\tvarying vec2 openfl_TextureCoordv;\n\n\t\tuniform mat4 openfl_Matrix;\n\t\tuniform bool openfl_HasColorTransform;\n\t\tuniform vec2 openfl_TextureSize;\n\r\n\t\t\r\n\t\tattribute float alpha;\r\n\t\tattribute vec4 colorMultiplier;\r\n\t\tattribute vec4 colorOffset;\r\n\t\tuniform bool hasColorTransform;\r\n\t\t\r\n\t\tvoid main(void)\r\n\t\t{\r\n\t\t\topenfl_Alphav = openfl_Alpha;\n\t\topenfl_TextureCoordv = openfl_TextureCoord;\n\n\t\tif (openfl_HasColorTransform) {\n\n\t\t\topenfl_ColorMultiplierv = openfl_ColorMultiplier;\n\t\t\topenfl_ColorOffsetv = openfl_ColorOffset / 255.0;\n\n\t\t}\n\n\t\tgl_Position = openfl_Matrix * openfl_Position;\n\r\n\t\t\t\r\n\t\t\topenfl_Alphav = openfl_Alpha * alpha;\r\n\t\t\t\r\n\t\t\tif (hasColorTransform)\r\n\t\t\t{\r\n\t\t\t\topenfl_ColorOffsetv = colorOffset / 255.0;\r\n\t\t\t\topenfl_ColorMultiplierv = colorMultiplier;\r\n\t\t\t}\r\n\t\t}";
+		this.__glVertexSource = "\r\n\t\tattribute float openfl_Alpha;\r\n\t\tattribute vec4 openfl_ColorMultiplier;\r\n\t\tattribute vec4 openfl_ColorOffset;\r\n\t\tattribute vec4 openfl_Position;\r\n\t\tattribute vec2 openfl_TextureCoord;\r\n\r\n\t\tvarying float openfl_Alphav;\r\n\t\tvarying vec4 openfl_ColorMultiplierv;\r\n\t\tvarying vec4 openfl_ColorOffsetv;\r\n\t\tvarying vec2 openfl_TextureCoordv;\r\n\r\n\t\tuniform mat4 openfl_Matrix;\r\n\t\tuniform bool openfl_HasColorTransform;\r\n\t\tuniform vec2 openfl_TextureSize;\n\r\n\t\t\r\n\t\tattribute float alpha;\r\n\t\tattribute vec4 colorMultiplier;\r\n\t\tattribute vec4 colorOffset;\r\n\t\tuniform bool hasColorTransform;\r\n\t\t\r\n\t\tvoid main(void)\r\n\t\t{\r\n\t\t\topenfl_Alphav = openfl_Alpha;\r\n\t\topenfl_TextureCoordv = openfl_TextureCoord;\r\n\r\n\t\tif (openfl_HasColorTransform) {\r\n\r\n\t\t\topenfl_ColorMultiplierv = openfl_ColorMultiplier;\r\n\t\t\topenfl_ColorOffsetv = openfl_ColorOffset / 255.0;\r\n\r\n\t\t}\r\n\r\n\t\tgl_Position = openfl_Matrix * openfl_Position;\n\r\n\t\t\t\r\n\t\t\topenfl_Alphav = openfl_Alpha * alpha;\r\n\t\t\t\r\n\t\t\tif (hasColorTransform)\r\n\t\t\t{\r\n\t\t\t\topenfl_ColorOffsetv = colorOffset / 255.0;\r\n\t\t\t\topenfl_ColorMultiplierv = colorMultiplier;\r\n\t\t\t}\r\n\t\t}";
 	}
 	flixel_graphics_tile_FlxGraphicsShader.call(this);
 	this.iTime.value = [0.0];
@@ -128663,10 +128070,10 @@ shader_CrtShader.prototype = $extend(flixel_graphics_tile_FlxGraphicsShader.prot
 });
 var shader_PixelateShader = function() {
 	if(this.__glFragmentSource == null) {
-		this.__glFragmentSource = "varying float openfl_Alphav;\n\t\tvarying vec4 openfl_ColorMultiplierv;\n\t\tvarying vec4 openfl_ColorOffsetv;\n\t\tvarying vec2 openfl_TextureCoordv;\n\n\t\tuniform bool openfl_HasColorTransform;\n\t\tuniform vec2 openfl_TextureSize;\n\t\tuniform sampler2D bitmap;\n\r\n\t\tuniform bool hasTransform;\r\n\t\tuniform bool hasColorTransform;\r\n\r\n\t\tvec4 flixel_texture2D(sampler2D bitmap, vec2 coord)\r\n\t\t{\r\n\t\t\tvec4 color = texture2D(bitmap, coord);\r\n\t\t\tif (!hasTransform)\r\n\t\t\t{\r\n\t\t\t\treturn color;\r\n\t\t\t}\r\n\r\n\t\t\tif (color.a == 0.0)\r\n\t\t\t{\r\n\t\t\t\treturn vec4(0.0, 0.0, 0.0, 0.0);\r\n\t\t\t}\r\n\r\n\t\t\tif (!hasColorTransform)\r\n\t\t\t{\r\n\t\t\t\treturn color * openfl_Alphav;\r\n\t\t\t}\r\n\r\n\t\t\tcolor = vec4(color.rgb / color.a, color.a);\r\n\r\n\t\t\tmat4 colorMultiplier = mat4(0);\r\n\t\t\tcolorMultiplier[0][0] = openfl_ColorMultiplierv.x;\r\n\t\t\tcolorMultiplier[1][1] = openfl_ColorMultiplierv.y;\r\n\t\t\tcolorMultiplier[2][2] = openfl_ColorMultiplierv.z;\r\n\t\t\tcolorMultiplier[3][3] = openfl_ColorMultiplierv.w;\r\n\r\n\t\t\tcolor = clamp(openfl_ColorOffsetv + (color * colorMultiplier), 0.0, 1.0);\r\n\r\n\t\t\tif (color.a > 0.0)\r\n\t\t\t{\r\n\t\t\t\treturn vec4(color.rgb * color.a * openfl_Alphav, color.a * openfl_Alphav);\r\n\t\t\t}\r\n\t\t\treturn vec4(0.0, 0.0, 0.0, 0.0);\r\n\t\t}\r\n\t\n\r\n\r\n#define PI 3.1415926535\r\n\r\n// original game size\r\nuniform vec2 iScreenSize;\r\nuniform float iTime;\r\n// uniform float iRand;\r\n\r\nvec2 fakePixel(vec2 uv, vec2 base)\r\n{\r\n\t//vec2 shift = base*0.5;\r\n\t//vec2 normalizer = 2.0*base/(base*base);\r\n\tvec2 res = vec2(0.0);\r\n\tres.x = abs(sin(PI*(uv.x/base.x)));\r\n\tres.y = abs(sin(PI*(uv.y/base.y)));\r\n\t\r\n\t//float m = abs(0.4*sin(iTime*PI*0.25));\r\n\t//res = smoothstep(vec2(0.1 + m), vec2(0.75), res);\r\n\treturn res;\r\n}\r\n\r\nfloat random (vec2 st) {\r\n\treturn fract(sin(0.00175*iTime*3.14 + dot(st.xy,\r\n\t\t\t\t\t\t\t\t\t\t\t\tvec2(12.9898,78.233)))*\r\n\t\t\t43758.5453);\r\n}\r\n\r\nvoid main()\r\n{\r\n\t// another way to implement vertical scanlines\r\n\t// https://www.shadertoy.com/view/Ms23DR\r\n\r\n\tvec2 uv = openfl_TextureCoordv.xy;\r\n\t\r\n\tvec3 col = flixel_texture2D(bitmap, uv).rgb;\r\n\t\r\n\t// width and height in fake pixels\r\n\t// vec2 fakeSize = vec2(640.0, 480.0)*0.1875;\r\n\tvec2 fakeSize = iScreenSize*0.1875;\r\n\tfakeSize = 1.0/fakeSize;\r\n\tvec2 fp = vec2(0.0);\r\n\tfp = fakePixel(uv, fakeSize);\r\n\r\n\t// how dark edges of fake pixels should be\r\n\t// the more it is, the darker it will be\r\n\tfloat dark = 0.35;\r\n\tvec3 darkColor = col*(1.0-dark);\r\n\t// how bright the fake pixel should be\r\n\tfloat luma = 1.25;\r\n\tcol = mix(darkColor, col*luma, fp.x*fp.y);\r\n\r\n\t// scale coordinate system (it will match \"pixelation\" from above)\r\n\tuv /= fakeSize;\r\n\t// random value [0,1]\r\n\tvec2 ipos = floor(uv);\r\n\tfloat rnd =  random( ipos );\r\n\tif (rnd >= 0.6) {\r\n\t\t//float f = step(0.7,rnd);\r\n\t\t// noize factor\r\n\t\tfloat nf = 0.08;\r\n\t\tcol *= (1.1-nf) + nf*(rnd*2.0-1.0);\r\n\t}\r\n\t\r\n\tgl_FragColor = vec4(col, 1.0);\r\n}";
+		this.__glFragmentSource = "varying float openfl_Alphav;\r\n\t\tvarying vec4 openfl_ColorMultiplierv;\r\n\t\tvarying vec4 openfl_ColorOffsetv;\r\n\t\tvarying vec2 openfl_TextureCoordv;\r\n\r\n\t\tuniform bool openfl_HasColorTransform;\r\n\t\tuniform vec2 openfl_TextureSize;\r\n\t\tuniform sampler2D bitmap;\n\r\n\t\tuniform bool hasTransform;\r\n\t\tuniform bool hasColorTransform;\r\n\r\n\t\tvec4 flixel_texture2D(sampler2D bitmap, vec2 coord)\r\n\t\t{\r\n\t\t\tvec4 color = texture2D(bitmap, coord);\r\n\t\t\tif (!hasTransform)\r\n\t\t\t{\r\n\t\t\t\treturn color;\r\n\t\t\t}\r\n\r\n\t\t\tif (color.a == 0.0)\r\n\t\t\t{\r\n\t\t\t\treturn vec4(0.0, 0.0, 0.0, 0.0);\r\n\t\t\t}\r\n\r\n\t\t\tif (!hasColorTransform)\r\n\t\t\t{\r\n\t\t\t\treturn color * openfl_Alphav;\r\n\t\t\t}\r\n\r\n\t\t\tcolor = vec4(color.rgb / color.a, color.a);\r\n\r\n\t\t\tmat4 colorMultiplier = mat4(0);\r\n\t\t\tcolorMultiplier[0][0] = openfl_ColorMultiplierv.x;\r\n\t\t\tcolorMultiplier[1][1] = openfl_ColorMultiplierv.y;\r\n\t\t\tcolorMultiplier[2][2] = openfl_ColorMultiplierv.z;\r\n\t\t\tcolorMultiplier[3][3] = openfl_ColorMultiplierv.w;\r\n\r\n\t\t\tcolor = clamp(openfl_ColorOffsetv + (color * colorMultiplier), 0.0, 1.0);\r\n\r\n\t\t\tif (color.a > 0.0)\r\n\t\t\t{\r\n\t\t\t\treturn vec4(color.rgb * color.a * openfl_Alphav, color.a * openfl_Alphav);\r\n\t\t\t}\r\n\t\t\treturn vec4(0.0, 0.0, 0.0, 0.0);\r\n\t\t}\r\n\t\n\r\n\r\n#define PI 3.1415926535\r\n\r\n// original game size\r\nuniform vec2 iScreenSize;\r\nuniform float iTime;\r\n// uniform float iRand;\r\n\r\n// Converts UV pixel coord to \"fake screen\" pixel coord.\r\nvec2 fakePixel(vec2 uv, vec2 fakeSize)\r\n{\r\n\t//vec2 shift = base*0.5;\r\n\t//vec2 normalizer = 2.0*base/(base*base);\r\n\r\n\tvec2 res = vec2(0.0);\r\n\tres.x = abs(sin(3.14*(uv.x*fakeSize.x)));\r\n\tres.y = abs(sin(3.14*(uv.y*fakeSize.y)));\r\n\r\n\t//float m = abs(0.4*sin(iTime*PI*0.25));\r\n\t//res = smoothstep(vec2(0.1 + m), vec2(0.75), res);\r\n\r\n\treturn res;\r\n}\r\n\r\nfloat random (vec2 st) {\r\n\treturn fract(sin(0.00175*iTime*3.14 + dot(st.xy,\r\n\t\t\t\t\t\t\t\t\t\t\t\tvec2(12.9898,78.233)))*\r\n\t\t\t43758.5453);\r\n}\r\n\r\nvoid main()\r\n{\r\n\t// another way to implement vertical scanlines\r\n\t// https://www.shadertoy.com/view/Ms23DR\r\n\r\n\tvec2 uv = openfl_TextureCoordv.xy;\r\n\t\r\n\tvec3 col = flixel_texture2D(bitmap, uv).rgb;\r\n\r\n\t// Scale defines how many \"fake pixels\"\r\n\t// will be inside \"fake screen\".\r\n\t// Less scale - bigger \"fake pixels\".\r\n\t// Set it to 0.00625 to get 4x3 screen\r\n\tfloat scale = 1.0;\r\n\t// scale to match 6 real to 1 fake pixel\r\n\tscale = 1.0/6.0;\r\n\t// ceil() makes sure  num of fake pixels is integer\r\n\tscale = ceil(iScreenSize.x * scale ) / iScreenSize.x;\r\n\t// Width and height in fake pixels,\r\n\t// set it to whatever you want.\r\n\tvec2 fakeSize = iScreenSize*scale;\r\n\t// fp - is \"fake pixel\" coord used below\r\n\t// to mix black and real texture color.\r\n\tvec2 fp = fakePixel(uv, fakeSize);\r\n\r\n\t// how dark edges of fake pixels should be\r\n\t// the more it is, the darker it will be\r\n\tfloat dark = 0.35;\r\n\tvec3 darkColor = col*(1.0-dark);\r\n\t// how bright the fake pixel should be\r\n\tfloat luma = 1.25;\r\n\tcol = mix(darkColor, col*luma, fp.x*fp.y);\r\n\r\n\t// scale coordinate system (it will match \"pixelation\" from above)\r\n\tuv *= fakeSize;\r\n\t// random value [0,1]\r\n\tvec2 ipos = floor(uv);\r\n\tfloat rnd =  random( ipos );\r\n\tif (rnd >= 0.6) {\r\n\t\t//float f = step(0.7,rnd);\r\n\t\t// noize factor\r\n\t\tfloat nf = 0.08;\r\n\t\tcol *= (1.1-nf) + nf*(rnd*2.0-1.0);\r\n\t}\r\n\t\r\n\tgl_FragColor = vec4(col, 1.0);\r\n}";
 	}
 	if(this.__glVertexSource == null) {
-		this.__glVertexSource = "\r\n\t\tattribute float openfl_Alpha;\n\t\tattribute vec4 openfl_ColorMultiplier;\n\t\tattribute vec4 openfl_ColorOffset;\n\t\tattribute vec4 openfl_Position;\n\t\tattribute vec2 openfl_TextureCoord;\n\n\t\tvarying float openfl_Alphav;\n\t\tvarying vec4 openfl_ColorMultiplierv;\n\t\tvarying vec4 openfl_ColorOffsetv;\n\t\tvarying vec2 openfl_TextureCoordv;\n\n\t\tuniform mat4 openfl_Matrix;\n\t\tuniform bool openfl_HasColorTransform;\n\t\tuniform vec2 openfl_TextureSize;\n\r\n\t\t\r\n\t\tattribute float alpha;\r\n\t\tattribute vec4 colorMultiplier;\r\n\t\tattribute vec4 colorOffset;\r\n\t\tuniform bool hasColorTransform;\r\n\t\t\r\n\t\tvoid main(void)\r\n\t\t{\r\n\t\t\topenfl_Alphav = openfl_Alpha;\n\t\topenfl_TextureCoordv = openfl_TextureCoord;\n\n\t\tif (openfl_HasColorTransform) {\n\n\t\t\topenfl_ColorMultiplierv = openfl_ColorMultiplier;\n\t\t\topenfl_ColorOffsetv = openfl_ColorOffset / 255.0;\n\n\t\t}\n\n\t\tgl_Position = openfl_Matrix * openfl_Position;\n\r\n\t\t\t\r\n\t\t\topenfl_Alphav = openfl_Alpha * alpha;\r\n\t\t\t\r\n\t\t\tif (hasColorTransform)\r\n\t\t\t{\r\n\t\t\t\topenfl_ColorOffsetv = colorOffset / 255.0;\r\n\t\t\t\topenfl_ColorMultiplierv = colorMultiplier;\r\n\t\t\t}\r\n\t\t}";
+		this.__glVertexSource = "\r\n\t\tattribute float openfl_Alpha;\r\n\t\tattribute vec4 openfl_ColorMultiplier;\r\n\t\tattribute vec4 openfl_ColorOffset;\r\n\t\tattribute vec4 openfl_Position;\r\n\t\tattribute vec2 openfl_TextureCoord;\r\n\r\n\t\tvarying float openfl_Alphav;\r\n\t\tvarying vec4 openfl_ColorMultiplierv;\r\n\t\tvarying vec4 openfl_ColorOffsetv;\r\n\t\tvarying vec2 openfl_TextureCoordv;\r\n\r\n\t\tuniform mat4 openfl_Matrix;\r\n\t\tuniform bool openfl_HasColorTransform;\r\n\t\tuniform vec2 openfl_TextureSize;\n\r\n\t\t\r\n\t\tattribute float alpha;\r\n\t\tattribute vec4 colorMultiplier;\r\n\t\tattribute vec4 colorOffset;\r\n\t\tuniform bool hasColorTransform;\r\n\t\t\r\n\t\tvoid main(void)\r\n\t\t{\r\n\t\t\topenfl_Alphav = openfl_Alpha;\r\n\t\topenfl_TextureCoordv = openfl_TextureCoord;\r\n\r\n\t\tif (openfl_HasColorTransform) {\r\n\r\n\t\t\topenfl_ColorMultiplierv = openfl_ColorMultiplier;\r\n\t\t\topenfl_ColorOffsetv = openfl_ColorOffset / 255.0;\r\n\r\n\t\t}\r\n\r\n\t\tgl_Position = openfl_Matrix * openfl_Position;\n\r\n\t\t\t\r\n\t\t\topenfl_Alphav = openfl_Alpha * alpha;\r\n\t\t\t\r\n\t\t\tif (hasColorTransform)\r\n\t\t\t{\r\n\t\t\t\topenfl_ColorOffsetv = colorOffset / 255.0;\r\n\t\t\t\topenfl_ColorMultiplierv = colorMultiplier;\r\n\t\t\t}\r\n\t\t}";
 	}
 	flixel_graphics_tile_FlxGraphicsShader.call(this);
 	this.iScreenSize.value = [flixel_FlxG.width,flixel_FlxG.height];
@@ -128737,6 +128144,78 @@ ui_GithubRepoLink.__super__ = flixel_ui_FlxTypedButton_$flixel_$FlxSprite;
 ui_GithubRepoLink.prototype = $extend(flixel_ui_FlxTypedButton_$flixel_$FlxSprite.prototype,{
 	labelGroup: null
 	,__class__: ui_GithubRepoLink
+});
+var ui_HostInput = function() {
+	var _gthis = this;
+	flixel_group_FlxTypedSpriteGroup.call(this);
+	var label = this.styleText(new flixel_text_FlxText(null,null,null,"IP:"));
+	label.textField.set_backgroundColor(16744448);
+	this.add(label);
+	this.address = this.styleText(new flixel_addons_text_FlxTextInput());
+	this.address.set_multiline(false);
+	this.address.set_maxChars(15);
+	this.address.set_text(flixel_FlxG.game.host.address);
+	this.address.set_x(this.x + this.get_width() + 2);
+	this.address.set_fieldWidth(200);
+	this.address.set_fieldHeight(this.address.get_height());
+	this.add(this.address);
+	label = this.styleText(new flixel_text_FlxText(null,null,null,"port:"));
+	label.textField.set_backgroundColor(16744448);
+	label.set_x(this.x + this.get_width() + 2);
+	this.add(label);
+	this.port = this.styleText(new flixel_addons_text_FlxTextInput());
+	this.port.set_multiline(false);
+	this.port.set_maxChars(5);
+	this.port.set_text("" + flixel_FlxG.game.host.port);
+	this.port.set_fieldWidth(100);
+	this.port.set_fieldHeight(this.address.get_fieldHeight());
+	this.port.set_x(this.x + this.get_width() + 2);
+	this.add(this.port);
+	this.address.onChange.add(function() {
+		_gthis.updateLastHost(_gthis.address,"address");
+	});
+	this.address.onInput.add(function() {
+		_gthis.updateLastHost(_gthis.address,"address");
+	});
+	this.port.onChange.add(function() {
+		_gthis.updateLastHost(_gthis.port,"port");
+	});
+	this.port.onInput.add(function() {
+		_gthis.updateLastHost(_gthis.port,"port");
+	});
+};
+$hxClasses["ui.HostInput"] = ui_HostInput;
+ui_HostInput.__name__ = "ui.HostInput";
+ui_HostInput.__super__ = flixel_group_FlxTypedSpriteGroup;
+ui_HostInput.prototype = $extend(flixel_group_FlxTypedSpriteGroup.prototype,{
+	address: null
+	,port: null
+	,updateLastHost: function(field,propName) {
+		field.set_text(StringTools.trim(field.text));
+		flixel_FlxG.game.host[propName] = field.text;
+	}
+	,styleText: function(text) {
+		text.set_size(18);
+		text.set_color(1118481);
+		text.set_alignment("left");
+		text.textField.set_background(true);
+		text.textField.set_backgroundColor(15658734);
+		var format = text._defaultFormat;
+		format.leftMargin = format.rightMargin = 6;
+		text.textField.set_defaultTextFormat(text._defaultFormat);
+		text.textField.setTextFormat(text._defaultFormat);
+		text._regen = true;
+		return text;
+	}
+	,setPos: function(x,y) {
+		utils_FlxSpriteGroupUtil_setPosition(this,x,y);
+		return this;
+	}
+	,get_GAME: function() {
+		return flixel_FlxG.game;
+	}
+	,__class__: ui_HostInput
+	,__properties__: $extend(flixel_group_FlxTypedSpriteGroup.prototype.__properties__,{get_GAME:"get_GAME"})
 });
 var utils_FlxDragManager = function() {
 	this.isDragging = false;
@@ -128995,6 +128474,73 @@ function utils_FlxSpriteDraw_twinkle(sprite,color,duration,interval,timerManager
 	flicker.timer = new flixel_util_FlxTimer(timerManager).start(interval,$bind(flicker,flicker.flickerProgress),duration / interval | 0);
 	flixel_effects_FlxFlicker._boundObjects.set(sprite,flicker);
 	return flicker;
+}
+function utils_FlxSpriteGroupUtil_getGroupBounds(group) {
+	var x = group.findMinX();
+	var y = group.findMinY();
+	var w = group.findMaxX() - x;
+	var h = group.findMaxY() - y;
+	var X = x;
+	var Y = y;
+	var Width = w;
+	var Height = h;
+	if(h == null) {
+		Height = 0;
+	}
+	if(w == null) {
+		Width = 0;
+	}
+	if(y == null) {
+		Y = 0;
+	}
+	if(x == null) {
+		X = 0;
+	}
+	var _this = flixel_math_FlxRect._pool.get();
+	var X1 = X;
+	var Y1 = Y;
+	var Width1 = Width;
+	var Height1 = Height;
+	if(Height1 == null) {
+		Height1 = 0;
+	}
+	if(Width1 == null) {
+		Width1 = 0;
+	}
+	if(Y1 == null) {
+		Y1 = 0;
+	}
+	if(X1 == null) {
+		X1 = 0;
+	}
+	_this.x = X1;
+	_this.y = Y1;
+	_this.width = Width1;
+	_this.height = Height1;
+	_this._inPool = false;
+	return _this;
+}
+function utils_FlxSpriteGroupUtil_setPosition(group,x,y) {
+	var dx = x - group.x;
+	var dy = y - group.y;
+	if(group._skipTransformChildren || group.group == null) {
+		return group;
+	}
+	var _g = 0;
+	var _g1 = group._sprites;
+	while(_g < _g1.length) {
+		var sprite = _g1[_g];
+		++_g;
+		if(sprite != null && sprite.exists) {
+			sprite.set_x(sprite.x + dx);
+			sprite.set_y(sprite.y + dy);
+		}
+	}
+	group._skipTransformChildren = true;
+	group.set_x(x);
+	group.set_y(y);
+	group._skipTransformChildren = false;
+	return group;
 }
 function utils_TraceUtils_getClassName(infos) {
 	return infos.className.substring(infos.className.lastIndexOf(".") + 1);
@@ -129333,6 +128879,7 @@ AssetPaths.gh_icon_final__png = "assets/images/gh icon final.png";
 AssetPaths.pointer_cursor_16__png = "assets/images/pointer cursor 16.png";
 AssetPaths.music_goes_here__txt = "assets/music/music-goes-here.txt";
 AssetPaths.license__txt = "assets/sounds/license.txt";
+AssetPaths.lose_crowd_disappointed__ogg = "assets/sounds/lose crowd disappointed.ogg";
 AssetPaths.sfx_ball_collision_1__ogg = "assets/sounds/sfx_ball_collision-1.ogg";
 AssetPaths.sfx_ball_collision_2__ogg = "assets/sounds/sfx_ball_collision-2.ogg";
 AssetPaths.sfx_ball_collision_3__ogg = "assets/sounds/sfx_ball_collision-3.ogg";
@@ -129343,7 +128890,7 @@ AssetPaths.win_crowd_applause__ogg = "assets/sounds/win crowd applause.ogg";
 AssetPaths.yeah_crowd_men__ogg = "assets/sounds/yeah crowd men.ogg";
 AssetPaths._bongo_4__samplefocus__com__mp3 = "assets/sounds/_bongo_4.samplefocus.com.mp3";
 AssetPaths._Mouth_Sound___Single_Click__samplefocus__com__mp3 = "assets/sounds/_Mouth_Sound_-_Single_Click.samplefocus.com.mp3";
-AssetPaths.allFiles = ["assets/data/data-goes-here.txt","assets/images/arrow cursor 16.png","assets/images/cup.png","assets/images/gh icon final.png","assets/images/pointer cursor 16.png","assets/music/music-goes-here.txt","assets/sounds/license.txt","assets/sounds/sfx_ball_collision-1.ogg","assets/sounds/sfx_ball_collision-2.ogg","assets/sounds/sfx_ball_collision-3.ogg","assets/sounds/sfx_ball_collision-4.ogg","assets/sounds/sfx_speedup.ogg","assets/sounds/sounds-go-here.txt","assets/sounds/win crowd applause.ogg","assets/sounds/yeah crowd men.ogg","assets/sounds/_bongo_4.samplefocus.com.mp3","assets/sounds/_Mouth_Sound_-_Single_Click.samplefocus.com.mp3"];
+AssetPaths.allFiles = ["assets/data/data-goes-here.txt","assets/images/arrow cursor 16.png","assets/images/cup.png","assets/images/gh icon final.png","assets/images/pointer cursor 16.png","assets/music/music-goes-here.txt","assets/sounds/license.txt","assets/sounds/lose crowd disappointed.ogg","assets/sounds/sfx_ball_collision-1.ogg","assets/sounds/sfx_ball_collision-2.ogg","assets/sounds/sfx_ball_collision-3.ogg","assets/sounds/sfx_ball_collision-4.ogg","assets/sounds/sfx_speedup.ogg","assets/sounds/sounds-go-here.txt","assets/sounds/win crowd applause.ogg","assets/sounds/yeah crowd men.ogg","assets/sounds/_bongo_4.samplefocus.com.mp3","assets/sounds/_Mouth_Sound_-_Single_Click.samplefocus.com.mp3"];
 flixel_FlxBasic.idEnumerator = 0;
 flixel_math_FlxRect._pool = (function($this) {
 	var $r;
@@ -129395,7 +128942,7 @@ LevelBuilder.inst = new LevelBuilder();
 var LevelBuilder_defaultWallParams = { pos : 256, thickness : 5, size : 1.0, padding : 0};
 openfl_text_Font.__fontByName = new haxe_ds_StringMap();
 openfl_text_Font.__registeredFonts = [];
-Pong.defaultParams = { ballSize : 12, ballSpeed : 310, ballServeDelay : 2.0, racketLength : 80, racketThickness : 12, racketSpeed : 225.0, racketPadding : 12.0, scoreToWin : 11};
+Pong.defaultParams = { ballSize : 12, ballSpeed : 306, ballServeDelay : 2.0, racketLength : 78, racketThickness : 12, racketSpeed : 228.0, racketPadding : 12.0, scoreToWin : 11};
 Pong.params = Reflect.copy(Pong.defaultParams);
 Player.defaultOptions = { name : "player", position : 1, color : -1, getController : function(racket) {
 	var c = new racket_KeyboardMovementController(racket);
@@ -129410,7 +128957,7 @@ Xml.DocType = 4;
 Xml.ProcessingInstruction = 5;
 Xml.Document = 6;
 var ai_AIFactory_ais = ["easy","medium","hard","hardest"];
-djFlixel_D.DJFLX_VER = "0.5.8";
+djFlixel_D.DJFLX_VER = "0.5.9";
 djFlixel_D.IP = { name : "djflixel_app", version : "0.1", web : "", volume : -1, fullscreen : false, savename : "", init : null};
 djFlixel_D.MAX_WINDOW_ZOOM = 1;
 djFlixel_core_Dcontrols.GAMEPAD_POLL_TIME = 0.5;
@@ -129422,8 +128969,9 @@ djFlixel_gfx_pal_Pal_$CPC.COL = [-16777216,-16777088,-16776961,-8388608,-8388480
 djFlixel_gfx_pal_Pal_$CPCBoy.COL = [-16777216,-15000714,-13224232,-9035992,-10340240,-6996313,-3393994,-3257478,-1874278,-14977509,-15106154,-15104270,-7573990,-7434610,-6512921,-1798614,-1399401,-98050,-11223225,-13121633,-13250588,-7481290,-4664907,-6821423,-1190842,-1317724,-1,-856089,-4537483,-8022704,-12034744,-14075583];
 djFlixel_gfx_pal_Pal_$DB16.COL = [-15463396,-12311500,-13618067,-11646386,-8041424,-13343452,-3127736,-9080479,-10912306,-2982612,-8022623,-9590228,-2970983,-9583926,-2436002,-2167082];
 djFlixel_ui_FlxAutoText.DEFAULT_CPS = 30;
-djFlixel_ui_FlxAutoText.DEFAULT_CARRIER_TICK = 0.24;
-djFlixel_ui_FlxAutoText.DEFAULT_CARRIER_SMB = "_";
+djFlixel_ui_FlxAutoText.DEFAULT_CARET_TICK = 0.24;
+djFlixel_ui_FlxAutoText.DEFAULT_CARET_SMB = "_";
+djFlixel_ui_FlxAutoText.INV_CHAR = "‎";
 djFlixel_ui_FlxAutoText.TAG_CPS = "c";
 djFlixel_ui_FlxAutoText.TAG_WAIT = "w";
 djFlixel_ui_FlxAutoText.TAG_WORD = "wm";
@@ -129431,6 +128979,7 @@ djFlixel_ui_FlxAutoText.TAG_SP = "sp";
 djFlixel_ui_FlxAutoText.TAG_NP = "np";
 djFlixel_ui_FlxAutoText.TAG_CALL = "call";
 djFlixel_ui_FlxAutoText.MIN_TICK = 0.10;
+djFlixel_ui_FlxAutoText._dlog = false;
 flixel_tweens_FlxEase.PI2 = Math.PI / 2;
 flixel_tweens_FlxEase.EL = 2 * Math.PI / .45;
 flixel_tweens_FlxEase.B1 = 0.36363636363636365;
@@ -129535,6 +129084,8 @@ flixel_FlxG.initialWidth = 0;
 flixel_FlxG.initialHeight = 0;
 flixel_FlxG.signals = new flixel_system_frontEnds_SignalFrontEnd();
 flixel_system_FlxSplash.muted = true;
+flixel_text_FlxText.VERTICAL_GUTTER = 4;
+openfl_text_TextField.__missingFontWarning = new haxe_ds_StringMap();
 flixel_animation_FlxPrerotatedAnimation.PREROTATED = "prerotated_animation";
 flixel_effects_FlxFlicker._pool = new flixel_util_FlxPool(function() {
 	return new flixel_effects_FlxFlicker();
@@ -129585,15 +129136,6 @@ flixel_graphics_tile_FlxDrawTrianglesItem.rect = (function($this) {
 }(this));
 openfl_display_Shader.__meta__ = { fields : { glProgram : { SuppressWarnings : ["checkstyle:Dynamic"]}}};
 flixel_input_FlxPointer._cachedPoint = new flixel_math_FlxBasePoint(0,0);
-flixel_input_actions_FlxInputDeviceID.ALL = -1;
-flixel_input_actions_FlxInputDeviceID.FIRST_ACTIVE = -2;
-flixel_input_actions_FlxInputDeviceID.NONE = -3;
-flixel_input_actions_FlxActionInputAnalog.A_X = true;
-flixel_input_actions_FlxActionInputAnalog.A_Y = false;
-flixel_input_actions_FlxSteamController.CONTROLLER_CONNECT_POLL_TIME = 0.25;
-flixel_input_actions_FlxSteamController.ORIGIN_DATA_POLL_TIME = 1.0;
-flixel_input_actions_FlxSteamController.onControllerConnect = null;
-flixel_input_actions_FlxSteamController.onOriginUpdate = null;
 flixel_input_gamepad_FlxGamepadInputID.fromStringMap = (function($this) {
 	var $r;
 	var _g = new haxe_ds_StringMap();
@@ -130352,7 +129894,6 @@ flixel_system_debug_log_LogStyle.WARNING = new flixel_system_debug_log_LogStyle(
 flixel_system_debug_log_LogStyle.ERROR = new flixel_system_debug_log_LogStyle("[ERROR] ","FF8888",12,false,false,false,"flixel/sounds/beep",true);
 flixel_system_debug_log_LogStyle.NOTICE = new flixel_system_debug_log_LogStyle("[NOTICE] ","5CF878",12,false);
 flixel_system_debug_log_LogStyle.CONSOLE = new flixel_system_debug_log_LogStyle("> ","5A96FA",12,false);
-flixel_text_FlxText.VERTICAL_GUTTER = 4;
 flixel_text_FlxTextAlign.LEFT = "left";
 flixel_text_FlxTextAlign.CENTER = "center";
 flixel_text_FlxTextAlign.RIGHT = "right";
@@ -131822,8 +131363,8 @@ menu_MainMenu.SELF_ROOM_MENU_ID = "load_self_room";
 menu_MainMenu.VS_AI_SETTINGS_MENU_ID = "player-vs-ai-settings";
 menu_MainMenu.NETPLAY_MENU_ID = "netplay";
 menu_MainMenu.NETPLAY_MENU_LABEL = "internet";
-var netplay_TwoPlayersNetplayData_ballCollisionData = { wallUid : -1, ball : { uid : -1, x : 0.0, y : 0.0, vx : 0.0, vy : 0.0}};
-var network_$wrtc_Network_netplayUid = 0;
+var netplay_Netplay_netplayUid = 0;
+var netplay_Netplay_ballCollisionData = { wallUid : -1, ball : { uid : -1, x : 0.0, y : 0.0, vx : 0.0, vy : 0.0}};
 openfl_Lib.__lastTimerID = 0;
 openfl_Lib.__sentWarnings = new haxe_ds_StringMap();
 openfl_Lib.__timers = new haxe_ds_IntMap();
@@ -132252,7 +131793,6 @@ openfl_text_GridFitType.NONE = 0;
 openfl_text_GridFitType.PIXEL = 1;
 openfl_text_GridFitType.SUBPIXEL = 2;
 openfl_text_StyleSheet.__supportedStyles = ["color","display","font-family","font-size","font-style","font-weight","kerning","leading","letter-spacing","margin-left","margin-right","text-align","text-decoration","text-indent"];
-openfl_text_TextField.__missingFontWarning = new haxe_ds_StringMap();
 openfl_text_TextFieldAutoSize.CENTER = 0;
 openfl_text_TextFieldAutoSize.LEFT = 1;
 openfl_text_TextFieldAutoSize.NONE = 2;
